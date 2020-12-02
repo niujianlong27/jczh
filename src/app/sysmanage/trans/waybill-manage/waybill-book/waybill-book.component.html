@@ -1,0 +1,88 @@
+<app-searchform  (search)="query($event)" [triggerSearch]="true"></app-searchform>
+<tpl-buttons  (btnClick)="btnClick($event)"></tpl-buttons>
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+  <ng-template #one>
+    <app-table-form gridId="grid1" [dataSet]="waybillData" [pageSize]="pageSize" [selfTableHeight]="gridOneHeight" [totalPage]="total" [isMutli]="true" (updateDataResult)="selectedWaybill($event)" (listClick)="rowCilcked($event)"
+                    (userColumnsEmit)="columns($event)" [colSet]="true" [paginationRef]="totalStats" [showCount]="false" [listLoading]="loading">
+      <ng-template #urlImg let-data>
+        <div *ngIf="data.returnPic" (click)="getView($event,data.returnPic)">
+          <nz-avatar *ngFor="let img of data.returnPic.split(';')" [nzSrc]="img" nzSize="small" style="width:17px;height:17px;line-height:17px;"></nz-avatar>
+        </div>
+      </ng-template>
+    </app-table-form>
+
+    <ng-template #totalStats>
+      已选&nbsp;{{selectedWaybillData.length}}&nbsp;条&nbsp;已选总重量:{{totalWeight | number}}吨 已选总件数:{{totalSheet | number}}件
+    </ng-template>
+  </ng-template>
+  <ng-template #two>
+    <app-table-form [gridId]="childGridId" [dataSet]="childData" [pageSize]="childPageSize" [updateHeader]="true" [selfTableHeight]="gridTwoHeight" [colSet]="true"
+                    [totalPage]="childTotal" [isMutli]="false" [tabArr]="tabArr" [tabIndex]="childIndex"
+                    (tabResultFun)="tabChange($event)" [listLoading]="childLoading" [nzShowPagination]="false"></app-table-form>
+  </ng-template>
+</app-grid-resize>
+<nz-modal [(nzVisible)]="isVisible" nzTitle="运单返单" [nzFooter]="modalFooter" (nzOnCancel)="isVisible=false" [nzContent]="modalContent" (nzOnOk)="waybillReturnSubmit()" [nzMaskClosable]="false">
+  <ng-template #modalContent>
+    <form nz-form [formGroup]="returnValidate">
+
+      <nz-form-item>
+
+        <nz-form-label [nzSpan]="5" nzRequired>件数</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+
+          <nz-input-number formControlName="totalSheet" [nzMin]="0.1" [nzStep]="1" [nzDisabled]="true"></nz-input-number>
+          <nz-form-explain *ngIf="returnValidate.get('totalSheet')?.dirty && returnValidate.get('totalSheet')?.errors">
+            返单件数不能为空!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5" nzRequired>重量</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <nz-input-number formControlName="totalWeight" [nzMin]="0.1" [nzStep]="1" [nzDisabled]="true"></nz-input-number>
+          <nz-form-explain *ngIf="returnValidate.get('totalWeight')?.dirty && returnValidate.get('totalWeight')?.errors">返单重量不能为空!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired [nzSpan]="5" >上传返单图片</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <nz-upload [nzAction]="upload.action" class="return-pic" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="returnPicList"
+                     nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData"  (nzChange)="handleChange($event)">
+            <i class="anticon anticon-plus"></i>
+            <div class="ant-upload-text">上传</div>
+          </nz-upload>
+          <nz-form-explain *ngIf="returnValidate.get('returnPic')?.dirty && returnValidate.get('returnPic')?.errors">返单图片不能为空!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-template>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="isVisible=false">取消</button>
+    <button nz-button nzType="primary" (click)="waybillReturnSubmit()" [nzLoading]="returnLoading" [disabled]="returnLoading">确定
+    </button>
+  </ng-template>
+</nz-modal>
+<app-waybill-import [isVisible]="importVisible"></app-waybill-import>
+<!--批量修改-->
+<nz-modal [(nzVisible)]="modalObj.visible" [nzTitle]="modalObj.title" [nzContent]="nzcontent" [nzOkLoading]="modalObj.loading" (nzOnCancel)="modalObj.visible = false" (nzOnOk)="modalOk()" [nzMaskClosable]="false" >
+  <ng-template #nzcontent>
+    <form nz-form [formGroup]="formValidate">
+      <nz-form-item *ngFor="let data of modalObj.data">
+        <nz-form-label [nzSpan]="6" [nzFor]="data.parameter" [nzRequired]="data.required">{{data.name}}</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <input-modal *ngIf="data.type === 'inputModal'" [(inputModalModel)]="data.value" [findset]="{formId: data.formId,name: data.name,parameter: data.nameStr,parameterSend: data.idStr}" (inpEmit)="modalInputModal($event,data)"></input-modal>
+          <nz-radio-group *ngIf="data.type === 'radio'" [formControlName]="data.parameter">
+            <label nz-radio *ngFor="let i of data.data" [nzValue]="i.value">{{i.name}}</label>
+          </nz-radio-group>
+          <nz-form-explain *ngIf="formValidate.get(data.parameter)?.dirty && formValidate.get(data.parameter)?.errors">
+            请选择{{data.name}}！
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-template>
+</nz-modal>

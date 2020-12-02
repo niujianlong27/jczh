@@ -1,0 +1,30 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnclick($event)"></tpl-buttons>
+<app-table-form  (pageIndexEmit)='getPageIndex($event)'
+                 (pageSizeEmit)='getPageSize1($event)' gridId='grid1'  [dataSet]="dataSet"
+                 [pageSize]="pageSize" (updateDataResult)="updateDataResult($event)" [totalPage]="totalPage" [isMutli]="true" [listLoading]="loading"
+                 [trSelectedShow]="true" [showCount]="false"></app-table-form>
+
+
+
+<nz-modal zmMovableModal [nzWidth]="width" [nzMask]="true" [(nzVisible)]="visible"  nzTitle="物质代码-选择"
+          (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzFooter]="null">
+    <p class="m-re" style="padding-bottom:10px;" [hidden]="!visible">
+      <button nz-button nzType="default" type = "button" (click)="handleCancel()">取消</button>
+      <button nz-button class="m-l" nzType="primary" type = "button" (click)="handleOk()">确定</button>
+<!--      <i nz-icon nzType="sync" nzTheme="outline" style="float:right" [nzSpin]="refreshs" (click)="refreshData()" *ngIf="refresh"></i>-->
+    </p>
+  <form (ngSubmit)="keyUp(inputModalSearchValue)">
+    <nz-input-group [ngStyle]="{'width':' 100%'}" [nzSuffix]="suffixIconSearch" >
+
+      <input type="text"  [(ngModel)]="inputModalSearchValue" name="findset.parameter"
+             nz-input >
+      <ng-template #suffixIconSearch>
+        <i nz-icon type="search" class="pointer-cursor" (click)="keyUp(inputModalSearchValue)"></i>
+      </ng-template>
+    </nz-input-group>
+  </form>
+  <app-table-form [dataSet]="dataSet2" [isMutli]="false" (updateDataResult)="updateDataResult2($event)" gridId="grid2" [totalPage]="totalPage2"
+                  [listLoading]="loading2"
+  ></app-table-form>
+</nz-modal>

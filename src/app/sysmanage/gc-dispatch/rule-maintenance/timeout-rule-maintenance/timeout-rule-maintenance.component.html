@@ -1,0 +1,211 @@
+<nz-spin [nzSpinning]="spinning">
+  <form nz-form
+        [formGroup]="validateForm"
+        (ngSubmit)="submitForm()"
+  >
+    <div
+      [nzGutter]="24"
+      nz-row
+      nzAlign="middle"
+      nzJustify="space-around"
+    >
+      <div
+        class="schedulingParameters"
+        nz-col
+        nzSpan="24"
+      >
+        调度参数
+      </div>
+      <div nz-col nzSpan="8">
+        <nz-form-item
+          nzFlex
+          nzJustify="start"
+        >
+          <nz-form-label
+            nzSpan="12"
+            nzRequired
+            nzFor="noticeMinute"
+          >
+            进厂最大时长(分)
+          </nz-form-label>
+          <nz-form-control
+            nzSpan="12"
+          >
+            <nz-input-number
+              formControlName="noticeMinute"
+              id="noticeMinute"
+              [nzMin]="0"
+              [nzStep]="1"
+              [nzMax]="99999"
+            >
+            </nz-input-number>
+            <nz-form-explain *ngIf="validateForm.get('noticeMinute')?.dirty && validateForm.get('noticeMinute')?.errors">
+              请输入进厂最大时长(分)
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="8">
+        <nz-form-item
+          nzFlex
+          nzJustify="start"
+        >
+          <nz-form-label
+            nzRequired
+            nzFor="noticeCount"
+            nzSpan="12"
+          >
+            提醒次数
+          </nz-form-label>
+          <nz-form-control
+            nzSpan="12"
+          >
+            <nz-input-number
+              formControlName="noticeCount"
+              id="noticeCount"
+              [nzMin]="0"
+              [nzStep]="1"
+              [nzMax]="99999"
+            >
+            </nz-input-number>
+            <nz-form-explain *ngIf="validateForm.get('noticeCount')?.dirty && validateForm.get('noticeCount')?.errors">
+              请输入提醒次数
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="8">
+        <nz-form-item
+          nzFlex
+          nzJustify="start"
+        >
+          <nz-form-label
+            nzRequired
+            nzFor="noticeInterval"
+            nzSpan="12"
+          >
+            提醒间隔(分)
+          </nz-form-label>
+          <nz-form-control
+            nzSpan="12"
+          >
+            <nz-input-number
+              formControlName="noticeInterval"
+              id="noticeInterval"
+              [nzMin]="0"
+              [nzStep]="1"
+              [nzMax]="99999"
+            >
+            </nz-input-number>
+            <nz-form-explain
+              *ngIf="validateForm.get('noticeInterval')?.dirty && validateForm.get('noticeInterval')?.errors">
+              请输入提醒间隔(分)
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="8">
+        <nz-form-item
+          nzFlex
+          nzJustify="start"
+        >
+          <nz-form-label
+            nzRequired
+            nzFor="dealType"
+            nzSpan="12"
+          >
+            超时处理方式
+          </nz-form-label>
+          <nz-form-control
+            nzSpan="12"
+          >
+            <nz-select formControlName="dealType" (ngModelChange)="modelChange($event)">
+              <nz-option *ngFor="let i  of dealTypeArr" [nzValue]="i.value" [nzLabel]="i.name"></nz-option>
+            </nz-select>
+            <nz-form-explain *ngIf="validateForm.get('dealType')?.dirty && validateForm.get('dealType')?.errors">
+              请选择超时处理方式
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <ng-container *ngIf="validateForm.get('dealType').value === 'gc_addMinutes'">
+        <div nz-col nzSpan="8">
+          <nz-form-item
+            nzFlex
+            nzJustify="start"
+          >
+            <nz-form-label
+              nzRequired
+              nzFor="dealValue"
+              nzSpan="12"
+            >
+              顺延时长(分)
+            </nz-form-label>
+            <nz-form-control
+              nzSpan="12"
+            >
+              <nz-input-number
+                formControlName="dealValue"
+                id="dealValue"
+                [nzMin]="0"
+                [nzStep]="1"
+                [nzMax]="99999"
+              >
+              </nz-input-number>
+              <nz-form-explain *ngIf="validateForm.get('dealValue')?.dirty && validateForm.get('dealValue')?.errors">
+                请输入顺延时长(分)
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="8">
+          <nz-form-item
+            nzFlex
+            nzJustify="start"
+          >
+            <nz-form-label
+              nzRequired
+              nzFor="dealCount"
+              nzSpan="12"
+            >
+              顺延次数
+            </nz-form-label>
+            <nz-form-control
+              nzSpan="12"
+            >
+              <nz-input-number
+                formControlName="dealCount"
+                id="dealCount"
+                [nzMin]="0"
+                [nzStep]="1"
+                [nzMax]="99999"
+              >
+              </nz-input-number>
+              <nz-form-explain *ngIf="validateForm.get('dealCount')?.dirty && validateForm.get('dealCount')?.errors">
+                顺延次数
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </ng-container>
+    </div>
+
+
+    <nz-form-item
+      [nzFlex]="true"
+      [nzJustify]="'end'"
+      nzType="flex"
+    >
+      <nz-form-control>
+        <button
+          nz-button
+          nzType="primary"
+          [nzLoading]="saveLoading"
+        >
+          保存
+        </button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+
+</nz-spin>

@@ -1,0 +1,46 @@
+<common-page (search)="listSearch($event)" (btnAdd)="btnAdd()"  (btnDelete)="delete($event)" (btnUpdate)="btnUpdate($event)" [totalPage]="totalPage" [pageSize]="pageSize"
+    [listLoading]="listLoading" [dataSet]="dataSet" [isMutli]="false"(updateDataResult)="updateDataResult($event)"></common-page>
+
+<!--弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzOkLoading]="isOkLoading"
+(nzAfterClose)="closeResult()">
+<form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData">
+        <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+            {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="12">
+
+            <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+                <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+            </nz-radio-group>
+            
+            <input *ngIf="m.eName == 'companyName'" nz-input placeholder="物流公司名称" [formControlName]="m.eName" >
+
+            <input *ngIf="m.eName == 'truckTeam'" nz-input placeholder="车队名称" [formControlName]="m.eName">
+            <nz-input-number *ngIf="m.eName === 'delayTime'" [nzMin]="0" [nzMax]="60" [nzStep]="1" formControlName="{{m.eName}}"></nz-input-number>
+            <input *ngIf="m.eName == 'remark'" nz-input placeholder="备注" [formControlName]="m.eName">
+            
+            <nz-select #select  style="width: 236px;" *ngIf="m.eName === 'status1'" 
+                nzShowSearch nzAllowClear nzPlaceHolder="状态" [formControlName]="m.eName" >
+                <nz-option *ngFor="let i of themeArrZ" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+            </nz-select>
+          
+
+            <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+                <div *ngIf="modalValidateForm.get(m.eName).errors.pattern;else erroInf">
+                    {{ m.validators.patternErr}}
+                </div>
+                <ng-template #erroInf>
+                    {{ m.validateCon}}
+                </ng-template>
+            </nz-form-explain>
+
+        </nz-form-control>
+
+    </nz-form-item>
+</form>
+
+</nz-modal>
+

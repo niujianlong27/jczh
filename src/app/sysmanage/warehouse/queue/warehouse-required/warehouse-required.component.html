@@ -1,0 +1,124 @@
+<nz-tabset [(nzSelectedIndex)]="carNum">
+    <nz-tab *ngFor="let tab of tabs;let i = index;" [nzTitle]="tab.itemCname + '(' + tab.itemCount + ')'"
+            (nzSelect)="selectChange(tab.itemCode)">
+            <app-searchform  (search)="listSearch($event)"  [staticData]="staticData"  [btnHiden]={mutiSearch:true}  (searchComponent)="searchComponent($event)"></app-searchform>
+            <tpl-buttons (btnClick)="btnClick($event)" [btnHiden]="{'directEntry':true,'greenChannel':true,'Return':true,'BatchUpdate':true,'Update':true,'CallNum':tab.itemCname == '全部'}">
+            </tpl-buttons>
+          </nz-tab>
+        </nz-tabset>
+<app-table-form (updateDataResult)="updateDataResult($event)" [dataSet]="dataSet" [isMutli]="false" [extraTableHeight]="90"
+                [listLoading]="loading" [pageSize]="pageSize" [showCount]="false" [totalPage]="totalPage" [noGetStaticData]='true'
+                [trSelectedShow]="true" gridId='grid1' (userColumnsEmit)="colName($event)">
+
+                <ng-template #warehouse let-data let-header>
+                    <nz-select [nzAllowClear]="false" [nzShowSearch]="true" nzSize="small" [(ngModel)]="data.warehouseCode"
+                               [ngClass]="{'selectShow':data.selectShow,'selectClose':!data.selectShow}"
+                        >
+                      <nz-option *ngFor="let p of warehouseArr" [nzLabel]="p.warehouseName" [nzValue]="p.warehouseCode"></nz-option>
+                    </nz-select>
+                    <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.warehouseName}}</div>
+                  </ng-template>
+
+                  <!-- <ng-template #gate let-data let-header>
+                      <nz-select [nzAllowClear]="true" [nzShowSearch]="true" nzSize="small" [(ngModel)]="data.gateCode"
+                                 [ngClass]="{'selectShow':data.selectShow,'selectClose':!data.selectShow}"
+                                 >
+                        <nz-option *ngFor="let p of gateArr" [nzLabel]="p.itemCname" [nzValue]="p.itemCode"></nz-option>
+                      </nz-select>
+                      <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.gateName}}</div>
+                    </ng-template> -->
+
+
+</app-table-form>
+<ng-container>
+    <div style="display:block;float:left;">
+            <nz-tag [nzColor]="'#f86c6b'">排队超过48小时</nz-tag>
+            <nz-tag [nzColor]="'#ffbf00'">排队24-48小时</nz-tag>
+            <button nz-button [nzType]="'default'" [nzSize]="'small'"><span>排队24小时内</span></button>
+            <nz-tag [nzColor]="'#63c2de'">绿色通道</nz-tag>
+          </div>
+</ng-container>
+
+
+
+
+<!-- 批量修改大门 -->
+<ng-template #tplTitle>
+  <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent>
+  <form nz-form [formGroup]="validateForm">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" [nzRequired]="true">
+        新的仓库
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-select formControlName="warehouseCode" nzRequired>
+          <nz-option *ngFor="let g of warehouseArr" [nzValue]="g.warehouseCode" [nzLabel]="g.warehouseName">
+          </nz-option>
+        </nz-select>
+        <nz-form-explain *ngIf="validateForm.get('warehouseCode').dirty && validateForm.get('warehouseCode').errors">
+          <ng-container *ngIf="validateForm.get('warehouseCode').hasError('required')">
+            请选择仓库
+          </ng-container>
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</ng-template>
+<ng-template #tplFooter>
+  <button nz-button nzType="default" (click)="handleCance()">取消</button>
+  <button nz-button nzType="primary" (click)="importConfirm()">确定</button>
+</ng-template>
+
+
+
+<!-- 操作 -->
+<nz-modal [(nzVisible)]="InsertFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="Cancel()" 
+           [nzFooter]="null">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+          <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+        </nz-radio-group>
+        <!-- <nz-select #select style="width: 236px;" *ngIf="m.eName === 'gateCode'" [nzAllowClear]="false"
+                   nzShowSearch nzAllowClear nzPlaceHolder="大门" [formControlName]="m.eName" [disabled]=true
+                  >
+          <nz-option *ngFor="let i of gateArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+        </nz-select>
+
+        <nz-select #select style="width: 236px;" *ngIf="m.eName === 'warehouseCode'" [nzAllowClear]="false"
+                   nzShowSearch nzAllowClear nzPlaceHolder="仓库" [formControlName]="m.eName" [disabled]=true
+                   >
+          <nz-option *ngFor="let i of warehouseArr" [nzLabel]="i.warehouseName" [nzValue]="i.warehouseCode"></nz-option>
+        </nz-select> -->
+        <input type="{{m.type}}" *ngIf="m.type == 'input'" nz-input formControlName="{{m.eName}}" [id]="m.eName"
+               disabled=true>
+        <!-- <nz-input-number style="width: 200px;" *ngIf="m.type === 'num'" [nzMin]="1" [nzMax]="20" [nzStep]="1"
+                         formControlName="{{m.eName}}" disabled=true></nz-input-number> -->
+        <textarea rows="4" nz-input *ngIf="m.type === 'textarea'" formControlName="{{m.eName}}"></textarea>
+
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+          <div *ngIf="modalValidateForm.get(m.eName).errors['pattern'];else erroInf">
+            {{ m.validators.patternErr}}
+          </div>
+          <ng-template #erroInf>
+            {{ m.validateCon}}
+          </ng-template>
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+
+
+  </form>
+  <ng-container>
+    <div>
+      <tpl-buttons (btnClick)="btnClick($event)" 
+                   [btnHiden]="{'Find':true,'Update':true,'Operate':true,'Save':true,'BatchUpdate':true,'Cancel':true,'CallNum':true,'CancelQUEUE':true,'PassNum':true}"></tpl-buttons>
+    </div>
+  </ng-container>
+</nz-modal>

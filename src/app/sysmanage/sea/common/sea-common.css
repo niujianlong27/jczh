@@ -1,0 +1,88 @@
+
+.ant-form {
+    margin: 1em 0;
+}
+
+.ant-form-inline .ant-form-item {
+    display: inherit;
+    margin-bottom: 1em;
+}
+
+.ant-table-tbody > tr > td {
+    padding: 10px 0;
+}
+
+.b-t {
+    border-bottom: aliceblue;
+    margin-bottom: auto;
+}
+
+.p-sm-tb {
+    padding: 0; 
+}
+
+:host ::ng-deep table tr td .ellipsis{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */
+}
+
+
+.modal-table ::ng-deep .ant-table-body{
+    height: 100%;
+    min-height: 100%;
+}
+
+.inner-table ::ng-deep .ant-table-body{
+    min-height: 0px;
+    margin-top: 0.5em;
+    height: 100%;
+    min-height: 200px;
+}
+
+.ellipsis{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */
+    line-height: 20px;
+}
+
+.term {
+    display: inline-block;
+    width: 33%;
+    margin-right: 8px;
+    padding-bottom: 8px;
+    white-space: nowrap;
+    line-height: 20px;
+    text-align: right;
+    vertical-align: middle
+}
+
+.term:after {
+    position: relative;
+    top: -0.5px;
+    margin: 0 8px 0 2px;
+    content: ":";
+}
+
+.detail {
+    display: inline-block;
+    padding-bottom: 8px;
+    line-height: 20px;
+    width: 60%;
+}
+
+.btn-icon{
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin-right: 3px;
+}

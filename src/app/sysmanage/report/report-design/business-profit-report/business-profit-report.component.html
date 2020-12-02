@@ -1,0 +1,73 @@
+<common-page [dataSet]="dataSet" [pageSize]="pageSize" [totalPage]="totalPage" [listLoading]="listLoading"
+             [isMutli]="false" (search)="listSearch($event)" (btnClick)="btnClick($event)" (searchDataReturn)="searchDataReturn($event)"
+             (updateDataResult)="updateDataResult($event)"></common-page>
+<!--<form nz-form class="ant-advanced-search-form b-t search-form clearfix">-->
+  <!--<div class="fl clearfix">-->
+    <!--<label class="search-checkbox fl"></label>-->
+    <!--<div class="clearfix fl search-input-label">-->
+      <!--<span>日期:</span>-->
+    <!--</div>-->
+    <!--<div class="fl search-input-group clearfix" >-->
+      <!--<nz-date-picker-->
+        <!--nzShowTime-->
+        <!--nzFormat="yyyy-MM-01"-->
+        <!--nzPlaceHolder="开始时间"-->
+        <!--[nzDisabledDate]="disabledStartDate"-->
+        <!--[(ngModel)]="startValue"-->
+        <!--[ngModelOptions]="{standalone: true}"-->
+        <!--(ngModelChange)="onStartChange($event)"-->
+        <!--(nzOnOpenChange)="handleStartOpenChange($event)">-->
+      <!--</nz-date-picker>-->
+      <!-- - -->
+      <!--<nz-date-picker-->
+        <!--nzShowTime-->
+        <!--nzFormat="yyyy-MM-31 23:59:59"-->
+        <!--nzPlaceHolder="结束时间"-->
+        <!--[nzDisabledDate]="disabledEndDate"-->
+        <!--[(ngModel)]="endValue"-->
+        <!--[nzOpen]="endOpen"-->
+        <!--[ngModelOptions]="{standalone: true}"-->
+        <!--(ngModelChange)="onEndChange($event)"-->
+        <!--(nzOnOpenChange)="handleEndOpenChange($event)"-->
+      <!--&gt;-->
+      <!--</nz-date-picker>-->
+    <!--</div>-->
+
+  <!--</div>-->
+  <!--<div class="fl clearfix">-->
+    <!--<label class="search-checkbox fl"></label>-->
+    <!--<div class="clearfix fl search-input-label">-->
+      <!--<span>业务板块:</span>-->
+    <!--</div>-->
+    <!--<div class="fl search-input-group clearfix" >-->
+      <!--<nz-select style="width: 120px;" [(ngModel)]="selectedValue" [ngModelOptions]="{standalone: true}" nzAllowClear >-->
+        <!--<ng-container *ngFor="let select of selectedArray">-->
+          <!--<nz-option [nzValue]="select.segmentName" [nzLabel]="select.segmentName"></nz-option>-->
+        <!--</ng-container>-->
+
+      <!--</nz-select>-->
+    <!--</div>-->
+
+  <!--</div>-->
+  <!--<div class="searchBtnBox">-->
+    <!--<button nz-button type="submit" [nzType]="'primary'" nzSize="small" (click)="search()" class="button-reset m-l m-r" nzGhost>-->
+      <!--<a class="btn-icon">-->
+        <!--<img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/查询.svg">-->
+      <!--</a>-->
+      <!--查询-->
+    <!--</button>-->
+    <!--<button nz-button type="button"  [nzType]="'primary'" nzSize="small" class="button-reset m-r" nzGhost (click)="clear()">-->
+      <!--<a class="btn-icon">-->
+        <!--<img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/重置.svg">-->
+      <!--</a>-->
+      <!--重置-->
+    <!--</button>-->
+  <!--</div>-->
+<!--</form>-->
+
+
+<!--<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>-->
+<!--<app-table-form [dataSet]="dataSet" [pageSize]="pageSize" [totalPage]="totalPage" [listLoading]="listLoading"-->
+                <!--[isMutli]="false" (updateDataResult)="updateDataResult($event)">-->
+
+<!--</app-table-form>-->

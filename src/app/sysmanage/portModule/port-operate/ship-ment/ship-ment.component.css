@@ -1,0 +1,6 @@
+::ng-deep .ant-form-item-label{
+  padding: 0!important;
+}
+.rangePicker ::ng-deep .ant-calendar-picker{
+  width: 102%!important;
+}

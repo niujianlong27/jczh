@@ -1,0 +1,57 @@
+<!--<div class="clearfix" style="padding-top: 10px" [hidden]="searchFormHidden">-->
+  <!--<form nz-form [formGroup]="validateForm"  >-->
+    <!--<nz-form-item>-->
+      <!--<nz-form-label class="fl" nzSpan="1">线路</nz-form-label>-->
+      <!--&lt;!&ndash;<nz-date-picker></nz-date-picker>&ndash;&gt;-->
+      <!--<nz-form-control class="fl m-r" nzSpan="3">-->
+        <!--<nz-select style="width: 120px;" [(ngModel)]="lineName"  nzAllowClear nzPlaceHolder="请选择线路" [ngModelOptions]="{standalone: true}">-->
+          <!--<nz-option *ngFor="let item of lineArr" nzValue="{{item.lineName}}" nzLabel="{{item.lineName}}">-->
+
+          <!--</nz-option>-->
+        <!--</nz-select>-->
+      <!--</nz-form-control>-->
+
+      <!--&lt;!&ndash;<nz-form-label class="fl" nzSpan="1">城市</nz-form-label>&ndash;&gt;-->
+      <!--&lt;!&ndash;&lt;!&ndash;<nz-date-picker></nz-date-picker>&ndash;&gt;&ndash;&gt;-->
+      <!--&lt;!&ndash;<nz-form-control class="fl m-r" nzSpan="3">&ndash;&gt;-->
+      <!--&lt;!&ndash;<nz-select style="width: 120px;" [(ngModel)]="paramCity" nzAllowClear nzPlaceHolder="请选择城市" [ngModelOptions]="{standalone: true}">&ndash;&gt;-->
+      <!--&lt;!&ndash;<nz-option nzValue="jack" nzLabel="Jack"></nz-option>&ndash;&gt;-->
+      <!--&lt;!&ndash;<nz-option nzValue="lucy" nzLabel="Lucy"></nz-option>&ndash;&gt;-->
+      <!--&lt;!&ndash;<nz-option *ngFor="let item of cityArr" nzValue="{{item.name}}" nzLabel="{{item.value}}">&ndash;&gt;-->
+
+      <!--&lt;!&ndash;</nz-option>&ndash;&gt;-->
+      <!--&lt;!&ndash;</nz-select>&ndash;&gt;-->
+      <!--&lt;!&ndash;</nz-form-control>&ndash;&gt;-->
+
+      <!--&lt;!&ndash;<nz-form-label class="fl" nzSpan="1">车队</nz-form-label>&ndash;&gt;-->
+
+      <!--&lt;!&ndash;<nz-form-control class="fl m-r" nzSpan="3">&ndash;&gt;-->
+      <!--&lt;!&ndash;<nz-select style="width: 120px;" [(ngModel)]="paramCar" nzAllowClear nzPlaceHolder="请选择车队" [ngModelOptions]="{standalone: true}">&ndash;&gt;-->
+      <!--&lt;!&ndash;<nz-option nzValue="jack2" nzLabel="Jack2"></nz-option>&ndash;&gt;-->
+      <!--&lt;!&ndash;<nz-option nzValue="lucy2" nzLabel="Lucy2"></nz-option>&ndash;&gt;-->
+      <!--&lt;!&ndash;</nz-select>&ndash;&gt;-->
+      <!--&lt;!&ndash;</nz-form-control>&ndash;&gt;-->
+
+      <!--<nz-form-label class="fl"  nzSpan="2">时间范围</nz-form-label>-->
+      <!--&lt;!&ndash;<nz-date-picker></nz-date-picker>&ndash;&gt;-->
+      <!--<nz-form-control class="fl m-r" nzSpan="3">-->
+        <!--&lt;!&ndash;<nz-date-picker  formControlName="chooseTime"></nz-date-picker>&ndash;&gt;-->
+        <!--<nz-range-picker formControlName="chooseTime"></nz-range-picker>-->
+        <!--&lt;!&ndash;<nz-form-explain *ngIf="validateForm.get('chooseTime').dirty && validateForm.get('chooseTime').errors"><span>请选择时间范围</span></nz-form-explain>&ndash;&gt;-->
+
+      <!--</nz-form-control>-->
+    <!--</nz-form-item>-->
+  <!--</form>-->
+
+<!--</div>-->
+
+<app-searchform (search)="listSearch($event)" (searchDataReturn)="searchDataReturn($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" (btnSearch)="btnSearch($event)"></tpl-buttons>
+
+
+<app-table-form  [pageFun]='true' (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)' [gridId]="'grid1'"
+                   [dataSet]="dataSet1" (updateDataResult)="updateDataResult($event)" [checkBoxWidth]="'120px'" [closeBgTr]="false"
+                   [pageSize]="pageSize1" [totalPage]="totalPages1" [listLoading]="listLoading1"></app-table-form>
+
+
+

@@ -1,0 +1,15 @@
+.marL-6{
+  margin-left:6px;
+}
+.marL-10{
+  margin-left:10px;
+}
+/*:host ::ng-deep  .ant-table-placeholder{
+  display: none!important;
+}*/
+.btn-bx{
+  padding-top: 15px;
+}
+.btn-bx button{
+  margin-right: 15px;
+}

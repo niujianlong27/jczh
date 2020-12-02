@@ -1,0 +1,18 @@
+.selectShow{
+  width: 100%;
+}
+.selectClose{
+  visibility: hidden;
+  position:absolute
+}
+.divShow {
+  text-align: left;
+
+}
+.divClose{
+  visibility: hidden;
+  position:absolute
+}
+:host::ng-deep .ant-table-tbody > tr > td{
+  text-align: left;
+}

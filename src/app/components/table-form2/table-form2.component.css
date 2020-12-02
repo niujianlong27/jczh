@@ -1,0 +1,72 @@
+.form-btn{
+    display: inline-block;
+}
+.b-t{
+    padding-top:15px;
+    border-bottom: 1px #ddd solid;
+    margin-bottom:30px;
+}
+/*标签栏重置*/
+.table-list ::ng-deep .ant-tabs-bar {
+    border-bottom-width:0;
+    margin:1px;
+}
+.grid-operate a{
+    padding:0 5px;
+}
+.grid-operate a:not(:last-child){
+  border-right:1px#999 solid;
+}
+
+.table-th{
+    position:relative;
+}
+.resize-handle{
+    display: inline-block;
+    position: absolute;
+    left: -1px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    padding: 0;
+    border-left:1px #000 dashed;
+    opacity: 0;
+    filter:alpha(opacity=0);
+    z-index:999;
+    cursor: col-resize;
+}
+
+.resultShow ::ng-deep .ant-table-placeholder{
+    display:none !important;
+}
+.table-grid ::ng-deep .ant-table-placeholder{
+    position: absolute;
+    top:50%;
+    left:0;
+    right:0;
+    margin:0 auto;
+}
+
+::ng-deep .ant-table-filter-dropdown-link.clear{
+    clear: none;
+}
+::ng-deep .ant-table-filter-dropdown .ant-dropdown-menu {
+    max-height:300px;
+    overflow: auto;
+}
+
+:host ::ng-deep table tr td span{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  /* autoprefixer: off */
+  -webkit-box-orient: vertical;
+  /* autoprefixer: on */
+  /*white-space: pre-line;*/
+  word-break: break-all;
+}
+
+::ng-deep .ant-spin-blur {
+    overflow: inherit;
+}

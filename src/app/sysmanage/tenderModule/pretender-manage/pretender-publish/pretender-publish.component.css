@@ -1,0 +1,23 @@
+.grid-pad {
+  padding-top: 30px;
+}
+
+.input-width ::ng-deep .ant-input {
+  width: 90px;
+}
+
+.modal-table ::ng-deep .ant-table-wrapper div.ant-table-body {
+  height: auto;
+  min-height: 0;
+  margin-bottom: 2px;
+}
+
+.reference {
+  width: 75px;
+}
+.modal-table ::ng-deep .ant-table-wrapper div.ant-table-body{
+  min-height: 0px!important;
+}
+.modal-table ::ng-deep .ant-table-fixed-header > .ant-table-content > .ant-table-scroll > .ant-table-body{
+  min-height: 0px!important;
+}

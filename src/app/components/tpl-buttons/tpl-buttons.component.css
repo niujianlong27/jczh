@@ -1,0 +1,28 @@
+.btn-box{
+    position:relative;
+    padding-top: 7px;
+    border-bottom: 1px #ddd solid;
+    margin-bottom:8px;
+}
+.btn-box button{
+  margin-right:15px;
+  margin-bottom: 7px;
+}
+.b-t p{
+    margin-bottom:0;
+}
+
+.btn-icon{
+  display: inline-block;
+  width:15px;
+  height:15px;
+  margin-right:3px;
+}
+.btn-icon img{
+  display:inline-block;
+  vertical-align: middle;
+  margin-top:-2px;
+  width:15px;
+  height:15px;
+
+}

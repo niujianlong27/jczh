@@ -1,0 +1,75 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+
+
+<app-table-form [gridId]="'grid1'"
+                [dataSet]="dataSet1"
+                [pageSize]="pageSize1"
+                [totalPage]="totalPages1"
+                [isMutli]="true"
+                [listLoading]="listLoading1"
+                (updateDataResult)="updateDataResult($event)">
+
+</app-table-form>
+
+<ng-template #tplTitle>
+  <span>{{tplTitle}}</span>
+</ng-template>
+<ng-template #tplContent>
+  <form nz-form [formGroup]="modalValidateForm">
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="7" *ngFor="let m of modalFormData" style="margin-left:10px;margin-bottom: 10px ">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="10" [nzRequired]="m.require">
+            {{m.name}}
+          </nz-form-label>
+
+          <nz-form-control style="margin-left: -10px" [nzSpan]="14">
+            <nz-date-picker class="rangePicker" *ngIf="m.type == 'date'" [formControlName]="m.eName"
+                            [nzShowTime]="'true'"></nz-date-picker>
+            <nz-select nzAllowClear nzPlaceHolder="请选择" (ngModelChange)=change($event) formControlName="{{m.eName}}"
+                       *ngIf="m.type == 'select'">
+              <nz-option *ngFor="let o of lockoutTypeArr" [nzValue]="o.value" [nzLabel]="o.name"></nz-option>
+            </nz-select>
+            <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'"
+                   [readOnly]="m.readOnly || (buttonId == 'Update' && (m.eName == 'vehicleNo' || m.eName == 'driverName') )" placeholder="{{m.placeholder}}">
+            <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+
+              <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+                {{m.validateCon}}
+              </ng-container>
+              <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+                {{m.validators.patternErr}}
+              </ng-container>
+
+            </nz-form-explain>
+          </nz-form-control>
+
+        </nz-form-item>
+      </div>
+        <div nz-col [nzSpan]="7"  *ngFor="let m of modelList" style="margin-left:10px;margin-bottom: 10px ">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="10" [nzRequired]="m.require">
+              {{m.name}}
+            </nz-form-label>
+
+            <nz-form-control style="margin-left: -10px" [nzSpan]="14">
+              <nz-date-picker class="rangePicker" *ngIf="m.type == 'date'" [formControlName]="m.eName"
+                              [nzShowTime]="'true'"></nz-date-picker>
+              <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'"
+                     [readOnly]="m.readOnly" placeholder="{{m.placeholder}}">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+    </div>
+  </form>
+
+</ng-template>
+
+<ng-template #tplFooter>
+  <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  <button nz-button nzType="primary" (click)="handleOk()">确定
+  </button>
+</ng-template>

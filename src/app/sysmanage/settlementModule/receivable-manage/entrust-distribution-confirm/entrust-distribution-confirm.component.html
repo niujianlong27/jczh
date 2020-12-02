@@ -1,0 +1,8 @@
+<common-page [pageSize]="pageSize" [totalPage]="totalPage" 
+gridId="grid1"
+[btnDisable]="{'cancel':!selectData[0],'confirm': !selectData[0], 'Refund': !selectData[0]}"
+[dataSet]="listData" [listLoading]="loading"
+(search)="listSearch($event)" (updateDataResult)="selectDataFun($event)" 
+[isMutli]="true" (btnClick)="btnClick($event)" [triggerSearch]="true">
+
+</common-page>

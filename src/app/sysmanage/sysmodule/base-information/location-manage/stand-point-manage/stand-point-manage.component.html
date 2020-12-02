@@ -1,0 +1,8 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+<common-page (search)="search($event)" [triggerSearch]="true" (btnClick)="btnclick($event)"
+             [dataSet]="listData" [totalPage]="total" [listLoading]="loading"
+             (updateDataResult)="selectedData($event)"></common-page>
+<location-manage-modal [(visible)]="modalFormVisible" [status]="status" [params]="params" (updateList)="updateList($event)" [rowid]="rowid" >
+
+</location-manage-modal>
+

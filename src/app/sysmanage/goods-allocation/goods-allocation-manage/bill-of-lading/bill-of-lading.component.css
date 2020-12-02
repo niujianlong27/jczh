@@ -1,0 +1,10 @@
+.child{
+  display: inline;
+  margin-left:100px
+}
+.parent{
+  display: block;
+}
+.tableheader{
+  text-align: center;
+}

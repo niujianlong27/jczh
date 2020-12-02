@@ -1,0 +1,31 @@
+<form nz-form [formGroup]="validateForm" class="ant-advanced-search-form" style="padding:15px 20px 0px 0px">
+  <div nz-row [nzGutter]="24" nzAlign="top" nzJustify="space-around">
+    <div nz-col [nzSpan]="8" *ngFor="let control of controlArray">
+      <nz-form-item nzFlex>
+        <nz-form-label [nzRequired]="control.require" [nzSpan]="6"
+                       [nzFor]="control.eName">{{ control.cName}}</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <input-modal *ngIf="control.type == 'modal'" [isMutli]="false" [findset]="formIdFindset"
+          [inputModalModel]="inputModalModel" (inpEmit)="inpEmit($event)" [borderRed]="borderRed"
+          [DISABLED]="true"></input-modal> 
+         
+          <input *ngIf="control.type == 'text' || control.type == 'number'" nz-input [type]="control.type"
+          [formControlName]="control.eName" [attr.id]="control.eName">
+
+          <nz-form-explain *ngIf="validateForm.get(control.eName).dirty && validateForm.get(control.eName).errors">
+            <ng-container *ngIf="validateForm.get(control.eName).hasError('required')">
+              {{control.validateCon}}
+            </ng-container>
+          </nz-form-explain>
+
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col [nzSpan]="24" style="text-align: right;">
+      <button nz-button [nzType]="'primary'" (click)="submitForm()">确定</button>
+      <button nz-button (click)="cancel()">取消</button>
+    </div>
+  </div>
+</form>

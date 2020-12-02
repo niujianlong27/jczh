@@ -1,0 +1,178 @@
+.xforce-invoice-card {
+  position: relative;
+  font-size: 12px;
+  width: 1000px;
+  min-width: 900px;
+  color: rgb(90, 91, 93);
+  border-width: 2px;
+  border-style: solid;
+  border-color: rgb(209, 176, 149);
+  border-image: initial;
+  border-radius: 20px;
+  padding: 20px 50px;
+  margin: 0px auto;
+}
+.xforce-invoice-card::before {
+  left: 30px;
+}
+.xforce-invoice-card::after {
+  right: 30px;
+}
+.xforce-invoice-card::after, .xforce-invoice-card::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  height: 100%;
+  border-width: 1px;
+  border-style: dashed;
+  border-color: rgb(213, 183, 157);
+  border-image: initial;
+}
+.xforce-invoice-card .card-header {
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+.xforce-invoice-common .label {
+  position: relative;
+  font-weight: 700;
+  color: rgb(193, 149, 113);
+}
+.xforce-invoice-card .status-tips {
+  position: absolute;
+  top: -30px;
+  left: -20px;
+}
+.blockchain {
+  position: absolute;
+  right: 56px;
+  top: 23px;
+  width: 100px;
+}
+.xforce-invoice-card .base-info {
+  margin-bottom: 10px;
+}
+.xforce-invoice-common table td{
+  white-space: normal;
+  word-wrap: none;
+}
+.xforce-invoice-common p{
+  margin-bottom: 0;
+}
+.xforce-invoice-common .xforce-col-5 {
+  width: 20.8333%;
+}
+.xforce-invoice-common .xforce-col-4 {
+  width: 16.6667%;
+}
+.xforce-invoice-common .xforce-col-6 {
+  width: 25%;
+}
+.xforce-invoice-common .xforce-col-2 {
+  width: 8.33333%;
+}
+.xforce-invoice-common [class*="xforce-col-"] {
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+  font-size: 12px;
+  padding: 0px 5px;
+}
+.xforce-invoice-common .label__inner {
+  display: inline-block;
+  vertical-align: top;
+}
+.xforce-invoice-common .plr5 {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.xforce-invoice-common table tr td {
+  border-right: 1px solid rgb(209, 176, 149);
+  white-space: normal;
+  word-break: normal;
+}
+.xforce-invoice-common .label__vertical {
+  display: inline-block;
+  text-align: center;
+  padding: 0px 6px;
+}
+.xforce-invoice-common .padding-0 {
+  padding: 0px;
+}
+.xforce-invoice-common .label__inner {
+  display: inline-block;
+  vertical-align: top;
+}
+.xforce-invoice-common .xforce-col-19 {
+  width: 79.1667%;
+}
+.xforce-invoice-common table tr td:last-child {
+  border-right: none;
+}
+.xforce-invoice-common .height-240 {
+  min-height: 240px;
+}
+.xforce-invoice-common table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border-width: 1px 1px 1px;
+  border-style: solid solid none;
+  border-color: rgb(209, 176, 149) rgb(209, 176, 149) rgb(209, 176, 149);
+  border-image: initial;
+  border-spacing: 0px;
+  border-bottom: none;
+}
+.xforce-invoice-common .text-center {
+  text-align: center;
+}
+.xforce-invoice-common table tr th {
+  padding: 5px 0px;
+  border-right: 1px solid rgb(209, 176, 149);
+}
+.xforce-invoice-common .align-left {
+  text-align: left;
+}
+.word-break {
+  word-break: break-all;
+}
+.xforce-invoice-common .align-right {
+  text-align: right;
+}
+.xforce-invoice-common .height-30 {
+  height: 30px;
+  line-height: 30px;
+}
+.xforce-invoice-common .ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.xforce-invoice-common .xforce-col-8 {
+  width: 33.3333%;
+}
+.xforce-invoice-common .label__semi::after {
+  content: ":";
+  position: relative;
+  top: -0.5px;
+  margin: 0px 5px 0px 2px;
+}
+.xforce-invoice-common .word-wrap {
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+.xforce-invoice-common table:last-child {
+  border-bottom: 1px solid rgb(209, 176, 149);
+}
+
+::ng-deep .invoice-detial-modal .ant-modal-body{
+  padding: 0;
+}
+.text-ellisped{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: keep-all;
+  font-size: 10px;
+}

@@ -1,0 +1,8 @@
+p{
+  font-size: 20px;
+}
+/* 避免被全局样式修改 */
+:host ::ng-deep .table-grid .ant-table-wrapper div.ant-table-body, 
+:host ::ng-deep .table-grid .ant-table-fixed-header > .ant-table-content > .ant-table-scroll > .ant-table-body{
+  /*margin-top: unset;*/
+}

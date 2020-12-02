@@ -1,0 +1,127 @@
+<div class="goods">
+  <nz-layout class="app-layout">
+    <app-home-page-header></app-home-page-header>
+    <div class="goodsbg">
+      <main class="goodsType">
+        <div class="oneOfType">
+          <div class="carsNumber">{{totalNumber}}</div>
+          <div>资源总计(条)</div>
+        </div>
+
+        <div class="oneOfType">
+          <div class="carsNumber">{{totalNumber*20}}</div>
+          <div>资源总计(吨)</div>
+        </div>
+
+        <div class="oneOfType">
+          <div class="carsNumber">{{totalNumber*20}}</div>
+          <div>已成交(吨)</div>
+        </div>
+
+        <div class="oneOfType">
+          <div class="carsNumber">{{addNumber}}</div>
+          <div>今日新增(条)</div>
+        </div>
+
+        <div class="oneOfType">
+          <div class="carsNumber">{{addNumber*50}}</div>
+          <div>今日新增(吨)</div>
+        </div>
+      </main>
+      <span class="button" (click)="route()">
+        发布货源
+      </span>
+    </div>
+  </nz-layout>
+  <section>
+    <span>待成交145条</span><span>已成交12345条</span>
+    <div style="margin: 20px">
+      <div nz-col nzSpan="4">
+        <nz-form-label [nzSm]="4" [nzXs]="24">装点</nz-form-label>
+        <nz-form-control [nzSm]="20" [nzXs]="24">
+          <nz-cascader [(ngModel)]="zhuang" [nzLoadData]="loadData" (ngModelChange)="onChanges($event)"></nz-cascader>
+        </nz-form-control>
+      </div>
+      <div nz-col nzSpan="4">
+        <nz-form-label [nzSm]="4" [nzXs]="24">卸点</nz-form-label>
+
+        <nz-form-control [nzSm]="20" [nzXs]="24">
+          <nz-cascader [(ngModel)]="xie" [nzLoadData]="loadData" (ngModelChange)="onChanges($event)"></nz-cascader>
+        </nz-form-control>
+      </div>
+      <div nz-col nzSpan="4">
+        <nz-form-label [nzSm]="6" [nzXs]="24">品种</nz-form-label>
+        <nz-form-control [nzSm]="17" [nzXs]="24">
+
+          <nz-select style="width: 120px" [(ngModel)]="type" nzAllowClear>
+            <nz-option [nzLabel]="'白卷'" [nzValue]="'白卷'"></nz-option>
+            <nz-option [nzLabel]="'平板'" [nzValue]="'平板'"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </div>
+      <div nz-col nzSpan="8">
+        <nz-form-item>
+          <nz-form-label [nzSm]="4">装货时间</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="dateChange($event)" nzShowTime></nz-range-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="4">
+        <span class="search">查询</span>
+      </div>
+
+    </div>
+  </section>
+  <main class="tran table">
+    <nz-spin [nzSimple]="false" [nzSpinning]="tableLoading1">
+      <table class="tab-scroll">
+        <thead>
+        <tr class="table-title">
+          <th style="width: 20%;">装点/卸点</th>
+          <th style="width: 10%;">品种</th>
+          <th style="width: 14%;">总量/待成交量(吨)</th>
+          <th style="width: 12%;">装货时间</th>
+          <th style="width: 12%;">期望运价</th>
+          <th style="width: 12%;">发布时间</th>
+          <th style="width:20%;"></th>
+        </tr>
+        </thead>
+      </table>
+
+        <table #table class="tab-scroll">
+          <tbody>
+          <div *ngFor="let item of dataSet"  style="width: 100%!important;">
+            <tr>
+              <!--<p>-->
+              <td style="width: 20%">{{item.startPoint}}</td>
+              <td style="width: 10%">{{item.type}}</td>
+              <td style="width: 14%">{{item.zong}}</td>
+              <td style="width: 12%">{{item.vehiclenullDate}}</td>
+              <td style="width: 12%">{{item.price}}</td>
+              <td style="width: 12%">{{item.publishDate}}</td>
+              <td style="width: 20%;position: relative" rowspan="2">
+                <img style="height:40px;width:80px;
+                  position: absolute;right: 0;top: 0;" src="../../../assets/static/dcj.png" alt="">
+                <span class="read" (click)="route()">查看详情</span>
+              </td>
+            </tr>
+            <tr>
+              <td>{{item.endPoint}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+
+              <!--</p>-->
+            </tr>
+          </div>
+
+          </tbody>
+        </table>
+      <!--</div>-->
+    </nz-spin>
+
+  </main>
+</div>

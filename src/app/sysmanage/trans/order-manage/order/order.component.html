@@ -1,0 +1,127 @@
+<app-searchform (search)="query($event)" [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [btnDisable]="{'update': selectedOrderData.length != 1, 'delete': selectedOrderData.length == 0}" [btnLoading]="{'Valid': btnLoading.valid, 'ItemValid': btnLoading.itemValid, 'Download': btnLoading.download, 'Export': btnLoading.export,
+            'print': btnLoading.print,'saleClose': btnLoading.saleClose, 'Back': btnLoading.back, 'Integrated': btnLoading.integrated, 'Pick': btnLoading.pick}" [btnHiden]="{'Use':true,'Cancel':true}">
+
+</tpl-buttons>
+<app-grid-resize [gridOne]="gridOne" [gridTwo]="gridTwo" (selfHeightResult)="gridHeight($event)">
+    <ng-template #gridOne>
+        <app-table-form gridId="order" [dataSet]="orderData" [pageSize]="pageSize" tabIndex="1" (userColumnsEmit)="userColumnsEmit($event)" [selfTableHeight]="gridOneHeight" [selectedChange]="true" [totalPage]="total" (updateDataResult)="selectedOrder($event)"
+            (listClick)="rowCilcked($event)" [isMutli]="true" [colSet]="true" [listLoading]="loading" [paginationRef]="totalStats">
+        </app-table-form>
+        <ng-template #totalStats>
+            <!--&nbsp;<span> 已选 {{selectedOrderData.length}} 条</span>-->
+            &nbsp;<span> 已选重量 {{totalWeight| number:'1.3-3'  }} 吨</span> &nbsp;
+            <span> 已选件数 {{totalSheet | number:'1.2-2'}} 件</span> &nbsp;
+            <span> 已选金额 {{totalPrice | number:'1.2-2' }} 元</span>
+        </ng-template>
+    </ng-template>
+
+    <ng-template #gridTwo>
+        <app-table-form gridId="item" [dataSet]="itemData" isMutli="true" [nzShowPagination]="false" [selfTableHeight]="gridTwoHeight" [caculateEnameArr]="caculateEnameArr1">
+
+        </app-table-form>
+    </ng-template>
+</app-grid-resize>
+<!--<app-modal-confirm [deleteVisible]="deleteVisable" modalTitle="作废确认框" modalCon="是否确定作废所选委托记录？" (modalConfirmResult)="modalConfirmResult($event)">-->
+<!--</app-modal-confirm>-->
+<ng-template #tplTitle>
+    <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent>
+    <form nz-form [formGroup]="validateForm"   >
+        <nz-form-item *ngFor="let m of modalFormData" [hidden]="m.hidden">
+            <nz-form-label [nzSpan]="6" [nzRequired]="true">
+                {{m.name}}
+            </nz-form-label>
+
+            <nz-form-control [nzSpan]="16">
+                <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'" (click)="selectFile()" [readOnly]="m.readOnly">
+                <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'file'" #fileInput (change)="fileChange($event)">
+                <nz-form-explain *ngIf="validateForm.get(m.eName).dirty && validateForm.get(m.eName).errors">
+                    <ng-container *ngIf="validateForm.get(m.eName).hasError('required')">
+                        {{m.validateCon}}
+                    </ng-container>
+                    <ng-container *ngIf="validateForm.get(m.eName).hasError('pattern')">
+                        {{m.validators.patternErr}}
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+
+        </nz-form-item>
+    </form>
+</ng-template>
+<ng-template #tplFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+    <button nz-button nzType="primary" (click)="importConfirm()" [nzLoading]="implistLoading">确定</button>
+</ng-template>
+
+
+<ng-template #tplTitle1>
+    <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent1>
+    <!--<nz-form-control [nzSpan]="16">-->
+    <!--<nz-upload [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="FileList"-->
+    <!--[nzData]="handleData" (nzChange)="getFileUrl($event)">-->
+    <!--<button nz-button>-->
+    <!--<i nz-icon type="upload"></i><span>请选择文件</span>-->
+    <!--</button>-->
+    <!--</nz-upload>-->
+    <!--</nz-form-control>-->
+    <!--<div style="margin-top:-10px;margin-bottom:10px">-->
+        <!--<button nz-button nzType="default" (click)="handleCancel()">取消</button>-->
+        <!--<button class="m-l-sm" nz-button nzType="primary" (click)="importConfirm1()" [disabled]="uploadDisabled">确定</button>-->
+    <!--</div>-->
+    <div class="clearfix">
+        <nz-upload nzListType="picture" [nzAction]="upload.action" [(nzFileList)]="fileList" [nzData]="upload.handleData" [nzDisabled]="uploadStatus" [nzMultiple]="true" [nzCustomRequest]='upload.handleRequest' [nzRemove]="fileRemove" (nzChange)="getFileUrl($event)">
+            <button nz-button><i nz-icon type="upload"></i><span>上传文件</span></button>
+        </nz-upload>
+        <!--    <nz-upload nzListType="picture-card" nzAccept="image/*" [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest'-->
+        <!--               [(nzFileList)]="fileList" [nzPreview]="handlePreview" [nzData]="upload.handleData"-->
+        <!--               (nzChange)="getFileUrl($event)">-->
+        <!--      <i class="fa fa-plus" style="font-size: 30px;color: #ccc"></i>-->
+        <!--      <div class="ant-upload-text">Upload</div>-->
+        <!--    </nz-upload>-->
+        <!--    <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"-->
+        <!--              (nzOnCancel)="previewVisible=false">-->
+        <!--      <ng-template #modalContent>-->
+        <!--        <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }"/>-->
+        <!--      </ng-template>-->
+        <!--    </nz-modal>-->
+    </div>
+</ng-template>
+<ng-template #tplFooter1>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+    <button nz-button nzType="primary" (click)="importConfirm1()" [disabled]="uploadDisabled">确定</button>
+</ng-template>
+
+
+<ng-template #tplTitle3>
+    <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent3>
+    <form nz-form [formGroup]="validateForm1">
+        <nz-form-item *ngFor="let m of modalFormData3" [hidden]="m.hidden">
+            <nz-form-label [nzSpan]="6" [nzRequired]="true">
+                {{m.name}}
+            </nz-form-label>
+
+            <nz-form-control [nzSpan]="16">
+                <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'" [readOnly]="m.readOnly">
+                <nz-form-explain *ngIf="validateForm1.get(m.eName).dirty && validateForm1.get(m.eName).errors">
+                    <ng-container *ngIf="validateForm1.get(m.eName).hasError('required')">
+                        {{m.validateCon}}
+                    </ng-container>
+                    <ng-container *ngIf="validateForm1.get(m.eName).hasError('pattern')">
+                        {{m.validators.patternErr}}
+                    </ng-container>
+                </nz-form-explain>
+            </nz-form-control>
+
+        </nz-form-item>
+    </form>
+</ng-template>
+<ng-template #tplFooter3>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+    <button nz-button nzType="primary" (click)="handleOk1()" [nzLoading]="implistLoading">确定</button>
+</ng-template>

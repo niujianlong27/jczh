@@ -1,0 +1,143 @@
+<nz-spin nzTip="正在加载..." *ngIf="pageLoading" style="margin-top: 50px;"></nz-spin>
+<ng-container *ngIf="!pageLoading">
+  <form nz-form class="check-info" [formGroup]="checkForm">
+    <div nz-row nzType="flex">
+      <div nz-col [nzSpan]="8">
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24">盘库单号</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <input nz-input disabled placeholder="系统生成" formControlName="checkWsNo"/>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="8">
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>盘库时间</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-date-picker
+              nzShowTime
+              formControlName="checkWsTime"
+              style="width: 100%"
+              [nzStyle]="{width: '100%'}"
+              nzFormat="yyyy-MM-dd HH:mm:ss">
+          </nz-date-picker>
+          <nz-form-explain *ngIf="checkForm.get('checkWsTime')?.dirty && checkForm.get('checkWsTime')?.errors"
+          >请填写盘库时间</nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="8">
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>盘库人</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-select 
+            nzShowSearch
+            nzAllowClear
+            formControlName="checkUserId"
+            (nzOnSearch)="selectSearch($event)"
+            (nzOpenChange)="selectOpen($event)"
+            (nzScrollToBottom)="loadMore()">
+                <ng-container *ngFor="let item of userData">
+                  <nz-option [nzLabel]="item.name" [nzValue]="item.userId"></nz-option>
+                </ng-container>
+            </nz-select>
+            <nz-form-explain *ngIf="checkForm.get('checkUserId')?.dirty && checkForm.get('checkUserId')?.errors"
+              >请选择盘库人</nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row nzType="flex">
+      <div nz-col [nzSpan]="8">
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24">备注</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <input nz-input formControlName="remark"/>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+  <tpl-buttons 
+  (btnClick)="btnClick($event)"
+  [btnLoading]="{save: saveLoading}"
+  [btnHiden]="{matching: !btnMatching}"></tpl-buttons>
+  <app-table-form 
+  gridId="grid1"
+  [isMutli]="true"
+  (inputBlurFun)="inputBlur($event)"
+  (userColumnsEmit)="columns($event)"
+  [dataSet]="data">
+    <ng-template #newWsArea let-data let-index="index">
+      <nz-select style="width: 100%"
+        [(ngModel)]="data.newWsArea"
+        (ngModelChange)="newWsAreaChange($event, data.newWsAreaArr, index)"
+        nzSize="small"
+        nzShowSearch
+        nzAllowClear>
+        <ng-container *ngFor="let item of data.newWsAreaArr">
+          <nz-option [nzLabel]="item.areaName" [nzValue]="item.areaName"></nz-option>
+        </ng-container>
+      </nz-select>
+    </ng-template>
+    <ng-template #newWsLocation let-data let-index="index">
+      <nz-select style="width: 100%"
+      [(ngModel)]="data.newWsLocation"
+      (ngModelChange)="newWsLocationChange($event, index)"
+      [nzDisabled]="!data.newWsArea"
+      nzSize="small"
+      nzShowSearch
+      nzAllowClear>
+      <ng-container *ngFor="let item of data.newWsLocationArr">
+        <nz-option [nzLabel]="item.locationName" [nzValue]="item.locationName"></nz-option>
+      </ng-container>
+      </nz-select>
+    </ng-template>
+  </app-table-form>
+
+  <nz-modal
+  [(nzVisible)]="visible"
+  nzTitle="在库库存"
+  nzWidth="70%"
+  (nzOnCancel)="visible = false"
+  [nzContent]="modalContent"
+  (nzOnOk)="ok()">
+    <ng-template #modalContent>
+      <app-searchform
+      [searchFormShow]="true" 
+      (search)="getDetail($event)"
+      gridId="grid2"></app-searchform>
+      <app-table-form 
+        gridId="grid2"
+        selfTableHeight="300px"
+        [listLoading]="loading"
+        [dataSet]="modalData"
+        [isMutli]="true"
+        [colSet]="false"
+        [nzShowPagination]="false"></app-table-form>
+    </ng-template>
+  </nz-modal>
+  <nz-modal
+   [(nzVisible)]="matchVisible"
+   nzTitle="匹配数据"
+   nzWidth="70%"
+   [nzContent]="content"
+   (nzOnCancel)="matchVisible = false"
+   (nzOnOk)="matchingOk()">
+     <ng-template #content>
+        <app-searchform
+          class="matching-search"
+          gridId="grid3"
+          [searchFormShow]="true"
+          (search)="getMatchData($event)"></app-searchform>
+        <app-table-form
+          gridId="grid3"
+          selfTableHeight="300px"
+          [listLoading]="matchLoading"
+          [dataSet]="matchData"
+          [isMutli]="true"
+          [colSet]="false"
+          [nzShowPagination]="false"></app-table-form>
+      </ng-template>
+  </nz-modal>
+</ng-container>

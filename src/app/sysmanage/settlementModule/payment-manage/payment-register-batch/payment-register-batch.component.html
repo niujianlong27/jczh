@@ -1,0 +1,28 @@
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+
+<app-table-form searchParamFiled="companyId" searchListFiled="fleetCompanyId" [isCheckBox]=false [searchParamFiledNot]="{carrierCompanyName:true}"
+                [nzShowPagination]=false [gridId]='"grid2"' [isMutli]="isMutli" [dataSet]='dataSet'
+                [totalPage]='totalPages' (inpEmit)="commonPageEmit($event)" (userColumnsEmit)="userColumnsEmit($event)" (modelChange)="modelChange($event)"></app-table-form>
+
+<ng-template #tplTitle>
+  <span>{{tplTitle}}</span>
+</ng-template>
+<ng-template #tplContent>
+  <common-page (search)='modal_listSearch($event)' [isMutli]='modal_isMutli' [dataSet]='modal_dataSet' [gridId]='gridId'
+               [formId]="formId" [triggerSearch]="true"
+               [totalPage]='modal_totalPages' [listLoading]="modal_loading" (btnClick)='modal_btnClick($event)'
+               (updateDataResult)='modal_check($event)'></common-page>
+
+</ng-template>
+<ng-template #tplFooter>
+  <button nz-button nzType="primary" (click)="modal_success()">确定</button>
+  <button nz-button nzType="default" (click)="modal_return()">取消</button>
+</ng-template>
+
+<!-- 提示弹窗 -->
+<app-modal-confirm [deleteVisible]='showTipModal' [modalTitle]='"提示"' [modalCon]='modalCon'
+                   (modalConfirmResult)='tipModalResult($event)'></app-modal-confirm>
+
+<!-- <nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"> -->
+
+<!-- </nz-modal> -->

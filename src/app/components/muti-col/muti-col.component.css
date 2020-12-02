@@ -1,0 +1,9 @@
+.setting-col {
+  display: inline-block;
+  height: 24px;
+  padding: 1px;
+  width: 24px;
+  background: #f7f7f7;
+  text-align: center;
+  border: 1px #ddd solid;
+}

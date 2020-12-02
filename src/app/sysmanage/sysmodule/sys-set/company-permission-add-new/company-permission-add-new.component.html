@@ -1,0 +1,161 @@
+<common-page (search)="listSearch($event)"
+             [formId]="'form_company_power'" [gridId]="'grid1'"
+             [pageSize]="pageSize" [totalPage]="totalPage"
+             [listLoading]="listLoading"
+             [isMutli]="true"
+             [triggerSearch]="true"
+             [pageFun]="true" (pageIndexEmit)="pageIndex1($event)"
+             (pageSizeEmit)="pageSize1($event)"
+             (btnAdd)="add($event)" (btnUpdate)="update($event)"
+             (btnDelete)="btnDelete($event)"
+             (btnClick)="btnClick($event)"
+             [dataSet]="dataSet">
+</common-page>
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>
+
+<!--弹出框-->
+<!--管理员弹出-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" [nzFooter]="adminFooter" (nzOnCancel)="handleCancel()"
+          (nzAfterClose)="closeResult()">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input type="{{m.type}}" *ngIf="m.type == 'text' || m.type == 'number'" nz-input formControlName="{{m.eName}}"
+               [id]="m.eName">
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+          {{ m.validateCon}}
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+  <ng-template #adminFooter>
+    <div class="fl">
+      <button nz-button
+              (click)="addAdmin(modalValidateForm.getRawValue().plateCompanyId)">添加
+      </button>
+
+      <!--原有判断-->
+      <!--<button nz-button *ngIf="!modalValidateForm.getRawValue().userId"-->
+              <!--(click)="addAdmin(modalValidateForm.getRawValue().plateCompanyId)">添加-->
+      <!--</button>-->
+      <!--<button nz-button *ngIf="modalValidateForm.getRawValue().userId"-->
+              <!--(click)="setCompanyAdmin(modalValidateForm.getRawValue().plateCompanyId)">设置-->
+      <!--</button>-->
+    </div>
+    <button nz-button (click)="adminCancel()">取消</button>
+    <button nz-button nzType="primary" (click)="setAdmin()">确定</button>
+  </ng-template>
+</nz-modal>
+
+<!--公司权限新增弹出框-->
+<nz-modal nzWidth="35%" [(nzVisible)]="nzVisible" [nzTitle]="buttonId==='update'?'平台公司权限管理  >  修改':'平台公司权限管理  >  新增'"
+          (nzOnCancel)="companyCancel()" (nzOnOk)="companyOk()"
+          (nzAfterClose)="companyCloseResult()">
+  <form nz-form [formGroup]="companyForm">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="8" nzRequired>公司名字</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input nz-input formControlName="companyName">
+        <input type="hidden" formControlName="plateCompanyId">
+        <nz-form-explain *ngIf="companyForm.get('companyName').dirty && companyForm.get('companyName').errors">
+          请输入公司名字!
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="8" nzRequired>公司类型</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-select style="width: 100px" nzAllowClear nzPlaceHolder="请选择" formControlName="companyType"
+                   (ngModelChange)="changeOfCompanyType()">
+          <nz-option *ngFor="let o of typeDataArr" [nzValue]="o.value" [nzLabel]="o.name"></nz-option>
+        </nz-select>
+        <nz-form-explain *ngIf="companyForm.get('companyType').dirty && companyForm.get('companyType').errors">
+          请选择公司类型!
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="8" [nzRequired]="companyForm.get('companyType').value !== 'GSLX40'">业务板块</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-select style="width: 100%" nzAllowClear nzPlaceHolder="请选择" formControlName="segmentId" nzMode="multiple">
+          <nz-option *ngFor="let o of segmentDate" [nzValue]="o.segmentId" [nzLabel]="o.segmentName"></nz-option>
+        </nz-select>
+        <nz-form-explain *ngIf="companyForm.get('segmentId').dirty && companyForm.get('segmentId').errors">
+          请选择业务板块!
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>
+
+<!--公司所有用户弹窗-->
+<nz-modal [(nzVisible)]="companyUserVisible" nzTitle="公司用户 " (nzOnCancel)="userCancel()" (nzOnOk)="userOk()"
+          (nzAfterClose)="userClose()">
+  <nz-table #table [nzData]="listData" nzShowPagination="false" [nzScroll]="{x:'110%',y:'350px' }">
+    <thead>
+    <tr>
+      <th nzShowCheckbox [nzDisabled]=!isMutli [(nzChecked)]="allChecked" [nzIndeterminate]="indeterminate"
+          (nzCheckedChange)="checkAll($event)"></th>
+      <th *ngFor="let data of listHeader">{{data.colCname}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of table.data">
+      <td nzShowCheckbox [(nzChecked)]="data.checked" [nzDisabled]="data.disabled"
+          (nzCheckedChange)="refreshStatus(data)"></td>
+      <td *ngFor="let h of listHeader">{{data[h.colEname]}}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</nz-modal>
+
+<!--创建用户-->
+<nz-modal [(nzVisible)]="userVisible" nzTitle="请输入要创建的用户名" [nzOkLoading]="buttonLoading" (nzOnOk)="userOnOk()"
+          (nzOnCancel)="userAddCancel()" (nzAfterClose)="userAddCancel()">
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzFor="loginName" nzRequired>登录名</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <input nz-input autocomplete="off" placeholder="通过回车查询" name="loginName" type="text"  [(ngModel)]="loginName" (ngModelChange)="modelChange($event)"
+               [ngModelOptions]="{standalone: true}" (click)="open1()" (keyup.enter)="open1()" nz-input>
+        <nz-select nzAllowClear nzShowSearch [(ngModel)]="loginName"  (nzScrollToBottom)="loadMore()"
+                   (ngModelChange)="userChange($event)" [ngModelOptions]="{standalone: true}"
+                   style="width: 100%;visibility: hidden;margin-left: -100%" [(nzOpen)]="open">
+          <nz-option *ngFor="let p of userArr" [nzLabel]="p.name" [nzValue]="p.value"></nz-option>
+          <nz-option *ngIf="isLoading" nzDisabled nzCustomContent>
+            <i nz-icon nzType="loading" class="loading-icon"></i> 数据加载中...
+          </nz-option>
+        </nz-select>
+      </nz-form-control>
+
+      <nz-form-label [nzSpan]="6" nzFor="name" nzRequired>姓名</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <input nz-input name="name" type="text" autocomplete="off"  [disabled]="isDisplayed" [maxlength]="20" id="userName" [(ngModel)]="userName">
+      </nz-form-control>
+      <nz-form-label [nzSpan]="6" nzFor="mobile" autocomplete="off"  nzRequired>手机号</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <input nz-input name="mobile" type="text" [disabled]="isDisplayed" [maxlength]="11" id="mobile" [(ngModel)]="mobile">
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>
+<!---复制公司界面-->
+
+<nz-modal nzWidth="60%" [(nzVisible)]="copymodal.visible" [nzTitle]="copymodal.title" (nzOnOk)="modalOk()"
+          (nzOnCancel)="copymodal.visible = false" [nzContent]="modalContent" [nzOkDisabled]="copymodal.disabled"
+          [nzOkLoading]="copymodal.btnloading">
+  <ng-template #modalContent>
+    <app-searchform [formId]=" 'form_company_power2' " [triggerSearch]="false" [searchFormShow]="true"
+                    (search)="modalSearch($event)"></app-searchform>
+    <app-table-form [formId]="'form_company_power2'" selfTableHeight="350px" [dataSet]="copymodal.data"
+                    [totalPage]="copymodal.totalPage" [pageSize]="copymodal.pageSize"
+                    [listLoading]="copymodal.loading" [pageFun]="true" (pageIndexEmit)="pageIndex2($event)"
+                    (pageSizeEmit)="pageSize2($event)" (updateDataResult)="modalSelected($event)"></app-table-form>
+  </ng-template>
+</nz-modal>
+

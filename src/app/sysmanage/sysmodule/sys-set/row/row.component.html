@@ -1,0 +1,51 @@
+<common-page (search)="listSearch($event)" (btnAdd)="btnAdd()" [pageSize]="pageSize" [totalPage]="totalPage"
+             [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" (btnDelete)="btnDelete($event)"
+             [dataSet]="dataSet" [isMutli]="true" (btnClick)='btnClick($event)'>
+
+</common-page>
+
+<!--数据弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+          (nzAfterClose)="closeResult()">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="12">
+
+        <nz-select style="width: 100px" nzAllowClear nzPlaceHolder="请选择" formControlName="{{m.eName}}"
+                   *ngIf="m.type == 'select'">
+          <nz-option *ngFor="let o of typeDataArr" [nzValue]="o.value" [nzLabel]="o.name"></nz-option>
+        </nz-select>
+
+        <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+          <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+        </nz-radio-group>
+
+        <nz-checkbox-group *ngIf="m.type == 'checkbox'" formControlName="{{m.eName}}"></nz-checkbox-group>
+
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'number'">
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'">
+
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+            {{m.validators.patternErr}}
+          </ng-container>
+
+        </nz-form-explain>
+      </nz-form-control>
+
+    </nz-form-item>
+
+  </form>
+</nz-modal>
+
+<!--确认弹窗-->
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>

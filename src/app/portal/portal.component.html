@@ -1,0 +1,911 @@
+  <link rel="stylesheet" href="/assets/static/bootstrap.min.css">
+  <script src="/assets/static/jquery.min.js"></script>
+  <script src="/assets/static/bootstrap.min.js"></script>
+
+<div style="margin: 0px; background-color: #f1f3f4;">
+    <div class="c_bgDiv">
+      <div style="width: 1300px; margin: 0 auto; height: 30px; line-height: 30px;">
+        <div style="color: #9d9d9d; float: left;"><i class="tel" style=""></i>
+          400-133-5656
+        </div>
+        <div style=" float: right;">
+          <a href="#/system/dashboard" ui-sref="login" style="font-size:13px; color:#d93600;font-family:&#39;微软雅黑&#39;">您好,{{userInfo.loginName?userInfo.loginName:'请登录'}}</a>
+<a ui-sref="logout" *ngIf="userInfo.loginName" (click)="loginOut()" style="margin-left:5px;font-size:13px; color:#2c7cdb;font-family:&#39;微软雅黑&#39;">
+            退出</a>
+        </div>
+      </div>
+      <div class="bg-w" style="width: 100%;">
+        <div style="width: 1300px; margin: 0 auto; overflow: hidden;">
+          <div class="fl"><img src="/assets/static/home_logo.jpg" class="logo2"></div>
+          <ul class="fr">
+            <li class="fl header-li c-li">首页</li>
+            <li class="fl header-li c-li">行情与咨询</li>
+            <li class="fl header-li c-li">关于我们</li>
+            <li class="fl header-li c-li">APP下载</li>
+            <div class="fl" style="width: 300px; height: 30px; border-radius: 5px; border:1px solid #2c7cdb; margin-top: 22px;">
+              <span style="line-height: 28px; font-size: 12px; color: #666666; margin-left: 10px;">船舶动态查询</span>
+              <img style="margin: 5px 10px;" class="fr" src="/assets/static/home_btn_search_for_nor.png">
+            </div>
+          </ul>
+        </div>
+      </div>
+      <div class="img_posit">
+        <div class="c_bgImg"></div>
+
+        <app-portal-login [userInfo]="userInfo" (loginSuccessEvent)="loginSuccess($event)">
+        </app-portal-login>
+        <!-- <app-login [test]="'asdfghj'" (loginSuccessEvent)="loginSuccess($event)"></app-login> -->
+
+      </div>
+      <div style="width: 1300px; margin: 0 auto; overflow: hidden;">
+        <div>
+          <div style="margin: 4px 0px;">
+            <span style="color: #2c7cdb; line-height: 30px;">内贸资讯</span>
+            <div class="fr" style="width: 80px; font-size: 14px; border: 1px solid #999999; text-align: center; line-height: 28px;">
+              更多&gt;&gt;
+            </div>
+          </div>
+          <div style="overflow: hidden;">
+            <div class="bg-w" style="width: 500px; float: left; height: 360px;">
+              <!-- <img src="/assets/static/zhexiantu-1.png"> -->
+              <app-portal-chart></app-portal-chart>
+            </div>
+            <div class="bg-w" style="width: 790px; float: right; height: 360px;">
+              <div style="color: #666666; font-size: 14px;line-height: 50px; text-align: center; border-bottom: 1px solid #eeeeee; overflow: hidden;">
+                <div class="fl" style="width: 100px;">承运人</div>
+                <div class="fl" style="width: 140px;">主营货物</div>
+                <div class="fl" style="width: 100px;">船舶数量</div>
+                <div class="fl" style="width: 180px;">主要船舶名称</div>
+                <div class="fl" style="width: 100px;">主要船型</div>
+                <div class="fl" style="width: 150px;">主要承运流向</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-w" style="overflow: hidden; margin: 10px 0px; border-top: 2px solid #2c7cdb;">
+            <div style="line-height: 30px; margin-left: 20px;">运价参考</div>
+            <div id="myCarousel" class="carousel slide">
+              <!-- 轮播（Carousel）项目 -->
+              <div class="carousel-inner">
+                <div class="item active" style="border-top: 1px solid #eeeeee;">
+                  <!--<img src="img/home_pic1.png" alt="First slide">-->
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="item" style="border-top: 1px solid #eeeeee;">
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="item" style="border-top: 1px solid #eeeeee;">
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- 轮播（Carousel）导航 -->
+              <a class="left left-style hoverShow" href="http://192.168.1.28:8080/html/2/index.html#myCarousel" role="button"
+                data-slide="prev" style="display: none;">
+                <!--<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>-->
+                <!--<span class="sr-only">Previous</span>-->
+              </a>
+              <a class="right right-style hoverShow" href="http://192.168.1.28:8080/html/2/index.html#myCarousel" role="button"
+                data-slide="next" style="display: none;">
+                <!--<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>-->
+                <!--<span class="sr-only">Next</span>-->
+              </a>
+            </div>
+          </div>
+          <div style="overflow: hidden;">
+            <div class="img-style"><img src="/assets/static/home_pic1.png"></div>
+            <div class="img-style"><img src="/assets/static/home_pic2.png"></div>
+            <div class="img-style" style="margin-right: 0px;"><img src="/assets/static/home_pic3.png"></div>
+          </div>
+          <div style="margin: 4px 0px;">
+            <span style="color: #2c7cdb; line-height: 30px;">外贸资讯</span>
+            <div class="fr" style="width: 80px; font-size: 14px; border: 1px solid #999999; text-align: center; line-height: 28px;">
+              更多&gt;&gt;
+            </div>
+          </div>
+          <div style="overflow: hidden;">
+            <div class="bg-w" style="width: 500px; float: left; height: 360px;">
+              <!-- <img src="/assets/static/zhexiantu-2.png"> -->
+              <app-portal-chart2></app-portal-chart2>
+            </div>
+            <div class="bg-w" style="width: 790px; float: right; height: 360px;">
+              <div style="color: #666666; font-size: 14px;line-height: 50px; text-align: center; border-bottom: 1px solid #eeeeee; overflow: hidden;">
+                <div class="fl" style="width: 100px;">承运人</div>
+                <div class="fl" style="width: 140px;">主营货物</div>
+                <div class="fl" style="width: 100px;">船舶数量</div>
+                <div class="fl" style="width: 180px;">主要船舶名称</div>
+                <div class="fl" style="width: 100px;">主要船型</div>
+                <div class="fl" style="width: 150px;">主要承运流向</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-w" style="overflow: hidden; margin: 10px 0px; border-top: 2px solid #2c7cdb;">
+            <div style="line-height: 30px; margin-left: 20px;">运价参考</div>
+            <div id="myCarousel1" class="carousel slide">
+              <!-- 轮播（Carousel）项目 -->
+              <div class="carousel-inner">
+                <div class="item active" style="border-top: 1px solid #eeeeee;">
+                  <!--<img src="img/home_pic1.png" alt="First slide">-->
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="item" style="border-top: 1px solid #eeeeee;">
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="item" style="border-top: 1px solid #eeeeee;">
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- 轮播（Carousel）导航 -->
+              <a class="left left-style hoverShow" href="http://192.168.1.28:8080/html/2/index.html#myCarousel1" role="button"
+                data-slide="prev" style="display: none;">
+                <!--<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>-->
+                <!--<span class="sr-only">Previous</span>-->
+              </a>
+              <a class="right right-style hoverShow" href="http://192.168.1.28:8080/html/2/index.html#myCarousel1" role="button"
+                data-slide="next" style="display: none;">
+                <!--<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>-->
+                <!--<span class="sr-only">Next</span>-->
+              </a>
+            </div>
+          </div>
+          <div style="margin: 4px 0px;">
+            <span style="color: #2c7cdb; line-height: 30px;">内河资讯</span>
+            <div class="fr" style="width: 80px; font-size: 14px; border: 1px solid #999999; text-align: center; line-height: 28px;">
+              更多&gt;&gt;
+            </div>
+          </div>
+          <div style="overflow: hidden;">
+            <div class="bg-w" style="width: 500px; float: left; height: 360px;">
+              <!-- <img src="/assets/static/zhexiantu-3.png"> -->
+              <app-portal-chart3></app-portal-chart3>
+            </div>
+            <div class="bg-w" style="width: 790px; float: right; height: 360px;">
+              <div style="color: #666666; font-size: 14px;line-height: 50px; text-align: center; border-bottom: 1px solid #eeeeee; overflow: hidden;">
+                <div class="fl" style="width: 100px;">承运人</div>
+                <div class="fl" style="width: 140px;">主营货物</div>
+                <div class="fl" style="width: 100px;">船舶数量</div>
+                <div class="fl" style="width: 180px;">主要船舶名称</div>
+                <div class="fl" style="width: 100px;">主要船型</div>
+                <div class="fl" style="width: 150px;">主要承运流向</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+              <div class="list-style">
+                <div class="fl" style="width: 100px;">安徽明志</div>
+                <div class="fl" style="width: 140px;">日钢水渣</div>
+                <div class="fl" style="width: 100px;">11</div>
+                <div class="fl" style="width: 180px;">全福发、大红山、安捷力5</div>
+                <div class="fl" style="width: 100px;">10000-15000</div>
+                <div class="fl" style="width: 150px;">广东、上海</div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-w" style="overflow: hidden; margin: 10px 0px; border-top: 2px solid #2c7cdb;">
+            <div style="line-height: 30px; margin-left: 20px;">运价参考</div>
+            <div id="myCarousel2" class="carousel slide">
+              <!-- 轮播（Carousel）项目 -->
+              <div class="carousel-inner">
+                <div class="item active" style="border-top: 1px solid #eeeeee;">
+                  <!--<img src="img/home_pic1.png" alt="First slide">-->
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="item" style="border-top: 1px solid #eeeeee;">
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="item" style="border-top: 1px solid #eeeeee;">
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 304px; float: left; height: 144px; margin-left: 20px; border-right:  1px solid #eeeeee;">
+                    <div style="margin-top: 14px;">上海<img src="/assets/static/home_icon_route.png">宁波</div>
+                    <div style="overflow: hidden;margin-top: 40px;">
+                      <div style="width: 100px; font-size: 12px;color: #666666; float: left;">
+                        <div>水渣粉</div>
+                        <div>50000吨</div>
+                      </div>
+                      <div style="width: 180px;color: #ed6500; float: right; text-align: right; margin-right: 16px;">
+                        <span style="font-size: 24px;">41.00</span><span>￥</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- 轮播（Carousel）导航 -->
+              <a class="left left-style hoverShow" href="http://192.168.1.28:8080/html/2/index.html#myCarousel2" role="button"
+                data-slide="prev" style="display: none;">
+                <!--<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>-->
+                <!--<span class="sr-only">Previous</span>-->
+              </a>
+              <a class="right right-style hoverShow" href="http://192.168.1.28:8080/html/2/index.html#myCarousel2" role="button"
+                data-slide="next" style="display: none;">
+                <!--<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>-->
+                <!--<span class="sr-only">Next</span>-->
+              </a>
+            </div>
+          </div>
+          <div style="margin: 4px 0px;">
+            <span style="color: #2c7cdb; line-height: 30px;">指数</span>
+          </div>
+          <div class="bg-w" style="overflow: hidden; margin: 10px 0px;">
+            <img src="/assets/static/d1f164725ec4b1af56e0573607c5981.png">
+          </div>
+          <div style="margin: 4px 0px;">
+            <span style="color: #2c7cdb; line-height: 30px;">行业资讯</span>
+          </div>
+          <div style="overflow: hidden; margin: 10px 0px;">
+            <div class="bg-w fl" style="width: 790px; overflow: hidden;">
+              <div style="width: 90%; margin: 0 auto;">
+                <div style="line-height: 50px; font-size: 14px; width: 100%; overflow: hidden;">
+                  <div style="width: 100px; float: left;">航运动态</div>
+                  <div style="width: 100px; float: left;">物流咨询</div>
+                  <div style="width: 100px; float: left;">知识百科</div>
+                  <div class="fr" style="width: 80px; font-size: 14px; border: 1px solid #999999; text-align: center; line-height: 28px; margin-top: 10px;">
+                    更多&gt;&gt;
+                  </div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                  <img style=" display: block;width: 300px; float: left;" src="/assets/static/4dfde5e81bd7df8e0e1a8a4c68d4410.png">
+                  <div style="width: 400px; float: right;">
+                    <p>物流领域共享经济产品状态</p>
+                    <p style="font-size: 12px; color: #999999;">
+                      美国重启对伊朗制裁的宽限期将于当地时间6日午夜到期，届时伊朗政府将不得再购入美元、黄金和贵金属，地毯、食品货品则无法想美国出口，伊朗不少民众担忧。</p>
+                    <p>沿海运价市场报告【第36周】</p>
+                    <p>物流平台的前世，今生</p>
+                    <p>物流平台的前世</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bg-w fr" style="width: 500px; overflow: hidden;">
+              <div style="width: 90%; margin: 0 auto;">
+                <div style="line-height: 50px; font-size: 14px; width: 100%; overflow: hidden;">
+                  <div style="width: 100px; float: left; font-size: 16px;">川洋观点</div>
+                  <div style="width: 60px; float: left;">周报</div>
+                  <div style="width: 60px; float: left;">月报</div>
+                  <div style="width: 150px; float: left;">国际干散货行情分析</div>
+                  <div class="fr" style="width: 80px; font-size: 14px; border: 1px solid #999999; text-align: center; line-height: 28px; margin-top: 10px;">
+                    更多&gt;&gt;
+                  </div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                  <div>
+                    <p>物流领域共享经济产品状态</p>
+                    <p style="font-size: 12px; color: #999999;">
+                      美国重启对伊朗制裁的宽限期将于当地时间6日午夜到期，届时伊朗政府将不得再购入美元、黄金和贵金属，地毯、食品货品则无法想美国出口，伊朗不少民众担忧。</p>
+                    <p>沿海运价市场报告【第36周】</p>
+                    <p>物流平台的前世，今生</p>
+                    <p>物流平台的前世</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin: 4px 0px;">
+            <span style="color: #2c7cdb; line-height: 30px;">码头信息</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="bg-w" style=" width:100%;overflow: hidden; margin-bottom: 10px;">
+      <div style="width: 1300px; margin: 0 auto;">
+        <div style="width: 430px; overflow: hidden; border-right: 1px solid #eeeeee; float: left;">
+          <div style="width: 200px; float: left; margin-left: 20px;">
+            <p style="line-height: 40px; color: #999999; font-size: 14px;">岚北港</p>
+            <p>泊位<span style="color:#ed6500;">23</span>个</p>
+            <p>货物吞吐量<span style="color:#ed6500;">38610万</span>吨</p>
+          </div>
+          <div style=" float: left; margin-top: 20px;">
+            <img src="/assets/static/home_icon_port1.png">
+          </div>
+        </div>
+        <div style="width: 430px; overflow: hidden; border-right: 1px solid #eeeeee; float: left;">
+          <div style="width: 200px; float: left; margin-left: 20px;">
+            <p style="line-height: 40px; color: #999999; font-size: 14px;">鲅鱼圈港</p>
+            <p>泊位<span style="color:#ed6500;">26</span>个</p>
+            <p>货物吞吐量<span style="color:#ed6500;">30107万</span>吨</p>
+          </div>
+          <div style=" float: left; margin-top: 20px;">
+            <img src="/assets/static/home_icon_port2.png">
+          </div>
+        </div>
+        <div style="width: 430px; overflow: hidden; border-right: 1px solid #eeeeee; float: left;">
+          <div style="width: 200px; float: left; margin-left: 20px;">
+            <p style="line-height: 40px; color: #999999; font-size: 14px;">博晟港</p>
+            <p>泊位<span style="color:#ed6500;">33</span>个</p>
+            <p>货物吞吐量<span style="color:#ed6500;">42107万</span>吨</p>
+          </div>
+          <div style=" float: left; margin-top: 20px;">
+            <img src="/assets/static/home_icon_port3.png">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="position: fixed; bottom: 10%; left: 1%;"><img src="/assets/static/283466bb49e35fd0991e6d04c41280c.png"></div>
+  <div style="position: fixed; bottom: 10%; right: 1%;"><img src="/assets/static/283466bb49e35fd0991e6d04c41280c.png"></div>
+  <div class="c-footer footerwarp">
+    <p>
+      <span>客服电话: 021-61231318</span>
+      <span>地址: 上海市杨浦区逸仙路25号同济晶度21楼</span>
+      <span>网站总访问量: 0</span>
+    </p>
+    <p>
+      <span>Copyright© 2017 沪ICP备16029112 号</span>
+      <span>沪公安网备号 31011002001909</span>
+
+    </p>
+  </div>
+
+  <script>
+    $(".carousel").mouseover(function () {
+      $(".hoverShow").show();
+    }).mouseout(function () {
+      $(".hoverShow").hide();
+    });
+  </script>

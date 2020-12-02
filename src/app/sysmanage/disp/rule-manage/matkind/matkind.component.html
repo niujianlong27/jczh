@@ -1,0 +1,161 @@
+<common-page (btnAdd)="addData()" [totalPage]="totalPage" [listLoading]="listLoading"  
+[pageSize]="pageSize" (search)="listSearch($event)" (btnDelete)="btnClick($event)" [dataSet]="dataSet" (btnUpdate)="updateData($event)"  [isMutli]="false">
+</common-page>
+
+
+<nz-modal [nzWidth]="'800px'" [nzVisible]="InsertFormVisible" [nzTitle]="modalTitle1" [nzContent]="modalContent1" [nzFooter]="modalFooter1" (nzOnCancel)="InsertFormVisible=false">
+        <ng-template #modalTitle1>
+            新增->基本信息
+        </ng-template>
+        <ng-template #modalContent1>
+            <div class="div5">
+              <span class="span8 required">物料分类名称:</span>
+              <input class="input8" [(ngModel)]="matKindName" [ngModelOptions]="{standalone: true}">
+            </div>
+            <!-- <div class="div6">
+              <span class="span9">物料分类编码：</span>
+              <input class="input9" [(ngModel)]="matKindCode" [ngModelOptions]="{standalone: true}">
+            </div> -->
+            <div class="div6 ">
+              <label class="span15 required">排队大类名称:</label>
+              <nz-select class="select15" nzShowSearch nzAllowClear [(ngModel)]="kindCode" [ngModelOptions]="{standalone: true}" >
+                <!-- <nz-option nzLabel="西门口" nzValue="西门口"></nz-option>
+                <nz-option nzLabel="东门口" nzValue="东门口"></nz-option> -->
+                <nz-option *ngFor="let i of QueueArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option> 
+              </nz-select>
+            </div>
+            <div style="width:100%; height: 40px;">
+              <span class="span4  pull-left">备注:</span>
+              <textarea class="text  pull-left" [(ngModel)]="remark"></textarea>
+            </div>
+     </ng-template>
+     <ng-template #modalFooter1>
+      <button nz-button nzType="primary" (click)="saveData()"  [nzLoading]="isLoading"
+      >保存</button>
+      <button nz-button nzType="default" (click)="quitData()">取消</button>
+    </ng-template>
+</nz-modal>
+  <!-- 修改弹出框 -->
+<nz-modal [nzWidth]="'800px'" [nzVisible]="UpdateFormVisible" [nzTitle]="modalTitle"  [nzContent]="modalContent" [nzFooter]="modalFooter" (nzOnCancel)="quitEdit()">
+<form #detailForm2="ngForm">
+  <ng-template #modalTitle>
+      修改->基本信息
+  </ng-template>
+  <ng-template #modalContent>
+            <div>
+              <span class="span12">排队大类名称:</span>
+              <nz-select  class="select5" nzShowSearch nzAllowClear [(ngModel)]="kindCode"  [ngModelOptions]="{standalone: true}" [nzDisabled]=true>
+                <!-- <nz-option nzLabel="西门口" nzValue="西门口"></nz-option>
+                <nz-option nzLabel="东门口" nzValue="东门口"></nz-option> -->
+                <nz-option *ngFor="let i of QueueArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+           </nz-select>
+            </div>
+            <div class='Wldiv'>
+              <span class='spanwl'>物料分类名称:</span>
+              <input class='inpwl' [(ngModel)]="matKindName" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="div10">
+              <span class="span11">状态:</span>
+              <nz-select  class="select6" nzShowSearch nzAllowClear [(ngModel)]="status"  [ngModelOptions]="{standalone: true}">
+                <!-- <nz-option nzLabel="启用" nzValue="ST01"></nz-option>
+                <nz-option nzLabel="作废" nzValue="ST00"></nz-option> -->
+                <nz-option *ngFor="let i of themeArr3" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+           </nz-select>
+            </div>
+            <div>
+              <span class="span10" style="vertical-align: top;">备注:</span>
+              <textarea class="input10" [(ngModel)]="remark" [ngModelOptions]="{standalone: true}"></textarea>
+    </div>
+  </ng-template>
+  <ng-template #modalFooter>
+    <button nz-button nzType="primary" (click)="update()" [nzLoading]="isLoading"
+      [disabled]="">保存</button>
+    <button nz-button nzType="default" (click)="quitEdit()">取消</button>
+  </ng-template>
+  </form>
+</nz-modal> 
+
+<nz-modal [nzWidth]="'800px'" [nzVisible]="UpdateChildFormVisible" [nzTitle]="modalTitle"  [nzContent]="modalContent3" [nzFooter]="modalFooter" (nzOnCancel)="quitEdit()">
+  <form #detailForm2="ngForm">
+    <ng-template #modalTitle>
+        修改->基本信息
+    </ng-template>
+    <ng-template #modalContent3>
+              <div>
+                <span class="span12">排队大类名称:</span>
+                <nz-select  class="select5" nzShowSearch nzAllowClear [(ngModel)]="kindCode"  [ngModelOptions]="{standalone: true}" [nzDisabled]=true>
+                  <!-- <nz-option nzLabel="西门口" nzValue="西门口"></nz-option>
+                  <nz-option nzLabel="东门口" nzValue="东门口"></nz-option> -->
+                  <nz-option *ngFor="let i of QueueArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+             </nz-select>
+              </div>
+              <div class='Wldivchild'>
+                <span class='spanwlchild'>父类名称:</span>
+                <input class='inpwlchild' [(ngModel)]="parentName" [ngModelOptions]="{standalone: true}" disabled=true style="background-color:#f5f5f5">
+              </div>
+              <div class='Wldivchild'>
+                <span class='spanwlchild'>子类名称:</span>
+                <input class='inpwlchild' [(ngModel)]="matKindName" [ngModelOptions]="{standalone: true}">
+              </div>
+              <div class="div10">
+                <span class="span11">状态:</span>
+                <nz-select  class="select6" nzShowSearch nzAllowClear [(ngModel)]="status"  [ngModelOptions]="{standalone: true}">
+                  <!-- <nz-option nzLabel="启用" nzValue="ST01"></nz-option>
+                  <nz-option nzLabel="作废" nzValue="ST00"></nz-option> -->
+                  <nz-option *ngFor="let i of themeArr3" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+             </nz-select>
+              </div>
+              <div>
+                <span class="span10" style="vertical-align: top;">备注:</span>
+                <textarea class="input10" [(ngModel)]="remark" [ngModelOptions]="{standalone: true}"></textarea>
+      </div>
+    </ng-template>
+    <ng-template #modalFooter>
+      <button nz-button nzType="primary" (click)="update()" [nzLoading]="isLoading"
+        [disabled]="">保存</button>
+      <button nz-button nzType="default" (click)="quitEdit()">取消</button>
+    </ng-template>
+    </form>
+  </nz-modal> 
+
+
+
+<nz-modal [nzWidth]="'45%'" [(nzVisible)]="modalFormVisible" nzTitle="{{ newItemModaltitle }}" (nzOnCancel)="handleCancel()"  [nzOkLoading]='isLoading' (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()">
+    
+  <form nz-form [formGroup]="modalValidateForm" >
+      <nz-form-item *ngFor="let m of modalFormData">
+        <nz-form-label [nzSpan]="8" [nzRequired]="m.require"  [hidden]='m.hidden'>
+          {{m.name}}
+        </nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <nz-radio-group  [attr.id]="m.eName" *ngIf="m.type == 'radio'; else other" formControlName="{{m.eName}}">
+            <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+          </nz-radio-group>
+          <ng-template #other>
+            <input type="{{m.type}}" *ngIf="m.eName === 'matKindName'" nz-input formControlName="{{m.eName}}"  [attr.id]="m.eName">
+            <input type="{{m.type}}" *ngIf="m.eName === 'parentName'" nz-input formControlName="{{m.eName}}"  [attr.id]="m.eName" disabled=true style="background-color:#f5f5f5">
+            <input type="{{m.type}}" *ngIf="m.type === 'text1'" [hidden]='m.hidden' nz-input formControlName="{{m.eName}}"  [attr.id]="m.eName" >
+            <nz-select style="width: 200px;" *ngIf="m.type === 'select'" nzShowSearch nzAllowClear  formControlName="{{m.eName}}" [nzDisabled]=true>
+                <!-- <nz-option nzLabel="东门口" nzValue="东门口"></nz-option>
+                <nz-option nzLabel="西门口" nzValue="西门口"></nz-option> -->
+                <nz-option *ngFor="let i of QueueArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+            </nz-select>  
+            <textarea rows="4" nz-input *ngIf="m.type === 'textarea'" formControlName="{{m.eName}}"></textarea>
+          </ng-template>
+  
+          <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+              <div *ngIf="modalValidateForm.get(m.eName).errors.pattern;else erroInf">
+                {{ m.validators.patternErr}}
+              </div>
+              <ng-template #erroInf>
+                {{ m.validateCon}}
+              </ng-template>
+          </nz-form-explain>
+        </nz-form-control>
+  
+      </nz-form-item>
+  
+    </form>
+</nz-modal>
+ 
+

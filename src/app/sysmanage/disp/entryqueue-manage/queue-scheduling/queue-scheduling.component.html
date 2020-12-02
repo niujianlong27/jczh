@@ -1,0 +1,10 @@
+<nz-tabset (nzSelectChange)="selectChange($event)" [(nzSelectedIndex)]="index">
+  <nz-tab *ngFor="let tab of tabs;let i = index;" [nzTitle]='tab.itemCname+tab.itemCount'>
+  </nz-tab>
+</nz-tabset>
+<common-page (search)="listSearch($event)" (searchDataReturn)="searchDataFun($event)" [pageSize]="pageSize" [totalPage]="totalPage" [listLoading]="listLoading"
+(btnUpdate)="btnUpdate($event)" [dataSet]="dataSet" [isMutli]="true" (updateDataResult)='updateDataResult($event)'
+formId="form_entryQueueQuery" (btnClick)="btnclick($event) "
+></common-page>
+
+<app-modal-map-line [vehicleIsVisible] = 'isVisible' [httpInfo]='httpInfo' (modalShow)='modalShow($event)'></app-modal-map-line>

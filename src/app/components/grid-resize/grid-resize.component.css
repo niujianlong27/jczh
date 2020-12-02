@@ -1,0 +1,99 @@
+.grid-resize-box {
+    width: 100%;
+    position: relative;
+}
+
+.horizontal-grid {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+}
+
+.horizontal-grid-left {
+    left: 0;
+}
+
+.horizontal-grid-right {
+    right: 0;
+}
+
+.line-box {
+    width: 1%;
+    position: absolute;
+    left: 49.5%;
+    top: 0;
+    height: 100%;
+}
+
+.trans {
+    transition: all 250ms ease;
+}
+
+.tableLine {
+    width: 8px;
+    height: 100%;
+    background-color: #fafafa;
+    margin: 0 auto;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    cursor: w-resize;
+    z-index: 101;
+}
+
+.grid-line-btn {
+    position: absolute;
+    margin: auto;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 8px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background-color: #eee;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.grid-line-copy:after {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    z-index: 50;
+}
+
+.tableLine-vertical {
+    height: 8px;
+    width: 100%;
+    background-color: #fafafa;
+    /* cursor: s-resize;*/
+    position: absolute;
+    display: block;
+    z-index: 1;
+}
+
+.grid-line-btn-vertical {
+    position: relative;
+    margin: auto;
+    display: block;
+    width: 50px;
+    height: 8px;
+    line-height: 8px;
+    text-align: center;
+    background-color: #eee;
+    cursor: pointer;
+}
+
+.grid-line-btn-vertical i {
+    font-size: 12px;
+    margin-top: -3px;
+}

@@ -1,0 +1,120 @@
+<app-searchform [formId]="'form_rgDisp_messagemanage'" (search)="listSearch($event)" (searchDataReturn)='searchDataReturn($event)' [isClick]='true'  (modelChange)='listChange($event)'
+[searchDataHiden]="{'typeName':false,'kindName':false,'queueStatusName':false,'statusName':status0,'status1':status1,'status2':status2,'title':false}"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [formId]="'form_rgDisp_messagemanage'" [btnHiden]="{'Find':false,'Add':false,'Update':!saveFlag,'Delete':false,'Save':saveFlag}"></tpl-buttons>
+<app-table-form
+                  [formId]="'form_rgDisp_messagemanage'" [gridId]="'grid1'"
+                  [isMutli]="false"
+                  [dataSet]="dataSet"
+                  (updateDataResult)="updateDataResult($event)"
+                  [isCheckBox]="true"
+                  [listLoading]="listLoading"  [showCount]='true'
+                  (userColumnsEmit)="columns($event)"
+                  [pageSize]="pageSize" [totalPage]="totalPage"
+                  [isMutli]="false"
+                 >
+                 <!-- <ng-template #g1 let-data let-index="index">
+                  <a (click)="update(data,index)" *ngIf="data.editstate==0 && data.type !='disp_messageType_3'">修改</a>
+                  <ng-container *ngIf="data.editstate==1">
+                      <a (click)='saveData(data,index)'>保存</a>
+                      <a>&nbsp;&nbsp;</a>
+                      <a (click)='cancle(data,index)'>取消</a>
+                  </ng-container>
+                  <ng-container *ngIf="data.status == 'disp_messageStatus_12'||data.status == 'disp_messageStatus_23'">
+                      <a>&nbsp;&nbsp;</a>
+                      <a (click)='deleteBtn(data)'>删除</a>
+                      </ng-container>
+                </ng-template> -->
+  </app-table-form>
+
+
+  <!-- <nz-modal [(nzVisible)]="InsertFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzOkLoading]="isOkLoading"
+  (nzAfterClose)="closeResult()">
+  <form nz-form [formGroup]="modalValidateForm">
+      <nz-form-item *ngFor="let m of modalFormData" >
+          <nz-form-label [nzSpan]="6" [nzRequired]="m.require" >
+              {{m.name}}
+          </nz-form-label>
+          <nz-form-control [nzSpan]="12">
+              <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+                  <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+              </nz-radio-group>
+                <nz-select #select  style="width: 236px;" *ngIf="m.eName === 'type'"
+                nzShowSearch nzAllowClear nzPlaceHolder="消息类型" [formControlName]="m.eName" (ngModelChange)='codeChange($event)'>
+                  <nz-option *ngFor="let i of messageArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+                </nz-select>
+
+                  <input type="{{m.type}}" *ngIf="m.eName == 'title'" nz-input formControlName="{{m.eName}}" [id]="m.eName">
+                  <input type="{{m.type}}" *ngIf="m.eName == 'body'" nz-input formControlName="{{m.eName}}" [id]="m.eName">
+              <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+                  <div *ngIf="modalValidateForm.get(m.eName).errors['pattern'];else erroInf">
+                      {{ m.validators.patternErr}}
+                  </div>
+                  <ng-template #erroInf>
+                      {{ m.validateCon}}
+                  </ng-template>
+              </nz-form-explain>
+
+          </nz-form-control>
+
+      </nz-form-item>
+  </form>
+   -->
+
+   <nz-modal [nzWidth]="'45%'" [(nzVisible)]="InsertFormVisible" [nzTitle]="modalTitle " (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()" [nzOkLoading]="isOkLoading" >
+
+    <form nz-form [formGroup]="modalValidateForm" >
+        <nz-form-item *ngFor="let m of modalFormData">
+          <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+            {{m.name}}
+          </nz-form-label>
+
+          <nz-form-control [nzSpan]="12">
+
+            <nz-radio-group  [attr.id]="m.eName" *ngIf="m.type == 'radio'; else other"  formControlName="{{m.eName}}">
+              <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+            </nz-radio-group>
+
+            <ng-template #other>
+                    <input type="{{m.type}}" *ngIf="m.type === 'text'" nz-input formControlName="{{m.eName}}"  [attr.id]="m.eName">
+                    <nz-select style="width: 200px;" *ngIf="m.type === 'select'"  nzShowSearch nzAllowClear nzPlaceHolder="消息类型" [formControlName]="m.eName" (ngModelChange)="modelChange($event)">
+                      <nz-option *ngFor="let option of messageArr " [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+                      </nz-option>
+                    </nz-select>
+                    <nz-date-picker nzShowTime *ngIf="m.type === 'date'"  formControlName="{{m.eName}}"></nz-date-picker>
+                    <nz-select style="width: 200px;" *ngIf="m.eName === 'kindCode'" nzShowSearch nzAllowClear nzPlaceHolder="品种" formControlName="kindCode">
+                      <nz-option *ngFor="let option of kindArr" [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+                      </nz-option>
+                    </nz-select>
+
+                    <nz-select style="width: 200px;" *ngIf="m.eName === 'queueStatus'" nzShowSearch nzAllowClear nzPlaceHolder="排队状态" formControlName="queueStatus">
+                      <nz-option *ngFor="let option of queueArr" [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+                      </nz-option>
+                    </nz-select>
+                    <nz-select style="width: 200px;" *ngIf="m.type === 'select3'" nzShowSearch nzAllowClear nzPlaceHolder="状态" formControlName="{{m.eName}}">
+                      <nz-option nzLabel="启用" nzValue="ST01"></nz-option>
+                      <nz-option nzLabel="作废" nzValue="ST00"></nz-option>
+                    </nz-select>
+                    <nz-input-number style="width: 200px;" *ngIf="m.type === 'num'" [nzMin]="1" [nzMax]="20" [nzStep]="1" formControlName="{{m.eName}}"></nz-input-number>
+                    <nz-input-number style="width: 200px;" *ngIf="m.type === 'num1'" [nzMin]="1" [nzMax]="60" [nzStep]="5" formControlName="{{m.eName}}"></nz-input-number>
+                    <textarea rows="4" nz-input *ngIf="m.type === 'textarea'" formControlName="{{m.eName}}"></textarea>
+            </ng-template>
+
+            <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+                <div *ngIf="modalValidateForm.get(m.eName).errors.pattern;else erroInf">
+                  {{ m.validators.patternErr}}
+                </div>
+                <ng-template #erroInf>
+                  {{ m.validateCon}}
+                </ng-template>
+            </nz-form-explain>
+          </nz-form-control>
+
+        </nz-form-item>
+
+      </form>
+  </nz-modal>
+
+
+  <app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="deletemodaltitle" [modalCon]="finishCon"
+                   (modalConfirmResult)="deleteData($event)">
+</app-modal-confirm>

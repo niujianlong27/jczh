@@ -1,0 +1,144 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+</app-grid-resize>
+<ng-template #one>
+
+  <app-table-form [dataSet]="dataSet" [gridId]="'grid1'" [selfTableHeight]="gridOneHeight" [pageSize]="pageSize"
+                  [totalPage]="total" [isMutli]="false" [listLoading]="listLoading" [pageFun]="true"
+                  (updateDataResult)="updateDataResult($event)" (pageIndexEmit)="pageIndexMain($event)"
+                  (pageSizeEmit)="pageSizeMain($event)" (listClick)="listMainClick($event)"
+  >
+  </app-table-form>
+
+</ng-template>
+<ng-template #two>
+
+  <app-table-form [dataSet]="dataSetChild" [tabArr]="tabArr" [(tabIndex)]="tabIndex" [gridId]="gridId"
+                  [selfTableHeight]="gridTwoHeight" [pageSize]="pageSizeChild" [totalPage]="totalChild"
+                  [isCheckBox]="false" [showCount]="false" [listLoading]="listLoadingChild" [nzShowPagination]="false"
+                  [updateHeader]="true" (updateDataResult)="updateDataChild($event)"
+                  (tabIndexChange)="tabIndexChange($event)">
+  </app-table-form>
+
+</ng-template>
+
+<nz-modal nzWidth="80%" [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" [nzMaskClosable]="false"
+          [nzFooter]="null" (nzOnOk)="handleOk()" (nzOnCancel)="handleCancel()"
+          (nzAfterClose)="closeResult()">
+  <nz-spin [nzSpinning]="modalSpinning">
+    <tpl-buttons [formId]="'form_boat_water_gauge_add'" (btnClick)="btnClick($event)">
+    </tpl-buttons>
+    <form nz-form class="ant-advanced-search-form" [formGroup]="modalValidateForm">
+      <div nz-row [nzGutter]="8">
+        <div nz-col [nzSpan]="8" *ngFor="let m of modalFormData">
+          <nz-form-item nzFlex>
+            <nz-form-label [nzSpan]="9" [nzRequired]="m.require">{{m.name}}</nz-form-label>
+
+            <nz-form-control [nzSpan]="15">
+
+              <input nz-input type="text" *ngIf="m.type == 'text'" [formControlName]="m.eName" [id]="m.eName">
+
+              <!--            <ng-container *ngIf="m.type == 'img'">-->
+              <!--              <nz-upload nzListType="picture" [nzAction]="upload.action"-->
+              <!--                         [nzData]="upload.handleData" [nzCustomRequest]='upload.handleRequest'-->
+              <!--                         [(nzFileList)]="imgWaterGaugeList" (nzChange)="getFileUrl($event,m.eName)">-->
+              <!--                <input hidden [formControlName]="m.eName">-->
+              <!--                <button nz-button><i nz-icon nzType="upload"></i><span>点击上传</span></button>-->
+              <!--              </nz-upload>-->
+              <!--            </ng-container>-->
+
+
+              <nz-select *ngIf="m.type === 'select'" style="width: 120px;" [formControlName]="m.eName">
+                <nz-option *ngFor="let i of m.selectList" [nzLabel]="i.label" [nzValue]="i.value"></nz-option>
+              </nz-select>
+
+              <nz-form-explain
+                *ngIf="modalValidateForm.get(m.eName).invalid && (modalValidateForm.get(m.eName).dirty || modalValidateForm.get(m.eName).touched)">
+                <ng-container *ngIf="modalValidateForm.get(m.eName).errors.required">
+                  {{m.validateCon}}
+                </ng-container>
+              </nz-form-explain>
+
+            </nz-form-control>
+
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+    <tpl-buttons [formId]="'form_boat_water_gauge_add2'" (btnClick)="btnClick($event)">
+    </tpl-buttons>
+    <app-table-form [formId]="'form_boat_water_gauge_add'" [gridId]="'grid1'" [dataSet]="modalDataSet"
+                    [extraTableHeight]="300" [nzShowPagination]="false" [isMutli]="true"
+                    (updateDataResult)="updateDataModal($event)">
+      <ng-template grid-row="tpl-grid1-imgWaterGauge" let-obj let-index="index" let-key="key">
+        <button nz-button nzType="default" (click)="modalUpdate(obj,key)">
+          <ng-template [ngIf]="!obj.imgWaterGauge" [ngIfElse]="other">
+            点击上传
+          </ng-template>
+          <ng-template #other>
+            已上传
+          </ng-template>
+        </button>
+      </ng-template>
+
+    </app-table-form>
+  </nz-spin>
+
+</nz-modal>
+<ng-template #importDataModal>
+  <nz-upload nzListType="picture" [nzAction]="upload.action"
+             [nzData]="upload.handleData" [nzCustomRequest]='upload.handleRequest'
+             [(nzFileList)]="fileList" (nzChange)="getFileUrl($event)">
+    <button nz-button><i nz-icon nzType="upload"></i><span>点击上传</span></button>
+  </nz-upload>
+</ng-template>
+
+<!--<nz-modal nzWidth="80%" [(nzVisible)]="commodityWaterGaugeVisible" [nzTitle]="'商检水尺维护'" [nzMaskClosable]="false"-->
+<!--          [nzFooter]="null" (nzOnOk)="handleOk()" (nzOnCancel)="handleCancel()"-->
+<!--          (nzAfterClose)="closeResult()">-->
+<ng-template #commodityWaterGauge>
+  <nz-spin [nzSpinning]="listLoadingChild">
+    <form nz-form [formGroup]="commodityWaterGaugeForm">
+      <div nz-row [nzGutter]="8">
+        <div nz-col [nzSpan]="8" *ngFor="let m of commodityWaterGaugeFormData">
+          <nz-form-item nzFlex>
+            <nz-form-label [nzSpan]="9" [nzRequired]="m.require">{{m.name}}</nz-form-label>
+
+            <nz-form-control [nzSpan]="15">
+
+              <input nz-input type="text" *ngIf="m.type == 'text'" [formControlName]="m.eName" [id]="m.eName">
+
+              <nz-input-number *ngIf="m.type == 'number'" [formControlName]="m.eName" [nzMin]="0" [nzStep]="1">
+              </nz-input-number>
+              <nz-select *ngIf="m.type === 'select'" style="width: 120px;" [formControlName]="m.eName">
+                <nz-option *ngFor="let i of m.selectList" [nzLabel]="i.label" [nzValue]="i.value"></nz-option>
+              </nz-select>
+
+              <ng-container *ngIf="m.type == 'img'">
+                <nz-upload nzListType="picture" [nzAction]="upload.action"
+                           [nzData]="upload.handleData" [nzCustomRequest]='upload.handleRequest'
+                           [(nzFileList)]="imgInspectGaugeList" (nzChange)="getImgInspectGaugeUrl($event,m.eName)">
+                  <input hidden [formControlName]="m.eName">
+                  <button nz-button><i nz-icon nzType="upload"></i><span>点击上传</span></button>
+                </nz-upload>
+              </ng-container>
+
+              <nz-form-explain
+                *ngIf="commodityWaterGaugeForm.get(m.eName).invalid && (commodityWaterGaugeForm.get(m.eName).dirty || commodityWaterGaugeForm.get(m.eName).touched)">
+                <ng-container *ngIf="commodityWaterGaugeForm.get(m.eName).errors.required">
+                  {{m.validateCon}}
+                </ng-container>
+              </nz-form-explain>
+
+            </nz-form-control>
+
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-spin>
+
+</ng-template>
+<!--</nz-modal>-->

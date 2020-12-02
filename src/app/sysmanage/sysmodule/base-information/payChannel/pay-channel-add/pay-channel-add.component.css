@@ -1,0 +1,11 @@
+.channel-layout{
+    padding:15px 0 15px 25px;
+}
+.m-t-10{
+    margin-top:10px;
+}
+
+:host ::ng-deep .ant-upload-text {
+  margin-top: 8px;
+  color: #666;
+}

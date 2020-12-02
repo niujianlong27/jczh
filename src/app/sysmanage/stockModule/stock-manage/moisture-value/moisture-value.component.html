@@ -1,0 +1,66 @@
+<app-searchform [formId]="'form_moistuerValue'"  gridId="moistuer" (search)="listSearch($event)"></app-searchform>
+<tpl-buttons formId="form_moistuerValue" (btnClick)="btnClick($event)"></tpl-buttons>
+
+
+<app-table-form (pageIndexEmit)='getPageIndex1($event)'
+                (pageSizeEmit)='getPageSize1($event)'
+                [formId]="'form_moistuerValue'"
+                gridId="moistuer"
+                [dataSet]="dataSet1"
+                [isMutli]="true"
+                [colSet]="true"
+                [pageSize]="pageSize1"
+                [totalPage]="totalPages1"
+                [listLoading]="listLoading1"
+                (updateDataResult)="updateDataResult($event)">
+
+</app-table-form>
+
+<nz-modal class="portalCraneModal" [(nzVisible)]="isVisible" [nzTitle]="tplTitle" [nzFooter]="modalFooter"
+          (nzOnCancel)="nzOnCancel()" [nzMaskClosable]="false" nzWidth="30%"  (nzAfterClose)="closeResult()">
+
+  <form nz-form [formGroup]="modalValidateForm">
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="24" *ngFor="let m of modalFormData" style="margin-left:10px;margin-bottom: 10px ">
+        <nz-form-item>
+          <nz-form-label  [nzSpan]="8" [nzRequired]="m.require" >
+            {{m.name}}
+          </nz-form-label>
+
+          <nz-form-control style="margin-left: -10px" [nzSpan]="13">
+            <nz-date-picker class="rangePicker" *ngIf="m.type == 'time'" [formControlName]="m.eName" [nzShowTime]="'true'"></nz-date-picker>
+            <nz-select nzAllowClear nzPlaceHolder="请选择" formControlName="{{m.eName}}" *ngIf="m.type == 'select'">
+              <nz-option *ngFor="let o of lockoutTypeArr" [nzValue]="o.value" [nzLabel]="o.name"></nz-option>
+            </nz-select>
+            <app-input-number *ngIf="m.type == 'number'" formControlName="{{m.eName}}" [attr.id]="m.eName"></app-input-number>
+            <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'" [readOnly]="m.readOnly" placeholder="{{m.placeholder}}">
+            <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+              <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+                {{m.validateCon}}
+              </ng-container>
+              <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+                {{m.validators.patternErr}}
+              </ng-container>
+
+            </nz-form-explain>
+          </nz-form-control>
+
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="nzOnCancel()">取消</button>
+    <button nz-button nzType="primary" (click)="handleOk()" >确定</button>
+  </ng-template>
+</nz-modal>
+
+<ng-container>
+  <ng-template #confirmTitle>提示信息</ng-template>
+  <ng-template #confirmContent>{{confimCon}}</ng-template>
+  <ng-template #confirmFooter>
+    <button nz-button nzType="primary" (click)="deleteData()">确定</button>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  </ng-template>
+</ng-container>

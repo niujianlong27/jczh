@@ -1,0 +1,20 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+<common-page formId="form_point_unstand" (search)="search($event)" [triggerSearch]="true" (btnClick)="btnclick($event)" [isMutli]="true"
+[dataSet]="listData" [totalPage]="total" [listLoading]="loading" [btnDisable]="{'updateStand': btnDisabled?.updateStand,'relateStand': btnDisabled?.relateStand,
+'Update': btnDisabled?.update, 'Delete': btnDisabled?.delete}"
+[btnLoading]="{'updateStand': btnLoading?.updateStand}" (updateDataResult)="selectedData($event)"></common-page>
+<nz-modal [(nzVisible)]="modal.visible" [nzTitle]="modal.title" [nzContent]="modalContent"
+nzWidth="70%" (nzOnCancel)="modal.visible = false" [nzOkLoading]="modal.okloading" (nzOnOk)="modalOk()" [nzOkDisabled]="!modal.selectData[0]" [nzMaskClosable]="false" >
+   <ng-template #modalContent>
+      <app-searchform formId="form_point_stand" [searchFormShow]="true" (search)="getStandList($event,1)"></app-searchform>
+      <app-table-form formId="form_point_stand" selfTableHeight="400px" [pageFun]="true" (pageIndexEmit)="pageIndex($event)" (pageSizeEmit)="pageSize($event)"
+      [listLoading]="modal.loading" [totalPage]="modal.total" [dataSet]="modal.listData" (updateDataResult)="modalTableSelect($event)"></app-table-form>
+   </ng-template>
+</nz-modal>
+<location-manage-modal [(visible)]="modalFormVisible" [status]="status" [params]="params" (updateList)="updateList($event)" [rowid]="rowid">
+
+</location-manage-modal>
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon" (modalConfirmResult)="modalConfirmResult($event)">
+
+</app-modal-confirm>

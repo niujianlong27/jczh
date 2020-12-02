@@ -1,0 +1,189 @@
+<nz-tabset [(nzSelectedIndex)]="carNum">
+  <nz-tab *ngFor="let tab of tabs;let i = index;" [nzTitle]='tab.itemCname+tab.itemCount'
+          (nzSelect)="selectChange(tab.statusType)">
+      <div style="margin-top: 20px;margin-left:20px;margin-bottom: 20px">
+        <div style="display: inline">
+            <a style="margin-right: 10px">品种</a>
+            <nz-select style="width: 120px;" nzAllowClear  [(ngModel)]="inqu.kindCode" nzPlaceHolder="请选择品种">
+              <nz-option *ngFor="let i of kindArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+          </nz-select>
+          <nz-select style="width: 120px;" nzAllowClear  [(ngModel)]="inqu.subKindCode"  *ngIf="inqu.kindCode =='disp_matKind_FG'">
+            <nz-option *ngFor="let i of subKindArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+        </nz-select>
+        </div>
+
+
+      <div style="display: inline;margin-left:30px">
+          <a>供应商</a>
+           <input   [(ngModel)]="inqu.vendor" style="margin-left:10px" name='vendor' />
+          <!-- <input nz-input  nzSize="small" nzSpan="4" [(ngModel)]="inqu.vendor" name='vendor'/> -->
+      </div>
+
+
+      <div style="display: inline;margin-left:30px">
+        <a style="display: inline;margin-right: 10px">入厂大门</a>
+        <nz-select style="width: 150px;" nzAllowClear  [(ngModel)]="inqu.gateCode" nzPlaceHolder="请选择入厂大门" >
+          <nz-option *ngFor="let i of gateArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+      </nz-select>
+    </div>
+
+    <div style="display: inline;margin-left:30px">
+      <a style="display: inline">车牌号</a>
+      <input   [(ngModel)]="inqu.truckNo" style="margin-left:10px" />
+  </div>
+
+  <div style="display: inline;margin-left:30px">
+    <a style="display: inline">业务号</a>
+    <!-- <input   [(ngModel)]="inqu.dealNo" style="margin-left:10px" /> -->
+    <input   value='{$ITEM->inoutnum}' min="0"
+onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}"
+[(ngModel)]="inqu.dealId" style="margin-left:10px" />
+
+</div>
+
+  <div style="margin-left:0;margin-top:30px">
+    <div style="display: inline" *ngIf="carNum == 0 || carNum == 2">
+      <a style="display: inline;margin-right:10px">装载时间</a>
+      <nz-date-picker   [(ngModel)]="inqu.startCreateTime" [nzFormat]="'yyyy-MM-dd HH:mm:ss'" [nzShowTime]='true'></nz-date-picker>-<nz-date-picker  [(ngModel)]="inqu.endCreateTime" [nzFormat]="'yyyy-MM-dd HH:mm:ss'" [nzShowTime]='true'></nz-date-picker>
+    </div>
+    <div style="display: inline" *ngIf="carNum == 1">
+      <a style="display: inline;margin-right:10px">回退时间</a>
+      <nz-date-picker  [(ngModel)]="inqu.startRecReviseTime" [nzFormat]="'yyyy-MM-dd HH:mm:ss'" [nzShowTime]='true'></nz-date-picker>-<nz-date-picker  [(ngModel)]="inqu.endRecReviseTime" [nzFormat]="'yyyy-MM-dd HH:mm:ss'" [nzShowTime]='true'></nz-date-picker>
+    </div>
+    <div style="display: inline" *ngIf="carNum == 3">
+      <a style="display: inline;margin-right:10px">排队时间</a>
+      <nz-date-picker  [(ngModel)]="inqu.startQueueStartTime" [nzFormat]="'yyyy-MM-dd HH:mm:ss'" [nzShowTime]='true'></nz-date-picker>-<nz-date-picker  [(ngModel)]="inqu.endQueueStartTime" [nzFormat]="'yyyy-MM-dd HH:mm:ss'" [nzShowTime]='true'></nz-date-picker>
+    </div>
+    <div style="display: inline" *ngIf="carNum == 4">
+      <a style="display: inline;margin-right:10px">入厂通知时间</a>
+      <nz-date-picker  [(ngModel)]="inqu.startEntryNoticeTime" [nzFormat]="'yyyy-MM-dd HH:mm:ss'" [nzShowTime]='true'></nz-date-picker>-<nz-date-picker  [(ngModel)]="inqu.endEntryNoticeTime" [nzFormat]="'yyyy-MM-dd HH:mm:ss'" [nzShowTime]='true'></nz-date-picker>
+    </div>
+    <div style="display: inline" *ngIf="carNum == 5">
+      <a style="display: inline;margin-right:10px">入厂时间</a>
+      <nz-date-picker  [(ngModel)]="inqu.startCreateTime" [nzFormat]="'yyyy-MM-dd HH:mm:ss'" [nzShowTime]='true'></nz-date-picker>-<nz-date-picker  [(ngModel)]="inqu.startEntryTime" [nzFormat]="'yyyy-MM-dd HH:mm:ss'" [nzShowTime]='true'></nz-date-picker>
+    </div>
+    <div style="display: inline" *ngIf="carNum == 6">
+      <a style="display: inline;margin-right:10px">出厂时间</a>
+      <nz-date-picker  [(ngModel)]="inqu.startFinishTime" [nzFormat]="'yyyy-MM-dd HH:mm:ss'" [nzShowTime]='true'></nz-date-picker>-<nz-date-picker  [(ngModel)]="inqu.endFinishTime" [nzFormat]="'yyyy-MM-dd HH:mm:ss'" [nzShowTime]='true'></nz-date-picker>
+    </div>
+      <!-- <div style="display: inline;margin-left:30px" *ngIf=" carNum ==1">
+      <a style="display: inline">状态</a>
+      <nz-select style="width: 120px;" nzAllowClear  [(ngModel)]="inqu.status" >
+        <nz-option *ngFor="let i of statusArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+      </nz-select>
+    </div> -->
+    <div style="display: inline;margin-left:30px" *ngIf="carNum ==3 || carNum == 1">
+      <a style="display: inline">状态</a>
+      <nz-select style="width: 120px;" nzAllowClear  [(ngModel)]="inqu.status" >
+        <nz-option *ngFor="let i of detailArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+      </nz-select>
+    </div>
+    <div style="display: inline;margin-left:30px" *ngIf="carNum ==4 || carNum ==5 || carNum ==6">
+      <a style="display: inline">仓库</a>
+      <nz-select style="width: 140px;" nzAllowClear  [(ngModel)]="inqu.warehouseCode" nzPlaceHolder="请选择仓库">
+        <nz-option *ngFor="let i of warehouseArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+      </nz-select>
+    </div>
+
+    <div style="display: inline">
+      <a style="display: inline;margin-right:10px;margin-left:30px">送达时间</a>
+      <!-- <input   [(ngModel)]="inqu.intervalHours" name='intervalHours' style="margin-left:10px;border-radius: 3px" /> -->
+      <nz-input-number type="number" nz-input [(ngModel)]="inqu.intervalHours" [nzMin]="0"  style="margin-left:10px"></nz-input-number>
+      <a>小时内</a>
+    </div>
+
+    <div style="float: right">
+      <!--<button nz-button nzType="primary" (click)="exportExcel()" [nzLoading]='exportLoading'>导出Execl</button>-->
+      <!--<a>&nbsp;&nbsp;</a>-->
+      <button nz-button nzType="primary" (click)="query()">查询</button>
+  </div>
+</div>
+
+      </div>
+    <ng-container>
+      <tpl-buttons (btnClick)="btnClick($event)"  formId="form_rgDisp_vehicleFind0" [btnHiden]="{'Find':true,'Out':!(tab.formId=='form_rgDisp_vehicleFind0'||tab.formId=='form_rgDisp_vehicleFind5'),'Process':false,
+           'Delete':!(tab.formId!='form_rgDisp_vehicleFind5'),'Suspend':!(tab.formId=='form_rgDisp_vehicleFind0'||tab.formId=='form_rgDisp_vehicleFind3'),
+           'Recovery':!(tab.formId=='form_rgDisp_vehicleFind0'||tab.formId=='form_rgDisp_vehicleFind3'),'Export':false,'Open':intervalFlag,'Close':!intervalFlag}" ></tpl-buttons>
+        <!-- <app-table-form
+        [formId]="'form_rgDisp_warehouseRequired'" [gridId]="'grid1'" [pageFun]="true" (pageIndexEmit)="pageIndexEmit($event)"
+        [isMutli]="false" (pageSizeEmit)="pageSizeEmit($event)"
+        [dataSet]="dataSet"
+        [gridOperate]="{show:true,title:'操作',template:g1}"
+        [isCheckBox]="false"
+        [listLoading]="listLoading"
+        [pageSize]="pageSize" [totalPage]="totalPage"
+                         >
+            <ng-template #g1 let-data let-index="index">
+              <a (click)="delete(data,index)" a>运输过程</a>
+              <a (click)="delete(data,index)" a>删除</a>
+            </ng-template>
+          </app-table-form> -->
+          <!-- <app-table-form
+                  [formId]="'form_rgDisp_vehicleFind1'" [gridId]="'grid1'" [pageFun]="true" (pageIndexEmit)="pageIndexEmit($event)"
+                  [isMutli]="false" (pageSizeEmit)="pageSizeEmit($event)"
+                  [dataSet]="dataSet"
+                  [gridOperate]="{show:true,title:'操作',template:g1,width: '200px'}"  (updateDataResult)="updateDataResult($event)"
+                  [isCheckBox]="false"
+                  [listLoading]="listLoading"   [pageSize]="pageSize" [totalPage]="totalPage"
+                 > -->
+
+                 <app-table-form
+                 [formId]="tab.formId" [gridId]="'grid1'"  [pageFun]="true" (pageIndexEmit)="pageIndexEmit($event)"
+                 [isMutli]="false"  (pageSizeEmit)="pageSizeEmit($event)"
+                 [dataSet]="dataSet"
+
+                 [showCount]='false'
+                 [listLoading]="listLoading"
+                 [pageSize]="pageSize" [totalPage]="totalPage" (updateDataResult)="updateDataResult($event)"
+                >
+
+  </app-table-form>
+    </ng-container>
+    <div style="text-align: center;margin-top:-25px;color: #20a8d8;"> <span>合计:</span><span style="margin-left:26px">车辆</span><span style="margin-left:10px">{{this.vehicleNum}}</span><span>辆</span><span style="margin-left:26px">重量</span><span style="margin-left:10px">{{this.totalWeight}}</span><span>吨</span></div>
+  </nz-tab>
+</nz-tabset>
+
+<nz-modal [nzWidth]="'55%'" [(nzVisible)]="isVisible" nzTitle="{{ modalTitle }}" [nzContent]="modalContent" [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()">
+  <ng-template #modalContent>
+    <nz-table #basicTable [nzData]="dataSet1" [nzPageSize]="'8'">
+      <thead>
+        <tr>
+          <th [nzAlign]="'left'" style="width: 4%">任务ID</th>
+          <th [nzAlign]="'left'" style="width: 4%">车牌号</th>
+          <th [nzAlign]="'left'"style="width: 4%">司机</th>
+          <th [nzAlign]="'left'"style="width: 7%">处理时间</th>
+          <th [nzAlign]="'left'" style="width: 10%">处理过程</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data">
+          <td [nzAlign]="'left'">{{data.taskId}}</td>
+          <td [nzAlign]="'left'">{{data.truckNo}}</td>
+          <td [nzAlign]="'left'">{{data.diverName}}</td>
+          <td [nzAlign]="'left'">{{data.recCreateTime}}</td>
+          <td [nzAlign]="'left'" title={{data.updateDesc}}>{{data.updateDesc}}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </ng-template>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  </ng-template>
+</nz-modal>
+
+
+
+<app-modal-confirm [deleteVisible]="finishVisible" [modalTitle]="modalTitle" [modalCon]="finishCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>
+
+<app-modal-confirm [deleteVisible]="deleteVisible1" [modalTitle]="modalTitle" [modalCon]="finishCon"
+                   (modalConfirmResult)="deleteResult($event)">
+</app-modal-confirm>
+
+<app-modal-confirm [deleteVisible]="confirmVisible" [modalTitle]="modalTitle" [modalCon]="finishCon"
+                   (modalConfirmResult)="confirmResult($event)">
+</app-modal-confirm>
+

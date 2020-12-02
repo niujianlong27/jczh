@@ -1,0 +1,24 @@
+<nz-modal [nzWidth]="'45%'" [nzVisible]='_vehicleIsVisible' nzTitle="车辆轨迹" [nzContent]="vehicleModalContent" [nzFooter]="vehicleModalFooter"
+  (nzOnCancel)="vehicleHandleCancel()">
+  <ng-template #vehicleModalContent> 
+    <div id='container' style='width:auto; height:600px;'></div>
+    <div class="input-card" style="background-color: lavender; width: auto;">    
+      <h4>轨迹回放控制</h4>
+      <div class="input-item"> 
+          <button nz-button class="btn" nzType="primary" (click)="startAnimation()">开始动画</button>
+          <button nz-button class="btn" nzType="primary" (click)="pauseAnimation()">暂停动画</button>
+          <input style="float: right; width: 100px; margin-inline-end: 40px;" nz-input nzSize="small" disabled="true" [ngModel]="truckNo">
+          <label style="float: right; margin-inline-end: 20px;" class="truckNo">车牌号</label>
+      </div>
+      <div class="input-item">
+          <button nz-button class="btn" nzType="primary" (click)="resumeAnimation()">继续动画</button>
+          <button nz-button class="btn" nzType="primary" (click)="stopAnimation()">停止动画</button> 
+          <input style="float: right; width: 100px; margin-inline-end: 40px;" nz-input nzSize="small" disabled="true" [ngModel]="driverPhone">
+          <label style="float: right; margin-inline-end: 20px;" class="driverPhone">手机号</label>  
+      </div>
+  </div>
+  </ng-template>
+  <ng-template #vehicleModalFooter>
+    <button nz-button nzType="default" (click)="vehicleHandleCancel()">取消</button>
+  </ng-template>
+</nz-modal>

@@ -1,0 +1,30 @@
+<app-searchform (search)="listSearch($event)" [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+<app-grid-resize [gridOne]="gridOne" [gridTwo]="gridTwo" (selfHeightResult)="gridHeight($event)">
+    <ng-template #gridOne>
+        <app-table-form gridId="order" [isMutli]="true" tabIndex="1" [dataSet]="orderData" [pageSize]="pageSize1" [totalPage]="total" (listClick)="rowCilcked($event)" [selfTableHeight]="gridOneHeight" [colSet]="true" [listLoading]="listLoading1" [selectedChange]="true"
+            [paginationRef]="totalStats" (updateDataResult)="selectedOrder($event)"
+            [isResetFilter]="isResetFilter"></app-table-form>
+        <ng-template #totalStats>
+            &nbsp;<span> 已选重量 {{totalWeight| number:'1.3-3'  }} 吨</span>
+            <!--&nbsp;<span> 已选件数 {{totalSheet | number:'1.2-2'}} 件</span>-->
+            &nbsp;<span> 已选金额 {{totalPrice | number:'1.2-2' }} 元</span>
+        </ng-template>
+    </ng-template>
+
+    <ng-template #gridTwo>
+        <app-table-form gridId="item" [dataSet]="itemData" isMutli="true" [nzShowPagination]="false" [selfTableHeight]="gridTwoHeight" [caculateEnameArr]="caculateEnameArr1">
+
+        </app-table-form>
+
+    </ng-template>
+</app-grid-resize>
+
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="提示信息" (nzOnCancel)="handleOk()" (nzOnCancel)="handleCancel()">
+    {{returnMsg}}
+</nz-modal>
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon" (modalConfirmResult)="modalConfirmResult($event)">
+
+</app-modal-confirm>

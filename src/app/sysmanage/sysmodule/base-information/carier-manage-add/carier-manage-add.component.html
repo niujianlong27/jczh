@@ -1,0 +1,68 @@
+
+<form nz-form [formGroup]="validateForm" style="padding:15px 20px 0 0">
+  <div nz-row [nzGutter]="24" nzAlign="top" nzJustify="space-around">
+    <ng-container *ngFor="let control of controlArray">
+      <div nz-col [nzSpan]="8" *ngIf="control.type !== null">
+        <nz-form-item>
+          <nz-form-label [nzRequired]="control.require" [nzSpan]="7"
+                         [nzFor]="control.eName">{{ control.cName}}</nz-form-label>
+          <nz-form-control [nzSpan]="17">
+
+            <input-modal [isMutli]="false" [findset]="invoiceCompanyFindSet" *ngIf="control.type == 'modal'"
+                         [inputModalModel]="inputModalModel" (inpEmit)="inpEmitModal($event,control.eName)" [borderRed]="borderRed"
+                         (blurEmit)="blurChange($event)"></input-modal>
+
+            <input *ngIf="control.type == 'text1' " nz-input [type]="control.type" [maxlength]="control.maxLength" autocomplete="off"
+                   [formControlName]="control.eName" [attr.id]="control.eName" (blur)="blur()">
+
+            <input *ngIf="control.type == 'text' " nz-input [type]="control.type" [maxlength]="control.maxLength" autocomplete="off"
+                   [formControlName]="control.eName" [attr.id]="control.eName">
+
+            <nz-date-picker *ngIf="control.type == 'data'" [formControlName]="control.eName" style="width:100%" [nzStyle]="{width: '100%'}"></nz-date-picker>
+            <nz-input-number *ngIf="control.type == 'number'"  [formControlName]="control.eName" style="width:100%"
+            ></nz-input-number>
+            <div *ngIf="control.type == 'upload'">
+              <nz-upload
+                [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="control.dataArr"
+                nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData" (nzChange)="handleChange($event,control.eName)"
+                [nzShowButton]="control.dataArr.length < 2">
+                <i nz-icon type="plus"></i>
+                <div class="ant-upload-text">Upload</div>
+              </nz-upload>
+              <input type="hidden" formControlName={{control.eName}} readonly="readonly">
+              <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+                        (nzOnCancel)="previewVisible=false">
+                <ng-template #modalContent>
+                  <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }"/>
+                </ng-template>
+              </nz-modal>
+            </div>
+
+            <nz-radio-group [attr.id]="control.eName" *ngIf="control.type == 'radio'" [formControlName]="control.eName">
+              <label nz-radio nzValue="{{r.value}}" *ngFor="let r of control.radioArr">{{r.name}}</label>
+            </nz-radio-group>
+            <nz-select *ngIf="control.type == 'select' " nz-input style="width:100%"
+                       [formControlName]="control.eName" [attr.id]="control.eName">
+              <nz-option *ngFor="let i of control.selectList" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+            </nz-select>
+            <nz-form-explain *ngIf="validateForm.get(control.eName).dirty && validateForm.get(control.eName).errors">
+              <ng-container *ngIf="validateForm.get(control.eName).hasError('required')">
+                {{control.validateCon}}
+              </ng-container>
+              <ng-container *ngIf="validateForm.get(control.eName).hasError(control.customValidateStatus)">
+                {{control.customValidateCon}}
+              </ng-container>
+            </nz-form-explain>
+
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </ng-container>
+  </div>
+  <div nz-row>
+    <div nz-col [nzSpan]="24" style="text-align: right;">
+      <button nz-button [nzType]="'primary'" (click)="submitForm()" style="margin-right: 15px">确定</button>
+      <button nz-button (click)="cancel()">取消</button>
+    </div>
+  </div>
+</form>

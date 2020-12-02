@@ -1,0 +1,93 @@
+/*登录背景*/
+.home-login-box {
+    width: 288px;
+    height: 270px;
+    background-color: rgba(255,255,255,.8);
+    margin-top: 60px;
+} 
+.home-banner{
+    position: relative;
+    height:388px;
+}
+/*账户-密码样式*/
+.hlb_top form div input {
+  padding-left: 35px;
+}
+.hlb_top input {
+  width: 250px;
+  height: 32px;
+  margin-top: 20px;
+}
+/*账户-密码样式*/
+.hlb_top{
+    padding:18px 19px;
+}
+/*标题*/
+.home-login-title{
+    display:block;
+    font-size:16px;
+    font-family: '微软雅黑', 'microsoft yahei', tahoma, arial, 'helvetica neue', 'hiragino sans gb', sans-serif;
+    color:#ff6666;
+  }
+/*登录按钮*/
+.hlb_top form div button:first-child {
+    background: #ea6a69;
+    border: 1px #ea6a69 solid;
+    color: #fff;
+    margin-top: 32px;
+}
+.hlb_top form div button {
+  width: 119px;
+  height: 29px;
+  line-height: 29px !important;
+}
+/*免费注册按钮*/
+.hlb_top form div button:last-child {
+  background: #fff;
+  border: 1px #ea6a69 solid;
+  color: #ea6a69;
+  float: right;
+  margin-top: 32px;
+}
+.hlb_top form div button {
+  width: 119px;
+  height: 29px;
+  line-height: 29px !important;/*禁止覆盖*/
+}
+
+:host ::ng-deep .ant-input-affix-wrapper .ant-input-prefix {/*":host ::ng-deep"作用:规划格式*/
+  top: 70%;
+}
+
+.ant-btn-primary {
+  background-color: #ea6a69;
+  border-color: #ea6a69;
+  width: 100px;
+  margin-top: 20px;
+}
+
+.ant-btn-default { 
+  border-color: #ea6a69;
+  width: 100px;
+  margin-left: 40px;
+  margin-top: 20px;
+}
+.m-t-12{
+  margin-top:12px;
+}
+.info-img{
+  width:120px;
+  height:90px;
+  padding:16px 0;
+  background-color:rgba(255,255,255,.5);
+  margin:0 auto;
+  border-radius:4px;
+}
+
+
+
+
+
+
+
+    

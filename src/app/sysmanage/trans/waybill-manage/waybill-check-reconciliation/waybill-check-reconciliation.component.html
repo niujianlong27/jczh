@@ -1,0 +1,8 @@
+<common-page (search)="listSearch($event)" (btnClick)="btnClick($event)" (updateDataResult)="updateDataResult($event)"
+             [pageSize]="pageSize" [totalPage]="totalPage" [listLoading]="listLoading" [dataSet]="dataSet" gridId="waybillPackCheck"
+             [isMutli]="true" [paginationRef]="paginationRef"></common-page>
+<ng-template #paginationRef>
+  已选总件数: {{selectedData | dataAggregation:'prePackSheet' | gridData:{type: 'number', format: '0'} }} 件
+  已选总重量: {{selectedData | dataAggregation:'prePackWeight' | gridData:{type: 'number', format: '3'} }} 吨
+  已选应付总金额: {{selectedData | dataAggregation:'totalAmount' | gridData:{type: 'number', format: '2'} }} 元
+</ng-template>

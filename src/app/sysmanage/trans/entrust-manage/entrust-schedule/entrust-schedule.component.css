@@ -1,0 +1,86 @@
+.ant-upload-text {
+  margin-top: 8px;
+  color: #666;
+}
+
+.tableLine {
+  position: absolute;
+  width: 1%;
+  top: 0;
+  z-index: 1;
+  height: 100%;
+}
+
+.tableLine-in {
+  width: 8px;
+  height: 100%;
+  background-color: #fafafa;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: w-resize;
+}
+
+.trans {
+  transition: all 0.3s;
+  overflow: hidden;
+}
+
+.grid-line-btn {
+  position: absolute;
+  margin: auto;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 8px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  background-color: #eee;
+  cursor: pointer;
+}
+
+.grid-line-btn:hover {
+  background-color: #fc6;
+}
+
+.grid-line-btn i {
+  font-size: 12px;
+}
+
+.label-inline {
+  display: inline-block !important;
+  margin-left: 15px;
+}
+
+.locationStyle {
+  float: left;
+  width: 60%;
+  margin-left: 10px;
+}
+
+::ng-deep .selectCarriage ::ng-deep .ant-select-selection__rendered ul .ant-select-selection__choice {
+  display: none;
+}
+
+.search-box {
+  padding: 8px;
+}
+
+.search-box input {
+  width: 188px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.search-box button {
+  width: 90px;
+}
+
+.search-button {
+  margin-right: 8px;
+}

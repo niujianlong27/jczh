@@ -1,0 +1,91 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+<common-page (search)="listSearch($event)"  (btnAdd)="btnAdd()"  [pageSize] = "pageSize" [totalPage] = "totalPage"  [listLoading]="listLoading"
+             (btnUpdate)="btnUpdate($event)" (btnDelete)="btnDelete($event)" [dataSet]="dataSet" [isMutli] = "true"
+             [extraTableHeight]="permissions ? 52 : 0">
+
+</common-page>
+
+<!--弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()">
+  <form nz-form [formGroup]="modalValidateForm" >
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-label *ngIf="m.name !== '公司ID' && m.name !== '用户ID'" [nzSpan]="6" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="12">
+
+
+        <input-modal *ngIf="m.type == 'modal'" [isMutli]="false" [findset]="formIdFindset"
+                     [inputModalModel]="inputModalModel" (inpEmit)="inpEmit($event)" [borderRed]="borderRed"
+                     [DISABLED]="false"></input-modal>
+
+        <nz-radio-group  [attr.id]="m.eName" *ngIf="m.type == 'radio';else other" formControlName="{{m.eName}}">
+          <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+        </nz-radio-group>
+
+        <ng-template #other>
+
+            <input type="{{m.type}}" *ngIf="m.type === 'hidden'" nz-input formControlName="{{m.eName}}"  [attr.id]="m.eName">
+          
+            <nz-input-group *ngIf="m.type === 'text1'" [nzSuffix]="suffixTemplate">
+            <input type="text" (click)="Icon()" nz-input formControlName="{{m.eName}}"  [attr.id]="m.eName">
+            </nz-input-group>
+          
+
+          <nz-select style="width: 200px;" *ngIf="m.type === 'select'"   nzAllowClear  formControlName="{{m.eName}}">
+              <nz-option nzLabel="是" nzValue="0"></nz-option>
+              <nz-option nzLabel="否" nzValue="1"></nz-option>
+          </nz-select> 
+        </ng-template>
+            <ng-template #suffixTemplate>
+                <i nz-icon type="search" (click)="Icon()"></i>
+            </ng-template>
+                  
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+          <div *ngIf="modalValidateForm.get(m.eName).errors.pattern;else erroInf">
+            {{ m.validators.patternErr}}
+          </div>
+          <ng-template #erroInf>
+            {{ m.validateCon}}
+          </ng-template>
+        </nz-form-explain>
+
+      </nz-form-control>
+
+    </nz-form-item>
+
+  </form>
+</nz-modal>
+
+<!--确认弹窗-->
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>
+
+
+<nz-modal [nzMask]="false" [(nzVisible)]="isVisible" nzTitle="选择用户" (nzOnCancel)="handleCancel1()" (nzOnOk)="handleOk1()">
+  <input type="text" nz-input placeholder="输入用户名查找" (input)="find($event.target?.value)">
+  <nz-table #rowSelectionTable nzSize="small" [nzData]="data" [nzScroll]="{x:'300px',y:'300px'}"
+            [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <ng-container *ngFor="let h of dataHeader">
+        <th title="{{h.cName}}">{{h.cName}}</th>
+      </ng-container>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of rowSelectionTable.data">
+      <td nzShowCheckbox [(nzChecked)]="data.checked" [nzDisabled]="data.disabled"
+          (nzCheckedChange)="refreshStatus()"></td>
+      <ng-container *ngFor="let n of dataHeader">
+        <td [ngClass]="n.type">
+          <span title="{{data[n.eName]}}">{{data[n.eName]}}</span>
+        </td>
+      </ng-container>
+    </tr>
+    </tbody>
+  </nz-table>
+</nz-modal>
+

@@ -1,0 +1,195 @@
+<nz-spin
+  [nzSize]="'large'"
+  [nzSpinning]="isSpinning"
+>
+  <app-searchform
+    [triggerSearch]="true"
+    (search)="listSearch($event)"
+  >
+  </app-searchform>
+  <tpl-buttons
+    (btnClick)="btnClick($event)"
+    [btnDisable]="{addStoreArea:!selectData?.storeName,addStorePositon:(!selectData?.storeName)&&(!selectData?.areaName),update:!selectData?.level,delete:!selectData?.level}"
+  >
+  </tpl-buttons>
+
+  <nz-table
+    reNzTable
+    #nzTable
+    (heightEmit)="tableHeightFun($event)"
+    [nzScroll]="{ x: tableWidth, y: tableHeight}"
+    [formId]="curFormId"
+    nzSize="small"
+    [nzShowPagination]="false"
+    [nzFrontPagination]="false"
+    [nzData]="dataSet"
+    [nzVirtualScroll]="true"
+    [nzVirtualItemSize]="30"
+    [nzVirtualMinBufferPx]="virtualMinBuffer"
+    [nzVirtualMaxBufferPx]="virtualMaxBuffer"
+  >
+    <thead>
+    <tr>
+      <ng-container *ngFor="let header of dataHeader">
+        <th
+          [nzWidth]="header.width||'150px'"
+        >
+          {{header.colCname}}
+        </th>
+      </ng-container>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-template nz-virtual-scroll let-data let-index="index">
+      <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+        <tr
+          *ngIf="(item.parent && item.parent.expand) || !item.parent"
+        >
+          <ng-container *ngFor="let n of dataHeader">
+            <ng-container [ngSwitch]="n?.colEname">
+              <td
+                *ngSwitchCase="'storeName'"
+                nzAlign="left"
+                [nzShowExpand]="!!item?.areaList?.toString()||!!item?.storeLocationModelList?.toString()"
+                [(nzExpand)]="item.expand"
+                (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)"
+              >
+                  <span
+                    class="span-style"
+                    [style.width]="digitalConversion(n.width,!!item?.areaList?.toString()||!!item?.storeLocationModelList?.toString())"
+                    [title]="item[n.colEname]"
+                  >
+                  {{ item[n.colEname] }}
+                 </span>
+
+                <label
+                  (ngModelChange)="checkBoxChange($event,item)"
+                  *ngIf="!!item?.storeCode"
+                  [(ngModel)]="item.checked"
+                  nz-checkbox
+                >
+                </label>
+              </td>
+              <td
+                *ngSwitchCase="'areaName'"
+                nzAlign="left"
+                [nzShowExpand]="!!item?.storeLocationList?.toString()"
+                [(nzExpand)]="item.expand"
+                (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
+                 <span
+                   class="span-style"
+                   [style.width]="digitalConversion(n.width,!!item?.storeLocationList?.toString())"
+                   [title]="item[n.colEname]"
+                 >
+                  {{ item[n.colEname] }}
+                </span>
+                <label
+                  (ngModelChange)="checkBoxChange($event,item)"
+                  *ngIf="!!item?.areaCode"
+                  [(ngModel)]="item.checked"
+                  nz-checkbox
+                >
+                </label>
+
+              </td>
+              <td
+                *ngSwitchCase="'locationName'"
+                nzAlign="left"
+              >
+                <span
+                  class="span-style"
+                  [style.width]="digitalConversion(n.width,!!item?.storeLocationList?.toString())"
+                  [title]="item[n.colEname]"
+                >
+                  {{ item[n.colEname] }}
+                </span>
+                <label
+                  *ngIf="!!item?.locationCdoe"
+                  nz-checkbox
+                  [(ngModel)]="item.checked"
+                  (ngModelChange)="checkBoxChange($event,item)"
+                >
+                </label>
+              </td>
+              <td
+                *ngSwitchDefault
+                nzAlign="left"
+              >
+                 <span
+                   [title]="item[n.colEname]"
+                 >
+                  {{ item[n.colEname] }}
+                </span>
+              </td>
+            </ng-container>
+
+          </ng-container>
+        </tr>
+      </ng-container>
+
+    </ng-template>
+    </tbody>
+  </nz-table>
+  <div nz-row nzType="flex" nzJustify="end">
+    <div nz-col>
+      <nz-pagination
+        (nzPageIndexChange)="pageIndexChange($event)"
+        (nzPageSizeChange)="pageSizeChange($event)"
+        [(nzPageIndex)]="page"
+        [nzTotal]="total"
+        [nzPageSize]="pageSize"
+        [nzSize]="'small'"
+        [nzPageSizeOptions]="[50,100,200,400,1000]"
+        [nzShowTotal]="totalTemplate"
+        nzShowSizeChanger
+        nzShowQuickJumper
+      >
+      </nz-pagination>
+      <ng-template #totalTemplate let-total>共有  {{ total }}  条</ng-template>
+    </div>
+  </div>
+</nz-spin>
+
+<nz-modal
+  [(nzVisible)]="modalVisible"
+  [nzTitle]="modalTitle"
+  (nzOnCancel)="modalOnCancel()"
+  (nzAfterClose)="modalAfterClose()"
+  (nzOnOk)="modalOnOk()"
+>
+  <form nz-form [formGroup]="modalValidateForm">
+    <ng-container *ngFor="let m of modalFormData">
+      <ng-container *ngIf="m.display.indexOf(buttonStatus) !== -1 ">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+            {{m.name}}
+          </nz-form-label>
+
+          <nz-form-control [nzSpan]="12">
+
+            <input type="{{m.type}}" *ngIf="m.type == 'text' || m.type == 'number'" nz-input
+                   formControlName="{{m.eName}}"
+                   [id]="m.eName">
+
+            <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+              <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+            </nz-radio-group>
+
+            <!--        <nz-select style="width: 100px" nzAllowClear nzPlaceHolder="请选择" formControlName="{{m.eName}}"-->
+            <!--                   *ngIf="m.type == 'select'">-->
+            <!--          <nz-option *ngFor="let o of typeDataArr" [nzValue]="o.value" [nzLabel]="o.name"></nz-option>-->
+            <!--        </nz-select>-->
+
+            <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+              {{ m.validateCon}}
+            </nz-form-explain>
+
+          </nz-form-control>
+
+        </nz-form-item>
+      </ng-container>
+    </ng-container>
+
+
+  </form>
+</nz-modal>

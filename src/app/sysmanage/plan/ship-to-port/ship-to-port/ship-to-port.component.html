@@ -1,0 +1,257 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+
+<app-table-form [dataSet]="dataSet" gridId="grid1" [pageSize]="pageSize" [totalPage]="total" [isMutli]="true"
+                [listLoading]="listLoading" [isCheckBox]="true" [showCount]="false"
+                (updateDataResult)="selectData($event)">
+</app-table-form>
+
+
+<nz-modal nzWidth="75%" [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" [nzMaskClosable]="false"
+          [nzBodyStyle]="{'padding-top':'5px'}" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+          (nzAfterClose)="closeResult()">
+  <!--选择船舶计划-->
+  <tpl-buttons formId="form_predict_port_two" [btnDisable]="{selectBoat:this.status === 'update'}"
+               (btnClick)="btnClick($event)"></tpl-buttons>
+  <form nz-form [formGroup]="modalValidateForm" style="padding:15px 20px 0px 0px">
+
+    <nz-form-item>
+      <!--      <nz-form-label [nzXs]="3" nzFor="preNum">报港号</nz-form-label>-->
+      <!--      <nz-form-control [nzXs]="5">-->
+      <!--        <input type="text" nz-input name="preNum" formControlName="preNum" placeholder="系统生成">-->
+      <!--      </nz-form-control>-->
+
+      <nz-form-label [nzXs]="3" nzRequired nzFor="boatBatchNum">船批号</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <input type="text" nz-input name="boatBatchNum" formControlName="boatBatchNum" placeholder="选择船舶计划带入">
+        <nz-form-explain
+          *ngIf="modalValidateForm.get('boatBatchNum').dirty && modalValidateForm.get('boatBatchNum').errors">
+        </nz-form-explain>
+      </nz-form-control>
+
+      <nz-form-label [nzXs]="3" nzRequired nzFor="boatName">船名</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <input type="text" nz-input name="boatName" formControlName="boatName" placeholder="选择船舶计划带入">
+      </nz-form-control>
+
+      <nz-form-label [nzXs]="3" nzRequired nzFor="captain">船长</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <input type="text" nz-input name="captain" formControlName="captain" placeholder="选择船舶计划带入">
+      </nz-form-control>
+
+    </nz-form-item>
+
+    <nz-form-item>
+
+      <nz-form-label [nzXs]="3" nzRequired nzFor="loadWeight">载重</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <input type="text" nz-input name="loadWeight" formControlName="loadWeight" placeholder="选择船舶计划带入">
+      </nz-form-control>
+
+      <nz-form-label [nzXs]="3" nzFor="dockBerth">停靠泊位</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <nz-select formControlName="dockBerth">
+          <nz-option *ngFor="let i of berthList" [nzLabel]="i" [nzValue]="i"></nz-option>
+        </nz-select>
+        <!--        <input type="text" nz-input name="dockBerth" formControlName="dockBerth" placeholder="">-->
+        <nz-form-explain *ngIf="modalValidateForm.get('dockBerth').dirty && modalValidateForm.get('dockBerth').errors">
+          请选择停靠泊位
+        </nz-form-explain>
+      </nz-form-control>
+
+      <nz-form-label [nzXs]="3" nzFor="addWater">是否加水</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <nz-select formControlName="addWater" nzAllowClear
+                   nzPlaceHolder="请选择">
+          <nz-option nzValue="SFJS10" nzLabel="是"></nz-option>
+          <nz-option nzValue="SFJS20" nzLabel="否"></nz-option>
+        </nz-select>
+        <nz-form-explain *ngIf="modalValidateForm.get('addWater').dirty && modalValidateForm.get('addWater').errors">
+          请选择是否加水
+        </nz-form-explain>
+      </nz-form-control>
+
+    </nz-form-item>
+
+    <nz-form-item>
+
+      <nz-form-label [nzXs]="3" nzFor="powerUp">是否加电</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <nz-select formControlName="powerUp" nzAllowClear nzPlaceHolder="请选择">
+          <nz-option nzValue="SFJD10" nzLabel="是"></nz-option>
+          <nz-option nzValue="SFJD20" nzLabel="否"></nz-option>
+        </nz-select>
+        <nz-form-explain *ngIf="modalValidateForm.get('powerUp').dirty && modalValidateForm.get('powerUp').errors">
+          请选择是否加电
+        </nz-form-explain>
+      </nz-form-control>
+
+      <nz-form-label [nzXs]="3" nzFor="tug">是否拖轮</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <nz-select formControlName="tug" nzAllowClear nzPlaceHolder="请选择">
+          <nz-option nzValue="SFTL10" nzLabel="是"></nz-option>
+          <nz-option nzValue="SFTL20" nzLabel="否"></nz-option>
+        </nz-select>
+        <nz-form-explain *ngIf="modalValidateForm.get('tug').dirty && modalValidateForm.get('tug').errors">请选择是否拖轮
+        </nz-form-explain>
+      </nz-form-control>
+
+      <nz-form-label [nzXs]="3" nzFor="pilot">是否引航</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <nz-select formControlName="pilot" nzAllowClear nzPlaceHolder="请选择">
+          <nz-option nzValue="SFYH10" nzLabel="是"></nz-option>
+          <nz-option nzValue="SFYH20" nzLabel="否"></nz-option>
+        </nz-select>
+        <nz-form-explain *ngIf="modalValidateForm.get('pilot').dirty && modalValidateForm.get('pilot').errors">请选择是否引航
+        </nz-form-explain>
+      </nz-form-control>
+
+      <!--      <nz-form-label [nzXs]="3" nzFor="actualToportTime">实际靠港时间</nz-form-label>-->
+      <!--      <nz-form-control [nzXs]="5">-->
+      <!--        <nz-date-picker formControlName="actualToportTime" nzFormat="yyyy-MM-dd HH:mm:ss" [nzStyle]="{width:'166.78px'}"-->
+      <!--                        [nzShowTime]="true"></nz-date-picker>-->
+      <!--        <nz-form-explain-->
+      <!--          *ngIf="modalValidateForm.get('actualToportTime').dirty && modalValidateForm.get('actualToportTime').errors">-->
+      <!--          请选择实际靠港时间-->
+      <!--        </nz-form-explain>-->
+      <!--      </nz-form-control>-->
+
+    </nz-form-item>
+
+    <!--    <nz-form-item>-->
+
+    <!--&lt;!&ndash;      <nz-form-label [nzXs]="3" nzFor="actualAnchorageTime">实际锚地时间</nz-form-label>&ndash;&gt;-->
+    <!--&lt;!&ndash;      <nz-form-control [nzXs]="5">&ndash;&gt;-->
+    <!--&lt;!&ndash;        <nz-date-picker formControlName="actualAnchorageTime" nzFormat="yyyy-MM-dd HH:mm:ss"&ndash;&gt;-->
+    <!--&lt;!&ndash;                        [nzStyle]="{width:'166.78px'}" [nzShowTime]="true"></nz-date-picker>&ndash;&gt;-->
+    <!--&lt;!&ndash;        <nz-form-explain&ndash;&gt;-->
+    <!--&lt;!&ndash;          *ngIf="modalValidateForm.get('actualAnchorageTime').dirty && modalValidateForm.get('actualAnchorageTime').errors">&ndash;&gt;-->
+    <!--&lt;!&ndash;          请选择实际锚地时间&ndash;&gt;-->
+    <!--&lt;!&ndash;        </nz-form-explain>&ndash;&gt;-->
+    <!--&lt;!&ndash;      </nz-form-control>&ndash;&gt;-->
+
+
+    <!--&lt;!&ndash;      <nz-form-label [nzXs]="3" nzFor="actualBerthingTime">实际靠泊时间</nz-form-label>&ndash;&gt;-->
+    <!--&lt;!&ndash;      <nz-form-control [nzXs]="5">&ndash;&gt;-->
+    <!--&lt;!&ndash;        <nz-date-picker formControlName="actualBerthingTime" nzFormat="yyyy-MM-dd HH:mm:ss"&ndash;&gt;-->
+    <!--&lt;!&ndash;                        [nzStyle]="{width:'166.78px'}" [nzShowTime]="true"></nz-date-picker>&ndash;&gt;-->
+    <!--&lt;!&ndash;        <nz-form-explain&ndash;&gt;-->
+    <!--&lt;!&ndash;          *ngIf="modalValidateForm.get('actualBerthingTime').dirty && modalValidateForm.get('actualBerthingTime').errors">&ndash;&gt;-->
+    <!--&lt;!&ndash;          请选择实际离港时间&ndash;&gt;-->
+    <!--&lt;!&ndash;        </nz-form-explain>&ndash;&gt;-->
+    <!--&lt;!&ndash;      </nz-form-control>&ndash;&gt;-->
+
+    <!--    </nz-form-item>-->
+
+    <nz-form-item>
+
+      <nz-form-label [nzXs]="3" nzFor="imgBoatId">船证</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <nz-upload nzListType="picture" [nzAction]="upload.action"
+                   [nzData]="upload.handleData" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="boatPhotoList"
+                   [nzShowButton]="!uploadStatus&&boatPhotoList.length<1" (nzChange)="getFileUrl($event,'imgBoatId')">
+          <input hidden formControlName="imgBoatId">
+          <button nz-button><i nz-icon nzType="upload"></i><span>点击上传</span></button>
+        </nz-upload>
+        <nz-form-explain *ngIf="modalValidateForm.get('imgBoatId').dirty && modalValidateForm.get('imgBoatId').errors">
+          请上传船证
+        </nz-form-explain>
+      </nz-form-control>
+
+      <nz-form-label [nzXs]="3" nzFor="imgCaptainId">船长身份证</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <nz-upload nzListType="picture" [nzAction]="upload.action" [nzData]="upload.handleData"
+                   [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="captainIDCardList"
+                   [nzShowButton]="!uploadStatus&&captainIDCardList.length<1"
+                   (nzChange)="getFileUrl($event,'imgCaptainId')">
+          <input hidden formControlName="imgCaptainId">
+          <button nz-button><i nz-icon nzType="upload"></i><span>点击上传</span></button>
+        </nz-upload>
+        <nz-form-explain
+          *ngIf="modalValidateForm.get('imgCaptainId').dirty && modalValidateForm.get('imgCaptainId').errors">请上传船长身份证
+        </nz-form-explain>
+      </nz-form-control>
+
+    </nz-form-item>
+    <!-- <div nz-row [nzGutter]="16">
+      <div nz-col [nzSpan]="6" *ngFor="let m of modalFormData">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzSpan]="10" [nzRequired]="m.require">{{m.name}}</nz-form-label>
+
+          <nz-form-control [nzSpan]="14">
+
+            <input nz-input type="text" *ngIf="m.type == 'text'" [formControlName]="m.eName" [id]="m.eName">
+
+            <nz-input-number *ngIf="m.type == 'number'" [formControlName]="m.eName" [nzMin]="0"
+                             [nzStep]="1">
+            </nz-input-number>
+
+            <nz-date-picker *ngIf="m.type == 'date'" nzFormat="yyyy-MM-dd HH:mm:ss" [formControlName]="m.eName">
+            </nz-date-picker>
+
+            <nz-select style="width: 120px;" *ngIf="m.type == 'select'" [formControlName]="m.eName" nzAllowClear
+                       nzPlaceHolder="请选择">
+              <nz-option nzValue="10" nzLabel="是"></nz-option>
+              <nz-option nzValue="20" nzLabel="否"></nz-option>
+            </nz-select>
+
+            <nz-upload nzListType="picture" *ngIf="m.type == 'upload1'" [nzAction]="upload.action"
+                       [nzData]="upload.handleData" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="boatPhotoList"
+                       [nzShowButton]="boatPhotoList<m.length"
+                       (nzChange)="getFileUrl($event,m.eName)">
+              <input hidden [formControlName]="m.eName">
+              <button nz-button><i nz-icon nzType="upload"></i><span>点击上传</span></button>
+            </nz-upload>
+            <nz-upload nzListType="picture" *ngIf="m.type == 'upload2'" [nzAction]="upload.action"
+                       [nzData]="upload.handleData" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="captainIDCardList"
+                       [nzShowButton]="captainIDCardList<m.length"
+                       (nzChange)="getFileUrl($event,m.eName)">
+              <input hidden [formControlName]="m.eName">
+              <button nz-button><i nz-icon nzType="upload"></i><span>点击上传</span></button>
+            </nz-upload>
+
+            <input-modal type="text" *ngIf="m.type == 'text'"
+            [isMutli]="false"
+            [findset]="{ formId: 'company_pop', name: '客户名称', parameter: 'companyName',parameterSend:'companyId' }"
+            [showExplainFlag]="showExplainFlag" [validate]="{validateOpt:'inpValue',validateCon:'请选择客户名称'}"
+            [inputModalModel]="customerName" [inputModalHiddenValue]="customerCode"
+            (inpEmit)="inpEmit($event)">
+            </input-modal>
+
+            <nz-form-explain
+              *ngIf="modalValidateForm.get(m.eName).invalid && (modalValidateForm.get(m.eName).dirty || modalValidateForm.get(m.eName).touched)">
+              <ng-container *ngIf="modalValidateForm.get(m.eName).errors.required">
+                {{m.validateCon}}
+              </ng-container>
+            </nz-form-explain>
+
+          </nz-form-control>
+
+        </nz-form-item>
+      </div>
+    </div> -->
+
+  </form>
+  <!-- <app-searchform [formId]=""  gridId="grid2" (search)="listSearch($event)"></app-searchform>
+  <tpl-buttons formId=""  gridId="grid2" (btnClick)='btnClick($event)'></tpl-buttons>
+  <app-table-form  formId="" gridId="grid2"
+                (userColumnsEmit)='getUserHeader($event)'
+                [dataSet]="dataSet1" [gridOperate]="{show:true,title:'操作',template:g1}" [popTableData]="popTableData"
+                [nzShowPagination]="false" [isCheckBox]="false" [listLoading]="listLoading1"></app-table-form> -->
+
+</nz-modal>
+
+
+<nz-modal nzWidth="50%" [(nzVisible)]="modalFormVisible1" nzTitle="选择船舶计划" (nzOnCancel)="handleCancel1()"
+          (nzOnOk)="handleOk1()" (nzAfterClose)="closeResult1()">
+
+  <app-searchform formId="form_predict_port_th" gridId="grid2" (search)="listSearch1($event)"></app-searchform>
+  <tpl-buttons formId="form_predict_port_th" gridId="grid2" (btnClick)='btnClick($event)'></tpl-buttons>
+  <app-table-form formId="form_predict_port_model" gridId="grid1" [dataSet]="boatPlanList" [isCheckBox]="true"
+                  [pageSize]="pageSize1"
+                  [pageFun]="true" [totalPage]="total1" [listLoading]="listLoading1" [selfTableHeight]="'230px'"
+                  (updateDataResult)="selectData1($event)" (pageIndexEmit)="getPageIndex1($event)"
+                  (pageSizeEmit)="getPageSize1($event)">
+  </app-table-form>
+
+</nz-modal>

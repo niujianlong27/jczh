@@ -1,0 +1,171 @@
+<script src="trans-fee.component.ts"></script>
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+
+<div>
+  <app-table-form (updateDataResult)="selectData($event)"
+                  [gridId]="'grid1'" [dataSet]="dataSet" (modelChange)="modelChange($event)"
+                  [pageSize]="pageSize" [totalPage]="totalPages"
+                  [isMutli]="true" [listLoading]="listLoading"
+                  (userColumnsEmit)="userColumnsEmit($event)"
+                  [isCheckBox]="true" [showCount]="true" [paginationRef]="totalStats">
+    <ng-template #urlImg let-data>
+      <div *ngIf="data.returnPic" (click)="getView($event,data.returnPic, data)">
+        <nz-avatar *ngFor="let img of data.returnPic.split(';')" [nzSrc]="img" nzSize="small" style="width:17px;height:17px;line-height:17px;"></nz-avatar>
+      </div>
+    </ng-template>
+  </app-table-form>
+</div>
+<ng-template #totalStats>
+  已选应收总价:{{allTotalPrice | number:'1.2-2'}}  已选应付总价:{{allPayTotalPrice | number:'1.2-2'}}  已选总重量:{{allTotalWeight | number:'1.3-3'}}
+</ng-template>
+
+<!--批量修改-->
+<nz-modal [(nzVisible)]="modalObj.visible" [nzTitle]="modalObj.title" [nzContent]="nzcontent" [nzOkLoading]="modalObj.loading" (nzOnCancel)="modalObj.visible = false" (nzOnOk)="modalOk()" [nzMaskClosable]="false" >
+  <ng-template #nzcontent>
+    <form nz-form [formGroup]="formValidate">
+      <nz-form-item *ngFor="let data of modalObj.data">
+        <nz-form-label [nzSpan]="6" [nzFor]="data.parameter" [nzRequired]="data.required">{{data.name}}</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <input-modal *ngIf="data.type === 'inputModal'" [(inputModalModel)]="data.value" [findset]="{formId: data.formId,name: data.name,parameter: data.nameStr,parameterSend: data.idStr}" (inpEmit)="modalInputModal($event,data)"></input-modal>
+          <nz-form-explain *ngIf="formValidate.get(data.parameter)?.dirty && formValidate.get(data.parameter)?.errors">
+            请选择{{data.name}}！
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-template>
+</nz-modal>
+
+
+<ng-template #tplTitle>
+  <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent>
+  <form nz-form [formGroup]="validateForm">
+    <nz-form-item *ngFor="let m of modalFormData" [hidden]="m.hidden">
+      <nz-form-label [nzSpan]="6" [nzRequired]="true">
+        {{m.name}}
+      </nz-form-label>
+
+
+      <nz-form-control [nzSpan]="12">
+        <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" [formControlName]="m.eName">
+          <label nz-radio [nzValue]="r.value" *ngFor="let r of isInArr">{{r.name}}</label>
+        </nz-radio-group>
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'"
+               (click)="selectFile()" [readOnly]="m.readOnly">
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'file'"
+               #fileInput (change)="fileChange($event)">
+        <nz-form-explain *ngIf="validateForm.get(m.eName).dirty && validateForm.get(m.eName).errors">
+          <ng-container *ngIf="validateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+          <ng-container *ngIf="validateForm.get(m.eName).hasError('pattern')">
+            {{m.validators.patternErr}}
+          </ng-container>
+        </nz-form-explain>
+      </nz-form-control>
+      <nz-form-control [nzSpan]="4" [nzPush]="1">
+        <a href="http://another2.oss-cn-hangzhou.aliyuncs.com/import/%E7%BB%93%E7%AE%97%E5%8D%95%E5%BA%94%E6%94%B6%E5%BA%94%E4%BB%98%E5%8D%95%E4%BB%B7%E4%BF%AE%E6%94%B9%E6%A8%A1%E7%89%88.xlsx">模板下载</a>
+      </nz-form-control>
+      <!--<nz-form-control [nzSpan]="4" style="margin-left:20px">-->
+        <!--<a href=">模板下载</a>-->
+      <!--</nz-form-control>-->
+
+    </nz-form-item>
+  </form>
+</ng-template>
+<ng-template #tplFooter>
+  <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  <button nz-button nzType="primary" (click)="importConfirm()"   [nzLoading]="implistLoading" [disabled]="implistLoading">确定</button>
+</ng-template>
+
+
+
+<!-- 导入Excel-->
+
+<ng-template #tplTitle1>
+  <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent1 >
+  <form nz-form [formGroup]="validateFormForm">
+    <nz-form-item *ngFor="let m of modalFormDataImport"  [hidden]="m.hidden">
+      <nz-form-label [nzSpan]="6" [nzRequired]="true">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="12">
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'" (click)="selectExcelFile()" [readOnly]="m.readOnly">
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'file'" #excelFileInput  (change)="excelFileChange($event)">
+        <nz-form-explain *ngIf="validateFormForm.get(m.eName).dirty && validateFormForm.get(m.eName).errors">
+          <ng-container *ngIf="validateFormForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+          <ng-container *ngIf="validateFormForm.get(m.eName).hasError('pattern')">
+            {{m.validators.patternErr}}
+          </ng-container>
+        </nz-form-explain>
+      </nz-form-control>
+<!--      <nz-form-control [nzSpan]="4" style="margin-left: 20px">-->
+<!--        <a (click)="aClick()">模板下载</a>-->
+<!--      </nz-form-control>-->
+    </nz-form-item>
+  </form>
+</ng-template>
+<ng-template #tplFooter1>
+  <button nz-button nzType="default" (click)="handleCancel1()" [disabled]="  implistLoading1">取消</button>
+  <button nz-button nzType="primary" (click)="importConfirm1()" [nzLoading]="implistLoading1" [disabled]="implistLoading1">确定</button>
+</ng-template>
+
+<ng-template #copyPriceModal>
+  <nz-radio-group [(ngModel)]="radioValue" style="padding-left:20px;" *ngIf="businessType !== '009'">
+    <label nz-radio [ngStyle]="style" nzValue="10">
+      自定义单价
+    </label>
+    <div *ngIf="radioValue=='10'" style="padding-left: 30px;margin-top: 5px;">
+      <label nz-checkbox [(ngModel)]="agentFlag" name="">应收单价</label>
+      <input [disabled]="!agentFlag" nz-input type="number" min="1" nzSize="small" style="margin-left: 15px;width: 80px;" [(ngModel)]="unitPrice">
+    </div>
+    <div *ngIf="radioValue=='10'" style="padding-left: 30px;margin-top: 10px;margin-bottom: 5px;">
+      <label nz-checkbox [(ngModel)]="payableFlag" name="">应付单价</label>
+      <input [disabled]="!payableFlag" nz-input type="number" min="1" nzSize="small" style="margin-left: 15px;width: 80px;" [(ngModel)]="payPrice">
+    </div>
+    <label nz-radio [ngStyle]="style" nzValue="20">委托单价</label>
+    <label nz-radio [ngStyle]="style" nzValue="30">线路单价</label>
+    <label nz-radio [ngStyle]="style" nzValue="40">委托或线路单价</label>
+  </nz-radio-group>
+  <ng-container *ngIf="businessType === '009'">
+    <div style="padding-left:20px;">
+      <span>应收价格</span>
+      <label class="label-inline" [nzDisabled]="true" [ngModel]="true" nz-radio [ngStyle]="style" nzValue="50">运输合同价格</label>
+
+    </div>
+    <div class="clearfix m-t" style="padding-left:20px;">
+      <span class="fl">应付价格</span>
+      <div class="fl">
+        <nz-radio-group [(ngModel)]="radioValue">
+          <label nz-radio [ngStyle]="style" nzValue="50" style="margin-left:15px;">线路价格</label>
+        </nz-radio-group>
+        <div>
+          <nz-radio-group [(ngModel)]="radioValue">
+            <label nz-radio [ngStyle]="style" nzValue="60" class="label-inline">自定义</label>
+          </nz-radio-group>
+          <input nz-input type="number" min="1" nzSize="small" style="width: 80px;" [(ngModel)]="linePrice">
+        </div>
+        <div>
+          <nz-radio-group [(ngModel)]="radioValue">
+            <label nz-radio [ngStyle]="style" nzValue="70" class="label-inline">总价录入</label>
+          </nz-radio-group>
+          <input nz-input type="number" min="1" nzSize="small" style="width: 80px;" [(ngModel)]="addPrice">
+          <nz-radio-group [(ngModel)]="choiceType" style="margin-left: 15px;" nzName="choiceType"
+                          [nzDisabled]="radioValue != '70'">
+            <label nz-radio nzValue="waybill">按运单</label>
+            <label nz-radio nzValue="weight">按重量</label>
+          </nz-radio-group>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>
+

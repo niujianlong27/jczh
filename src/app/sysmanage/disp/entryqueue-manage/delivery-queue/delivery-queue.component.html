@@ -1,0 +1,68 @@
+<nz-tabset  (nzSelectChange)="selectChange($event)" [(nzSelectedIndex)]="index">
+    <nz-tab *ngFor="let tab of tabs;let i = index;" [nzTitle]='tab.itemCname+tab.itemCount'>
+    </nz-tab>
+</nz-tabset>
+<common-page (search)="listSearch($event)" (searchDataReturn)="searchDataFun($event)" (btnUpdate)="btnUpdate($event)" (btnAdd)="btnAdd($event)" (btnClick)="Trajectory($event)"
+[pageSize]="pageSize" [totalPage]="totalPage" [listLoading]="listLoading" [dataSet]="dataSet" [isMutli]="true" (updateDataResult)='updateDataResult($event)'
+></common-page>
+<!-- 修改弹框 和车辆调度 -->
+<ng-template #tplTitle>
+    <span>{{tplTitle}}</span>
+</ng-template>
+<ng-template #tplContent>
+    <div style="width: 500px;margin: 0 auto">
+        <label class="ml_25 ml_100">车牌号</label>
+        <input nz-input nzSize="small" disabled="true" [(ngModel)]="truckNo">
+    </div>
+    <div style="width: 500px;margin: 0 auto;margin-top: 10px;">
+        <label class="ml_100" style="margin-right: 38px;">品种</label>
+        <input nz-input nzSize="small" disabled="true" [(ngModel)]="breed">
+    </div>
+    <div style="width: 500px;margin: 0 auto;margin-top: 10px;">
+        <label class="ml_25 ml_100">优先级</label>
+        <input nz-input nzSize="small" disabled="true" [(ngModel)]="queueClassName">
+    </div>
+    <div style="width: 500px;margin: 0 auto;margin-top: 10px;">
+        <label class="ml_25 ml_100">排队号</label>
+        <input nz-input nzSize="small" disabled="true" [(ngModel)]="queueNo">
+    </div>
+    <div style="width: 500px;margin: 0 auto;margin-top: 10px;">
+        <label class="required" style="margin-right: 12px;margin-left: 88px;">进厂大门</label>
+        <nz-select style="width: 160px;height: 30px; margin: 10px 0;" [(ngModel)]="gateName" name="gateName"
+            [nzAllowClear]=true>
+            <nz-option *ngFor="let option of factoryGateList" [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+            </nz-option>
+        </nz-select>
+    </div>
+    <div style="width: 500px;margin: 0 auto;margin-top: 10px;">
+        <label class="required" style="margin-right: 39px;margin-left: 88px;">仓库</label>
+        <nz-select style="width: 160px;" [(ngModel)]="warehouseName" name="warehouseName" [nzAllowClear]=true>
+            <nz-option *ngFor="let option of warehouseList" [nzLabel]="option.warehouseName" [nzValue]="option.warehouseCode">
+            </nz-option>
+        </nz-select>
+    </div>
+    <div *ngIf=isShow>
+        <div style="width: 500px;margin: 0 auto;margin-top: 20px;">
+            <label style="margin-right: 25px;margin-left: 58px;">排队开始时间</label>
+            <input nz-input nzSize="small" disabled="true" [(ngModel)]="queueStartTime">
+        </div>
+        <div style="width: 500px;margin: 0 auto;margin-top: 20px;">
+            <label class="ml_100" style="vertical-align: top;margin-right: 40px;">备注</label>
+            <textarea style="height: 50px;" rows="4" nz-input [(ngModel)]="bk6"></textarea>
+        </div>
+    </div>
+
+</ng-template>
+<ng-template #tplFooter>
+    <div *ngIf=isButton>
+        <button nz-button nzType="primary" (click)="update_success(param.taskId)" [nzLoading]="isOkLoading">确定</button>
+        <button style="margin-right:215px;" nz-button nzType="default" (click)="update_return()">返回</button>
+    </div>
+    <div *ngIf=isShow>
+        <button style="background:#1890ff; border-color:#1890ff" nz-button nzType="primary" (click)="directEntry(param.taskId)" [nzLoading]="isOkLoading">直接入厂</button>
+        <button style="background:green; border-color:green" nz-button nzType="primary" (click)="greenChannel(param.taskId)" [nzLoading]="isLoading">加入绿色通道</button>
+        <button style="margin-right:145px;" nz-button nzType="default" (click)="update_return()">返回</button>
+    </div>
+</ng-template>
+
+<app-modal-map-line [vehicleIsVisible] = 'vehicleIsVisible' [httpInfo]='httpInfo' (modalShow)='modalShow($event)'></app-modal-map-line>

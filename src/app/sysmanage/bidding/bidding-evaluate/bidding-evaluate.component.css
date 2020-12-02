@@ -1,0 +1,20 @@
+.modal-table ::ng-deep .ant-table-wrapper div.ant-table-body{
+  min-height: 150px!important;
+}
+.modal-table ::ng-deep .ant-table-fixed-header > .ant-table-content > .ant-table-scroll > .ant-table-body{
+  min-height: 150px!important;
+}
+.border {
+  border: solid 1px #ddd;
+  height: 200px;
+}
+.selectCarriage ::ng-deep .ant-form-item-control{
+  line-height: 30px;
+  height: 30px;
+}
+/*.selectCarriage ::ng-deep .ant-select-selection__rendered{
+  display:none;
+}*/
+ ::ng-deep .recordBox .selectCarriage ::ng-deep .ant-select-selection__rendered ul .ant-select-selection__choice{
+  display:none;
+}

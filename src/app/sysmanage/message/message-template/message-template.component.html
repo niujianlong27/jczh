@@ -1,0 +1,323 @@
+<!-- 筛选form -->
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<!-- 按钮栏 -->
+<tpl-buttons
+  formId="form_message_template"
+  (btnClick)="btnClick($event)"
+></tpl-buttons>
+<!-- 表格区域 -->
+<app-table-form
+  [formId]="formId"
+  gridId="grid1"
+  [dataSet]="dataSet"
+  isMutli="true"
+  (updateDataResult)="updateDataResult($event)"
+  [listLoading]="listLoading"
+  [pageSize]="pageSize"
+  [totalPage]="totalPage"
+></app-table-form>
+<!-- 新建/更新弹框 -->
+<nz-modal
+  nzWidth="80%"
+  [(nzVisible)]="modalFormVisible"
+  [nzTitle]="modalTitle"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  (nzAfterClose)="closeResult()"
+>
+  <form nz-form nzLayout="inline" [formGroup]="modalValidateForm">
+    <nz-form-item>
+      <nz-form-label [nzXs]="3">主题编号</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <input nz-input formControlName="topicCode" placeholder="系统生成" />
+      </nz-form-control>
+      <nz-form-label [nzXs]="3" nzRequired>主题名称</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <input
+          nz-input
+          formControlName="topicName"
+          placeholder="请输入主题名称"
+        />
+        <nz-form-explain
+          *ngIf="
+            modalValidateForm.get('topicName')?.dirty &&
+            modalValidateForm.get('topicName')?.errors
+          "
+        >
+          主题名称不能为空
+        </nz-form-explain>
+      </nz-form-control>
+      <nz-form-label [nzXs]="3" nzRequired>发送类型</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <nz-select nzShowSearch id="sendType" formControlName="sendType">
+          <nz-option
+            *ngFor="let i of selectSplitGroup"
+            [nzLabel]="i.name"
+            [nzValue]="i.value"
+          ></nz-option>
+        </nz-select>
+        <nz-form-explain
+          *ngIf="
+            modalValidateForm.get('sendType')?.dirty &&
+            modalValidateForm.get('sendType')?.errors
+          "
+        >
+          发送类型不能为空
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzXs]="3" nzRequired>模板标题</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <input type="text" nz-input formControlName="messageTemplateTitle" />
+        <nz-form-explain
+          *ngIf="
+            modalValidateForm.get('messageTemplateTitle')?.dirty &&
+            modalValidateForm.get('messageTemplateTitle')?.errors
+          "
+        >
+          模板标题不能为空
+        </nz-form-explain>
+      </nz-form-control>
+      <nz-form-label [nzXs]="3">web跳转界面</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <nz-select
+          nzShowSearch
+          id="webFormid"
+          formControlName="webFormid"
+          appInputThrottle
+          (throttleSearch)="SearchChangeWeb($event)"
+          (nzScrollToBottom)="scrollToBottomWeb()"
+          [nzAllowClear]="true"
+        >
+          <nz-option
+            *ngFor="let i of webInterfaceList"
+            [nzLabel]="i.formName"
+            [nzValue]="i.formId"
+          ></nz-option>
+          <nz-option *ngIf="isLoadingWeb" nzDisabled nzCustomContent>
+            <i nz-icon nzType="loading" class="loading-icon"></i> Loading
+            Data...
+          </nz-option>
+        </nz-select>
+      </nz-form-control>
+      <nz-form-label [nzXs]="3">app跳转界面</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <nz-select
+          nzShowSearch
+          id="appFormid"
+          formControlName="appFormid"
+          appInputThrottle
+          (throttleSearch)="SearchChangeApp($event)"
+          (nzScrollToBottom)="scrollToBottomApp()"
+          [nzAllowClear]="true"
+        >
+          <nz-option
+            *ngFor="let i of appInterfaceList"
+            [nzLabel]="i.formName"
+            [nzValue]="i.formId"
+          ></nz-option>
+          <nz-option *ngIf="isLoadingApp" nzDisabled nzCustomContent>
+            <i nz-icon nzType="loading" class="loading-icon"></i> Loading
+            Data...
+          </nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzXs]="3" nzRequired style="max-width: 11.11%"
+        >模板内容</nz-form-label
+      >
+      <nz-form-control [nzXs]="21">
+        <textarea
+          rows="3"
+          nz-input
+          formControlName="messageTemplateBody"
+        ></textarea>
+        <nz-form-explain
+          *ngIf="
+            modalValidateForm.get('messageTemplateBody')?.dirty &&
+            modalValidateForm.get('messageTemplateBody')?.errors
+          "
+        >
+          模板内容不能为空
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzXs]="3" nzRequired>消息种类</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <nz-select
+          nzShowSearch
+          id="messageKind"
+          formControlName="messageKind"
+          (ngModelChange)="mesKindChange($event)"
+        >
+          <nz-option
+            *ngFor="let i of selectKindGroup"
+            [nzLabel]="i.name"
+            [nzValue]="i.value"
+          ></nz-option>
+        </nz-select>
+        <nz-form-explain
+          *ngIf="
+            modalValidateForm.get('messageKind')?.dirty &&
+            modalValidateForm.get('messageKind')?.errors
+          "
+        >
+          消息种类不能为空
+        </nz-form-explain>
+      </nz-form-control>
+      <nz-form-label [nzXs]="3" [nzRequired]="businessTypeIsRequired"
+        >业务类型</nz-form-label
+      >
+      <nz-form-control [nzXs]="5">
+        <nz-select
+          nzShowSearch
+          id="businessType"
+          formControlName="businessType"
+          [nzAllowClear]="true"
+        >
+          <nz-option
+            *ngFor="let i of selectBtypeGroup"
+            [nzLabel]="i.name"
+            [nzValue]="i.value"
+          ></nz-option>
+        </nz-select>
+        <nz-form-explain
+          *ngIf="
+            modalValidateForm.get('businessType')?.dirty &&
+            modalValidateForm.get('businessType')?.errors
+          "
+        >
+          业务类型不能为空
+        </nz-form-explain>
+      </nz-form-control>
+      <nz-form-label [nzXs]="3">重试间隔</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <input
+          type="number"
+          nz-input
+          placeholder="失败重试间隔(单位秒)"
+          formControlName="retryInterval"
+        />
+        <nz-form-explain
+          *ngIf="
+            modalValidateForm.get('retryInterval')?.dirty &&
+            modalValidateForm.get('retryInterval')?.errors
+          "
+        >
+          重试间隔必须为非负整数
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzXs]="3">重试次数</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <nz-input-number
+          [nzPlaceHolder]="'失败重试次数'"
+          [nzMin]="0"
+          [nzMax]="100"
+          [nzStep]="1"
+          [nzPrecision]="0.1"
+          formControlName="retryTimes"
+        ></nz-input-number>
+        <nz-form-explain
+          *ngIf="
+            modalValidateForm.get('retryTimes')?.dirty &&
+            modalValidateForm.get('retryTimes')?.errors
+          "
+        >
+          重试次数必须为100以内的非负整数
+        </nz-form-explain>
+      </nz-form-control>
+      <nz-form-label [nzXs]="3">升级类型</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <nz-select
+          nzShowSearch
+          nzPlaceHolder="失败重试升级类型"
+          id="retryUpgradeSendType"
+          formControlName="retryUpgradeSendType"
+        >
+          <nz-option
+            *ngFor="let i of selectSplitGroup"
+            [nzLabel]="i.name"
+            [nzValue]="i.value"
+          ></nz-option>
+        </nz-select>
+      </nz-form-control>
+      <nz-form-label [nzXs]="3" nzRequired>是否重发</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <nz-radio-group
+          formControlName="repeatUpgradeSendType"
+          nzName="repeatUpgradeSendType"
+          id="repeatUpgradeSendType"
+          [nzButtonStyle]="'outline'"
+          (ngModelChange)="repeatUpgradeChange($event)"
+        >
+          <label nz-radio-button [nzValue]="'true'">重发</label>
+          <label nz-radio-button [nzValue]="'false'">不重发</label>
+        </nz-radio-group>
+        <nz-form-explain
+          *ngIf="
+            modalValidateForm.get('repeatUpgradeSendType')?.dirty &&
+            modalValidateForm.get('repeatUpgradeSendType')?.errors
+          "
+        >
+          是否重发不能为空
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label
+        [nzXs]="3"
+        *ngIf="modalValidateForm.value.repeatUpgradeSendType === 'true'"
+        [nzRequired]="modalValidateForm.value.repeatUpgradeSendType === 'true'"
+        >提醒重发间隔</nz-form-label
+      >
+      <nz-form-control
+        [nzXs]="5"
+        *ngIf="modalValidateForm.value.repeatUpgradeSendType === 'true'"
+      >
+        <input
+          type="number"
+          nz-input
+          placeholder="提醒重发间隔（单位秒）"
+          formControlName="repeatInterval"
+        />
+        <nz-form-explain
+          *ngIf="
+            modalValidateForm.get('repeatInterval')?.dirty &&
+            modalValidateForm.get('repeatInterval')?.errors
+          "
+        >
+          提醒重发间隔必须为非负整数
+        </nz-form-explain>
+      </nz-form-control>
+      <nz-form-label
+        [nzXs]="3"
+        *ngIf="modalValidateForm.value.repeatUpgradeSendType === 'true'"
+        [nzRequired]="modalValidateForm.value.repeatUpgradeSendType === 'true'"
+        >提醒重发次数</nz-form-label
+      >
+      <nz-form-control
+        [nzXs]="5"
+        *ngIf="modalValidateForm.value.repeatUpgradeSendType === 'true'"
+      >
+        <input type="number" nz-input formControlName="repeatTimes" />
+        <nz-form-explain
+          *ngIf="
+            modalValidateForm.get('repeatTimes')?.dirty &&
+            modalValidateForm.get('repeatTimes')?.errors
+          "
+        >
+          提醒重发次数必须为非负整数
+        </nz-form-explain>
+      </nz-form-control>
+      <nz-form-label [nzXs]="3">备注</nz-form-label>
+      <nz-form-control [nzXs]="5">
+        <input type="text" nz-input formControlName="remark" />
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>

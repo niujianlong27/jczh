@@ -1,0 +1,53 @@
+<common-page (search)="listSearch($event)"[pageSize]="pageSize" [totalPage]="totalPage"
+             [listLoading]="listLoading" (updateDataResult)="selectedList($event)"
+             [dataSet]="dataSet" [isMutli]="true"
+             (btnClick)='btnClick($event)' ></common-page>
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>
+
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+          (nzAfterClose)="closeResult()">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="15">
+
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName"
+               *ngIf="m.type === 'text'">
+
+
+        <textarea rows="3" *ngIf="m.type === 'textarea'" nz-input formControlName="{{m.eName}}"></textarea>
+
+
+        <nz-date-picker *ngIf="m.type == 'data' && m.eName =='beginTime' " [nzDisabledDate]="disabledStartDate" [nzShowToday]="false" nzShowTime  style="width:100%" [nzStyle]="{width: '100%'}" [formControlName]="m.eName"></nz-date-picker>
+
+        <nz-date-picker *ngIf="m.type == 'data' && m.eName =='endTime' "  [nzDisabledDate]="disabledEndDate" [nzShowToday]="false"  nzShowTime  style="width:100%" [nzStyle]="{width: '100%'}" [formControlName]="m.eName"></nz-date-picker>
+
+        <nz-select *ngIf="m.type == 'select'" nzMode="tags" nzPlaceHolder="请选择"  nzShowSearch [formControlName]="m.eName"
+                   [attr.id]="m.eName">
+          <nz-option *ngFor="let i of appNameArr"  [nzLabel]="i.appName" [nzValue]="i.appVersion">
+          </nz-option>
+        </nz-select>
+        <nz-input-number *ngIf="m.type ==='number'" formControlName="{{m.eName}}" [nzMin]="0"></nz-input-number>
+
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+            {{m.validators.patternErr}}
+          </ng-container>
+
+        </nz-form-explain>
+      </nz-form-control>
+
+    </nz-form-item>
+
+  </form>
+</nz-modal>

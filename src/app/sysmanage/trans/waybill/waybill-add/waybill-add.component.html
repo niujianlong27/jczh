@@ -1,0 +1,236 @@
+<ng-container *ngIf="operateType==='add'">
+  <button nz-button nzType="primary" (click)="insert()">保存</button>
+  <button nz-button nzType="primary" (click)="showModal()">导入</button>
+</ng-container>
+<ng-container *ngIf="operateType==='update'">
+  <button nz-button nzType="primary" (click)="update()">保存</button>
+  <button nz-button nzType="default" (click)="cancel()">返回</button>
+</ng-container>
+<div nz-row>
+  <div nz-col nzSpan="12">
+    <nz-card>
+      <form nz-form nzLayout="inline">
+        <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" nzType="flex" nzAlign="bottom">
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="8">运单号</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <input type="text" nz-input [(ngModel)]="waybill.waybillNo" name="waybillNo" placeholder="系统生成" disabled="true">
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>装载时间</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <nz-date-picker nzShowTime [(ngModel)]="waybill.loadDate" name="loadDate" nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>委托单位</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <app-select #consignor_select [apiParam]="companyApi" [(ngModel)]="waybill.consignorCompanyId" name="consignorCompanyId"></app-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>收货单位</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <app-select [apiParam]="companyApi" [(ngModel)]="waybill.consigneeCompanyId" name="consigneeCompanyId"></app-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>装货地</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <app-select [apiParam]="pointApi" [(ngModel)]="waybill.startPoint" name="startPoint"></app-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>到货地</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <app-select [apiParam]="pointApi" [(ngModel)]="waybill.endPoint" name="endPoint"></app-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>运输方式</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <app-select [apiParam]="flowApi" [(ngModel)]="waybill.flowId" name="flowId"></app-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>单价</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <nz-input-number [(ngModel)]="waybill.unitPrice" name="unitPrice" [nzMin]="0.01" [nzStep]="1"></nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="8">来源船号</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <input type="text" nz-input [(ngModel)]="waybill.upShipNo" name="upShipNo">
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="8">来源船批</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <input type="text" nz-input [(ngModel)]="waybill.upShipVoyage" name="upShipVoyage">
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="8">业务部门</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <input type="text" nz-input [(ngModel)]="waybill.businessDepartment" name="businessDepartment">
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="8">业务人员</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <input type="text" nz-input [(ngModel)]="waybill.workerName" name="workerName">
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="8">业务板块</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <input type="text" nz-input [(ngModel)]="waybill.businessType" name="businessType">
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzOffset="2" nzSpan="4">
+            <label nz-checkbox [(ngModel)]="waybill.status" name="status">是否已返单</label>
+          </div>
+          <div nz-col nzOffset="2" nzSpan="4">
+            <label nz-checkbox [(ngModel)]="waybill.isSettle" name="isSettle">是否参与结算</label>
+          </div>
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label nzSpan="4">备注</nz-form-label>
+              <nz-form-control nzSpan="20">
+                <input type="text" nz-input [(ngModel)]="waybill.remark" name="remark">
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </form>
+    </nz-card>
+
+  </div>
+  <div nz-col nzSpan="12">
+    <nz-card>
+      <div nz-row>
+        <div nz-col nzSpan="10">
+          <form nz-form [nzLayout]="'inline'">
+            <div nz-row [nzGutter]="{ xs: 8, md: 8, lg: 16, xl: 24 }">
+              <div nz-col nzSpan="24">
+                <nz-form-item>
+                  <nz-form-label nzSpan="8" nzRequired>工号</nz-form-label>
+                  <nz-form-control nzSpan="16">
+                    <app-select [dataSource]="driverDataSource" [fieldKey]="dirverFieldKey" [(ngModel)]="driver.userId"
+                      name="userId" (ngModelChange)="setDriverInfo($event)"></app-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="24">
+                <nz-form-item>
+                  <nz-form-label nzSpan="8" nzRequired>驾驶员</nz-form-label>
+                  <nz-form-control nzSpan="16">
+                    <input type="text" nz-input [(ngModel)]="driver.driverName" name="driverName">
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="24">
+                <nz-form-item>
+                  <nz-form-label nzSpan="8" nzRequired>车船号</nz-form-label>
+                  <nz-form-control nzSpan="16">
+                    <input type="text" nz-input [(ngModel)]="driver.vehicleNo" name="vehicleNo">
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="24">
+                <nz-form-item>
+                  <nz-form-label nzSpan="8" nzRequired>趟次</nz-form-label>
+                  <nz-form-control nzSpan="16">
+                    <input type="text" nz-input [(ngModel)]="driver.tripNo" name="tripNo" (keyup.enter)="addDriver()">
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div nz-col nzSpan="14">
+          <app-grid-block #grid_driver [formId]="formId" gridId="driver" [data]="driverData" showPagination="false">
+            <ng-template grid-row="tpl-driver-delete" let-obj let-index="index" let-key="key">
+              <span><a (click)="deleteDriver(index)">删除</a></span>
+            </ng-template>
+          </app-grid-block>
+        </div>
+      </div>
+    </nz-card>
+
+  </div>
+</div>
+<app-button-block [formId]="formId" (buttonClick)="buttonClick($event)"></app-button-block>
+<app-grid-block #grid_wayblii_pack [formId]="formId" gridId="waybillPack" [data]="packData" showPagination="false">
+  <ng-template grid-row="tpl-waybillPack-remark" let-obj let-index="index" let-key="key">
+    <input nz-input nzSize="small" [(ngModel)]="packData[index][key]" [name]="key" (keyup.enter)="addPack()">
+  </ng-template>
+  <ng-template grid-row="tpl-waybillPack-delete" let-obj let-index="index" let-key="key">
+    <span><a (click)="deletePack(index)">删除</a></span>
+  </ng-template>
+</app-grid-block>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="导入Excel" [nzContent]="modalContent" [nzFooter]="modalFooter" (nzOnCancel)="isVisible=false"
+  (nzOnOk)="importExcel()">
+  <ng-template #modalContent>
+    <form nz-form [formGroup]="importValidate">
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" nzRequired>文件</nz-form-label>
+        <nz-form-control [nzSm]="14">
+          <input #fileInput type="file" formControlName="file" (change)="writeFileName($event)" multiple="false" style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;" />
+          <input nz-input readonly (click)="selectFile()" formControlName="fileName" placeholder="请选择需要导入的文件">
+          <nz-form-explain *ngIf="importValidate.get('fileName').dirty && importValidate.get('fileName').errors">需要导入的文件不能为空!</nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" nzRequired>委托单位</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <app-select #consignor_select [apiParam]="companyApi" formControlName="consignorCompanyId"></app-select>
+          <nz-form-explain *ngIf="importValidate.get('consignorCompanyId').dirty && importValidate.get('consignorCompanyId').errors">委托单位不能为空!</nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+          <nz-form-label [nzSm]="6" nzRequired>业务板块</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <input type="text" nz-input formControlName="businessType">
+            <nz-form-explain *ngIf="importValidate.get('businessType').dirty && importValidate.get('businessType').errors">业务板块!</nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+    </form>
+  </ng-template>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="isVisible=false">取消</button>
+    <button nz-button nzType="primary" (click)="importExcel()" [nzLoading]="importLoading" [disabled]="importLoading">确定</button>
+  </ng-template>
+  <!-- <input #fileInput type="file" (change)="importTest($event)" multiple="false" style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;"/> -->
+  <!-- <input #fileInput type="file" multiple="false"/> -->
+
+</nz-modal>

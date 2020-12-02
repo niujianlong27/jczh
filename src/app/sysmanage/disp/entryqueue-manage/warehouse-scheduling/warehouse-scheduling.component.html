@@ -1,0 +1,60 @@
+<nz-tabset (nzSelectChange)="selectChange($event)" [(nzSelectedIndex)]="index">
+  <nz-tab *ngFor="let tab of tabs;let i = index;" [nzTitle]='tab.itemCname+tab.itemCount'>
+  </nz-tab>
+</nz-tabset>
+<common-page (search)="listSearch($event)" (searchDataReturn)="searchDataFun($event)" (btnAdd)="btnAdd($event)" [pageSize]="pageSize" [totalPage]="totalPage"
+  [listLoading]="listLoading" [dataSet]="dataSet" [isMutli]="false"></common-page>
+<!-- 仓库调度弹框 -->
+<ng-template #tplTitle>
+  <span>{{tplTitle}}</span>
+</ng-template>
+<ng-template #tplContent>
+  <!-- 车牌号 -->
+  <div style="width: 500px;margin: 0 auto">
+    <label class="ml_25 ml_100">车牌号</label>
+    <input nz-input nzSize="small" disabled="true" [(ngModel)]="truckNo">
+  </div>
+  <!-- 品种 -->
+  <div style="width: 500px;margin: 0 auto;margin-top: 10px;">
+    <label style="margin-right: 25px;margin-left:114px;">品种</label>
+    <input nz-input nzSize="small" disabled="true" [(ngModel)]="breed">
+  </div>
+  <!-- 装车位 -->
+  <div style="width: 500px;margin: 0 auto;margin-top: 10px;">
+    <label class="required" style="margin-right: 25px;margin-left:89px;">装车位</label>
+    <nz-select style="width: 160px;height: 30px; margin: 10px 0;" [(ngModel)]="stowName" name="stowName"
+      (ngModelChange)="selectFactoryGate($event)" [nzAllowClear]=true>
+      <nz-option *ngFor="let option of stowNameList" [nzLabel]="option.stowName" [nzValue]="option.stowCode">
+      </nz-option>
+    </nz-select>
+  </div>
+  <!-- 大门 -->
+  <div style="width: 500px;margin: 0 auto;margin-top: 10px;">
+    <label style="margin-right: 28px;margin-left:111px;">大门</label>
+    <input nz-input nzSize="small" disabled="true" [(ngModel)]="gateName">
+  </div>
+  <!-- 仓库 -->
+  <div style="width: 500px;margin: 0 auto;margin-top: 10px;">
+    <label style="margin-right: 28px;margin-left: 111px;">仓库</label>
+    <input nz-input nzSize="small" disabled="true" [(ngModel)]="warehouseName">
+  </div>
+  <!-- 排队开始时间 -->
+  <div style="width: 500px;margin: 0 auto;margin-top: 20px;">
+    <label style="margin-right: 25px;margin-left: 59px;">排队开始时间</label>
+    <input nz-input nzSize="small" disabled="true" [(ngModel)]="queueStartTime">
+  </div>
+  <!-- 排队号 -->
+  <div style="width: 500px;margin: 0 auto;margin-top: 10px;">
+    <label class="ml_25 ml_100">排队号</label>
+    <input nz-input nzSize="small" disabled="true" [(ngModel)]="queueNo">
+  </div>
+  <!-- 操作备注 -->
+  <div style="width: 500px;margin: 0 auto;margin-top: 20px;">
+    <label class="ml_100" style="vertical-align: top;margin-right: 12px;">操作备注</label>
+    <textarea style="height: 50px;" rows="4" nz-input [(ngModel)]="bk6"></textarea>
+  </div>
+</ng-template>
+<ng-template #tplFooter>
+  <button nz-button nzType="primary" (click)="update_success(param.taskId)" [nzLoading]="isOkLoading">保存</button>
+  <button style="margin-right:215px;" nz-button nzType="default" (click)="update_return()">返回</button>
+</ng-template>

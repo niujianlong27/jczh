@@ -1,0 +1,100 @@
+.c_bgDiv {
+  width: 100%;
+  overflow: hidden;
+}
+
+.img_posit {
+  width: 1300px;
+  height: 364px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.c_bgImg {
+  width: 1920px;
+  height: 364px;
+  margin: 0 auto;
+  position: absolute;
+  left: -310px;
+  top: 0px;
+  background: url(/assets/img/portal/banner.jpg) no-repeat 0px 0px;
+}
+
+.li-bor {
+  font-style: normal;
+  margin: 0px 15px;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+ul {
+  list-style: none;
+  margin: 0px;
+}
+
+.header-li {
+  padding: 0 20px;
+  height: 72px;
+  line-height: 72px;
+}
+
+.bg-w {
+  background-color: #ffffff;
+}
+
+.list-style {
+  font-size: 14px;
+  line-height: 40px;
+  text-align: center;
+}
+
+.img-style {
+  width: 427px;
+  height: 144px;
+  float: left;
+  margin-right: 9px;
+}
+
+.left-style {
+  width: 80px;
+  height: 80px;
+  background-image: url(/assets/img/portal/home_btn_next_nor.png);
+  position: absolute;
+  top: 40px;
+  left: 0px;
+  display: none;
+}
+
+.right-style {
+  width: 80px;
+  height: 80px;
+  background-image: url(/assets/img/portal/home_btn_previous_nor.png);
+  position: absolute;
+  top: 40px;
+  right: 0px;
+  display: none;
+}
+
+.c-footer {
+  text-align: center;
+  background-color: #353535;
+  color: #b1b1b1;
+  font-size: 12px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+  min-width: 1300px;
+}
+
+.tel {
+  display: inline-block;
+  width: 14px;
+  height: 18px;
+  background: url(/assets/img/portal/tel.png) center 4px no-repeat;
+}

@@ -1,0 +1,103 @@
+<form nz-form class="ant-advanced-search-form b-t search-form" [hidden]="searchFormHidden" *ngIf="findObj.buttonId === 'Find' || searchFormShow">
+    <ng-container *ngFor="let control of controlArray;let dex=index;">
+        <!---如果queryBoxType类型未定义隐藏，searchDataHiden是个对象 设置对应的parameter属性值true隐藏---->
+        <div class="inline-block" [hidden]="!control.queryBoxType || searchDataHiden[control.parameter]">
+            <label class="search-checkbox inline-block" [hidden]="!checkBoxVisible" nz-checkbox [(ngModel)]="control.checkBox" [ngModelOptions]="{standalone: true}"></label>
+            <div class="inline-block search-input-label" [title]="control.name">
+                <span>{{control.name}} :</span>
+            </div>
+            <div class="inline-block search-input-group" [ngSwitch]="control.queryBoxType">
+                <nz-select class="search-query" [(ngModel)]="control.query" [ngModelOptions]="{standalone: true}" [nzDropdownStyle]="{'min-width': '100px'}">
+                    <ng-container *ngFor="let o of searchOptionsArr">
+                        <nz-option 
+                         nzCustomContent 
+                         [nzLabel]="o.name"
+                         *ngIf="control.queryBoxType !== 'select' || (control.queryBoxType === 'select' && (o.value === '等于' || o.value === '不等于'))" 
+                         [nzValue]="o.value">
+                            <p class="m-re" title="{{o.name}}">{{o.name}}</p>
+                        </nz-option>
+                    </ng-container>
+                </nz-select>
+                <!--数字-->
+                <ng-template [ngSwitchCase]="'number'">
+                    <app-input-number class="number-input inline-block" (ngModelChange)="searchModelChange($event,control)" [(ngModel)]="control.value1" [name]="control.parameter"></app-input-number>
+                    <app-input-number class="number-input-last inline-block" style="margin-left:4px;" (ngModelChange)="searchModelChange($event,control)" [hidden]="control.query !== '介于'" [(ngModel)]="control.value2" [ngModelOptions]="{standalone: true}"></app-input-number>
+                </ng-template>
+                <!--文本-->
+                <ng-template [ngSwitchCase]="'string'">
+                    <input nz-input autocomplete="off" class="first-input inline-block" (ngModelChange)="searchModelChange($event,control)" [(ngModel)]="control.value1" [name]="control.parameter" [title]="control.value1 || ''">
+                    <input nz-input autocomplete="off" style="margin-left:4px;" (ngModelChange)="searchModelChange($event,control)" [hidden]="control.query !== '介于'" class="inline-block" [(ngModel)]="control.value2" [ngModelOptions]="{standalone: true}" [title]="control.value2 || ''">
+                </ng-template>
+                <!--日期-->
+                <ng-template [ngSwitchCase]="'date'">
+                    <nz-date-picker [nzStyle]="{width:'100%'}" (nzOnOpenChange)="dateopen($event,control,1)" [nzShowTime]="control.format | showTime" [nzPlaceHolder]="control.query === '介于'?'开始日期':'日期'" [nzFormat]="control.format || 'yyyy-MM-dd HH:mm:ss'" [nzDisabledDate]="disabledDate(control,1)"
+                        class="inline-block search-date single-date" (ngModelChange)="searchModelChange($event,control)" [(ngModel)]="control.value1" [name]="control.parameter" [title]="control.value1 || '' | gridData:{'type':'date','format':control.format}"></nz-date-picker>
+                    <nz-date-picker [nzStyle]="{width:'100%'}" (nzOnOpenChange)="dateopen($event,control,2)" [nzShowTime]="control.format | showTime" [hidden]="control.query !== '介于'" nzPlaceHolder="结束日期" [nzFormat]="control.format || 'yyyy-MM-dd HH:mm:ss'" [nzDisabledDate]="disabledDate(control,2)"
+                        class="inline-block last-date" (ngModelChange)="searchModelChange($event,control)" [(ngModel)]="control.value2" [ngModelOptions]="{standalone: true}" [title]="control.value2 || '' | gridData:{'type':'date','format':control.format}"></nz-date-picker>
+                </ng-template>
+                <!--条件下拉框-->
+                <ng-template [ngSwitchCase]="'select'">
+                    <!-- <nz-select class="search-select" (ngModelChange)="searchModelChange($event,control)" [(ngModel)]="control.value1" [name]="control.parameter" nzAllowClear>
+                    <nz-option *ngFor="let s of control.apiParameter?.optionList" [nzLabel]="s.name" [nzValue]="s.name"></nz-option>
+                </nz-select>-->
+                    <nz-select class="search-select inline-block" (ngModelChange)="searchModelChange($event,control)" [(ngModel)]="control.value1"
+                     [nzShowSearch]="(control.proper === undefined || control.proper?.showSearch === undefined) ? true : control.proper?.showSearch"
+                      [nzMode]="control.proper?.mode || 'default'" [name]="control.parameter" nzAllowClear>
+                        <nz-option *ngFor="let s of control.apiParameter?.optionList" [nzLabel]="s.name" [nzValue]="s.name"
+                         nzCustomContent><div [title]="s.name">{{s.name}}</div></nz-option>
+                    </nz-select>
+                </ng-template>
+              <ng-template [ngSwitchCase]="'treeselect'">
+                <nz-tree-select class="search-select inline-block" (ngModelChange)="searchModelChange($event,control)" [nzNodes]="nodes" [(ngModel)]="control.value1" [name]="control.parameter"></nz-tree-select>
+              </ng-template>
+                <!-- 查询by-value -->
+                <ng-template [ngSwitchCase]="'selectByValue'">
+                    <nz-select class="search-select inline-block" (ngModelChange)="searchModelChange($event,control)" [(ngModel)]="control.value1"
+                    [nzShowSearch]="control.proper?.showSearch"
+                    [nzMode]="control.proper?.mode || 'default'"
+                    [name]="control.parameter" nzAllowClear>
+                        <nz-option *ngFor="let s of control.apiParameter?.optionList" [nzLabel]="s.name" [nzValue]="s.value"></nz-option>
+                    </nz-select>
+                </ng-template>
+                <!--数据下拉框-->
+                <ng-template [ngSwitchCase]="'pop'">
+                    <input-modal class="inline-block search-pop" (ngModelChange)="searchModelChange($event,control)" [isMutli]=false [findset]="control.apiParameter" (inpEmit)="selectedData($event,control)" [(inputModalModel)]="control.value1"></input-modal>
+                </ng-template>
+                <!--单选按钮-->
+                <ng-template [ngSwitchCase]="'radio'">
+                    <nz-radio-group class="search-radio" (ngModelChange)="searchModelChange($event,control)" [(ngModel)]="control.value1" [name]="control.parameter" nzButtonStyle="solid" nzSize="small">
+                        <label *ngFor="let option of control.apiParameter.optionList" nz-radio-button [nzValue]="option.value">{{ option.label }}</label>
+                    </nz-radio-group>
+                </ng-template>
+            </div>
+            <nz-select [(ngModel)]="control.postQuery" class="post-query inline-block" [ngModelOptions]="{standalone: true}" [hidden]="postQueryHidden">
+                <nz-option [nzLabel]="'且'" [nzValue]="'且'"></nz-option>
+                <nz-option [nzLabel]="'或'" [nzValue]="'或'"></nz-option>
+            </nz-select>
+        </div>
+        <ng-container *ngIf="(dex+1) === controlArray.length && suffixTemplate">
+            <ng-template [ngTemplateOutlet]="suffixTemplate"></ng-template>
+        </ng-container>
+        <!-- <ng-container *ngIf="(dex+1) === controlArray.length" [ngTemplateOutlet]="searchBtnTpl"></ng-container> -->
+    </ng-container>
+    <!-- <ng-container *ngIf="!controlArray[0]" [ngTemplateOutlet]="searchBtnTpl"></ng-container> -->
+    <ng-container [ngTemplateOutlet]="searchBtnTpl"></ng-container>
+</form>
+
+<ng-template #searchBtnTpl>
+    <div class="searchBtnBox inline-block">
+        <button nz-button type="submit" [nzType]="'primary'" nzSize="small" (click)="listSearch()" class="button-reset m-l-sm m-r-xs" nzGhost>
+          <a class="btn-icon">
+            <img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/查询.svg">
+          </a>
+          查询
+        </button>
+        <button nz-button type="button" [hidden]="btnHiden['reset']" [nzType]="'primary'" nzSize="small" (click)="resetForm()" class="button-reset m-r-xs" nzGhost>
+          <a class="btn-icon">
+            <img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/重置.svg">
+          </a>
+          重置
+        </button>
+        <app-muti-search [formId]="formId" [gridId]="mutiSearchGridId" [requiredArr]="requiredArr" [hidden]="btnHiden['mutiSearch']" size="small" style="font-size:12px;"></app-muti-search>
+    </div>
+</ng-template>

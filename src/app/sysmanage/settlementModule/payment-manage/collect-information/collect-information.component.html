@@ -1,0 +1,119 @@
+<div>
+  <app-searchform (search)='listSearch($event)' [triggerSearch]="true" (searchComponent)="searchComponent($event)"></app-searchform>
+  <tpl-buttons  (btnClick)='btnClick($event)' ></tpl-buttons>
+  <app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+    <ng-template #one>
+      <app-table-form [isMutli]="isMutli" [listLoading]='listLoading' (inpEmit)='inpEmit($event)' [pageFun]=true
+                      (pageIndexEmit)='getPageIndex($event)' (pageSizeEmit)='getPageSize($event)' [gridId]='"grid1"' class="cellect-information"
+                      [dataSet]='dataSet' [totalPage]='totalPages' [pageSize]='pageSize' [selfTableHeight]="gridOneHeight"
+                      (updateDataResult)='selectData($event)' [paginationRef]="priceToatalTpl"
+                      (modelChange)="modelChange($event)" (userColumnsEmit)='getUserHeader($event)' [tdTemplate]="Triangle">
+      </app-table-form>
+      <ng-template #priceToatalTpl>
+        <span>金额汇总: <em>{{priceTotal | number }}</em></span>&nbsp;
+        <span>税额汇总: <em>{{taxPriceTotal | number }}</em></span>
+      </ng-template>
+      <ng-template #Triangle>
+        <span class="int" ></span>
+      </ng-template>
+      <ng-template #urlImg let-data>
+        <div *ngIf="data.invImgurl" (click)="getView($event,data.invImgurl)">
+          <nz-avatar *ngFor="let img of data.invImgurl.split(';')" [nzSrc]="img" nzSize="small"
+                     style="width:17px;height:17px;line-height:17px;"></nz-avatar>
+        </div>
+      </ng-template>
+    </ng-template>
+    <ng-template #two>
+      <app-table-form [isMutli]="isMutli" [listLoading]='childlistLoading' [gridId]='"grid2"' [nzShowPagination]="false" [updateHeader]=true
+                      [selfTableHeight]="gridTwoHeight"
+                      [dataSet]='childrenDataSet'>
+      </app-table-form>
+    </ng-template>
+  </app-grid-resize>
+</div>
+
+<ng-container>
+  <ng-template #tplTitle>
+    <span>{{modalTitle}}</span>
+  </ng-template>
+
+  <ng-template #tplContent>
+    <form nz-form [formGroup]="validateForm">
+      <nz-form-item *ngFor="let m of modalFormData" [hidden]="m.hidden">
+        <nz-form-label [nzSpan]="6" [nzRequired]="true">
+          {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="12">
+          <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'"
+                 (click)="selectFile()" [readOnly]="m.readOnly">
+          <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'file'"
+                 #fileInput (change)="fileChange($event)">
+
+          <!--<input #fileInput type="file" formControlName="file" (change)="writeFileName($event)" multiple="false" style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;" />-->
+          <nz-form-explain *ngIf="validateForm.get(m.eName).dirty && validateForm.get(m.eName).errors">
+            <ng-container *ngIf="validateForm.get(m.eName).hasError('required')">
+              {{m.validateCon}}
+            </ng-container>
+            <ng-container *ngIf="validateForm.get(m.eName).hasError('pattern')">
+              {{m.validators.patternErr}}
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-control>
+        <nz-form-control [nzSpan]="4" style="margin-left: 20px">
+          <a [href]=templateUrl>模板下载</a>
+        </nz-form-control>
+      </nz-form-item>
+
+    </form>
+  </ng-template>
+
+  <ng-template #tplFooter>
+    <button nz-button nzType="default" (click)="handleCancel()" [disabled]="implistLoading">取消</button>
+    <button nz-button nzType="primary" (click)="importConfirm()" [nzLoading]="implistLoading" [disabled]="implistLoading">
+      确定
+    </button>
+  </ng-template>
+
+
+  <ng-template #updateContent>
+    <!--<nz-form-control [nzSpan]="16">-->
+    <!--<nz-upload [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="FileList"-->
+    <!--[nzData]="handleData" (nzChange)="getFileUrl($event)">-->
+    <!--<button nz-button>-->
+    <!--<i nz-icon type="upload"></i><span>请选择文件</span>-->
+    <!--</button>-->
+    <!--</nz-upload>-->
+    <!--</nz-form-control>-->
+    <!--  <div style="margin-top:-10px;margin-bottom:10px">-->
+    <!--    <button nz-button nzType="default" (click)="updateCancel()">取消</button>-->
+    <!--    <button class="m-l-sm" nz-button nzType="primary" (click)="updateRequest()" [disabled]="uploadDisabled">确定</button>-->
+    <!--  </div>-->
+    <div class="clearfix">
+      <nz-upload nzListType="picture" [nzAction]="upload.action" [(nzFileList)]="fileList" [nzData]="upload.handleData"
+                 [nzDisabled]="uploadStatus" [nzMultiple]="true" [nzCustomRequest]='upload.handleRequest'
+                 [nzRemove]="fileRemove" (nzChange)="getFileUrl($event)">
+        <button nz-button><i nz-icon type="upload"></i><span>上传文件</span></button>
+      </nz-upload>
+      <!--    <nz-upload nzListType="picture-card" nzAccept="image/*" [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest'-->
+      <!--               [(nzFileList)]="fileList" [nzPreview]="handlePreview" [nzData]="upload.handleData"-->
+      <!--               (nzChange)="getFileUrl($event)">-->
+      <!--      <i class="fa fa-plus" style="font-size: 30px;color: #ccc"></i>-->
+      <!--      <div class="ant-upload-text">Upload</div>-->
+      <!--    </nz-upload>-->
+      <!--    <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"-->
+      <!--              (nzOnCancel)="previewVisible=false">-->
+      <!--      <ng-template #modalContent>-->
+      <!--        <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }"/>-->
+      <!--      </ng-template>-->
+      <!--    </nz-modal>-->
+    </div>
+  </ng-template>
+
+  <ng-template #updateFooter>
+    <button nz-button nzType="default" (click)="updateCancel()">取消</button>
+    <button nz-button nzType="primary" (click)="updateRequest()" [disabled]="uploadDisabled" >确定</button>
+  </ng-template>
+
+</ng-container>
+

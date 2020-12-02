@@ -1,0 +1,141 @@
+<app-searchform [formId]="formId" (search)='listSearch($event)' [triggerSearch]="true"></app-searchform>
+<tpl-buttons [formId]="formId" (btnClick)='btnClick($event)' [btnDisable]="{test:selectedData.length===0}"></tpl-buttons>
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+  <ng-template #one>
+    <app-table-form [isMutli]="isMutli" [listLoading]='listLoading'
+                    [formId]="formId"
+                    [gridId]='"grid1"' [dataSet]='dataSet'
+                    [selfTableHeight]="gridOneHeight"
+                    [totalPage]='totalPages' (updateDataResult)='updateData($event)'>
+
+    </app-table-form>
+  </ng-template>
+  <ng-template #two>
+    <main *ngIf="!isFleet">
+      <nz-tabset (nzSelectChange)="printModalTab($event)" [(nzSelectedIndex)]="printModalTabIndex">
+        <nz-tab nzTitle="按车队展示">
+          <app-table-form [columns]="printModalHeader" [dataSet]="printModalData1" [isCheckBox]="false"
+                          [selfTableHeight]="gridTwoHeight"
+                          [listLoading]="printModalLoading" [nzShowPagination]='false' [showCount]="false"
+                          [paginationRef]="pagination1"></app-table-form>
+          <ng-template #pagination1>
+            重量 {{printModalData1|dataAggregation:'weight'|gridData:{type: 'number', format: '3'} }}
+            吨，总价 {{printModalData1|dataAggregation:'totalPrice'|gridData:{type: 'number', format: '2'} }}
+            元
+          </ng-template>
+        </nz-tab>
+        <nz-tab nzTitle="按运单展示">
+          <app-table-form [columns]="printModalHeader" [dataSet]="printModalData2" [isCheckBox]="false"
+                          [selfTableHeight]="gridTwoHeight"
+                          [listLoading]="printModalLoading" [nzShowPagination]='false' [showCount]="false"
+                          [paginationRef]="pagination2"></app-table-form>
+          <ng-template #pagination2>
+            重量 {{printModalData2|dataAggregation:'weight'|gridData:{type: 'number', format: '3'} }}
+            吨，总价 {{printModalData2|dataAggregation:'totalPrice'|gridData:{type: 'number', format: '2'} }}
+            元
+          </ng-template>
+        </nz-tab>
+        <nz-tab nzTitle="按合同展示">
+          <app-table-form [columns]="printModalHeader" [dataSet]="printModalData3" [isCheckBox]="false"
+                          [selfTableHeight]="gridTwoHeight"
+                          [listLoading]="printModalLoading" [nzShowPagination]='false' [showCount]="false"
+                          [paginationRef]="pagination3"></app-table-form>
+          <ng-template #pagination3>
+            重量 {{printModalData3|dataAggregation:'weight'|gridData:{type: 'number', format: '3'} }}
+            吨，总价 {{printModalData3|dataAggregation:'payAmount'|gridData:{type: 'number', format: '2'} }}
+            元
+          </ng-template>
+        </nz-tab>
+        <nz-tab nzTitle="按装车清单号展示">
+          <app-table-form [columns]="printModalHeader" [dataSet]="printModalData4" [isCheckBox]="false"
+                          [selfTableHeight]="gridTwoHeight"
+                          [listLoading]="printModalLoading" [nzShowPagination]='false' [showCount]="false"
+                          [paginationRef]="pagination4"></app-table-form>
+          <ng-template #pagination4>
+            重量 {{printModalData4|dataAggregation:'weight'|gridData:{type: 'number', format: '3'} }}
+            吨，总价 {{printModalData4|dataAggregation:'totalPrice'|gridData:{type: 'number', format: '2'} }}
+            元
+          </ng-template>
+        </nz-tab>
+        <nz-tab nzTitle="按车队详情展示">
+          <app-table-form [columns]="printModalHeader" [dataSet]="printModalData5" [isCheckBox]="false"
+                          [selfTableHeight]="gridTwoHeight"
+                          [listLoading]="printModalLoading" [nzShowPagination]='false' [showCount]="false"
+                          [paginationRef]="pagination5"></app-table-form>
+          <ng-template #pagination5>
+            总价 {{printModalData5|dataAggregation:'totAmount'|gridData:{type: 'number', format: '2'} }}
+            元
+          </ng-template>
+        </nz-tab>
+
+      </nz-tabset>
+    </main>
+    <main *ngIf="isFleet">
+      <!--<p>按车队展示</p>-->
+      <app-table-form [columns]="printModalHeader" [dataSet]="printModalData1" [isCheckBox]="false"
+                      [selfTableHeight]="gridTwoHeight"
+                      [listLoading]="printModalLoading" [nzShowPagination]='false' [showCount]="false"
+                      [paginationRef]="pagination1"></app-table-form>
+      <ng-template #pagination1>
+        重量 {{printModalData1|dataAggregation:'weight'|gridData:{type: 'number', format: '3'} }}
+        吨，总价 {{printModalData1|dataAggregation:'totalPrice'|gridData:{type: 'number', format: '2'} }}
+        元
+      </ng-template>
+    </main>
+  </ng-template>
+</app-grid-resize>
+<nz-modal [(nzVisible)]="printModalVisible" nzTitle="分组打印" (nzOnCancel)="handleCancel()" nzWidth="70%"
+          [nzFooter]="printModalFooter" [nzMaskClosable]="false">
+  <nz-tabset (nzSelectChange)="printModalTab($event)" [(nzSelectedIndex)]="printModalTabIndex">
+    <nz-tab nzTitle="按车队展示">
+      <app-table-form [columns]="printModalHeader" [dataSet]="printModalData1" [isCheckBox]="false" [listLoading]="printModalLoading"
+        [nzShowPagination]='false' [showCount]="false" [paginationRef]="pagination1"></app-table-form>
+      <ng-template #pagination1>
+        重量 {{printModalData1|dataAggregation:'weight'|gridData:{type: 'number', format: '3'} }}
+        吨，总价 {{printModalData1|dataAggregation:'totalPrice'|gridData:{type: 'number', format: '2'} }}
+        元
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="按运单展示">
+      <app-table-form [columns]="printModalHeader" [dataSet]="printModalData2" [isCheckBox]="false" [listLoading]="printModalLoading"
+        [nzShowPagination]='false' [showCount]="false" [paginationRef]="pagination2"></app-table-form>
+      <ng-template #pagination2>
+        重量 {{printModalData2|dataAggregation:'weight'|gridData:{type: 'number', format: '3'} }}
+        吨，总价 {{printModalData2|dataAggregation:'totalPrice'|gridData:{type: 'number', format: '2'} }}
+        元
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="按合同展示">
+      <app-table-form [columns]="printModalHeader" [dataSet]="printModalData3" [isCheckBox]="false" [listLoading]="printModalLoading"
+        [nzShowPagination]='false' [showCount]="false" [paginationRef]="pagination3"></app-table-form>
+      <ng-template #pagination3>
+        重量 {{printModalData3|dataAggregation:'weight'|gridData:{type: 'number', format: '3'} }}
+        吨，总价 {{printModalData3|dataAggregation:'payAmount'|gridData:{type: 'number', format: '2'} }}
+        元
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="按装车清单号展示">
+      <app-table-form [columns]="printModalHeader" [dataSet]="printModalData4" [isCheckBox]="false" [listLoading]="printModalLoading"
+        [nzShowPagination]='false' [showCount]="false" [paginationRef]="pagination4"></app-table-form>
+      <ng-template #pagination4>
+        重量 {{printModalData4|dataAggregation:'weight'|gridData:{type: 'number', format: '3'} }}
+        吨，总价 {{printModalData4|dataAggregation:'totalPrice'|gridData:{type: 'number', format: '2'} }}
+        元
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="按车队详情展示">
+      <app-table-form [columns]="printModalHeader" [dataSet]="printModalData5" [isCheckBox]="false" [listLoading]="printModalLoading"
+        [nzShowPagination]='false' [showCount]="false" [paginationRef]="pagination5"></app-table-form>
+      <ng-template #pagination5>
+        总价 {{printModalData5|dataAggregation:'totamount'|gridData:{type: 'number', format: '2'} }}
+        元
+      </ng-template>
+    </nz-tab>
+
+  </nz-tabset>
+  <ng-template #printModalFooter>
+    <!--    <button nz-button nzType="primary" (click)="handleOk()">导出</button>-->
+    <button nz-button nzType="primary" (click)="handleOk(20)">打印</button>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  </ng-template>
+</nz-modal>

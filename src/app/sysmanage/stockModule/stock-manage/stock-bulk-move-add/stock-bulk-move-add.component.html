@@ -1,0 +1,63 @@
+<form nz-form [formGroup]="validateForm" style="padding:15px 20px 0px 0px">
+  <nz-form-item>
+    <nz-form-label [nzXs]="2" nzFor="moveWsNo">散货移库单号</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input type="text" nz-input name="moveWsNo" formControlName="moveWsNo" placeholder="系统生成" disabled="true">
+    </nz-form-control>
+    <nz-form-label [nzXs]="2" nzRequired nzFor="moveWsTime">散货移库时间</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <nz-date-picker nzShowTime name="moveWsTime" formControlName="moveWsTime"
+                      nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>
+      <nz-form-explain *ngIf="validateForm.get('moveWsTime').dirty && validateForm.get('moveWsTime').errors">请选择散货移库时间
+      </nz-form-explain>
+    </nz-form-control>
+
+    <nz-form-label [nzXs]="2" nzRequired nzFor="operTime">操作时间</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <nz-date-picker nzShowTime name="operTime" formControlName="operTime"
+                      nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>
+      <nz-form-explain *ngIf="validateForm.get('operTime').dirty && validateForm.get('operTime').errors">请选择操作时间
+      </nz-form-explain>
+    </nz-form-control>
+    <nz-form-label [nzXs]="2" nzRequired nzFor="operUser">操作人</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="operUser" id="operUser">
+      <nz-form-explain *ngIf="validateForm.get('operUser').dirty && validateForm.get('operUser').errors">请输入操作人
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzXs]="2" nzRequired nzFor="operTeam">操作班组</nz-form-label>
+    <!--<nz-form-control [nzXs]="4">-->
+      <!--<input nz-input formControlName="operTeam" id="operTeam">-->
+      <!--<nz-form-explain *ngIf="validateForm.get('operTeam').dirty && validateForm.get('operTeam').errors">请输入操作班组-->
+      <!--</nz-form-explain>-->
+    <!--</nz-form-control>-->
+    <nz-form-control [nzXs]="4">
+      <input-modal [isMutli]="false"
+                   [findset]="{ formId: 'form_team_manage', name: '班组名称', parameter: 'teamName',parameterSend:'teamId',url:'teamGetPage' }"
+                   [showExplainFlag]="teamShowExplainFlag" [validate]="{validateOpt:'inpName',validateCon:'请选择操作班组'}"
+                   [inputModalModel]="operTeam" [inputModalHiddenValue]="operTeamCode" (inpEmit)="teamInpEmit($event)"></input-modal>
+    </nz-form-control>
+    <nz-form-label [nzXs]="2" nzFor="remark">备注</nz-form-label>
+    <nz-form-control [nzXs]="10">
+      <input nz-input formControlName="remark" id="remark">
+    </nz-form-control>
+
+  </nz-form-item>
+  <tpl-buttons [btnDisable]="btnDisable" [formId]="'form_bulk_move_add'" (btnClick)='btnClick($event)'></tpl-buttons>
+  <app-table-form [popTableData]="popTableData" [formId]="'form_bulk_move_add'"
+                  [gridId]="'grid1'"
+                  [searchParamFiled]="'areaName'"
+                  [searchListFiled]="'wsArea'"
+                  [dataSet]="dataSet1"
+                  [gridOperate]="{show:true,title:'操作',template:g1}"
+                  [nzShowPagination]="false"
+                  [isCheckBox]="false"
+                  [listLoading]="listLoading1"
+                  (inpEmit)="inpEmitDetail($event)">
+    <ng-template #g1 let-data let-index="index">
+      <a (click)="delete(data,index)" a>删除</a>
+    </ng-template>
+  </app-table-form>
+</form>

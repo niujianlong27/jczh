@@ -1,0 +1,7 @@
+<div nz-row *ngIf="buttons.length > 0">
+  <div nz-col nzSpan="24">
+    <ng-container *ngFor="let button of buttons">
+      <button nz-button nzType="primary" (click)="buttonClicked(button)" nzGhost>{{button.buttonName}}</button>
+    </ng-container>
+  </div>
+</div>

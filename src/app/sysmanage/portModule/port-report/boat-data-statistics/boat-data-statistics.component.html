@@ -1,0 +1,13 @@
+<!--船舶数据统计-->
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+
+<div>
+  <app-table-form
+    [gridId]="'grid1'" [dataSet]="dataSet"
+    [extraTableHeight]="25"
+    [pageSize]="pageSize" [totalPage]="totalPages"
+    (updateDataResult)="selectData($event)"
+    [isMutli]="true" [listLoading]="listLoading"
+    [isCheckBox]="true" [showCount]="true"></app-table-form>
+</div>

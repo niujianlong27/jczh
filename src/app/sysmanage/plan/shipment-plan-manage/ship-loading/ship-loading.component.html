@@ -1,0 +1,139 @@
+<app-searchform (search)='listSearch($event)'>
+</app-searchform>
+<tpl-buttons [btnDisable]="{AddPack1:tmpButtonId==='UpdatePack',UpdatePack:tmpButtonId==='AddPack1'}"
+             (btnClick)='btnClick($event)'>
+</tpl-buttons>
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+</app-grid-resize>
+<ng-template #one>
+  <app-table-form gridId="grid1" [isMutli]="false" [listLoading]='listLoading' [dataSet]='dataSet'
+                  [totalPage]='total' [selfTableHeight]="gridOneHeight" (btnClick)='btnClick($event)'
+                  (updateDataResult)='updateDataResult($event)' (listClick)="listClick($event)">
+  </app-table-form>
+</ng-template>
+<ng-template #two>
+  <app-table-form gridId="grid2" [isMutli]="true" [dataSet]="packDataSet" [totalPage]="packTotal"
+                  [pageSize]="packPageSize" [selfTableHeight]="gridTwoHeight" [pageFun]="true"
+                  (pageIndexEmit)="packPageIndex($event)" (pageSizeEmit)="packPageSizeChange($event)"
+                  (updateDataResult)="packUpdateDataResult($event)">
+  </app-table-form>
+</ng-template>
+
+<nz-modal nzWidth="70%" nzMaskClosable="false" [nzStyle]="{ top: '0px' }" [(nzVisible)]="modalFormVisible"
+          [nzTitle]="modalTitle" [nzFooter]="null" [nzMaskClosable]="false" [nzBodyStyle]="{'padding-top':'0px'}"
+          (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()">
+  <nz-spin [nzSpinning]="modalSpinning">
+    <tpl-buttons formId="form_boat_stowage_add" [btnDisable]="{BoatSchedule:status === 'update'}"
+                 (btnClick)='btnClick($event)'>
+    </tpl-buttons>
+    <form nz-form [formGroup]="modalValidateForm">
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="8" *ngFor="let m of modalFormData">
+          <nz-form-item nzFlex>
+            <nz-form-label [nzSpan]="10" [nzRequired]="m.require">{{m.name}}</nz-form-label>
+
+            <nz-form-control [nzSpan]="14">
+
+              <ng-container *ngIf="m.eName==='stowageNum' else templateRef">
+                <input nz-input placeholder="系统自动生成" type="text" *ngIf="m.type == 'text'" [formControlName]="m.eName"
+                       [id]="m.eName">
+              </ng-container>
+
+              <ng-template #templateRef>
+                <input nz-input type="text" *ngIf="m.type == 'text'" [formControlName]="m.eName" [id]="m.eName">
+              </ng-template>
+
+              <ng-container *ngIf="m.type == 'img'">
+                <nz-upload nzListType="picture-card" [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest'
+                           [(nzFileList)]="imgStowageList" [nzPreview]="handlePreview" [nzData]="upload.handleData"
+                           [nzShowButton]="imgStowageList.length < 1" (nzChange)="handleChange($event,m.eName)">
+                  <i class="anticon anticon-plus"></i>
+                  <div class="ant-upload-text">Upload</div>
+                </nz-upload>
+                <input type="hidden" [formControlName]="m.eName" readonly="readonly">
+                <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+                          (nzOnCancel)="previewVisible=false">
+                  <ng-template #modalContent>
+                    <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }"/>
+                  </ng-template>
+                </nz-modal>
+              </ng-container>
+
+              <nz-input-number *ngIf="m.type == 'number'" [formControlName]="m.eName" [nzMin]="0"
+                               [nzStep]="1">
+              </nz-input-number>
+
+              <nz-date-picker *ngIf="m.type == 'date'" nzFormat="yyyy-MM-dd HH:mm:ss" [formControlName]="m.eName">
+              </nz-date-picker>
+
+              <nz-select *ngIf="m.type === 'select'" style="width: 120px;" [formControlName]="m.eName">
+                <nz-option *ngFor="let i of m.selectList" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+              </nz-select>
+
+              <nz-form-explain
+                *ngIf="modalValidateForm.get(m.eName).invalid && (modalValidateForm.get(m.eName).dirty || modalValidateForm.get(m.eName).touched)">
+                <ng-container *ngIf="modalValidateForm.get(m.eName).errors.required">
+                  {{m.validateCon}}
+                </ng-container>
+              </nz-form-explain>
+
+            </nz-form-control>
+
+          </nz-form-item>
+        </div>
+      </div>
+
+    </form>
+
+    <tpl-buttons formId="form_boat_stowage_sequence" (btnClick)='btnClick($event)'
+                 [btnDisable]="{LoadingSequence: detailModalSelectData.length === 0,LoadingSequenceDelete: modifiedDataSelect.length === 0}">
+    </tpl-buttons>
+    <div nz-row>
+      <div nz-col [nzSpan]="6">
+        <input nz-input placeholder="舱位" type="number" [disabled]="detailModalSelectData.length===0"
+               [(ngModel)]="shipingSpaceNumber" (ngModelChange)="numberChange($event,'shipingSpaceNumber')"/>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <input nz-input placeholder="顺序号" type="number" [disabled]="detailModalSelectData.length===0"
+               [(ngModel)]="orderNumber" (ngModelChange)="numberChange($event,'orderNumber')"/>
+      </div>
+    </div>
+
+    <div nz-row>
+      <div nz-col nzSpan="24">
+        <!--        <div>未配载列表</div>-->
+        <app-table-form formId="form_boat_stowage_sequence" [gridId]="'grid1'" [dataSet]="detailDataModalList"
+                        [isMutli]="true" [pageFun]="true" [pageSize]="detailDataModalPageSize"
+                        [totalPage]="detailDataModalTotalPage" [nzShowPagination]="false" [extraTableHeight]="283"
+                        (modelChange)="detailModalChange($event)"
+                        (updateDataResult)="detailModalUpdateDataResult($event)">
+        </app-table-form>
+      </div>
+      <div nz-col nzSpan="24">
+        <!--        <div>已配载列表</div>-->
+        <!--        <app-table-form [formId]="'form_boat_stowage_sequence_update'" [gridId]="'grid1'" [dataSet]="modifiedDataModal"-->
+        <!--                        [pageFun]="true" [nzShowPagination]="false" [showCount]="true" [extraTableHeight]="410"-->
+        <!--                        [isMutli]="true" (updateDataResult)="modifiedDataModalUpdateDataResult($event)">-->
+        <!--        </app-table-form>-->
+      </div>
+    </div>
+  </nz-spin>
+</nz-modal>
+
+<ng-template #schedulingPlan>
+  <app-table-form formId="form_boat_schedule" gridId="grid1" [dataSet]="schedulingPlanModalList"
+                  [totalPage]="schedulingPlanModalTotal"
+                  [extraTableHeight]="80" [pageSize]="schedulingPlanModalPageSize" [pageFun]="true"
+                  (updateDataResult)="schedulingPlanModalUpdateChange($event)"
+                  (pageSizeEmit)="schedulingPlanModalPageSizeChange($event)"
+                  (pageIndexEmit)="schedulingPlanModalPageIndexChange($event)">
+  </app-table-form>
+</ng-template>
+
+<ng-template #importDataModal>
+  <nz-upload [(nzFileList)]="fileList" [nzAction]="importUrl" [nzLimit]="1" [nzShowButton]="fileList.length < 1"
+             [nzFileType]="'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'"
+             [nzBeforeUpload]="beforeUpload">
+    <button nz-button><i nz-icon nzType="upload"></i><span>Click to Upload</span></button>
+  </nz-upload>
+</ng-template>

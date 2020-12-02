@@ -1,0 +1,77 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+
+<common-page (search)="listSearch($event)" (btnAdd)="btnAdd()" [pageSize]="pageSize"
+             (userColumnsEmit)="userColumnsEmit($event)" [formId]="'form_driver'"
+             [totalPage]="totalPage" (btnClick)="btnClick($event)"
+             [listLoading]="listLoading" (btnDelete)="btnDelete($event)"
+             (btnUpdate)="btnUpdate($event)" [extraTableHeight]="permissions ? 52 : 0"
+             [dataSet]="dataSet" [isMutli]="true">
+
+</common-page>
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+
+</app-modal-confirm>
+<nz-modal [nzMask]="false" [(nzVisible)]="isVisible" nzTitle="选择用户" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+          [nzFooter]="null"
+          [nzWidth]="700">
+  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+    <input type="text" nz-input placeholder="输入姓名查找,回车触发查询" [(ngModel)]="userSearch" (keyup.enter)="find()">
+  </nz-input-group>
+  <ng-template #suffixIconButton>
+    <button nz-button nzType="primary" nzSearch (click)="find()"><i nz-icon type="search"></i></button>
+  </ng-template>
+  <p class="m-re" style="padding:10px 0;">
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+    <button class="m-l" nz-button nzType="primary" (click)="handleOk()">确认</button>
+  </p>
+  <app-table-form [dataSet]="userDataSet" [listLoading]="userListLoading" [gridId]="'grid2'" selfTableHeight="550px"
+                  [colSet]="false" [pageSize]="userPageSize" [totalPage]="userTotalPage" [isMutli]="true"
+                  [pageFun]="true"
+                  (pageIndexEmit)='getPageIndex($event)' (pageSizeEmit)='getPageSize($event)'
+                  (updateDataResult)="updateDataResult($event)"></app-table-form>
+</nz-modal>
+
+<ng-template #tplTitle>
+  <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent>
+  <form nz-form [formGroup]="validateForm">
+    <nz-form-item *ngFor="let m of modalFormData" [hidden]="m.hidden">
+      <nz-form-label [nzSpan]="7" [nzRequired]="true">
+        {{m.name}}
+      </nz-form-label>
+
+
+      <nz-form-control [nzSpan]="13">
+        <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" [formControlName]="m.eName">
+          <label nz-radio [nzValue]="r.value" *ngFor="let r of isInArr">{{r.name}}</label>
+        </nz-radio-group>
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'"
+               (click)="selectFile()" [readOnly]="m.readOnly">
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'file'"
+               #fileInput (change)="fileChange($event)">
+        <nz-form-explain *ngIf="validateForm.get(m.eName).dirty && validateForm.get(m.eName).errors">
+          <ng-container *ngIf="validateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+          <ng-container *ngIf="validateForm.get(m.eName).hasError('pattern')">
+            {{m.validators.patternErr}}
+          </ng-container>
+        </nz-form-explain>
+      </nz-form-control>
+      <!--<nz-form-control [nzSpan]="4" style="margin-left:20px">-->
+      <!--<a href="">模板下载</a>-->
+      <!--</nz-form-control>-->
+
+    </nz-form-item>
+  </form>
+</ng-template>
+<ng-template #tplFooter>
+  <button nz-button nzType="default" (click)="handleCancelmodel()">取消</button>
+  <button nz-button nzType="primary" (click)="importConfirm()" [nzLoading]="implistLoading" [disabled]="implistLoading">
+    确定
+  </button>
+</ng-template>
+

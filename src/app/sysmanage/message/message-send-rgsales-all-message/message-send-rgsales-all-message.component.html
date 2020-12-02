@@ -1,0 +1,43 @@
+<app-searchform
+  gridId="grid1"
+  formId="form_message_sendView_past"
+  (search)="search($event)"
+  [triggerSearch]="true"
+  (searchDataReturn)="searchDataReturn($event)"
+>
+</app-searchform>
+<tpl-buttons
+  gridId="grid1"
+  formId="form_message_sendView_past"
+  [btnDisable]="{Select:(selectedUpDataList.length===0)||(selectedDownDataList.length===0)}"
+  (btnClick)="btnClick($event)">
+</tpl-buttons>
+
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="tableHeight($event)">
+  <ng-template #one>
+    <app-table-form
+      [selfTableHeight]="upHeight"
+      [totalPage]="total"
+      [listLoading]="upLoading"
+      [dataSet]="upData"
+      (updateDataResult)="selectedFun($event)"
+      formId="form_message_sendView_past"
+      gridId="grid1"
+    >
+    </app-table-form>
+  </ng-template>
+  <ng-template #two>
+    <app-table-form
+      [refresh]="refresh"
+      [selfTableHeight]="downHeight"
+      [isMutli]="true"
+      [dataSet]="downData"
+      [nzShowPagination]="false"
+      [listLoading]="downLoading"
+      (updateDataResult)="selectedDownData($event)"
+      formId="form_message_sendView_past"
+      gridId="grid2"
+    >
+    </app-table-form>
+  </ng-template>
+</app-grid-resize>

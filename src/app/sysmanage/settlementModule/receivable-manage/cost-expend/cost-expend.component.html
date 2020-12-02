@@ -1,0 +1,88 @@
+<app-searchform (search)="searchList($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" ></tpl-buttons>
+
+<app-table-form [nzShowPagination]="true" [listLoading]="listLoading" [dataSet]="dataSet" [pageSize]="pageSize" (updateDataResult)="updatedataResult($event)"
+                (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)' (userColumnsEmit)="userColumnsEmit($event)"
+                [totalPage]="totalPage"   isMutli="true"  [paginationRef]="totalStats">
+  <ng-template #totalStats>
+    已选&nbsp;{{updatedata.length}}&nbsp;条&nbsp;总金额:{{totalAmount | number:'1.2-2'}}元 总税额:{{totalInvoiceTax | number:'1.2-2'}}元  合计总金额:{{totalMoney|number:'1.2-2'}} 元
+  </ng-template>
+</app-table-form>
+
+
+<ng-template #tplTitle1>
+  <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent1>
+  <form nz-form [formGroup]="validateForm">
+    <nz-form-item *ngFor="let m of modalFormData"  [hidden]="m.hidden">
+      <nz-form-label [nzSpan]="6" [nzRequired]="true">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="12">
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'" (click)="selectFile()" [readOnly]="m.readOnly">
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'file'" #fileInput  (change)="fileChange($event)">
+        <nz-form-explain *ngIf="validateForm.get(m.eName).dirty && validateForm.get(m.eName).errors">
+          <ng-container *ngIf="validateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+          <ng-container *ngIf="validateForm.get(m.eName).hasError('pattern')">
+            {{m.validators.patternErr}}
+          </ng-container>
+        </nz-form-explain>
+      </nz-form-control>
+      <nz-form-control [nzSpan]="4" style="margin-left: 20px">
+        <a (click)="aClick()">模板下载</a>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</ng-template>
+<ng-template #tplFooter1>
+  <button nz-button nzType="default" (click)="handleCancel()" [disabled]="  implistLoading1">取消</button>
+  <button nz-button nzType="primary" (click)="importConfirm()" [nzLoading]="implistLoading1" [disabled]="implistLoading1">确定</button>
+</ng-template>
+<ng-template #tplTitle>
+  <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #updateContent>
+  <!--<nz-form-control [nzSpan]="16">-->
+  <!--<nz-upload [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="FileList"-->
+  <!--[nzData]="handleData" (nzChange)="getFileUrl($event)">-->
+  <!--<button nz-button>-->
+  <!--<i nz-icon type="upload"></i><span>请选择文件</span>-->
+  <!--</button>-->
+  <!--</nz-upload>-->
+  <!--</nz-form-control>-->
+  <!--  <div style="margin-top:-10px;margin-bottom:10px">-->
+  <!--    <button nz-button nzType="default" (click)="updateCancel()">取消</button>-->
+  <!--    <button class="m-l-sm" nz-button nzType="primary" (click)="updateRequest()" [disabled]="uploadDisabled">确定</button>-->
+  <!--  </div>-->
+  <div class="clearfix">
+    <nz-upload nzListType="picture" [nzAction]="upload.action" [(nzFileList)]="fileList" [nzData]="upload.handleData"
+               [nzDisabled]="uploadStatus" [nzMultiple]="true" [nzCustomRequest]='upload.handleRequest'
+               [nzRemove]="fileRemove" (nzChange)="getFileUrl($event)">
+      <button nz-button><i nz-icon type="upload"></i><span>上传文件</span></button>
+    </nz-upload>
+    <!--    <nz-upload nzListType="picture-card" nzAccept="image/*" [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest'-->
+    <!--               [(nzFileList)]="fileList" [nzPreview]="handlePreview" [nzData]="upload.handleData"-->
+    <!--               (nzChange)="getFileUrl($event)">-->
+    <!--      <i class="fa fa-plus" style="font-size: 30px;color: #ccc"></i>-->
+    <!--      <div class="ant-upload-text">Upload</div>-->
+    <!--    </nz-upload>-->
+    <!--    <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"-->
+    <!--              (nzOnCancel)="previewVisible=false">-->
+    <!--      <ng-template #modalContent>-->
+    <!--        <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }"/>-->
+    <!--      </ng-template>-->
+    <!--    </nz-modal>-->
+  </div>
+</ng-template>
+
+<ng-template #updateFooter>
+  <button nz-button nzType="default" (click)="updateCancel()">取消</button>
+  <button nz-button nzType="primary" (click)="updateRequest()" [disabled]="uploadDisabled" >确定</button>
+</ng-template>
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="'提示信息'" [modalCon]="'确认要删除吗？'"
+                   (modalConfirmResult)="modalConfirmResult($event)"></app-modal-confirm>

@@ -1,0 +1,311 @@
+<app-searchform (search)="searchList($event)" formId="form_inv_had"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" formId="form_inv_had"></tpl-buttons>
+<app-table-form [dataSet]="dataSet" [isMutli]="true" [pageSize]="pageSize" [listLoading]="listLoading" (updateDataResult)="updateDataResult($event)"
+                (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)' formId="form_inv_had"
+                    [totalPage]="totalPage"></app-table-form>
+
+
+<ng-template #tplTitle2>
+  <span>预览</span>
+</ng-template>
+<ng-template #tplContent2>
+  <nz-tabset>
+    <nz-tab nzTitle="发票预览">
+      <div class="xforce-invoice-card xforce-invoice-common ">
+        <div class="card-header label" kskey="发票类型">增值税专用发票</div>
+        <div>
+          <div class="status-tips"></div>
+          <div class="blockchain"></div>
+        </div>
+        <div class="base-info" style="margin-left: 800px">
+          <div  ><span class="label__inner" kskey="发票代码">{{invoiceData.invNo}}</span></div>
+          <div ><span class="label__inner" kskey="发票号码">{{invoiceData.invNum}}</span></div>
+          <div style="margin-left: -80px" ><label class="label label__semi">开票日期</label><span class="label__inner"
+                                                                                        kskey="开票日期">{{invoiceData.gmtCreate}}</span></div>
+        </div>
+        <table border="0">
+          <tbody>
+          <tr>
+            <td class="plr5" style="width: 4.16667%;"><span class="label__vertical label">购买方</span></td>
+            <td class="plr5" style="width: 50.2%;">
+              <p><label class="xforce-col-5 padding-0 label label__semi">名称</label><span class="xforce-col-19 label__inner"
+                                                                                         kskey="购买方名称">{{invoiceData.buyerName}}</span></p>
+              <p><label class="xforce-col-5 padding-0 label label__semi">纳税人识别号</label><span
+                class="xforce-col-19 label__inner" kskey="购买方纳税人识别号">{{invoiceData.buyerTaxCode}}</span></p>
+              <p><label class="xforce-col-5 padding-0 label label__semi">地址、电话</label><span
+                class="xforce-col-19 label__inner" kskey="购买方地址、电话">{{invoiceData.buyerAddress}}   {{invoiceData.buyerTel}}</span></p>
+              <p><label class="xforce-col-5 padding-0 label label__semi">开户行及账号</label><span
+                class="xforce-col-19 label__inner" kskey="购买方开户行及账号">{{invoiceData.buyerBankName}}{{invoiceData.buyerBankAccount}}</span></p>
+            </td>
+            <td class="plr5" style="width: 4.16667%;"><span class="label__vertical label">密码区</span></td>
+            <td class="plr5" kskey="密码区">{{invoiceData.taxCtrlNo}}</td>
+          </tr>
+          </tbody>
+        </table>
+        <table class="height-240 previewInvoiceDetailsTable" border="0">
+          <thead>
+          <tr>
+            <th class="label plr5 text-center" style="width: 20.8333%;">货物或应税劳务、服务名称</th>
+            <th class="label plr5 text-center" style="width: 12.5%;">规格型号</th>
+            <th class="label plr5 text-center" style="width: 8.33333%;">单位</th>
+            <th class="label plr5 text-center" style="width: 12.5%;">数量</th>
+            <th class="label plr5 text-center" style="width: 12.5%;">单价</th>
+            <th class="label plr5 text-center" style="width: 12.5%;">金额</th>
+            <th class="label plr5 text-center" style="width: 8.33333%;">税率</th>
+            <th class="label plr5 text-center" style="width: 12.5%;">税额</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let i of invoiceData.details">
+            <td class="plr5 align-left word-break" >{{i.itemTitle}}</td>
+            <td class="plr5 align-right">{{i.spec}}</td>
+            <td class="plr5 align-right">{{i.unit}}</td>
+            <td class="plr5 align-right">{{i.quantityStr}}</td>
+            <td class="plr5 align-right">{{i.priceStr}}</td>
+            <td class="plr5 align-right">{{i.moneyStr}}</td>
+            <td class="plr5 align-right">{{i.taxRatePercent}}</td>
+            <td class="plr5 align-right">{{i.taxMoneyStr}}</td>
+          </tr>
+          <tr class="height-30" valign="bottom">
+            <td class="label text-center" style="width: 20.8333%;">合计</td>
+            <td class="plr5" style="width: 12.5%;"></td>
+            <td class="plr5" style="width: 8.33333%;"></td>
+            <td class="plr5" style="width: 12.5%;"></td>
+            <td class="plr5" style="width: 12.5%;"></td>
+            <td class="label  ellipsis align-right" style="width: 12.5%;"><span>¥{{invoiceData.moneyStr}}</span></td>
+            <td class="plr5" style="width: 8.33333%;"></td>
+            <td class="label ellipsis align-right" style="width: 12.5%;"><span>¥{{invoiceData.taxMoney}}</span></td>
+          </tr>
+          </tbody>
+        </table>
+        <table>
+          <tbody>
+          <tr>
+            <td class="ptb5">
+              <div class="xforce-col-4 label align-right">价税合计(大写)</div>
+              <div class="xforce-col-8" kskey="价税合计(大写)">{{invoiceData.totalMoneyChina}}</div>
+              <div class="xforce-col-4 label align-right">(小写)</div>
+              <div class="xforce-col-8" kskey="(小写)">¥{{invoiceData.totalMoney}}</div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <table border="0">
+          <tbody>
+          <tr>
+            <td class="plr5" style="width: 4.16667%;"><span class="label__vertical label">销售方</span></td>
+            <td class="plr5" style="width: 50.2%;">
+              <p><label class="xforce-col-5 padding-0 label label__semi">名称</label><span class="xforce-col-19 label__inner"
+                                                                                         kskey="销售方名称">{{invoiceData.sellerName}}</span></p>
+              <p><label class="xforce-col-5 padding-0 label label__semi">纳税人识别号</label><span
+                class="xforce-col-19 label__inner" kskey="销售方纳税人识别号">{{invoiceData.sellerTaxCode}}</span></p>
+              <p><label class="xforce-col-5 padding-0 label label__semi">地址、电话</label><span
+                class="xforce-col-19 label__inner" kskey="销售方地址、电话">{{invoiceData.sellerAddress}}  {{invoiceData.sellerTel}}</span></p>
+              <p><label class="xforce-col-5 padding-0 label label__semi">开户行及账号</label><span
+                class="xforce-col-19 label__inner" kskey="销售方开户行及账号">{{invoiceData.sellerBankName}}{{invoiceData.sellerBankAccount}}</span></p>
+            </td>
+            <td class="plr5" style="width: 4.16667%;"><span class="label__vertical label">备注</span></td>
+            <td class="plr5 word-wrap" style="height: 110px; position: relative;">
+              <div kskey="备注">{{invoiceData.remark}}</div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <table border="0">
+          <tbody>
+          <tr>
+            <td colspan="4">
+              <div class="xforce-col-2 label align-right">收款人:</div>
+              <div class="xforce-col-6" kskey="收款人">{{invoiceData.payee}}</div>
+              <div class="xforce-col-2 label align-right">复核人:</div>
+              <div class="xforce-col-6" kskey="复核人">{{invoiceData.reviewer}}</div>
+              <div class="xforce-col-2 label align-right">开票人:</div>
+              <div class="xforce-col-6" kskey="开票人">{{invoiceData.creator}}</div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </nz-tab>
+    <nz-tab nzTitle="发票详情">
+      <div>
+        <nz-card nzTitle="预制发票信息" [nzBordered]="false">
+          <div nz-row class="m-b-sm">
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">购方名称：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.buyerName}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">购方纳税人识别号：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.buyerTaxCode}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">购方电话：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.buyerTel}}</div>
+            </div>
+          </div>
+          <div nz-row class="m-b-sm">
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">购方银行账号：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.buyerBankAccount}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">购方银行名称：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.buyerBankName}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">购方地址：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.buyerAddress}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">收款人：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.payee}}</div>
+            </div>
+          </div>
+          <div nz-row class="m-b-sm">
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">销方名称：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.sellerName}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">销方纳税人识别号：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.sellerTaxCode}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">销方电话：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.sellerTel}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">复核人：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.reviewer}}</div>
+            </div>
+          </div>
+          <div nz-row class="m-b-sm">
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">销方银行账号：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.sellerBankAccount}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">销方银行名称：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.sellerBankName}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">销方地址：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.sellerAddress}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">开票人：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.creator}}</div>
+            </div>
+          </div>
+          <div nz-row class="m-b-sm">
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">流水号：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">{{invoiceData.invoiceId}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">价税合计（含税）：</div>
+              <div nz-col nzSpan="14" class="text-ellisped">¥ {{invoiceData.totalMoney}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">发票备注：</div>
+              <div nz-col nzSpan="13" class="text-ellisped">{{invoiceData.remark}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+              <div nz-col nzSpan="10" class="t-r">发票类型：</div>
+              <div nz-col nzSpan="13" class="text-ellisped">{{invoiceData.invoiceTypeChina}}</div>
+            </div>
+          </div>
+        </nz-card>
+        <!-- <ng-template #more>
+            <a>查看所属单据</a>
+        </ng-template> -->
+        <nz-card nzTitle="发票明细" [nzBordered]="false">
+          <app-table-form
+            formId="form_inv_print"
+            gridId="grid2"
+            [isCheckBox]="false"
+            [dataSet]="invoiceData.details"
+            [colSet]="false"
+            [nzShowPagination]="false"
+            selfTableHeight="100px"
+            [showCount]="false"
+          ></app-table-form>
+        </nz-card>
+      </div>
+    </nz-tab>
+  </nz-tabset>
+
+</ng-template>
+<ng-template #tplFooter2>
+
+</ng-template>
+
+
+<div style="display: none">
+  <div id="print">
+    <div class = 'pageSize' *ngFor="let print of prints">
+        <span class="invNo">{{print.invNo}}</span>
+        <span class ='invNum'>{{print.invNum}}</span>
+        <span class="gmtCreate">{{print.gmtCreate}}</span>
+        <span class="buyerName">{{print.buyerName}}</span>
+        <span class="taxCtrlNo">{{print.taxCtrlNo}}</span>
+        <span class="buyerTaxCode">{{print.buyerTaxCode}}</span>
+        <span class="buyerAddress">{{print.buyerAddress}}  {{print.buyerTel}}</span>
+        <span class="buyerBankName">{{print.buyerBankName}}{{print.buyerrBankAccount}}</span>
+      <table class="itemTable">
+        <thead>
+        <tr>
+          <th style="width: 53mm;"></th>
+          <th  style="width: 26mm;"></th>
+          <th  style="width: 12.5mm;"></th>
+          <th  style="width: 21mm;"></th>
+          <th  style="width: 22mm;"></th>
+          <th style="width: 30.5mm;"></th>
+          <th style="width: 10.5mm;"></th>
+          <th  style="width: 30mm;"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let i of print.details">
+          <td  style="width: 53mm;">{{i.itemTitle}}</td>
+          <td  style="width: 26mm;">{{i.spec}}</td>
+          <td style="width: 12mm;">{{i.unit}}</td>
+          <td  style="width: 21mm;" class="align-right">{{i.quantityStr}}</td>
+          <td style="width: 22mm;" class="align-right">{{i.priceStr}}</td>
+          <td style="width: 30.5mm;" class="align-right">{{i.moneyStr}}</td>
+          <td style="width: 10.5mm;" class="align-right">{{i.taxRatePercent}}</td>
+          <td style="width: 30mm;" class="align-right">{{i.taxMoneyStr}}</td>
+        </tr>
+        <tr>
+          <td  style="width: 53mm;"></td>
+          <td  style="width: 26mm;"></td>
+          <td  style="width: 12mm;"></td>
+          <td  style="width: 21mm;"></td>
+          <td  style="width: 20mm;"></td>
+          <td  style="width: 30.5mm;" class="align-right bottom-down"><span>¥{{print.moneyStr}}</span></td>
+          <td  style="width: 10.5mm;"></td>
+          <td  style="width: 30mm;" class="align-right bottom-down"><span>¥{{print.taxMoney}}</span></td>
+        </tr>
+        </tbody>
+      </table>
+        <span class="totalMoneyChina">⊗{{print.totalMoneyChina}}</span>
+        <span class="totalMoney">¥{{print.totalMoney}}</span>
+        <span class="sellerName">{{print.sellerName}}</span>
+        <span class="remark">{{print.remark}}</span>
+        <span class="sellerTaxCode">{{print.sellerTaxCode}}</span>
+        <span class="sellerAddress">{{print.sellerAddress}}  {{print.sellerTel}}</span>
+        <span class="sellerBankName">{{print.sellerBankName}}{{print.sellerBankAccount}}</span>
+        <span class="payee">{{print.payee}}</span>
+        <span class="reviewer">{{print.reviewer}}</span>
+        <span class="creator">{{print.creator}}</span>
+    </div>
+  </div>
+</div>
+
+
+<e-ngx-print (printComplete)="printComplete()" [showBtn]="false" #print1 [printStyle]="printStyle"   ></e-ngx-print>
+
+<app-modal-confirm [deleteVisible]="printVisible" [modalTitle]="'提示信息'" [modalCon]="'是否立即打印？'"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>

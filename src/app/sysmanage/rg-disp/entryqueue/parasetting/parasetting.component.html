@@ -1,0 +1,169 @@
+<!-- <form  #setForm="ngForm" style="height: 1000px;">
+      <div style='margin-top:30px'>
+        <div><span style='margin-left:100px;font-size:15px;color:#ffbf00'>调度参数</span></div>
+        <div><span style='margin-left:100px;font-size:15px;color:#ffbf00;margin-top:300px;position:absolute;'>金港物流参数</span></div>
+      </div>
+
+  <div class="dd">
+    <div class='div1'>
+    <div>
+        <span class="f2sMaxTime required">进厂最大时长(分):</span>
+        <nz-input-number  class="fliMaxtime" required id="name" name="name" #name="ngModel" nz-input  nzSize="'small'"  [nzStep]='10' [nzMin]="0" onkeyup="this.value=this.value.replace(/\D/g,'')"  type=number [(ngModel)]="entryQueueMaxTime" [ngModelOptions]="{standalone: true}"></nz-input-number>
+    </div>
+    <div >
+        <span class="f3sRemindNum required">提醒次数:</span>
+        <nz-input-number class="f4iRemindNum" nz-input  nzSize="'small'" type=number [nzMin]="0" onkeyup="this.value=this.value.replace(/\D/g,'')" [(ngModel)]="remindNum" [ngModelOptions]="{standalone: true}"></nz-input-number>
+    </div>
+    <div >
+        <span class="f5sRemindInterval required">提醒间隔(分):</span>
+        <nz-input-number class="f6iRemindInterval" nz-input  nzSize="'small'" [nzMin]="0" onkeyup="this.value=this.value.replace(/\D/g,'')"  type=number [(ngModel)]="remindTime"[ngModelOptions]="{standalone: true}"></nz-input-number>
+    </div>
+    </div>
+    <div class='div2'>
+        <div>
+            <span class="f7sSelectedValue required">超时处理方式:</span>
+            <nz-select class="f8select" nzShowSearch nzAllowClear [(ngModel)]="dealType" [ngModelOptions]="{standalone: true}">
+                <nz-option *ngFor="let i of themeArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+            </nz-select>
+        </div>
+        <div *ngIf="dealType=='TO02'">
+            <span class="f9sPostponeTime required" >顺延时长(分):</span>
+            <nz-input-number class="f10IpostponeTime" nz-input  nzSize="'small'" [nzMin]="0" type=number onkeyup="this.value=this.value.replace(/\D/g,'')" [(ngModel)]="postTime" [ngModelOptions]="{standalone: true}"></nz-input-number>
+        </div>
+        <div *ngIf="dealType=='TO02'">
+            <span class="f11sPostponeNum required" >顺延次数:</span>
+            <nz-input-number class="f12IpostponeNum" nz-input  nzSize="'small'" [nzMin]="0" type=number  onkeyup="this.value=this.value.replace(/\D/g,'')" [(ngModel)]="postNum" [ngModelOptions]="{standalone: true}"></nz-input-number>
+        </div>
+      </div>
+      <div class="div3">
+          <span class="f15tel required">系统支持联系电话:</span>
+          <textarea class="f13Telephone" rows="4" nz-input [(ngModel)]="sysSuppTel" [ngModelOptions]="{standalone: true}"></textarea>
+          <span class="f15tel required">预计排队时间(分):</span>
+          <nz-input-number style="margin-left: 66px;"class="f10IpostponeTime" nz-input  nzSize="'small'" [nzMin]="0" type=number onkeyup="this.value=this.value.replace(/\D/g,'')" [(ngModel)]="forecastTime" [ngModelOptions]="{standalone: true}"></nz-input-number>
+      </div>
+      <div class="div4">
+        <button class="f14but" nz-button nzType="primary" (click)="save()" [nzLoading]='isLoading'>保存</button>
+      </div>
+
+
+      <div class='div5'>
+          <div>
+              <span class="f2sMaxTime required">进厂最大时长(分):</span>
+              <nz-input-number  class="fliMaxtime" required id="name" name="name" #name="ngModel" nz-input  nzSize="'small'"  [nzStep]='10' [nzMin]="0" onkeyup="this.value=this.value.replace(/\D/g,'')"  type=number [(ngModel)]="entryQueueMaxTime" [ngModelOptions]="{standalone: true}"></nz-input-number>
+          </div>
+          <div >
+              <span class="f3sRemindNum required">提醒次数:</span>
+              <nz-input-number class="f4iRemindNum" nz-input  nzSize="'small'" type=number [nzMin]="0" onkeyup="this.value=this.value.replace(/\D/g,'')" [(ngModel)]="remindNum" [ngModelOptions]="{standalone: true}"></nz-input-number>
+          </div>
+          <div >
+              <span class="f5sRemindInterval required">提醒间隔(分):</span>
+              <nz-input-number class="f6iRemindInterval" nz-input  nzSize="'small'" [nzMin]="0" onkeyup="this.value=this.value.replace(/\D/g,'')"  type=number [(ngModel)]="remindTime"[ngModelOptions]="{standalone: true}"></nz-input-number>
+          </div>
+          </div>
+          <div style="position:absolute;margin-top:310px;margin-left:50px"><button style="height:15px;margin-right: 10px"></button>重新排队</div>
+          <div class="div4">
+              <button class="f14but" nz-button nzType="primary" (click)="save()" [nzLoading]='isLoading'>保存</button>
+            </div>
+
+    </div>
+
+
+</form> -->
+<form nz-form [formGroup]="validateForm" style="padding-top: 2%">
+  <p style="font-size: 20px;color:#ffbf00">调度参数</p><br/>
+  <div nz-row [nzGutter]="1" [nzType]="'flex'">
+      <nz-form-item style="margin-left: 130px">
+        <div nz-col [nzSpan]="8">
+        <nz-form-label [nzSpan]="13">进厂最大时长(分)</nz-form-label>
+        <nz-form-control [nzSpan]="9">
+          <app-input-number formControlName="noticeMinute" [intType]="true" [format]="'number'"></app-input-number>
+        </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="8" >
+        <nz-form-label [nzSpan]="13">提醒次数</nz-form-label>
+        <nz-form-control [nzSpan]="9">
+          <app-input-number formControlName="noticeCount" [intType]="true" [format]="'number'"></app-input-number>
+        </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="8">
+        <nz-form-label [nzSpan]="13">提醒间隔(分)</nz-form-label>
+        <nz-form-control [nzSpan]="9">
+          <app-input-number formControlName="noticeInterval" [intType]="true" [format]="'number'"></app-input-number>
+        </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="8">
+        <nz-form-label [nzSpan]="13">超时处理方式</nz-form-label>
+        <nz-form-control [nzSpan]="9">
+          <nz-select formControlName="dealType" (ngModelChange)="modelChange($event)">
+            <nz-option *ngFor="let i  of dealTypeArr" [nzValue]="i.value" [nzLabel]="i.name"></nz-option>
+          </nz-select>
+        </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="8" *ngIf="dealType=='disp_dealType_addMinutes'">
+        <nz-form-label [nzSpan]="13">顺延时长(分)</nz-form-label>
+        <nz-form-control [nzSpan]="9">
+          <app-input-number formControlName="dealValue" [intType]="true" [format]="'number'"></app-input-number>
+        </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="8" *ngIf="dealType=='disp_dealType_addMinutes'">
+        <nz-form-label [nzSpan]="13">顺延次数</nz-form-label>
+        <nz-form-control [nzSpan]="9">
+          <app-input-number formControlName="dealCount" [intType]="true" [format]="'number'"></app-input-number>
+        </nz-form-control>
+        </div>
+      </nz-form-item>
+
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="4">系统支持联系电话</nz-form-label>
+        <textarea nz-input formControlName="supportContact" style="width: 500px;height: 200px "></textarea>
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+<div nz-row >
+  <div nz-col [nzSpan]="24" style="text-align: right;">
+    <button nz-button nzType="primary" (click)="importConfirm3()" [nzLoading]="implistLoading" style="text-align: right;"
+            [disabled]="isChange">保存
+    </button>
+  </div>
+</div>
+
+
+<form nz-form [formGroup]="validateForm1" style="padding-top: 2%">
+  <p style="font-size: 20px;color:#ffbf00">停车场超时参数</p>
+  <div nz-row [nzGutter]="1" [nzType]="'flex'">
+      <nz-form-item style="margin-left: 130px">
+        <div nz-col [nzSpan]="8" >
+        <nz-form-label [nzSpan]="13">进场最大时长(分)</nz-form-label>
+        <nz-form-control [nzSpan]="9">
+          <app-input-number formControlName="confirmMinute" [intType]="true" [format]="'number'"></app-input-number>
+        </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="8" >
+        <nz-form-label [nzSpan]="13">超时提醒次数</nz-form-label>
+        <nz-form-control [nzSpan]="9">
+          <app-input-number formControlName="confirmTimeoutCount" [intType]="true" [format]="'number'"></app-input-number>
+        </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="8">
+        <nz-form-label [nzSpan]="13">提醒间隔(分)</nz-form-label>
+        <nz-form-control [nzSpan]="9">
+          <app-input-number formControlName="confirmTimeoutInterval" [intType]="true" [format]="'number'"></app-input-number>
+        </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="13" >
+        <nz-form-control [nzSpan]="9">
+          <label nz-checkbox formControlName="unconfirmedRequeue">取消排队</label>
+        </nz-form-control>
+        </div>
+      </nz-form-item>
+  </div>
+</form>
+<div nz-row >
+  <div nz-col [nzSpan]="24" style="text-align: right;">
+<button nz-button nzType="primary" (click)="importConfirm1()" [nzLoading]="implistLoading1" style="text-align: right;"
+        [disabled]="isChang1">保存
+</button>
+  </div>
+</div>

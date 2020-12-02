@@ -1,0 +1,13 @@
+<!--车辆不足停时-->
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+
+<div>
+  <app-table-form
+    [gridId]="'grid1'" [dataSet]="dataSet1"
+    [extraTableHeight]="25"
+    [pageSize]="pageSize1" [totalPage]="totalPages1"
+    (updateDataResult)="selectData($event)"
+    [isMutli]="true" [listLoading]="listLoading1"
+    [isCheckBox]="true" [showCount]="true"></app-table-form>
+</div>

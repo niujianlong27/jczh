@@ -1,0 +1,55 @@
+
+.dashboard-box ::ng-deep .ant-card-head{
+    background:#f9f9f9;
+}
+.dashboard-top ::ng-deep .ant-card-body {
+    height: 192px;
+}
+.dashboard-top ::ng-deep .ant-card-body .ant-row{
+   margin-top:20px;
+}
+.left-avatar img{
+    display: block;
+    width:82px;
+    height:85px;
+}
+.person-info p{
+    padding-left:50px;
+}
+.mess-box img{
+    display: block;
+    width:65px;
+    height:67px;
+    margin:0 auto;
+}
+.mess-box dd{
+    font-size:14px;
+    color:#666;
+    text-align: center;
+    padding-top:15px;
+    font-weight: bold;
+}
+.entrance-box img {
+    display: block;
+    width:65px;
+    height:67px;
+    /*background:#1584ca;*/
+    border-radius: 10px;
+    padding:10px;
+    margin:0 auto;
+}
+.entrance-box h3{
+    font-size:24px;
+    color:#666;
+    font-weight: bold;
+}
+.entrance-box p{
+    font-size:12px;
+    color:#666;
+}
+.entrance-box ::ng-deep .ant-card-body{
+    padding:56px 24px;
+}
+.entrance-box ::ng-deep .ant-row:hover p,.mess-box dl:hover dd{
+    text-decoration: underline;
+}

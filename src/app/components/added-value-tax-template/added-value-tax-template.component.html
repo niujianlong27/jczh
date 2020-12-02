@@ -1,0 +1,177 @@
+<div class="xforce-invoice-card xforce-invoice-common ">
+  <div class="card-header label" kskey="发票类型">增值税专用发票</div>
+  <div>
+    <div class="status-tips"></div>
+    <div class="blockchain"></div>
+  </div>
+  <div class="base-info" style="margin-left: 800px">
+    <div ><span class="label__inner"
+        kskey="发票代码">{{_data.invNo}}</span></div>
+    <div ><span class="label__inner"
+        kskey="发票号码">{{_data.invNum}}</span></div>
+    <div style="margin-left: -80px"><label class="label label__semi">开票日期</label><span class="label__inner"
+        kskey="开票日期">{{_data.gmtCreate}}</span></div>
+  </div>
+  <table border="0">
+    <tbody>
+      <tr>
+        <td class="plr5" style="width: 4.16667%;"><span class="label__vertical label">购买方</span></td>
+        <td class="plr5" style="width: 50.2%;">
+          <p><label class="xforce-col-5 padding-0 label label__semi">名称</label><span class="xforce-col-19 label__inner"
+              kskey="购买方名称">{{_data.buyerName}}</span></p>
+          <p><label class="xforce-col-5 padding-0 label label__semi">纳税人识别号</label><span
+              class="xforce-col-19 label__inner" kskey="购买方纳税人识别号">{{_data.buyerTaxCode}}</span></p>
+          <p><label class="xforce-col-5 padding-0 label label__semi">地址、电话</label><span
+              class="xforce-col-19 label__inner" kskey="购买方地址、电话">{{_data.buyerAddress}}  {{_data.buyerTel}}</span></p>
+          <p><label class="xforce-col-5 padding-0 label label__semi">开户行及账号</label><span
+              class="xforce-col-19 label__inner" kskey="购买方开户行及账号">{{_data.buyerBankName}} {{_data.buyerBankAccount}}</span></p>
+        </td>
+        <td class="plr5" style="width: 4.16667%;"><span class="label__vertical label">密码区</span></td>
+        <td class="plr5" kskey="密码区">{{_data.texCtrlNo}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="height-240 previewInvoiceDetailsTable" border="0">
+    <thead>
+      <tr>
+        <th class="label plr5 text-center" style="width: 20.8333%;">货物或应税劳务、服务名称</th>
+        <th class="label plr5 text-center" style="width: 12.5%;">规格型号</th>
+        <th class="label plr5 text-center" style="width: 8.33333%;">单位</th>
+        <th class="label plr5 text-center" style="width: 12.5%;">数量</th>
+        <th class="label plr5 text-center" style="width: 12.5%;">单价</th>
+        <th class="label plr5 text-center" style="width: 12.5%;">金额</th>
+        <th class="label plr5 text-center" style="width: 8.33333%;">税率</th>
+        <th class="label plr5 text-center" style="width: 12.5%;">税额</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of _data.details">
+        <td class="plr5 align-left word-break" [title]="item.itemTitle">{{item.itemTitle}}</td>
+        <td class="plr5 align-right">{{item.spec}}</td>
+        <td class="plr5 align-right">{{item.unit}}</td>
+        <td class="plr5 align-right">{{item.quantityStr}}</td>
+        <td class="plr5 align-right">{{item.priceStr}}</td>
+        <td class="plr5 align-right">{{item.moneyStr}}</td>
+        <td class="plr5 align-right">{{item.taxRatePercent}}</td>
+        <td class="plr5 align-right">{{item.taxMoneyStr}}</td>
+      </tr>
+      <tr>
+        <td class="plr5 align-left word-break"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+      </tr>
+      <tr>
+        <td class="plr5 align-left word-break"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+      </tr>
+      <tr>
+        <td class="plr5 align-left word-break"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+      </tr>
+      <tr>
+        <td class="plr5 align-left word-break"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+      </tr>
+      <tr>
+        <td class="plr5 align-left word-break"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+      </tr>
+      <tr>
+        <td class="plr5 align-left word-break"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+        <td class="plr5 align-right"></td>
+      </tr>
+      <tr class="height-30" valign="bottom">
+        <td class="label text-center" style="width: 20.8333%;">合计</td>
+        <td class="plr5" style="width: 12.5%;"></td>
+        <td class="plr5" style="width: 8.33333%;"></td>
+        <td class="plr5" style="width: 12.5%;"></td>
+        <td class="plr5" style="width: 12.5%;"></td>
+        <td class="label  ellipsis align-right" style="width: 12.5%;"><span>¥ {{_data.moneyStr}}</span></td>
+        <td class="plr5" style="width: 8.33333%;"></td>
+        <td class="label ellipsis  align-right" style="width: 12.5%;"><span>¥ {{_data.taxMoney}}</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <table>
+    <tbody>
+      <tr>
+        <td class="ptb5">
+          <div class="xforce-col-4 label align-right">价税合计(大写)</div>
+          <div class="xforce-col-8" kskey="价税合计(大写)">⊗ {{_data.totalMoneyChina}}</div>
+          <div class="xforce-col-4 label align-right">(小写)</div>
+          <div class="xforce-col-8" kskey="(小写)">¥ {{_data.totalMoney}}</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table border="0">
+    <tbody>
+      <tr>
+        <td class="plr5" style="width: 4.16667%;"><span class="label__vertical label">销售方</span></td>
+        <td class="plr5" style="width: 50.2%;">
+          <p><label class="xforce-col-5 padding-0 label label__semi">名称</label><span class="xforce-col-19 label__inner"
+              kskey="销售方名称">{{_data.sellerName}}</span></p>
+          <p><label class="xforce-col-5 padding-0 label label__semi">纳税人识别号</label><span
+              class="xforce-col-19 label__inner" kskey="销售方纳税人识别号">{{_data.sellerTaxCode}}</span></p>
+          <p><label class="xforce-col-5 padding-0 label label__semi">地址、电话</label><span
+              class="xforce-col-19 label__inner" kskey="销售方地址、电话">{{_data.sellerAddress}} {{_data.sellerTel}}</span></p>
+          <p><label class="xforce-col-5 padding-0 label label__semi">开户行及账号</label><span
+              class="xforce-col-19 label__inner" kskey="销售方开户行及账号">{{_data.sellerBankName}} {{_data.sellerBankAccount}}</span></p>
+        </td>
+        <td class="plr5" style="width: 4.16667%;"><span class="label__vertical label">备注</span></td>
+        <td class="plr5 word-wrap" style="height: 110px; position: relative;">
+          <div kskey="备注">{{_data.remark}}</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table border="0">
+    <tbody>
+      <tr>
+        <td colspan="4">
+          <div class="xforce-col-2 label align-right">收款人:</div>
+          <div class="xforce-col-6" kskey="收款人">{{_data.payee}}</div>
+          <div class="xforce-col-2 label align-right">复核人:</div>
+          <div class="xforce-col-6" kskey="复核人">{{_data.reviewer}}</div>
+          <div class="xforce-col-2 label align-right">开票人:</div>
+          <div class="xforce-col-6" kskey="开票人">{{_data.creator}}</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

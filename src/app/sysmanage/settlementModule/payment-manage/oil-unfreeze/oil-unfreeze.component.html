@@ -1,0 +1,47 @@
+<!-- <common-page (search)='listSearch($event)' [isMutli]="isMutli" [gridId]='gridId' [tabArr]='tabArr' [(tabIndex)]='tabIndex' [updateHeader]=true
+        (tabResultFun)='tabChange($event)' [dataSet]='dataSet' [totalPage]='totalPages'
+        (btnClick)='btnClick($event)' [listLoading]='listLoading'></common-page> -->
+<app-searchform (search)="listSearch($event)" [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)' [btnDisable]="{'afresh':tabIndex == 0,'relieve':tabIndex == 1}"></tpl-buttons>
+
+<nz-tabset [nzSelectedIndex]="tabIndex">
+    <nz-tab nzTitle="油款已冻结" (nzClick)="tabChange({index:0})">
+        <app-table-form [gridId]="'grid1'" [listLoading]='listLoading' [dataSet]="dataSet" [totalPage]="totalPage1"
+            (updateDataResult)="selectData($event)"></app-table-form>
+    </nz-tab>
+    <nz-tab nzTitle="油款未冻结" (nzClick)="tabChange({index:1})">
+        <app-table-form [gridId]="'grid2'" [listLoading]='listLoading' [dataSet]="dataSet" [totalPage]="totalPage2"
+            (updateDataResult)="selectData($event)"></app-table-form>
+    </nz-tab>
+    
+</nz-tabset>
+
+
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <form nz-form [formGroup]="modalValidateForm">
+        <nz-form-item *ngFor="let m of modalFormData">
+            <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+                {{m.name}}
+            </nz-form-label>
+            <nz-form-control [nzSpan]="12">
+                <nz-date-picker *ngIf="m.type == 'time'" [formControlName]="m.eName"></nz-date-picker>
+                <!-- <nz-select style="width: 100px" nzAllowClear nzPlaceHolder="请选择" formControlName="{{m.eName}}" *ngIf="m.type == 'select'">
+                    <nz-option *ngFor="let o of m.selectArr" [nzValue]="o.value" [nzLabel]="o.name"></nz-option>
+                </nz-select> -->
+                <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" min="0" *ngIf="m.type == 'number'">
+                <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'"
+                    [readOnly]="m.readOnly">
+                <!-- <input-modal *ngIf="m.type == 'inputModal'" (selectedData)="selectedData($event)" [(inp11utModalModel)]="commissionClientName"
+                    [findset]="{formId:'company_pop',name:'收款单位'}" (ngModelChange)='clientChange($event)'></input-modal> -->
+                    <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+                        <div *ngIf="modalValidateForm.get(m.eName).errors['pattern'];else erroInf">
+                            {{ m.validators.patternErr}}
+                        </div>
+                        <ng-template #erroInf>
+                            {{ m.validateCon}}
+                        </ng-template>
+                    </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-modal>

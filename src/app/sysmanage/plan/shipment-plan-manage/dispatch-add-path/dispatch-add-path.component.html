@@ -1,0 +1,24 @@
+<app-searchform [formId]="'form_dispatch_path'" (search)="listSearch($event)"></app-searchform>
+<tpl-buttons [formId]="'form_dispatch_path'" (btnClick)='btnClick($event)'></tpl-buttons>
+<div class="dispatch">
+  <p>配载信息</p>
+  <app-table-form [formId]="formId" [pageFun]='false'
+                  (pageIndexEmit)='getPageIndex1($event)'
+                  (pageSizeEmit)='getPageSize1($event)'
+                  gridId="grid1" [extraTableHeight]="35"
+                  (updateDataResult)="select($event)"
+                  [dataSet]="dataSet1"
+                  [pageSize]="pageSize1"
+                  [nzShowPagination]="false"
+                  [showCount]="true"
+                  [totalPage]="totalPages1"
+                  [isMutli]="true" [paginationRef]="totalStats" [listLoading]="listLoading1"></app-table-form>
+  <ng-template #totalStats>
+    &nbsp;<span> 已选重量 {{totalWeight| number:'1.3-3'  }} 吨</span>
+    &nbsp;<span> 已选件数 {{totalPackageNum | number:'1.2-2'}} 件</span>
+    <span class="total">  共有 {{totalPages1}} 条</span>
+
+  </ng-template>
+
+</div>
+

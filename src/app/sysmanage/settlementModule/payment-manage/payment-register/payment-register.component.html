@@ -1,0 +1,76 @@
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+
+<form nz-form [formGroup]="modalValidateForm" class="clearfix registerForm">
+  <nz-form-item *ngFor="let m of modalFormData" [hidden]='m.hidden' style="width: 20%;float: left;">
+    <nz-form-label [nzSpan]="11" style="text-align: right;font-size: 12px;" [nzRequired]="m.require">
+      {{m.name}}
+    </nz-form-label>
+    <nz-form-control [nzSpan]="13">
+      <nz-range-picker *ngIf="m.type == 'range'" [formControlName]="m.eName" [nzStyle]="{'width': '100%'}"
+                       style="width:100%" [title]="modalValidateForm.get(m.eName)?.value || ''"></nz-range-picker>
+      <nz-date-picker *ngIf="m.type == 'time'" [formControlName]="m.eName" [nzStyle]="{'width': '100%'}"
+                      style="width:100%" [title]="modalValidateForm.get(m.eName)?.value || ''"></nz-date-picker>
+      <nz-select style="width: 100%" nzPlaceHolder="请选择" formControlName="{{m.eName}}"
+                 [title]="modalValidateForm.get(m.eName)?.value || ''" *ngIf="m.type == 'select'"
+                 (ngModelChange)="feeTypeChange($event)">
+        <nz-option *ngFor="let o of m.selectArr" [nzValue]="o.valueId" [nzLabel]="o.name"></nz-option>
+      </nz-select>
+      <!--收款-->
+      <nz-select style="width: 100%" nzPlaceHolder="请选择" formControlName="{{m.eName}}"
+                 [title]="modalValidateForm.get(m.eName)?.value || ''" *ngIf="m.type == 'bankSelect'"
+                 (ngModelChange)="bankSelected($event)">
+        <nz-option *ngFor="let o of this.modelSelectedArr" [nzValue]="o.account" [nzLabel]="o.account"></nz-option>
+      </nz-select>
+      <!--付款-->
+      <nz-select style="width: 100%" nzPlaceHolder="请选择" formControlName="{{m.eName}}"
+                 [title]="modalValidateForm.get(m.eName)?.value || ''" *ngIf="m.type == 'carrbankSelect'"
+                 (ngModelChange)="carrierBankSelected($event)">
+        <nz-option *ngFor="let o of this.carrierSelectedArr" [nzValue]="o.bankAccount"
+                   [nzLabel]="o.bankAccount"></nz-option>
+      </nz-select>
+
+      <nz-input-number [nzMin]="0" [nzStep]="0.01" [nzPrecision]="2" formControlName="{{m.eName}}" nzSize="small"
+                       [title]="modalValidateForm.get(m.eName)?.value || ''" *ngIf="m.type == 'number'"
+                       [nzDisabled]="m.disabled"></nz-input-number>
+      <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'"
+             [title]="modalValidateForm.get(m.eName)?.value || ''" [attr.disabled]="m.disabled">
+
+      <!--收款-->
+      <input-modal *ngIf="m.type === 'inputModal'" searchParamFiled="companyId" [searchValue]="transCompanyId"
+                   [DISABLED]='receivefeeDisabled' [isMutli]=false [(inputModalModel)]="receivefeeClientName"
+                   [inputModalHiddenValue]='receivefeeClientNo' [findset]="findset"
+                   (inpEmit)='inpEmit($event)'></input-modal>
+
+      <!--付款-->
+      <input-modal *ngIf="m.type === 'inputModalCarrier'" [isMutli]=false [(inputModalModel)]="carrierCompanyName"
+                   [inputModalHiddenValue]='carrierCompanyId' [findset]="carrierset"
+                   (inpEmit)='inpEmitCarrier($event)'></input-modal>
+
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+
+<app-table-form [isCheckBox]=false [nzShowPagination]=false [gridId]='"grid2"' [isMutli]="isMutli" [dataSet]='dataSet'
+                [extraTableHeight]="172" [totalPage]='totalPages'></app-table-form>
+
+<ng-template #tplTitle>
+  <span>{{tplTitle}}</span>
+</ng-template>
+<ng-template #tplContent>
+  <common-page (search)='modal_listSearch($event)' [isMutli]='modal_isMutli' [dataSet]='modal_dataSet' [gridId]='gridId'
+               [formId]="formId" [totalPage]='modal_totalPages' [listLoading]="modal_loading"
+               (btnClick)='modal_btnClick($event)' (updateDataResult)='modal_check($event)'
+               [triggerSearch]="true"></common-page>
+
+</ng-template>
+<ng-template #tplFooter>
+  <button nz-button nzType="primary" (click)="modal_success()">确定</button>
+  <button nz-button nzType="default" (click)="modal_return()">取消</button>
+</ng-template>
+
+<!-- 提示弹窗 -->
+<app-modal-confirm [deleteVisible]='showTipModal' [modalTitle]='"提示"' [modalCon]='modalCon'
+                   (modalConfirmResult)='tipModalResult($event)'></app-modal-confirm>
+
+

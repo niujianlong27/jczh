@@ -1,0 +1,7 @@
+<app-searchform formId="form_regist_log" (search)="listSearch($event)" [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+<app-table-form formId="form_regist_log"
+                [dataSet]="dataSet" (updateDataResult)="selectDate($event)"
+                gridId="grid1" [isCheckBox]="true"
+                [totalPage]="totalPage" [listLoading]="loading"
+                [pageSize]="pageSize1" [isMutli]="true"></app-table-form>

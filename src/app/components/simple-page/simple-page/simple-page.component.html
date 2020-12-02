@@ -1,0 +1,3 @@
+<app-inqu-block [formId]="formId" (queryClick)="queryClicked($event)"></app-inqu-block>
+<app-button-block [formId]="formId" (buttonClick)="buttonClicked($event)"></app-button-block>
+<app-grid-block [formId]="formId" [data]="data" [total]="total" [loading]="queryLoading" (paginationChange)="paginationChange($event)"></app-grid-block>

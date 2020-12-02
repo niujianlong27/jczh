@@ -1,0 +1,93 @@
+<app-searchform (search)="listSearch($event)" (searchDataReturn)="searchDataReturn($event)"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+
+<div class="clearfix" style="overflow: hidden;position: relative;">
+
+  <div class="fl trans" [ngStyle]="{width:leftWidth}">
+    <p>车次信息</p>
+    <app-table-form [pageFun]='true' [isCheckBox]="true" (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)'
+                    [gridId]="'grid1'" [dataSet]="dataSet1"
+                    [pageSize]="pageSize1" [totalPage]="totalPages1"
+                    [isMutli]="true" [listLoading]="listLoading1"
+                    [trSelectedShow]="true" (updateDataResult)="selectData($event)"></app-table-form>
+  </div>
+
+  <div class="tableLine trans" gridLine [ngStyle]="{left:lineWidth}" (gridLineResult)="gridLineFun($event)">
+    <div class="tableLine-in">
+        <span class="grid-line-btn" (click)="rightShowFun()">
+            <i nz-icon type="caret-right" theme="outline" [hidden]="rightShow"></i>
+            <i nz-icon type="caret-left" theme="outline" [hidden]="!rightShow"></i>
+        </span>
+    </div>
+  </div>
+  <div class="fr trans" [ngStyle]="{width:rightWidth,display:display}">
+    <p input-blur>车次货物清单</p>
+    <app-table-form [pageFun]='true' (pageIndexEmit)='getPageIndex2($event)' (pageSizeEmit)='getPageSize2($event)'
+                    [gridId]="'grid2'" [dataSet]="dataSet2" [pageSize]="pageSize2"
+                    [totalPage]="totalPages2" [listLoading]="listLoading2" [isMutli]="true" [isCheckBox]="false"
+                    [showCount]="false" [nzShowPagination] = "false" ></app-table-form>
+  </div>
+
+  <app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                     (modalConfirmResult)="modalConfirmResult($event)">
+  </app-modal-confirm>
+
+
+</div>
+
+
+<ng-template #tplTitle>
+  <span>分货管理 > 确认</span>
+</ng-template>
+<ng-template #tplContent>
+  <form nz-form [formGroup]="modalValidateForm">
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="24" *ngFor="let m of modalFormData" style="margin-left:10px;margin-bottom: 10px ">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+            {{m.name}}
+          </nz-form-label>
+          <nz-form-control style="margin-left: -10px" [nzSpan]="18">
+            <nz-date-picker class="rangePicker" *ngIf="m.type == 'time'" [formControlName]="m.eName"
+                            [nzShowTime]="'true'"></nz-date-picker>
+            <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'"
+                   [readOnly]="m.readOnly" placeholder="{{m.placeholder}}">
+            <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+              <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+                {{m.validateCon}}
+              </ng-container>
+              <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+                {{m.validators.patternErr}}
+              </ng-container>
+
+            </nz-form-explain>
+          </nz-form-control>
+
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+
+</ng-template>
+
+<ng-template #tplFooter>
+  <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  <button nz-button nzType="primary" (click)="handleOk()">确定
+  </button>
+</ng-template>
+
+
+<ng-template #tplTitle2>
+  <span>计划作废 > 确认</span>
+</ng-template>
+<ng-template #tplContent2>
+
+  <p style="text-align: center ">是否确认作废当前计划？</p>
+
+</ng-template>
+
+<ng-template #tplFooter2>
+  <button nz-button nzType="default" (click)="handleCancel2()">取消</button>
+  <button nz-button nzType="primary" (click)="handleOk2()">确定
+  </button>
+</ng-template>

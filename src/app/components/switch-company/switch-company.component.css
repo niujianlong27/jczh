@@ -1,0 +1,24 @@
+.list-company{
+    padding:5px 0;
+    cursor: pointer;
+}
+.list-company:hover{
+    background-color:#edf7fb;
+}
+.f5{
+    background-color:#edf7fb;
+}
+.switch-company-search{
+    margin-left:15px;
+    cursor: pointer;
+}
+.switch-company-search:hover{
+   color: #1f6387;
+}
+.switch-company-content{
+    max-height: 350px;
+    overflow: hidden auto;
+    width: 100%;
+    position: relative;
+    padding: 0 15px;
+}

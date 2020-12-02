@@ -1,0 +1,9 @@
+.button{
+  display:inline-block;
+  margin-right: 10px;
+  width:80px;
+  padding: 0 10px
+}
+.ant-form-item {
+  margin-bottom: 6px;
+}

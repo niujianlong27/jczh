@@ -1,0 +1,5 @@
+/*标签栏重置*/
+.table-list ::ng-deep .ant-tabs-bar {
+    border-bottom-width:0;
+    margin:1px;
+}

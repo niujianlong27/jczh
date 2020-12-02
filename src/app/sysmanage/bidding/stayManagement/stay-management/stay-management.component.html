@@ -1,0 +1,52 @@
+<app-searchform (search)='listSearch($event)' [triggerSearch]="false">
+</app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)">
+</tpl-buttons>
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+</app-grid-resize>
+<ng-template #one>
+  <app-table-form gridId="grid1" [selfTableHeight]="gridOneHeight" [dataSet]="dataSet" [pageSize]='pageSize'
+                  [totalPage]='totalPages' [isMutli]=true (updateDataResult)="updateDataResult($event)">
+  </app-table-form>
+</ng-template>
+<ng-template #two>
+  <app-table-form gridId="grid2" [pageFun]="true" [selfTableHeight]="gridTwoHeight" [dataSet]="dataChildSet"
+                  [pageSize]='pageChildSize' [totalPage]='totalChildPages' [isMutli]=true
+                  (updateDataResult)="updateDataChildResult($event)">
+  </app-table-form>
+</ng-template>
+
+<ng-template #directionalContent>
+  <p style="font-size:15px"><i nz-icon type="form" theme="outline"></i>选择业务范围</p>
+  <nz-radio-group [(ngModel)]="directionalRadioValue" (ngModelChange)="directionalRadioChange($event)">
+    <label nz-radio nzValue="toFleet">调度到车队</label>
+    <label nz-radio nzValue="toDriver">调度到车辆</label>
+  </nz-radio-group>
+
+  <ng-container style="padding-top: 10px" [ngSwitch]="directionalRadioValue">
+    <ng-container *ngSwitchCase="'toFleet'" [ngTemplateOutlet]="fleet">
+    </ng-container>
+    <ng-container *ngSwitchCase="'toDriver'" [ngTemplateOutlet]="driver">
+    </ng-container>
+
+
+  </ng-container>
+
+  <p style="font-size:15px"><i nz-icon type="form" theme="outline"></i>备注</p>
+  <input nz-input [(ngModel)]="remark">
+
+</ng-template>
+
+<ng-template #fleet>
+  <app-table-form gridId="grid2" selfTableHeight="300px" [isMutli]='true' [dataSet]="dataFleetSet"
+                  (updateDataResult)="updataDataFleetResult($event)"
+                  (modelChange)="modelFleetChange($event)">
+  </app-table-form>
+</ng-template>
+
+<ng-template #driver>
+  <app-table-form gridId="grid3" selfTableHeight="300px" [isMutli]='true' [dataSet]="dataDriverSet"
+                  (updateDataResult)="updataDataDriverResult($event)"
+                  (modelChange)="modelDriverChange($event)">
+  </app-table-form>
+</ng-template>

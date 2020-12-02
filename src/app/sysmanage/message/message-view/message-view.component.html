@@ -1,0 +1,88 @@
+<common-page
+  (search)="listSearch($event)"
+  [pageSize]="pageSize"
+  [totalPage]="totalPage"
+  [listLoading]="listLoading"
+  (btnClick)="readBtn($event)"
+  [dataSet]="dataSet"
+  [isMutli]="true"
+  [gridOperate]="{ show: true, title: '操作', template: g1 }"
+>
+</common-page>
+<!-- 数据弹出框 -->
+<nz-modal
+  [(nzVisible)]="modalFormVisible"
+  [nzTitle]="modalTitle"
+  (nzOnCancel)="handleCancel()"
+  [nzOkText]="null"
+  (nzAfterClose)="closeResult()"
+>
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="8">
+        消息标题
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-form-text>
+          {{ modalValidateForm.get('messageTitle').value }}
+        </nz-form-text>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="8">
+        发送人
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-form-text>
+          {{ modalValidateForm.get('sendIdName').value }}
+        </nz-form-text>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="8">
+        发送类型
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-form-text>
+          {{ modalValidateForm.get('sendTypeName').value }}
+        </nz-form-text>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="8">
+        发送时间
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-form-text>
+          {{ modalValidateForm.get('sendTime').value }}
+        </nz-form-text>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="8">
+        消息内容
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-form-text>
+          {{ modalValidateForm.get('messageBody').value }}
+          <a
+            *ngIf="showHref"
+            (click)="operateView(modalValidateForm.getRawValue())"
+          >
+            （查看详情）
+          </a>
+        </nz-form-text>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>
+
+<!-- 查看消息关联跳转页面 -->
+<ng-template #g1 let-data let-index="index">
+  <a (click)="viewDetail(data)" style="margin-right: 16px;">查看</a>
+  <a
+    [ngStyle]="{ color: !data.webFormid ? '#cccccc' : '' }"
+    (click)="operateView(data)"
+    >跳转</a
+  >
+</ng-template>

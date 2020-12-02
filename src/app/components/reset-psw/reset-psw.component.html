@@ -1,0 +1,53 @@
+<ng-template #passwordModalContent>
+
+  <form nz-form [formGroup]="passwordForm">
+    
+    <nz-form-item>
+      <nz-form-label [nzSm]="7"  nzFor="userName">用户名</nz-form-label>
+      <nz-form-control [nzSm]="12">
+        <input nz-input name="userName" formControlName="username">
+      </nz-form-control>
+    </nz-form-item>
+    
+    <nz-form-item>
+      <nz-form-label [nzSm]="7"  nzRequired>原始密码</nz-form-label>
+      <nz-form-control [nzSm]="12">
+        <input nz-input type="password" formControlName="oldPassword">
+        <nz-form-explain *ngIf="passwordForm.get('oldPassword').dirty&&passwordForm.get('oldPassword').hasError('required')">请输入旧密码！</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7" nzRequired>新密码</nz-form-label>
+      <div>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input type="password" formControlName="password" (ngModelChange)="validateConfirmPassword()">
+          <nz-form-explain *ngIf="passwordForm.get('password').dirty&&passwordForm.get('password').hasError('required')">请输入新密码！</nz-form-explain>
+        </nz-form-control>
+      </div>
+    </nz-form-item>
+    
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7" nzRequired>确认密码</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input nz-input type="password" formControlName="confirm">
+        <nz-form-explain *ngIf="passwordForm.get('confirm').dirty&&passwordForm.get('confirm').errors">
+          <ng-container *ngIf="passwordForm.get('confirm').hasError('required')">
+            请重新输入新密码!
+          </ng-container>
+          <ng-container *ngIf="passwordForm.get('confirm').hasError('confirm')">
+            两次密码不匹配，请重新输入！
+          </ng-container>
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    
+  </form>
+</ng-template>
+
+<ng-template #passwordModalFooter>
+  <div>
+    <button nz-button nzType="default" *ngIf="cancelBtnShow" (click)="modalCancel()">取消</button>
+    <button nz-button nzType="primary" (click)="modalConfirm()">确认</button>
+  </div>
+</ng-template>

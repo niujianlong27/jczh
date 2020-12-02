@@ -1,0 +1,116 @@
+<style>
+
+  .ant-form-item-label {
+    text-align: left;
+  }
+</style>
+<div>
+  <app-searchform (search)="listSearch($event)"></app-searchform>
+  <tpl-buttons (btnClick)="btnClick($event)" [btnDisable]="{'bid':btnDis.bid,'result':btnDis.result}"></tpl-buttons>
+  <app-table-form gridId="grid1" [dataSet]="data1" [trSelectedShow]="true"
+                  [listLoading]="loading" [totalPage]="totalpage" [pageSize]="pageSize"
+                  (updateDataResult)="selectData($event)"
+                  [isMutli]="false" selfTableHeight="250px"></app-table-form>
+</div>
+<div>
+  <nz-tabset>
+    <nz-tab nzTitle="货盘明细">
+      <app-table-form gridId="grid2" [dataSet]="data2" [isCheckBox]="false" [listLoading]="nextLoading"
+                      [totalPage]="totalpage2" [pageSize]="pageSize2" [pageFun]="true"
+                      [showCount]="false" (pageSizeEmit)="pageSizeEmit($event)"
+                      (pageIndexEmit)="pageIndexEmit($event)">
+      </app-table-form>
+
+    </nz-tab>
+
+  </nz-tabset>
+</div>
+<ng-container>
+  <ng-template #recordTitle>
+    {{recordTit}}
+  </ng-template>
+  <ng-template #recordContent>
+    <ng-container *ngIf="status != 'FBFS30'">
+      <p *ngIf="buttonId == 'bid'"><i nz-icon type="form" theme="outline"></i><span>投标价</span></p>
+      <app-table-form [columns]="modalTableHeader" [dataSet]="modalTableData" [colSet]="false"
+                      [nzShowPagination]="false"
+                      [showCount]="false"
+                      [isCheckBox]="false"></app-table-form>
+    </ng-container>
+    <ng-container *ngIf="status == 'FBFS30'">
+      <p *ngIf="buttonId == 'bid'"><i nz-icon type="form" theme="outline"></i><span>投标价</span></p>
+      <div class="clearfix">
+        <div class="fl clearfix m-r" style="width: 300px">
+          <nz-form-label class="fl" nzRequired style="width: 80px;margin-left: 10px">是否含税</nz-form-label>
+          <div class="fl" style="line-height: 40px;">
+            {{tempInfo.settleType}}
+          </div>
+        </div>
+        <div class="fl clearfix m-r" style="width: 300px;">
+          <nz-form-label class="fl" nzRequired style="width: 80px;margin-left: 10px">参考运价</nz-form-label>
+          <div class="fl" style="line-height: 40px;">
+            {{tempInfo.carriage}}
+          </div>
+        </div>
+      </div>
+      <div class="clearfix">
+        <div class="fl clearfix m-r" style="width: 300px">
+          <nz-form-label class="fl"  style="width: 80px;margin-left: 10px">尺寸规格</nz-form-label>
+          <div class="fl" style="line-height: 40px;">
+            {{tempInfo.specifications}}
+          </div>
+        </div>
+      </div>
+      <div class="clearfix">
+        <div class="fl clearfix m-r"
+             *ngFor="let data of tempInfo.loadStandardType;let dex = index">
+          <p style="padding-left: 10px;margin: 16px 0">{{data.loadStandardName}}</p>
+
+          <nz-form-label class="fl" nzRequired style="width: 70px; margin-left: 10px">投标价</nz-form-label>
+          <nz-form-control class="fl">
+            <nz-input-number [nzPrecision]="3" [nzMin]="0" [nzMax]="999999999999" [nzDisabled]="buttonId === 'result'"
+                             [(ngModel)]="data.price">
+            </nz-input-number>
+          </nz-form-control>
+          <nz-form-label class="fl" nzRequired style="width: 70px;margin-left: 10px">车次</nz-form-label>
+          <nz-form-control class="fl">
+            <nz-input-number [nzPrecision]="3" [nzMin]="0" [nzMax]="999999999999" [nzDisabled]="buttonId === 'result'"
+                             [(ngModel)]="data.totalTrainNum">
+            </nz-input-number>
+          </nz-form-control>
+          <nz-form-label class="fl" nzRequired style="width: 70px;margin-left: 10px">运力</nz-form-label>
+          <nz-form-control class="fl">
+            <nz-input-number [nzPrecision]="3" [nzMin]="0" [nzMax]="999999999999" [nzDisabled]="buttonId === 'result'"
+                             [(ngModel)]="data.capacity">
+            </nz-input-number>
+          </nz-form-control>
+        </div>
+      </div>
+      <!--<p *ngIf="buttonId == 'bid'" style="color: #d93600; line-height: 40px;">-->
+        <!--<span>注：运力不能小于1000吨！</span></p>-->
+    </ng-container>
+  </ng-template>
+  <ng-template #recordFooter>
+    <ng-container *ngIf="buttonId === 'bid'">
+      <button nz-button nzType="default" (click)="cancel()">取消</button>
+      <button nz-button nzType="primary" (click)="bidConfirm()" [nzLoading]="comfirmLoading"
+              [disabled]="comfirmLoading">确定
+      </button>
+
+    </ng-container>
+    <ng-container *ngIf="buttonId === 'result'">
+      <button nz-button nzType="default" (click)="cancel()">关闭</button>
+    </ng-container>
+  </ng-template>
+</ng-container>
+<ng-container>
+  <ng-template #confirmTitle>提示信息</ng-template>
+  <ng-template #confirmContent>
+    <p class="text-center f-b" style="margin:0;"> {{confirmCon}} </p>
+  </ng-template>
+  <ng-template #confirmFooter>
+    <button nz-button nzType="primary" (click)="confirm()">确定</button>
+    <button nz-button nzType="default" (click)="cancel()">取消</button>
+  </ng-template>
+</ng-container>
+

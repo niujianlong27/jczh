@@ -1,0 +1,3 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+<app-table-form [dataSet]="dataSet" [listLoading]="listLoading1"  (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)' [totalPage]="totalPage"></app-table-form>

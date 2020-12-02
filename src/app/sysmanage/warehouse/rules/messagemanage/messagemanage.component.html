@@ -1,0 +1,55 @@
+<app-searchform (search)="getList($event)" [triggerSearch]="true" [staticData]="staticData"
+  [btnHiden]="{'mutiSearch': true}"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [btnHiden]="{Update: true}"  (btnDataReturn)="btnData($event)"></tpl-buttons>
+<app-table-form  gridId='grid1'  [dataSet]="dataSet" (updateDataResult)="updateDataResult($event)" [totalPage]="totalPage" [isMutli]="false" [listLoading]="loading"
+ [staticCode]="staticData" [gridOperate]="isUpdate ? {show: true, template: operate} : ''"
+ (userColumnsEmit)="columns($event)">
+ <ng-template #operate let-data>
+     <button nzType="primary" nz-button nzSize="small" [hidden]="data._setUpdate"
+     (click)="update(data,1)" [disabled]="data.messageType === 'product_disp_messageType_3'"
+     [title]="data.messageType === 'product_disp_messageType_3' ? '通知不可修改' : ''">修改</button>
+     <div [hidden]="!data._setUpdate">
+         <button nzType="danger" [nzLoading]="data.btnloading" nz-button nzSize="small" (click)="save(data)" style="margin-right: 5px;">保存</button>
+         <button nzType="default" [disabled]="data.btnloading" nz-button nzSize="small" (click)="update(data,0)">取消</button>
+     </div>
+ </ng-template>
+</app-table-form>
+
+
+<nz-modal [(nzVisible)]="InsertFormVisible" nzTitle="消息管理新增" (nzOnCancel)="InsertFormVisible = false" (nzOnOk)="handleOk()" [nzOkLoading]="isOkLoading" 
+ [nzContent]="modalContent">
+  <ng-template #modalContent>
+      <form nz-form [formGroup]="modalValidateForm" >
+          <nz-form-item *ngFor="let item of modalFormData">
+              <nz-form-label [nzSm]="6" [nzXs]="24" [nzRequired]="item.require" [nzFor]="item.eName">{{item.name}}</nz-form-label>
+              <nz-form-control [nzSm]="14" [nzXs]="24" [ngSwitch]="item.type">
+                  <ng-template [ngSwitchCase]="'select'">
+                      <nz-select [nzAllowClear]="!item.allowclear" nzShowSearch [formControlName]="item.eName" (ngModelChange)="selectChange(item)">
+                          <nz-option *ngFor="let data of item.data" [nzValue]="data.value" [nzLabel]="data.name"></nz-option>
+                      </nz-select>
+                  </ng-template>
+                  <ng-template [ngSwitchCase]="'inputNumber'">
+                      <nz-input-number style="width: 100%;" [formControlName]="item.eName" [nzMin]="0"></nz-input-number>
+                  </ng-template>
+                  <ng-template [ngSwitchCase]="'date'">
+                      <nz-date-picker nzShowTime style="width: 100%;" [formControlName]="item.eName"
+                        [nzStyle]="{width: '100%'}" nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>
+                  </ng-template>
+                  <ng-template [ngSwitchCase]="'text'">
+                      <input nz-input type="text" [formControlName]="item.eName"/>
+                  </ng-template>
+                  <ng-template [ngSwitchCase]="'textarea'">
+                      <textarea rows="3" nz-input [formControlName]="item.eName"></textarea>
+                  </ng-template>
+                  <nz-form-explain *ngIf="modalValidateForm.get(item.eName)?.dirty && modalValidateForm.get(item.eName)?.errors">
+                      <ng-container *ngIf="modalValidateForm.get(item.eName)?.hasError('required')">{{item.name}}为必填项!</ng-container>
+                      <ng-container *ngIf="!modalValidateForm.get(item.eName)?.hasError('required') &&
+                       modalValidateForm.get(item.eName)?.errors">
+                          {{item.error}}
+                      </ng-container>     
+                  </nz-form-explain>
+              </nz-form-control>
+          </nz-form-item>
+        </form>
+  </ng-template>
+  </nz-modal>

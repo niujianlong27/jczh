@@ -1,0 +1,68 @@
+<app-searchform (search)="query($event)" (searchComponent)="_initalSearch($event)"></app-searchform>
+
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+
+<div class="clearfix" style="overflow: hidden;position: relative;">
+  <div class="fl v-split" [ngStyle]="{width:vSplit.leftWidth}">
+    <app-table-form gridId="grid1" [dataSet]="result" [totalPage]="total" [trSelectedShow]="true" [listLoading]="loading"
+      (updateDataResult)="checkboxClick($event, 'grid1')" [isMutli]="true"></app-table-form>
+  </div>
+
+  <div class="tableLine v-split" gridLine [ngStyle]="{left:vSplit.lineWidth}" (gridLineResult)="vSplit.gridLineFun($event)">
+    <div class="tableLine-in">
+      <span class="grid-line-btn" (click)="vSplit.rightShowFun()">
+        <i nz-icon type="caret-right" theme="outline" [hidden]="vSplit.rightShow"></i>
+        <i nz-icon type="caret-left" theme="outline" [hidden]="!vSplit.rightShow"></i>
+      </span>
+    </div>
+  </div>
+
+  <div class="fr v-split" [ngStyle]="{width:vSplit.rightWidth,display:vSplit.display}">
+    <nz-tabset class="table-list" [(nzSelectedIndex)]="tabIndex">
+      <nz-tab nzTitle="作业计划">
+        <app-table-form gridId="grid2" [dataSet]="resultWork" [totalPage]="totalWork" [trSelectedShow]="true"
+          [listLoading]="loadingWork" (updateDataResult)="checkboxClick($event, 'grid2')" [isMutli]="true"></app-table-form>
+      </nz-tab>
+      <nz-tab nzTitle="作业计划捆包">
+        <app-table-form gridId="grid3" [dataSet]="resultWorkItem" [totalPage]="totalWorkItem" [trSelectedShow]="true"
+          [listLoading]="loadingWorkItem" (updateDataResult)="checkboxClick($event, 'grid3')" [isMutli]="true"></app-table-form>
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</div>
+
+<nz-modal [nzWidth]="'35%'" [nzVisible]="modalIsVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+  (nzOnCancel)="modalIsVisible = false">
+  <ng-template #modalTitle>
+    装船确认
+  </ng-template>
+  <ng-template #modalContent>
+    <form nz-form [formGroup]="form">
+
+      <nz-form-item>
+        <nz-form-label nzSpan="8">装船时间</nz-form-label>
+        <nz-form-control nzSpan="16">
+          <nz-date-picker formControlName="actualDepartureTime" nzShowTime nzPlaceHolder="装船时间">
+          </nz-date-picker>
+          <nz-form-explain *ngIf="(form.get('actualDepartureTime').dirty && form.get('actualDepartureTime').errors)">请选择装船时间!</nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzSpan="8">到达时间</nz-form-label>
+        <nz-form-control nzSpan="16">
+          <nz-date-picker formControlName="arriveDate" nzShowTime nzPlaceHolder="到达时间">
+          </nz-date-picker>
+          <nz-form-explain *ngIf="(form.get('arriveDate').dirty && form.get('arriveDate').errors)">请选择到达时间!</nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <p class="b-t p-sm-tb">
+      <button nz-button nzType="default" class="m-r" (click)="modalIsVisible = false">取消</button>
+      <button nz-button nzType="primary" class="m-r" [nzLoading]="confirmLoading" (click)="createWaybill()">确认</button>
+    </p>
+  </ng-template>
+</nz-modal>

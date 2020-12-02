@@ -1,0 +1,53 @@
+<common-page [dataSet]="dataSet" [pageSize]="pageSize" [totalPage]="totalPage" [listLoading]="listLoading"
+             [isMutli]="true" (search)="listSearch($event)" (updateDataResult)="updateDataResult($event)"
+             (btnClick)="btnClick($event)"></common-page>
+
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()"
+          (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData" [hidden]='m.hidden'>
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="12">
+
+        <input-modal *ngIf="m.type == 'modal'" [isMutli]="false" [findset]="formIdFindset"
+                     [(inputModalModel)]="inputModalModel" (inpEmit)="inpEmit($event)" [borderRed]="borderRed">
+        </input-modal>
+
+        <input type="{{m.type}}" *ngIf="m.type == 'text'" nz-input formControlName="{{m.eName}}" [id]="m.eName">
+
+        <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+          <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+        </nz-radio-group>
+
+        <nz-select *ngIf="m.type === 'bankName'" [formControlName]="m.eName" (ngModelChange)="bankBaseChange($event)">
+          <nz-option *ngFor="let i of bankBaseList" [nzLabel]="i.bankName" [nzValue]="i.bankId"></nz-option>
+        </nz-select>
+        <nz-select *ngIf="m.type === 'bankSubbranchName'" [formControlName]="m.eName">
+          <nz-option *ngFor="let i of bankSubbranchNameList" [nzLabel]="i.bankSubbranchName" [nzValue]="i.bankSubbranchName"></nz-option>
+        </nz-select>
+
+
+        <nz-select nzShowSearch [attr.id]="m.eName" *ngIf="m.type == 'province'" [formControlName]="m.eName"
+                   (ngModelChange)="addressChange($event,'DZDJ10')">
+          <nz-option *ngFor="let i of provinceArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+        </nz-select>
+        <nz-select nzShowSearch [attr.id]="m.eName" *ngIf="m.type == 'city'" [formControlName]="m.eName"
+                   (ngModelChange)="addressChange($event,'DZDJ20')">
+          <nz-option *ngFor="let i of cityArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+        </nz-select>
+        <nz-form-explain style="color: #f5222d;" *ngIf="m.type == 'modal'&&borderRed2">请选择有效业务公司</nz-form-explain>
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+        </nz-form-explain>
+
+      </nz-form-control>
+
+    </nz-form-item>
+
+  </form>
+</nz-modal>

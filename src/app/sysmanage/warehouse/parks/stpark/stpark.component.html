@@ -1,0 +1,119 @@
+<form nz-form>
+  <nz-form-item nzFlex="true" nzJustify="center" nzAlign="middle">
+
+    <nz-form-label [nzSpan]="3" nzFor="company">仓库名称</nz-form-label>
+
+    <nz-form-control [nzSpan]="4">
+      <nz-select name="company" [(ngModel)]="selectedCompany" nzAllowClear nzPlaceHolder="选择">
+        <nz-option *ngFor="let data of selectedCompanyData" [nzValue]="data.companyId"
+                   [nzLabel]="data.companyName"></nz-option>
+      </nz-select>
+    </nz-form-control>
+
+    <nz-form-control [nzSpan]="3" nzOffset="1">
+      <button nz-button nzType="default" (click)="selectedCompanyClick()">选择</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+
+<div nz-row nzType="flex" nzJustify="space-around" style="padding-top: 20px">
+
+  <div nz-col nzSpan="12">
+    <nz-table [nzTitle]="roleTitle" class="user-table" #roleTable [extraTableHeight]="permissions ? 110 : 58" reNzTable [nzData]="roleData" nzSize="small" [nzBordered]="false" (heightEmit)="heightFun($event,0)"
+              [nzShowPagination]=false [nzFrontPagination]=false [nzHideOnSinglePage]="true" [nzScroll]="{x: '100%',y: roleHeight}">
+      <thead>
+      <tr>
+        <ng-container >
+          <th title="仓库ID" nzWidth="100px" style="text-align: center">仓库ID</th>
+          <th title="仓库名称" nzWidth="100px" style="text-align: center">仓库名称</th>
+        </ng-container>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let data of roleTable.data" [class.tr-selected]="data.isClick">
+        <ng-container *ngFor="let role of roleHeaderData">
+          <!-- <td [title]="data[role.eName]" (click)="roleClick(data)">
+            <span>{{ data[role.eName]}}</span>
+          </td> -->
+        </ng-container>
+      </tr>
+      </tbody>
+    </nz-table>
+
+    <ng-template #roleTitle>
+      <div>仓库管理</div>
+    </ng-template>
+  </div>
+
+  <div nz-col nzSpan="12">
+
+    <nz-table  class="user-table" #userTable nzSize="small" [nzTitle]="tableHead" [nzData]="userData" reNzTable  (heightEmit)="heightFun($event,1)" [extraTableHeight]="permissions ? 202 : 150"
+              [nzBordered]="false" [nzShowPagination]=false [nzFrontPagination]=false [nzHideOnSinglePage]="true"
+              [nzScroll]="{x: '100%',y: userHeight}">
+      <!-- <thead>
+      <tr>
+        <th nzShowCheckbox [(nzChecked)]="allChecked" [nzIndeterminate]="indeterminate"
+            (nzCheckedChange)="checkAll($event)" nzWidth="30px"></th>
+        
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of userTable.data">
+        <td nzShowCheckbox [(nzChecked)]="data.checked" (nzCheckedChange)="refreshStatus(data)"></td>
+        <ng-container *ngFor="let user of userHeaderData">
+        </ng-container>
+      </tr>
+      </tbody> -->
+      <app-table-form (updateDataResult)="updateDataResult($event)" [dataSet]="dataSet" [isMutli]="false"
+                [listLoading]="loading" [pageSize]="pageSize" [showCount]="false" [totalPage]="totalPage"
+                [trSelectedShow]="true" gridId='grid1'>
+      </app-table-form>
+
+
+    </nz-table>
+
+    <ng-template #tableHead>
+      <div>用户管理</div>
+      <nz-tabset [(nzSelectedIndex)]="nzSelectedIndex" (nzSelectChange)="onNzSelectChange([$event])">
+        <nz-tab nzTitle="已选用户" (nzSelect)="tabClick('select')">
+            <nz-input-group [nzSuffix]="suffixTemplate1">
+                <input #searchBox id="search-box" (input)="search(searchBox.value)" type="text" nz-input [(ngModel)]="searchValue" placeholder="已选用户搜索"/>
+              </nz-input-group>
+              <ng-template #suffixTemplate1
+                ><i
+                  nz-icon
+                  nz-tooltip
+                  class="ant-input-clear-icon"
+                  nzTheme="fill"
+                  nzType="close-circle"
+                  *ngIf="searchValue"
+                  (click)="searchValue = null;getUserByUserIdAndroleId()"
+                ></i
+              ></ng-template>
+        </nz-tab>
+        <nz-tab nzTitle="未选用户" (nzSelect)="tabClick('notToChoose')">
+            <nz-input-group [nzSuffix]="suffixTemplate2">
+                <input #searchBox1 id="search-box1" (input)="search(searchBox1.value)" type="text" nz-input [(ngModel)]="searchValue" placeholder="未选用户搜索"/>
+              </nz-input-group>
+              <ng-template #suffixTemplate2
+                ><i
+                  nz-icon
+                  nz-tooltip
+                  class="ant-input-clear-icon"
+                  nzTheme="fill"
+                  nzType="close-circle"
+                  *ngIf="searchValue"
+                  (click)="searchValue = null;getUserByCompanyID()"
+                ></i
+              ></ng-template>
+        </nz-tab>
+      </nz-tabset>
+    </ng-template>
+
+  </div>
+
+</div>

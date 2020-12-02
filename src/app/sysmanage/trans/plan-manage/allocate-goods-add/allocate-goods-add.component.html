@@ -1,0 +1,85 @@
+<form nz-form [formGroup]="validateForm" style="padding:15px 20px 0px 0px">
+  <nz-form-item>
+    <nz-form-label [nzXs]="2" nzFor="loadTaskCode">车次号</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input type="text" nz-input name="loadTaskCode" formControlName="loadTaskCode" placeholder="系统生成" disabled="true">
+    </nz-form-control>
+    <nz-form-label [nzXs]="2" nzRequired nzFor="planStartTime">计划开始时间</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <nz-date-picker nzShowTime name="planStartTime" formControlName="planStartTime"
+                      nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>
+      <nz-form-explain *ngIf="validateForm.get('planStartTime').dirty && validateForm.get('planStartTime').errors">请选择计划开始时间
+      </nz-form-explain>
+    </nz-form-control>
+
+    <!--<nz-form-label [nzXs]="2" nzRequired nzFor="customerName">客户名称</nz-form-label>-->
+    <!--<nz-form-control [nzXs]="4">-->
+      <!--<input-modal [isMutli]="false"-->
+                   <!--[findset]="{ formId: 'company_pop', name: '客户名称', parameter: 'companyName',parameterSend:'companyId' }"-->
+                   <!--[showExplainFlag]="showExplainFlag" [validate]="{validateOpt:'inpValue',validateCon:'请选择客户名称'}"-->
+                   <!--[inputModalModel]="customerName" [inputModalHiddenValue]="customerCode"-->
+                   <!--(inpEmit)="inpEmit($event)"></input-modal>-->
+    <!--</nz-form-control>-->
+
+    <nz-form-label [nzXs]="2" nzRequired nzFor="truckFleet">车队</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="truckFleet" id="truckFleet">
+      <nz-form-explain *ngIf="validateForm.get('truckFleet').dirty && validateForm.get('truckFleet').errors">请输入车队
+      </nz-form-explain>
+    </nz-form-control>
+
+
+
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzXs]="2" nzRequired nzFor="truckType">车型</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="truckType" id="truckType">
+      <nz-form-explain *ngIf="validateForm.get('truckType').dirty && validateForm.get('truckType').errors">请输入操作人
+      </nz-form-explain>
+    </nz-form-control>
+
+    <!--<nz-form-label [nzXs]="2" nzRequired nzFor="operTime">操作时间</nz-form-label>-->
+    <!--<nz-form-control [nzXs]="4">-->
+      <!--<nz-date-picker nzShowTime name="operTime" formControlName="operTime"-->
+                      <!--nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>-->
+      <!--<nz-form-explain *ngIf="validateForm.get('operTime').dirty && validateForm.get('operTime').errors">请选择操作时间-->
+      <!--</nz-form-explain>-->
+    <!--</nz-form-control>-->
+
+    <nz-form-label [nzXs]="2" nzRequired nzFor="lineName">线路</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="lineName" id="lineName">
+      <nz-form-explain *ngIf="validateForm.get('lineName').dirty && validateForm.get('lineName').errors">请输入线路
+      </nz-form-explain>
+    </nz-form-control>
+
+    <nz-form-label [nzXs]="2" nzRequired nzFor="taskPriority">优先级</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="taskPriority" id="taskPriority">
+      <nz-form-explain *ngIf="validateForm.get('taskPriority').dirty && validateForm.get('taskPriority').errors">请输入优先级
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+
+
+    <!--<nz-form-label [nzXs]="2" nzFor="remark">备注</nz-form-label>-->
+    <!--<nz-form-control [nzXs]="10">-->
+      <!--<input nz-input formControlName="remark" id="remark">-->
+    <!--</nz-form-control>-->
+  </nz-form-item>
+
+
+</form>
+<tpl-buttons [formId]="'form_plan_manage_allocateGoodsAdd'" (btnClick)='btnClick($event)' [btnDisable]="btnDisable"></tpl-buttons>
+<app-table-form  [formId]="'form_plan_manage_allocateGoodsAdd'" [gridId]="'grid1'"
+                (userColumnsEmit)='getUserHeader($event)'
+                [dataSet]="dataSet1" [gridOperate]="{show:true,title:'操作',template:g1}"
+                [nzShowPagination]="false" [isCheckBox]="false" [listLoading]="listLoading1"
+               >
+  <ng-template #g1 let-data let-index="index">
+    <a (click)="delete(data,index)" a>删除</a>
+  </ng-template>
+</app-table-form>

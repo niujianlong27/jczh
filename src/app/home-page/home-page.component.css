@@ -1,0 +1,306 @@
+.service {
+  height: 225px;
+}
+.ant-layout{
+  background-color: white;
+}
+
+.service > div {
+  border-right: 1px solid #eeeeee;
+  width: 25%;
+  height: 200px;
+  background-color: #ffffff;
+  display: inline-block;
+}
+
+.service > div:last-child {
+  border: none
+}
+
+.bgimg1{
+  background: url("/assets/static/diwen.png") 0  28% no-repeat;
+  background-size: 82% 60%;
+}
+.bgimg2{
+  background: url("/assets/static/diwen2.png") 120px  0 no-repeat;
+  background-size:185px 230px;
+}
+.bgimg3{
+  background: url("/assets/static/diwen3.png") 100% 100% no-repeat;
+  background-size:380px 660px;
+}
+.goodsType {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.name {
+  margin-left: 2%;
+  font-size: 18px;
+  font-family: PingFangSC-Semibold;
+  font-weight: bolder;
+  color: #000000;
+}
+
+.oneOfType {
+  width: 19%;
+  height: 150px;
+  margin: 0 0.5%;
+  background-color: #ffffff;
+  display: inline-block;
+  box-shadow: darkgrey 1px 1px 5px 0px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.goodsTypeLeft {
+  width: 50%;
+  height: 100%;
+  display: inline-block;
+  text-align: left;
+  float: left;
+}
+
+.goodsTyperight {
+  width: 50%;
+  height: 100%;
+  float: right;
+}
+
+.goodsTypeLeft p {
+  font-family: PingFang SC;
+  font-weight: 700;
+  font-size: 16px;
+  color: rgba(9, 9, 9, 1);
+  margin: 20px 0 0 20px;
+}
+
+.img_posit {
+  width: 100%;
+  height: 381px;
+  position: relative;
+}
+
+.img_sub_posit {
+  width: 100%;
+  height: 381px;
+}
+
+.li-bor {
+  font-style: normal;
+  margin: 0px 15px;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+ul {
+  list-style: none;
+  margin: 0px;
+}
+
+.bg-w {
+  margin: 0 auto 120px;
+}
+
+.bg-w section {
+  width: 80%;
+  padding: 10px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 1);
+  border: 3px solid rgba(239, 239, 239, 1);
+  box-shadow: 0px 0px 8px 0px rgba(139, 173, 188, 0.32);
+}
+
+.type-logo {
+  width: 70px;
+  height: 70px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.type-logo2 {
+  width: 51px;
+  height: 45px;
+  margin-right: 25px;
+  margin-left: 30px;
+}
+
+.type1 {
+  display: inline-block;
+  width: 25%;
+  background-color: rgba(255, 255, 255, 1);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.type1 h1 {
+  font-family: PingFang SC;
+  font-weight: 600;
+  color: rgba(51, 51, 51, 1);
+}
+
+.bolck {
+  position: relative;
+  height: 141px;
+  margin-bottom: 10px;
+}
+
+.bolck span {
+  display: inline-block;
+}
+
+.types1 {
+  position: relative;
+  padding: 10px;
+  text-align: center;
+  width: 25%;
+  display: inline-block;
+}
+
+.types1 p span {
+  height: 20px;
+  width: 100%;
+  display: block;
+  margin-top: 5px;
+}
+
+/**表格*/
+.table {
+  float: right;
+  margin: 0 0.5%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  box-shadow: darkgrey 1px 1px 5px 0px;
+  width: 68%;
+  height: 100%;
+  margin-bottom: 50px;
+}
+
+.tran th {
+  height: 55px;
+  text-align: center;
+  width: 10.1175vw;
+  vertical-align: middle;
+}
+
+.tran td {
+  height: 43px;
+  text-align: center;
+  width: 10.1175vw;
+  vertical-align: middle;
+}
+
+tbody tr td {
+  color: #000000;
+  width: 10.1175vw;
+  font-size: 8px;
+}
+
+tbody tr:nth-child(odd) { /*even-奇数行；odd-偶数行*/
+  background-color: #f6f6f6;
+}
+
+tbody tr:nth-child(even) { /*even-奇数行；odd-偶数行*/
+  background-color: #ffffff;
+}
+
+td {
+  word-break: break-word;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.scroll-box {
+  height: 330px;
+  overflow: hidden;
+  position: relative;
+}
+
+.tab-scroll {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-top: none;
+}
+
+.tab-scroll td {
+  border-top: none;
+}
+
+.ax_default {
+  font-family: 'Arial Normal', 'Arial';
+  font-weight: 400;
+  color: #333333;
+  text-align: center;
+}
+
+.heading_2 {
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 10px
+}
+
+.u126 {
+  margin: 12px;
+  font-size: 28px;
+  text-align: center;
+  font-family: PingFang SC;
+  font-weight: bold;
+  color: rgba(199, 221, 235, 1)
+}
+
+.details {
+  color: #333333;
+  padding: 0 43px;
+  font-size: 13px;
+  color: rgba(153, 153, 153, 1);
+}
+
+.title {
+  margin: 0 50px;
+  font-size: 28px;
+  font-family: DFPZongYiW7;
+}
+
+.realTime1 {
+  overflow: hidden;
+  height: 317px;
+
+}
+
+.tabImg {
+  float: left;
+  width: 30%;
+  height: 100%;
+}
+
+.realTime2 {
+  overflow: hidden;
+  height: 317px;
+  margin-top: 60px;
+}
+
+.line th {
+  height: 55px;
+  text-align: center;
+  width: 10.1175vw;
+  vertical-align: middle;
+}
+
+.line td {
+  height: 54px;
+  text-align: center;
+  width: 10.1175vw;
+  vertical-align: middle;
+}
+.font{
+  /*color: #eeeeee; ;*/
+  font-size: 18px;
+  font-weight: 700;
+}

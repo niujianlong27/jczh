@@ -1,0 +1,222 @@
+<common-page [caculateEnameArr]='caculateEnameArr' (search)="listSearch($event)" [listLoading]='listLoading'
+             [dataSet]="dataSet" [totalPage]="total" (btnClick)="btnClick($event)" [pageSize]='pageSize'
+             [isMutli]="true" (updateDataResult)="updateDataResult($event)" [triggerSearch]="true"></common-page>
+<div>
+  <ng-template #tplTitle>
+    <span>{{modalTitle}}</span>
+  </ng-template>
+  <ng-template #tplContent>
+    <form nz-form #formVal>
+      <ng-container *ngIf='this.buttonType === "BatchCreate"'>
+        <nz-form-item>
+          <nz-form-label [nzSpan]="7">委托单位</nz-form-label>
+          <nz-form-control [nzSpan]="12">
+            <input-modal [isMutli]=false (inpEmit)='inpEmitCon($event)' [findset]="findset"
+                         [(inputModalModel)]="consignorCompanyName"
+                         [inputModalHiddenValue]="consignorCompanyId"></input-modal>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="7">业务板块</nz-form-label>
+          <nz-form-control [nzSpan]="12">
+            <!-- <input nz-input type="text" [(ngModel)]="businessType" [ngModelOptions]="{standalone: true}"> -->
+            <nz-select [(ngModel)]="businessType" [ngModelOptions]="{standalone: true}">
+              <nz-option nzValue="{{i.segmentId}}" nzLabel="{{i.segmentName}}" *ngFor="let i of workPart"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="7">费用类型</nz-form-label>
+          <nz-form-control [nzSpan]="12">
+            <!-- <input nz-input type="text" [(ngModel)]="businessType" [ngModelOptions]="{standalone: true}"> -->
+            <nz-select [(ngModel)]="feeType" [ngModelOptions]="{standalone: true}">
+              <nz-option nzValue="" nzLabel="全部"></nz-option>
+              <nz-option nzValue="{{i.feeId}}" nzLabel="{{i.feeName}}" *ngFor="let i of feeArr"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="7">时间</nz-form-label>
+          <nz-form-control [nzSpan]="12">
+            <!-- <input nz-input type="text" [(ngModel)]="reportName" [ngModelOptions]="{standalone: true}"> -->
+            <nz-range-picker class="rangePicker" [(ngModel)]="dateRange" [ngModelOptions]="{standalone: true}"
+                             nzShowTime [nzFormat]="'yyyy-MM-dd HH:mm:ss'"></nz-range-picker>
+
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item style="padding-left:70px;">
+              <span>已选 {{ (calInfo.number && calInfo.number != 0) ? calInfo.number : 0}} 条，
+                已选件数 {{ (calInfo.totSheetCount && calInfo.totSheetCount != 0) ? calInfo.totSheetCount : '0.00'}} 件，
+                重量 {{(calInfo.weight && calInfo.weight != 0) ? calInfo.weight : '0.000'}} 吨，
+                总价 {{(calInfo.totalPrice && calInfo.totalPrice != 0) ? calInfo.totalPrice : '0.00'}} 元</span>
+        </nz-form-item>
+
+      </ng-container>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7">付款单位</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input-modal [isMutli]=false (inpEmit)='inpEmitCarrier($event)' [findset]="recset"
+                       [(inputModalModel)]="carrierCompany" [inputModalHiddenValue]="carrierCompanyId"></input-modal>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7">收款单位</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input-modal searchParamFiled="companyId" [isMutli]=false (inpEmit)='inpEmit($event)' [findset]="findset"
+                       [(inputModalModel)]="settleCompany" [inputModalHiddenValue]="settleCompanyId"
+                       [DISABLED]="!fleetCompanyId" [searchValue]="fleetCompanyId"></input-modal>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7">车队收款</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input-modal searchParamFiled="companyId" [isMutli]=false (inpEmit)='inpTransEmit($event)'
+                       [findset]="transset" [(inputModalModel)]="transCompany" [inputModalHiddenValue]="transCompanyId"
+                       [DISABLED]="!fleetCompanyId" [searchValue]="fleetCompanyId"></input-modal>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7">运输车队</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input-modal [isMutli]=false (inpEmit)='inpFleetEmit($event)' [findset]="fleetset"
+                       [(inputModalModel)]="fleetCompany" [inputModalHiddenValue]="fleetCompanyId"></input-modal>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7">报表名称</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input type="text" [(ngModel)]="reportName" [ngModelOptions]="{standalone: true}">
+        </nz-form-control>
+      </nz-form-item>
+
+      <!--<nz-form-item>-->
+        <!--<nz-form-label [nzSpan]="7">票点数</nz-form-label>-->
+        <!--<nz-form-control [nzSpan]="12">-->
+          <!--<nz-select [(ngModel)]="taxPercent" [ngModelOptions]="{standalone: true}">-->
+            <!--<nz-option *ngFor="let i of taxPercentList" [nzLabel]="i.text" [nzValue]="i.value"></nz-option>-->
+          <!--</nz-select>-->
+        <!--</nz-form-control>-->
+      <!--</nz-form-item>-->
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7">备注</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <textarea nz-input rows="2" [(ngModel)]="reportRemark" [ngModelOptions]="{standalone: true}"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-template>
+
+  <ng-template #tplFooter>
+    <div>
+      <button *ngIf='this.buttonType === "BatchCreate"' nz-button nzType="primary" (click)="modalGetInfo()">统计</button>
+      <button nz-button nzType="primary" (click)="modalConfirm()" [disabled]="btnDis">确认</button>
+      <button nz-button nzType="default" (click)="modalCancel()">取消</button>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #generateReports>
+  <ng-form>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">付款单位</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input-modal [isMutli]=false (inpEmit)='inpEmitCarrier($event)' [findset]="recset"
+                     [(inputModalModel)]="carrierCompany" [inputModalHiddenValue]="carrierCompanyId"></input-modal>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">收款单位</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input-modal searchParamFiled="companyId" [isMutli]=false (inpEmit)='inpEmit($event)' [findset]="findset"
+                     [(inputModalModel)]="settleCompany" [inputModalHiddenValue]="settleCompanyId"
+                     [DISABLED]="!fleetCompanyId" [searchValue]="fleetCompanyId"></input-modal>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">车队收款</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input-modal searchParamFiled="companyId" [isMutli]=false (inpEmit)='inpTransEmit($event)'
+                     [findset]="transset" [(inputModalModel)]="transCompany" [inputModalHiddenValue]="transCompanyId"
+                     [DISABLED]="!fleetCompanyId" [searchValue]="fleetCompanyId"></input-modal>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">运输车队</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input-modal [isMutli]=false (inpEmit)='inpFleetEmit($event)' [findset]="fleetset"
+                     [(inputModalModel)]="fleetCompany" [inputModalHiddenValue]="fleetCompanyId"></input-modal>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">报表名称</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input nz-input type="text" [(ngModel)]="reportName" [ngModelOptions]="{standalone: true}">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">运单号</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <textarea nz-input rows="2" [(ngModel)]="waybillNos" [ngModelOptions]="{standalone: true}"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">备注</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <textarea nz-input rows="2" [(ngModel)]="reportRemark" [ngModelOptions]="{standalone: true}"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+  </ng-form>
+</ng-template>
+
+
+<!--数据弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()"
+          (nzOnOk)="handleOk()" (nzAfterClose)="afterClose()">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-control [nzSpan]="23">
+        <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="15">
+          <input *ngIf="m.type == 'text'" type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName">
+
+          <nz-input-number style="width: 100%;" *ngIf="m.type ==='number'" formControlName="{{m.eName}}"
+                           [nzMin]="0"></nz-input-number>
+
+          <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+            <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+              {{m.validateCon}}
+            </ng-container>
+            <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+              {{m.validators.patternErr}}
+            </ng-container>
+
+          </nz-form-explain>
+
+        </nz-form-control>
+
+      </nz-form-control>
+    </nz-form-item>
+
+  </form>
+</nz-modal>
+
+

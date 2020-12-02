@@ -1,0 +1,67 @@
+<div nz-row>
+<tpl-buttons formId="form_outline_agreement" (btnClick)="btnClick($event)"
+[btnHiden]="{itemAdd:true,itemDelete:true,deleteAll:true,return:isReturn}"></tpl-buttons>
+</div>
+
+<form nz-form [formGroup]="modalValidateForm">
+  <div [nzGutter]="24" nz-row nzAlign="middle" nzJustify="space-around">
+    <div *ngFor="let m of modalFormData" [nzSpan]="8" nz-col>
+      <nz-form-item nzFlex>
+        <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="15">
+          <input *ngIf="m.type == 'text' " nz-input [type]="m.type" [maxlength]="m.maxLength" autocomplete="off"
+                 [formControlName]="m.eName" [attr.id]="m.eName">
+
+          <nz-date-picker *ngIf="m.type == 'date'" [formControlName]="m.eName" style="width:100%" nzFormat="yyyy-MM-dd HH:mm:ss"
+                          [nzStyle]="{width: '100%'}"></nz-date-picker>
+          <input-modal *ngIf="m.type == 'model1'" [findset]="m.findset"
+                       [inputModalModel]="productionCompanyName"
+                       [inputModalHiddenValue]="productionCompanyId"
+                       (inpEmit)="setCompanyId($event, 'productionCompanyId','productionCompanyName')"></input-modal>
+
+
+          <input-modal *ngIf="m.type == 'model2'" [findset]="m.findset"
+                       [inputModalModel]="consignorCompanyName"
+                       [inputModalHiddenValue]="consignorCompanyId" [validate]="m.validate"
+                       (inpEmit)="setCompanyId($event, 'consignorCompanyId','consignorCompanyName')"></input-modal>
+
+
+          <input-modal  *ngIf="m.type == 'model3'" [findset]="m.findset"
+                       [inputModalModel]="carrierCompanyName"
+                       [inputModalHiddenValue]="carrierCompanyId" [validate]="m.validate"
+                       (inpEmit)="setCompanyId($event, 'carrierCompanyId','carrierCompanyName')"></input-modal>
+
+          <nz-input-number style="width: 100%;" *ngIf="m.type ==='number'" formControlName="{{m.eName}}"
+                           [nzMin]="0"></nz-input-number>
+
+          <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+            <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+              {{m.validateCon}}
+            </ng-container>
+            <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+              {{m.validators.patternErr}}
+            </ng-container>
+
+          </nz-form-explain>
+
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+<div nz-row class="order-registration">
+  <nz-tabset>
+    <nz-tab nzTitle="合同明细">
+      <p class="m-re">
+        <tpl-buttons formId="form_outline_agreement" (btnClick)="btnClick($event)"
+                     [btnHiden]="{save:true,return:true}"></tpl-buttons>
+      </p>
+      <app-table-form [formId]="formId" gridId="grid1" [dataSet]="itemData" [isMutli]="true"
+                      [nzShowPagination]="false"
+                      [popTableData]="popTableData"></app-table-form>
+    </nz-tab>
+  </nz-tabset>
+</div>

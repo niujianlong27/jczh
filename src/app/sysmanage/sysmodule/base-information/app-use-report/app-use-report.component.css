@@ -1,0 +1,28 @@
+.app ::ng-deep .ant-table-tbody > tr > td.string, .ant-table-tbody > tr > td.pop{
+  text-align: center;
+}
+/*.app{*/
+  /*position: relative;*/
+/*}*/
+.app ::ng-deep .grid-pagination{
+  padding:0;
+}
+.app p {
+  margin: 0;
+  width: 60%;
+  /*position: absolute;*/
+  /*bottom: 10px;*/
+  color: #555555;
+  padding-top: 6px;
+  height: 35px;
+  border: #e1e6eb 1px solid;
+  border-top: none;
+  font-weight: 900;
+}
+.app p .fl{
+  margin-left: 22%;
+}
+.app p .fr{
+  margin-right: 15%;
+}
+

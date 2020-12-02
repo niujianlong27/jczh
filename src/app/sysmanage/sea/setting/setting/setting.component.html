@@ -1,0 +1,121 @@
+<div nz-row nzType="flex" nzType="flex" nzJustify="space-around" nzAlign="middle" style="margin-top: 1em;">
+  <div nz-col nzSpan="8">
+    <div class="term">资源名称</div>
+    <div class="detail">
+      <input type="text" nz-input [(ngModel)]="inqu.resource" name="resource" nzPlaceHolder="资源名称">
+    </div>
+  </div>
+  <div nz-col nzSpan="8">
+    <div class="term">资源值</div>
+    <div class="detail">
+      <input type="text" nz-input [(ngModel)]="inqu.value" name="value" nzPlaceHolder="资源值">
+    </div>
+  </div>
+  <div nz-col nzSpan="24" style="text-align: right;">
+    <p class="b-t p-sm-tb">
+      <button nz-button nzType="primary" nzGhost class="m-r" (click)="query()" [nzLoading]="queryLoading">查询</button>
+      <button nz-button nzType="primary" nzGhost class="m-r" (click)="modalIsVisible = true">新增</button>
+    </p>
+  </div>
+</div>
+
+<nz-table #basicTable [nzData]="result" [nzScroll]="{ x: '100%', y: '650px' }" [nzFrontPagination]="false" [nzBordered]="false"
+  nzShowPagination="false" [nzFooter]="tableFooter">
+  <ng-template #tableTotal>
+    总计 {{page.total}} 条
+  </ng-template>
+  <ng-template #tableFooter>
+    <div nz-row nzType="flex" nzAlign="middle" class="fr">
+      <div nz-col nzSpan="24">
+        <nz-pagination [nzShowTotal]="tableTotal" [(nzPageIndex)]="page.pageIndex" [nzPageSize]="page.pageSize"
+          (nzPageSizeChange)="pageSizeChange($event)" (nzPageIndexChange)="pageIndexChange($event)" [(nzTotal)]="page.total"
+          nzShowSizeChanger [nzPageSizeOptions]="page.sizeOptions" nzShowQuickJumper></nz-pagination>
+      </div>
+    </div>
+  </ng-template>
+  <thead>
+    <tr>
+      <th>资源名称</th>
+      <th>资源值</th>
+      <th>备用字段</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-template ngFor let-item [ngForOf]="basicTable.data">
+      <tr ngForm #rowForm="ngForm" [ngClass]="item.rowClass">
+        <td> {{ item.resource }} </td>
+        <td>
+          <ng-container *ngIf="item.isEditing">
+            <input type="text" nz-input [(ngModel)]="item.value" name="value" nzPlaceHolder="资源值" required>
+          </ng-container>
+          <ng-container *ngIf="!item.isEditing">
+            {{item.value}}
+          </ng-container>
+        </td>
+        <td>
+          <ng-container *ngIf="item.isEditing">
+            <input type="text" nz-input [(ngModel)]="item.bk1" name="bk1" nzPlaceHolder="备用字段">
+          </ng-container>
+          <ng-container *ngIf="!item.isEditing">
+            {{item.bk1}}
+          </ng-container>
+        </td>
+
+        <td>
+          <ng-container *ngIf="!item.isEditing">
+            <button nz-button nzType="default" class="m-r" (click)="item.isEditing = true">修改</button>
+            <button nz-popconfirm nzTitle="是否确认删除该资源?" (nzOnConfirm)="delete(item)" nz-button nzType="default" nzGhost class="m-r">删除</button>
+          </ng-container>
+          <ng-container *ngIf="item.isEditing">
+            <p class="b-t p-sm-tb">
+              <button nz-button nzType="default" class="m-r" (click)="item.isEditing=false">取消</button>
+              <button nz-button nzType="primary" class="m-r" [nzLoading]="loading" [disabled]="rowForm.pristine || rowForm.invalid"
+                (click)="save(item)">保存</button>
+            </p>
+          </ng-container>
+        </td>
+      </tr>
+    </ng-template>
+  </tbody>
+</nz-table>
+
+<nz-modal [nzWidth]="'35%'" [nzVisible]="modalIsVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+  (nzOnCancel)="modalIsVisible=false">
+  <ng-template #modalTitle>
+    新增资源
+  </ng-template>
+  <ng-template #modalContent>
+    <form nz-form [formGroup]="form">
+
+      <nz-form-item>
+        <nz-form-label nzSpan="6">资源名称</nz-form-label>
+        <nz-form-control nzSpan="14">
+          <input type="text" nz-input formControlName="resource" nzPlaceHolder="资源名称">
+          <nz-form-explain *ngIf="form.get('resource').dirty && form.get('resource').errors">请输入资源名称!</nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzSpan="6">资源值</nz-form-label>
+        <nz-form-control nzSpan="14">
+          <input type="text" nz-input formControlName="value" nzPlaceHolder="资源值">
+          <nz-form-explain *ngIf="form.get('value').dirty && form.get('value').errors">请输入资源名称!</nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzSpan="6">备用字段</nz-form-label>
+        <nz-form-control nzSpan="14">
+          <input type="text" nz-input formControlName="bk1" nzPlaceHolder="备用字段">
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <p class="b-t p-sm-tb">
+      <button nz-button nzType="default" class="m-r" (click)="modalIsVisible=false">取消</button>
+      <button nz-button nzType="primary" class="m-r" [nzLoading]="insertLoading" (click)="insert()">确认</button>
+    </p>
+  </ng-template>
+</nz-modal>

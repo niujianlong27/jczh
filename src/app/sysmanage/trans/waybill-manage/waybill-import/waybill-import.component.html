@@ -1,0 +1,25 @@
+<button nz-button *ngIf="mode==='button'" nzType="default" (click)="showModal()">导入</button>
+<nz-modal [(nzVisible)]="_isVisible" nzTitle="导入Excel" [nzContent]="modalContent" [nzFooter]="modalFooter" (nzOnCancel)="_isVisible=false"
+  (nzOnOk)="importExcel()" [nzMaskClosable]="false" >
+  <ng-template #modalContent>
+    <form nz-form [formGroup]="importValidate">
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" nzRequired>文件</nz-form-label>
+        <nz-form-control [nzSm]="12">
+          <input #fileInput type="file" formControlName="file" (change)="writeFileName($event)" multiple="false" style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;" />
+          <input nz-input readonly (click)="selectFile()" formControlName="fileName" placeholder="请选择需要导入的文件">
+          <nz-form-explain *ngIf="importValidate.get('fileName').dirty && importValidate.get('fileName').errors">需要导入的文件不能为空!</nz-form-explain>
+        </nz-form-control>
+        <nz-form-control [nzSm]="4" style="margin-left: 20px">
+          <a href="http://another2.oss-cn-hangzhou.aliyuncs.com/import/运单导入模板.xlsx">模板下载</a>
+        </nz-form-control>
+      </nz-form-item>
+
+
+    </form>
+  </ng-template>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="_isVisible=false">取消</button>
+    <button nz-button nzType="primary" (click)="importExcel()" [nzLoading]="importLoading" [disabled]="importLoading">确定</button>
+  </ng-template>
+</nz-modal>

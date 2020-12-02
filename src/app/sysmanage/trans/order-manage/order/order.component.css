@@ -1,0 +1,60 @@
+.form-btn{
+  display: inline-block;
+}
+.b-t{
+  padding-top:15px;
+  border-bottom: 1px #ddd solid;
+  margin-bottom:30px;
+}
+.b-light{
+  border:1px solid #eee;
+}
+.tableLine{
+  position:absolute;
+  width:1%;
+  top:0;
+  z-index:1;
+  height:100%;
+}
+.tableLine-in{
+  width:8px;
+  height:100%;
+  background-color:#fafafa;
+  position: absolute;
+  margin:auto;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  cursor: w-resize;
+}
+.trans{
+  transition: all 0.3s;
+  overflow: hidden;
+}
+.grid-line-btn{
+  position: absolute;
+  margin:auto;
+  left:0;
+  top:0;
+  right:0;
+  bottom:0;
+  width:8px;
+  height:50px;
+  line-height: 50px;
+  text-align: center;
+  background-color:#eee;
+  cursor: pointer;
+}
+.grid-line-btn:hover{
+  background-color:#fc6;
+}
+.grid-line-btn i{
+  font-size:12px;
+}
+
+.modal-table ::ng-deep .ant-table-wrapper div.ant-table-body {
+  height: auto;
+  min-height: 0;
+  margin-bottom: 2px;
+}

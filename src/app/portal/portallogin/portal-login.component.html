@@ -1,0 +1,59 @@
+<div class="loginBackground"></div>
+<div class="home-banner">
+    <div>
+        <div class="fr home-login-box">
+
+            <div *ngIf="!userInfo.loginName">
+                <div class="hlb_top">
+                    <span class="home-login-title">账号登录</span>
+                 
+                    <form nz-form [formGroup]="form">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzPrefix]="prefixUser">
+                                    <input type="text" nz-input formControlName="loginName" placeholder="用户名">
+                                </nz-input-group>
+                                <nz-form-explain *ngIf="form.get('loginName')?.dirty && form.get('loginName')?.errors">
+                                    请输入用户名!</nz-form-explain>
+                            </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzPrefix]="prefixLock">
+                                    <input type="password" nz-input formControlName="password" placeholder="密码">
+                                </nz-input-group>
+                                <nz-form-explain *ngIf="form.get('password')?.dirty && form.get('password')?.errors">
+                                    请输入密码!</nz-form-explain>
+                            </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
+                            <nz-form-control>
+                                <button nz-button class="button" [nzType]="'primary'" [nzLoading]="loginLoading"
+                                    (click)="login()">登录</button>
+                                <button nz-button class="button" [nzType]="'default'" (click)="register()">注册</button>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </form>
+
+                    <ng-template #prefixUser><i nz-icon type="user"></i></ng-template>
+                    <ng-template #prefixLock><i nz-icon type="lock"></i></ng-template>
+                </div>
+            </div>
+
+            <div *ngIf="userInfo.loginName">
+                <div class="hlb_top">
+                    <div style="margin-left:54px">Hi,{{userInfo.loginName}}欢迎您!</div>
+                </div>
+                <div class="m-t-12">
+                    <div class="info-img"><img src="src/app/img/LOGO.png"/></div>
+                </div>
+                <div class="text-center m-t-12">
+                    <button class="button bg-mix" style="width:120px;" ui-sref="app.account.myAccount"
+                        (click)="loginInter()">进入京创</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

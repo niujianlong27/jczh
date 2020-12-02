@@ -1,0 +1,11 @@
+.modal-payment-report ::ng-deep .ant-form-item{
+  margin-bottom:0;
+}
+.modal-right-div{
+  width: 200px;
+  display:inline-block;
+  margin-left:15px;
+}
+.ant-select {
+  width: 100%;
+}

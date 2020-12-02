@@ -1,0 +1,19 @@
+<common-page [dataSet]="dataSet" [pageSize]="pageSize" [totalPage]="totalPage" [listLoading]="listLoading"
+             [isMutli]="true" [triggerSearch]="true" (search)="listSearch($event)"
+             (updateDataResult)="updateDataResult($event)" (btnClick)="btnClick($event)">
+</common-page>
+
+
+<ng-template #loadMark>
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="5">载重标记</nz-form-label>
+      <nz-form-control [nzSpan]="12" [nzValidateStatus]="selectedValueValidateStatus">
+        <nz-select style="width: 120px;" name="selectedValue" [(ngModel)]="selectedValue" required>
+          <nz-option *ngFor="let select of selectArray" [nzValue]="select.value" [nzLabel]="select.name"></nz-option>
+        </nz-select>
+        <nz-form-explain *ngIf="selectedValueValidateStatus">请选择载重标记</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</ng-template>

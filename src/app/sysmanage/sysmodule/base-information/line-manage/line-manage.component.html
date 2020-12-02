@@ -1,0 +1,48 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+
+<common-page (search)="listSearch($event)" (btnAdd)="btnAdd()" [pageSize]="pageSize" [totalPage]="totalPage"
+             [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" (btnDelete)="btnDelete($event)"
+             [dataSet]="dataSet" [isMutli]="true" [extraTableHeight]="permissions ? 52 : 0">
+
+</common-page>
+
+<!--弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+          (nzAfterClose)="closeResult()">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="12">
+
+        <input-modal *ngIf="m.type == 'modal'" [isMutli]="false" [findset]="formIdFindset"
+                     [inputModalModel]="inputModalModel" (inpEmit)="inpEmit($event)" [borderRed]="borderRed"
+                     [DISABLED]="true"></input-modal>
+
+        <input type="{{m.type}}" *ngIf="m.type == 'text' || m.type == 'number'" nz-input formControlName="{{m.eName}}"
+               [id]="m.eName">
+
+        <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+          <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+        </nz-radio-group>
+
+
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+        </nz-form-explain>
+
+      </nz-form-control>
+
+    </nz-form-item>
+
+  </form>
+</nz-modal>
+
+<!--确认弹窗-->
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>

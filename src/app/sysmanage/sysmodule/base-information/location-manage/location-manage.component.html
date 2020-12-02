@@ -1,0 +1,13 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+
+<common-page (search)="listSearch($event)" (btnAdd)="btnAdd()" [pageSize]="pageSize" [totalPage]="totalPage" (btnClick)="btnClick($event)" [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" (btnDelete)="btnDelete($event)" [extraTableHeight]="permissions ? 52 : 0"
+    (updateDataResult)="updateDataResult($event)" [dataSet]="dataSet" [isMutli]="true" [btnDisable]="{'Update': !selectedData[0],'Delete': !selectedData[0], 'updateCheck': !selectedData[0]}" [triggerSearch]="true">
+
+</common-page>
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon" (modalConfirmResult)="modalConfirmResult($event)">
+
+</app-modal-confirm>
+<location-manage-modal [(visible)]="modalFormVisible" [status]="status" [params]="params" (updateList)="updateList($event)" [rowid]="rowid">
+
+</location-manage-modal>

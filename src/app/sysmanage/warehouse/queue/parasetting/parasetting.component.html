@@ -1,0 +1,60 @@
+
+<form nz-form [formGroup]="validateForm" style="padding-top: 2%">
+  <p style="font-size: 20px;color:#ffbf00">调度参数</p><br/>
+  <div nz-row [nzGutter]="1" [nzType]="'flex'">
+      <nz-form-item style="margin-left: 130px">
+        <div nz-col [nzSpan]="8">
+        <nz-form-label [nzSpan]="13">进厂最大时长(分)</nz-form-label>
+        <nz-form-control [nzSpan]="9">
+          <app-input-number formControlName="noticeMinute" [intType]="true" [format]="'number'"></app-input-number>
+        </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="8" >
+        <nz-form-label [nzSpan]="13">提醒次数</nz-form-label>
+        <nz-form-control [nzSpan]="9">
+          <app-input-number formControlName="noticeCount" [intType]="true" [format]="'number'"></app-input-number>
+        </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="8">
+        <nz-form-label [nzSpan]="13">提醒间隔(分)</nz-form-label>
+        <nz-form-control [nzSpan]="9">
+          <app-input-number formControlName="noticeInterval" [intType]="true" [format]="'number'"></app-input-number>
+        </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="8">
+        <nz-form-label [nzSpan]="13">超时处理方式</nz-form-label>
+        <nz-form-control [nzSpan]="9">
+          <nz-select formControlName="dealType" (ngModelChange)="modelChange($event)">
+            <nz-option *ngFor="let i  of dealTypeArr" [nzValue]="i.value" [nzLabel]="i.name"></nz-option>
+          </nz-select>
+        </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="8" *ngIf="dealType=='product_disp_dealType_addMinutes'">
+        <nz-form-label [nzSpan]="13">顺延时长(分)</nz-form-label>
+        <nz-form-control [nzSpan]="9">
+          <app-input-number formControlName="dealValue" [intType]="true" [format]="'number'"></app-input-number>
+        </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="8" *ngIf="dealType=='product_disp_dealType_addMinutes'">
+        <nz-form-label [nzSpan]="13">顺延次数</nz-form-label>
+        <nz-form-control [nzSpan]="9">
+          <app-input-number formControlName="dealCount" [intType]="true" [format]="'number'"></app-input-number>
+        </nz-form-control>
+        </div>
+      </nz-form-item>
+
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="4">系统支持联系电话</nz-form-label>
+        <textarea nz-input formControlName="supportContact" style="width: 500px;height: 200px "></textarea>
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+<div nz-row >
+  <div nz-col [nzSpan]="24" style="text-align: right;">
+    <button nz-button nzType="primary" (click)="importConfirm3()" [nzLoading]="implistLoading" style="text-align: right;"
+            [disabled]="isChange">保存
+    </button>
+  </div>
+</div>

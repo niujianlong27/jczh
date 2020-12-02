@@ -1,0 +1,39 @@
+<div class="progress-bar" [hidden]="!barShow">
+    <div class="progress-bar-inner"></div>
+</div>
+<layout-header [info]="info"></layout-header>
+<ng-container *ngIf="!loading">
+    <layout-sidebar [formId]="formId" [leftNavArr]="navModuleArr" [parentId]="parentId" [childrenId]="childrenId" (leftNavClick)="selectLeftNavFun($event)" (isCollapsed)="leftNavCollapsed($event)"></layout-sidebar>
+    <div class="main-content" [ngClass]="{'main-content-left':!collapsed,'main-content-colleft':collapsed}">
+        <ng-container>
+            <app-line-nav [tipNavArr]="tipNavArr" [formId]="formId" [selectMenuUrl]="selectMenuUrl" [urlChange]="urlChange" (selectTipNav)="selectTipNavFun($event)" (deleteTipNav)="deleteTipNav($event)"></app-line-nav>
+            <div class="content" [perfectScrollbar]="{wheelPropagation: true,suppressScrollX: true}">
+                <router-outlet></router-outlet>
+            </div>
+        </ng-container>
+    </div>
+</ng-container>
+<ng-container *ngIf="loading">
+    <nz-spin nzTip="正在加载..."  style="height: 100%;"></nz-spin>
+</ng-container>
+<ng-template #nnTemplate let-msg="data" let-notification>
+    <div class="ant-notification-notice-content">
+        <div>
+        <div class="ant-notification-notice-message">{{msg.messageTitle}}</div>
+        <div class="ant-notification-notice-description">
+            {{msg.messageTemplate}}
+            <a *ngIf="formIdValidate(msg)" (click)="msgRead(notification,msg, 1)">
+                （查看详情）
+            </a>
+        </div>
+        <span class="ant-notification-notice-btn">
+            <button nz-button nzType="primary" class="ant-btn ant-btn-primary" nzSize="small" (click)="msgRead(notification,msg, 2)">
+            <span>查看</span>
+            </button>
+            <button *ngIf="msg.code" nz-button nzType="primary" class="ant-btn ant-btn-primary" nzSize="small" (click)="msgRead(notification,msg, 3)">
+            <span>确认</span>
+            </button>
+        </span>
+        </div>
+    </div>
+</ng-template>

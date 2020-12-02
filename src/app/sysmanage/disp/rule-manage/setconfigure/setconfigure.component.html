@@ -1,0 +1,45 @@
+<form  #setForm="ngForm" style="height: 1000px;">
+  <div class="dd">
+    <div class='div1'>
+    <div>
+        <span class="f2sMaxTime required">进厂最大时长(分):</span>
+        <nz-input-number  class="fliMaxtime" required id="name" name="name" #name="ngModel" nz-input  nzSize="'small'"  [nzStep]='10' [nzMin]="0" onkeyup="this.value=this.value.replace(/\D/g,'')"  type=number [(ngModel)]="entryQueueMaxTime" [ngModelOptions]="{standalone: true}"></nz-input-number>
+    </div>
+    <div >
+        <span class="f3sRemindNum required">提醒次数:</span>
+        <nz-input-number class="f4iRemindNum" nz-input  nzSize="'small'" type=number [nzMin]="0" onkeyup="this.value=this.value.replace(/\D/g,'')" [(ngModel)]="remindNum" [ngModelOptions]="{standalone: true}"></nz-input-number>
+    </div>
+    <div >
+        <span class="f5sRemindInterval required">提醒间隔(分):</span>
+        <nz-input-number class="f6iRemindInterval" nz-input  nzSize="'small'" [nzMin]="0" onkeyup="this.value=this.value.replace(/\D/g,'')"  type=number [(ngModel)]="remindTime"[ngModelOptions]="{standalone: true}"></nz-input-number>
+    </div>
+    </div>
+    <div class='div2'>
+        <div>
+            <span class="f7sSelectedValue required">超时处理方式:</span>
+            <nz-select class="f8select" nzShowSearch nzAllowClear [(ngModel)]="dealType" [ngModelOptions]="{standalone: true}">
+                <nz-option *ngFor="let i of themeArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+            </nz-select>
+        </div>
+        <div *ngIf="dealType=='TO02'">
+            <span class="f9sPostponeTime required" >顺延时长(分):</span>
+            <nz-input-number class="f10IpostponeTime" nz-input  nzSize="'small'" [nzMin]="0" type=number onkeyup="this.value=this.value.replace(/\D/g,'')" [(ngModel)]="postTime" [ngModelOptions]="{standalone: true}"></nz-input-number>
+        </div>
+        <div *ngIf="dealType=='TO02'">
+            <span class="f11sPostponeNum required" >顺延次数:</span>
+            <nz-input-number class="f12IpostponeNum" nz-input  nzSize="'small'" [nzMin]="0" type=number  onkeyup="this.value=this.value.replace(/\D/g,'')" [(ngModel)]="postNum" [ngModelOptions]="{standalone: true}"></nz-input-number>
+        </div>
+      </div>
+      <div class="div3">
+          <span class="f15tel required">系统支持联系电话:</span>    
+          <textarea class="f13Telephone" rows="4" nz-input [(ngModel)]="sysSuppTel" [ngModelOptions]="{standalone: true}"></textarea>
+          <span class="f15tel required">预计排队时间(分):</span>
+          <nz-input-number style="margin-left: 66px;"class="f10IpostponeTime" nz-input  nzSize="'small'" [nzMin]="0" type=number onkeyup="this.value=this.value.replace(/\D/g,'')" [(ngModel)]="forecastTime" [ngModelOptions]="{standalone: true}"></nz-input-number>
+      </div>
+      <div class="div4">
+        <span style="color: red">系统联系电话格式:某某处电话/手机:0731-888888(保证是正确的号码)  注:如要添加多号码个请换行在添加</span>             
+        <button class="f14but" nz-button nzType="primary" (click)="save()" [nzLoading]='isLoading'>保存</button>
+      </div>
+      
+    </div>
+</form>

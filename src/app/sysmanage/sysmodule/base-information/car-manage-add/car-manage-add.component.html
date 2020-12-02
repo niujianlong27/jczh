@@ -1,0 +1,162 @@
+<nz-spin [nzSpinning]="spinning">
+  <form [formGroup]="validateForm" nz-form style="margin-top: 1%" class="in">
+    <div [nzGutter]="24" nz-row nzAlign="middle" nzJustify="space-around">
+      <div *ngFor="let control of controlArray" [nzSpan]="8" nz-col>
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="control.eName" [nzRequired]="control.require" [nzSpan]="10">
+            {{ control.cName }}
+          </nz-form-label>
+          <nz-form-control [nzSpan]="14">
+            <ng-container *ngIf="control?.extra">
+              <nz-input-group [nzSuffix]="extraContent">
+                <nz-input-number *ngIf="control.type==='number'" [attr.id]="control.eName"
+                                 [formControlName]="control.eName"
+                                 [nzMax]="control?.numberType?.nzMax || 999999999999999"
+                                 [nzMin]="control?.numberType?.nzMin || 0"
+                                 [nzPrecision]="control?.numberType?.nzPrecision || 0"
+                                 [nzStep]="control?.numberType?.nzStep || 1" style="width: 90%">
+                </nz-input-number>
+              </nz-input-group>
+              <ng-template #extraContent>
+                {{ control.extraContent }}
+              </ng-template>
+            </ng-container>
+            <ng-container *ngIf="!control?.extra">
+
+              <input *ngIf="control.type==='text'" [attr.id]="control.eName" [formControlName]="control.eName" nz-input
+                     trim type="text"/>
+
+              <nz-select
+                *ngIf="control.type ==='select'"
+                [nzMaxTagCount]="3"
+                [attr.id]="control.eName"
+                [formControlName]="control.eName"
+                nzMode="multiple"
+              >
+                <nz-option *ngFor="let option of control.selectList" [nzLabel]="option.name" [nzValue]="option.value">
+                </nz-option>
+              </nz-select>
+              <nz-select
+                *ngIf="control.type==='defaultSelect'"
+                [attr.id]="control.eName"
+                [formControlName]="control.eName"
+                nzMode="default"
+                [nzAllowClear]="true"
+              >
+                <nz-option *ngFor="let option of control.selectList" [nzLabel]="option.name" [nzValue]="option.value">
+                </nz-option>
+              </nz-select>
+
+              <nz-input-number *ngIf="control.type==='number'" [attr.id]="control.eName"
+                               [formControlName]="control.eName"
+                               [nzMax]="control?.numberType?.nzMax || 999999999999999"
+                               [nzMin]="control?.numberType?.nzMin || 0"
+                               [nzPrecision]="control?.numberType?.nzPrecision || 0"
+                               [nzStep]="control?.numberType?.nzStep || 1" style="width: 100%">
+              </nz-input-number>
+
+              <input-modal
+                *ngIf="control.type == 'modal'"
+                [isMutli]="false"
+                [findset]="formIdFindset"
+                [(inputModalModel)]="inputModalModel"
+                (inpEmit)="inpEmit($event)"
+                [borderRed]="borderRed"
+              >
+              </input-modal>
+            </ng-container>
+
+            <nz-form-explain *ngIf="validateForm.get(control.eName).dirty  && validateForm.get(control.eName).errors">
+
+              <ng-container *ngIf="validateForm.get(control.eName).hasError('required')">
+                {{control.validateCon}}
+              </ng-container>
+
+              <ng-container *ngIf="validateForm.get(control.eName).hasError('pattern')">
+                {{control.validators.patternErr}}
+              </ng-container>
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <div *ngIf="carManageData['status'] === 'update'" [nzGutter]="24" nz-row nzAlign="middle" nzJustify="space-around">
+      <div *ngFor="let control of checkArray" [nzSpan]="8" nz-col>
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="control.eName" [nzRequired]="control.require" [nzSpan]="10">
+            {{ control.cName }}
+          </nz-form-label>
+          <nz-form-control [nzSpan]="14">
+            <input *ngIf="control.type==='text'" [attr.id]="control.eName" [formControlName]="control.eName" nz-input
+                   trim type="text"/>
+
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+
+  <div nz-row nzAlign="middle" nzJustify="center" nzType="flex" style="margin-top: 1%">
+    <div nz-col nzSpan="10">
+      <ng-container *ngIf="carManageData['status'] === 'update'">
+        <app-table-form (userColumnsEmit)="tableColumns($event)" (updateDataResult)="updateDataResult($event)"
+                        [colSet]="false" [isMutli]="true" [dataSet]="segmentIds" [selfTableHeight]="'200px'"
+                        [nzShowPagination]="false" [selectedChange]="true" [refresh]="refresh"
+                        [gridId]="'grid2'">
+          <ng-template [grid-row]="'tpl-grid2-endPoint'"
+                       let-index="index" let-key="key" let-obj>
+            <nz-select (ngModelChange)="endPointSelectChange($event,obj)" [(ngModel)]="obj.endPoint" nzAllowClear
+                       nzMode="multiple" nzPlaceHolder="选择" style="width: 100%">
+              <nz-option *ngFor="let option of obj.selectList" [nzLabel]="option.name" [nzValue]="option.value">
+              </nz-option>
+            </nz-select>
+          </ng-template>
+          <ng-template [grid-row]="'tpl-grid2-startPoint'"
+                       let-index="index" let-key="key" let-obj>
+            <nz-select (ngModelChange)="endPointSelectChange($event,obj)" [(ngModel)]="obj.startPoint" nzAllowClear
+                       nzMode="multiple" nzPlaceHolder="选择" style="width: 100%">
+              <nz-option *ngFor="let option of obj.selectList2" [nzLabel]="option.name" [nzValue]="option.value">
+              </nz-option>
+            </nz-select>
+          </ng-template>
+        </app-table-form>
+      </ng-container>
+      <ng-container *ngIf="carManageData['status'] !== 'update'">
+        <app-table-form (userColumnsEmit)="tableColumns($event)" (updateDataResult)="updateDataResult($event)"
+                        [colSet]="false" [isMutli]="true" [dataSet]="segmentIds" [selfTableHeight]="'200px'"
+                        [nzShowPagination]="false" [selectedChange]="true" [refresh]="refresh"
+                        [gridId]="'grid3'">
+          <ng-template [grid-row]="'tpl-grid3-endPoint'"
+                       let-index="index" let-key="key" let-obj>
+            <nz-select (ngModelChange)="endPointSelectChange($event,obj)" [(ngModel)]="obj.endPoint" nzAllowClear
+                       nzMode="multiple" nzPlaceHolder="选择" style="width: 100%">
+              <nz-option *ngFor="let option of obj.selectList" [nzLabel]="option.name" [nzValue]="option.value">
+              </nz-option>
+            </nz-select>
+          </ng-template>
+          <ng-template [grid-row]="'tpl-grid3-startPoint'"
+                       let-index="index" let-key="key" let-obj>
+            <nz-select (ngModelChange)="endPointSelectChange($event,obj)" [(ngModel)]="obj.startPoint" nzAllowClear
+                       nzMode="multiple" nzPlaceHolder="选择" style="width: 100%">
+              <nz-option *ngFor="let option of obj.selectList2" [nzLabel]="option.name" [nzValue]="option.value">
+              </nz-option>
+            </nz-select>
+          </ng-template>
+        </app-table-form>
+      </ng-container>
+
+    </div>
+  </div>
+
+  <div nz-row nzAlign="middle" nzJustify="center" nzType="flex" style="margin-top: 1%">
+    <div nz-col>
+      <button (click)="btnConfirm()" [nzLoading]="buttonLoading" nz-button nzType="primary">确定</button>
+    </div>
+    <div nz-col nzSpan="3">
+    </div>
+    <div nz-col>
+      <button (click)="btnCancel()" [nzLoading]="buttonLoading" nz-button nzType="default">取消</button>
+    </div>
+  </div>
+</nz-spin>

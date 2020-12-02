@@ -1,0 +1,175 @@
+<!--<app-searchform (search)="searchList($event)"></app-searchform>-->
+<div>
+  <form nz-form [formGroup]="validateForm">
+    <div nz-row nzType="flex" [nzGutter]="1">
+      <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5">入库单号</nz-form-label>
+            <nz-form-control [nzSpan]="15">
+              <input nz-input  disabled="true" formControlName="inWsNo" placeholder="系统生产">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5" nzRequired>入库时间</nz-form-label>
+            <nz-form-control [nzSpan]="15">
+              <nz-date-picker  [nzFormat]="'yyyy-MM-dd'" formControlName="inWsTime" ></nz-date-picker>
+            </nz-form-control>
+            <nz-form-explain style="margin-left: 30%"
+                             *ngIf="validateForm.get('inWsTime').dirty && validateForm.get('inWsTime').errors">
+              <ng-container *ngIf="validateForm.get('inWsTime').hasError('required')">
+                请选择入库时间
+              </ng-container>
+            </nz-form-explain>
+          </nz-form-item>
+        </div>
+      <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5" nzRequired>入库类型</nz-form-label>
+            <nz-form-control [nzSpan]="15">
+              <nz-select nzShowSearch="true" formControlName="inType">
+                <nz-option *ngFor="let i of inTypeArr" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+              </nz-select>
+            </nz-form-control>
+            <nz-form-explain style="margin-left: 30%"
+                             *ngIf="validateForm.get('inType').dirty && validateForm.get('inType').errors">
+              <ng-container *ngIf="validateForm.get('inType').hasError('required')">
+                请选择入库类型
+              </ng-container>
+            </nz-form-explain>
+          </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" nzRequired>操作员</nz-form-label>
+          <nz-form-control [nzSpan]="15">
+            <nz-select
+              nzShowSearch
+              nzAllowClear
+              formControlName="operUser"
+              (nzOnSearch)="selectSearch($event)"
+              (nzOpenChange)="selectOpen($event)"
+              (nzScrollToBottom)="loadMore()">
+              <ng-container *ngFor="let item of userDataArr">
+                <nz-option [nzLabel]="item.name" [nzValue]="item.userId"></nz-option>
+              </ng-container>
+            </nz-select>
+          </nz-form-control>
+          <nz-form-explain style="margin-left: 30%"
+                           *ngIf="validateForm.get('operUser').dirty && validateForm.get('operUser').errors">
+            <ng-container *ngIf="validateForm.get('operUser').hasError('required')">
+              请输入操作员
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" >操作班组</nz-form-label>
+          <nz-form-control [nzSpan]="15">
+              <input nz-input formControlName="operTeam">
+          </nz-form-control>
+
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5">理货员</nz-form-label>
+          <nz-form-control [nzSpan]="15">
+            <input nz-input formControlName="tallyman">
+          </nz-form-control>
+
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" >吊机工</nz-form-label>
+          <nz-form-control [nzSpan]="15">
+            <input nz-input formControlName="craneOper">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" >备注</nz-form-label>
+          <nz-form-control [nzSpan]="15">
+            <input nz-input formControlName="remark">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" nzRequired>客户</nz-form-label>
+          <nz-form-control [nzSpan]="15">
+            <nz-select
+              nzShowSearch
+              formControlName="customerCode"
+              (nzOnSearch)="selectSearch1($event)"
+              (nzOpenChange)="selectOpen1($event)"
+              (nzScrollToBottom)="loadMore1()">
+              <ng-container *ngFor="let item of companyDataArr">
+                <nz-option [nzLabel]="item.companyName" [nzValue]="item.companyId"></nz-option>
+              </ng-container>
+            </nz-select>
+          </nz-form-control>
+          <nz-form-explain style="margin-left: 30%"
+                           *ngIf="validateForm.get('customerCode').dirty && validateForm.get('customerCode').errors">
+            <ng-container *ngIf="validateForm.get('customerCode').hasError('required')">
+              请选择客户
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-item>
+      </div>
+    </div>
+
+  </form>
+</div>
+<tpl-buttons (btnClick)="btnClick($event)" formId="form_stock_in_detail" [btnHiden]="{'Delete':false,'Save':false,'Import':false,'Add':false,'Find':true,'Reset':false}"></tpl-buttons>
+<app-table-form [dataSet]="dataSet" (updateDataResult)="updateDataResult($event)" formId="form_stock_in_detail" [isCheckBox]="true" [isMutli]="true" gridId="grid1"
+                [pageSize]="pageSize1" [totalPage]="totalPage"   (userColumnsEmit)="colName1($event)" (modelChange)="modelChange($event)"
+                [listLoading]="listLoading1">
+  <ng-template #wsId let-data let-header>
+    <nz-select [nzAllowClear]="true" [nzShowSearch]="false" nzSize="small" [(ngModel)]="data.wsId"  [ngModelOptions]="{standalone: true}"
+               style="width: 100%;" (ngModelChange)="fWhsChange($event,data)" [ngClass]="{'selectShow':!data.canUpdate,'selectClose':data.canUpdate}" >
+      <nz-option *ngFor="let p of warehouseArr" [nzLabel]="p.name" [nzValue]="p.value"></nz-option>
+    </nz-select>
+    <div [ngClass]="{'divShow':data.canUpdate,'divClose':!data.canUpdate}">{{data.wsName}}</div>
+  </ng-template>
+  <ng-template #wsLocation let-data let-header>
+    <nz-select [nzAllowClear]="true" [nzShowSearch]="false" nzSize="small" [(ngModel)]="data.wsLocationId"  [ngModelOptions]="{standalone: true}"
+               style="width: 100%;"  [ngClass]="{'selectShow':!data.canUpdate,'selectClose':data.canUpdate}" (nzOpenChange)="wsLocationOpenChange($event,data)" (ngModelChange)="wsLocationChange($event,data)">
+      <nz-option *ngFor="let p of data.wsLocationArr" [nzLabel]="p.name" [nzValue]="p.value"></nz-option>
+    </nz-select>
+    <div [ngClass]="{'divShow':data.canUpdate,'divClose':!data.canUpdate}">{{data.wsLocation}}</div>
+  </ng-template>
+  <ng-template #itemid let-data let-header>
+    <nz-select [nzAllowClear]="true" [nzShowSearch]="false" nzSize="small" [(ngModel)]="data.prodId"  [ngModelOptions]="{standalone: true}"
+               style="width: 100%;"  (ngModelChange)="itemidModelChange($event,data)" [ngClass]="{'selectShow':!data.canUpdate,'selectClose':data.canUpdate}">
+      <nz-option *ngFor="let p of itemidArr" [nzLabel]="p.itemid" [nzValue]="p.itemid"></nz-option>
+    </nz-select>
+    <div [ngClass]="{'divShow':data.canUpdate,'divClose':!data.canUpdate}">{{data.prodId}}</div>
+  </ng-template>
+
+</app-table-form>
+
+
+<ng-template #tplTitle2>
+  <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent2>
+  <app-searchform (search)="searchList($event)" formId="form_stock_in_detail"></app-searchform>
+  <tpl-buttons formId="form_stock_in_detail" [btnHiden]="{'Delete':true,'Save':true,'Import':true,'Add':true,'Find':false,'Reset':true}"></tpl-buttons>
+  <app-table-form [dataSet]="dataSet1" (updateDataResult)="updateDataResult1($event)" gridId="grid2" formId="form_stock_in_detail" [isCheckBox]="true" [isMutli]="true"
+                  [pageSize]="pageSize1" [totalPage]="totalPage"   (modelChange)="modelChange($event)"
+                  [listLoading]="listLoading1"     (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)'>
+  </app-table-form>
+</ng-template>
+<ng-template #tplFooter2>
+  <button nz-button nzType="default" (click)="handleCancel()" [disabled]="  implistLoading">取消</button>
+  <button nz-button nzType="primary" (click)="importConfirm2()" [nzLoading]="implistLoading"
+          [disabled]="implistLoading">确定
+  </button>
+</ng-template>
+
+

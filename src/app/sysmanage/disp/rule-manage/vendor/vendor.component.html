@@ -1,0 +1,108 @@
+<nz-tabset  [(nzSelectedIndex)]="carNum" (nzSelectChange)="selectChange()">
+  <nz-tab nzTitle="供应商基础数据维护">
+      <common-page [pageFun]='true' (pageIndexEmit)='getPageIndex($event)' (pageSizeEmit)='getPageSize($event)' (search)="listSearch($event)" (btnAdd)="btnAdd()" [formId]="'form_vendor'"  (btnDelete)="delete($event)"
+      (btnUpdate)="btnUpdate($event)" [totalPage]="totalPage" [pageSize]="pageSize" [listLoading]="listLoading" [dataSet]="dataSet" [isMutli]="false"></common-page>
+  </nz-tab>
+
+  <nz-tab nzTitle="供应商品种车辆上限数维护">
+      <common-page [pageFun]='true' (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)' (search)="listSearch1($event)" [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)"
+      [formId]="'form_vendor_kind'"  (btnAdd)="btnAdd()" (btnDelete)="delete($event)" [totalPage]="totalPage" [pageSize]="pageSize"  [isMutli]="false" [dataSet]="dataSet" ></common-page>
+  </nz-tab>
+</nz-tabset>
+
+<nz-modal [nzWidth]="'45%'" [(nzVisible)]="modalFormVisible1" nzTitle="{{ modalTitle }}" (nzOnCancel)="handleCancel()"
+  [nzOkLoading]="isOkLoading" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()">
+
+    <form nz-form [formGroup]="modalValidateForm1">
+      <nz-form-item *ngFor="let m of modalFormData1">
+        <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="12">
+
+          <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'; else other" formControlName="{{m.eName}}">
+            <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+          </nz-radio-group>
+
+          <ng-template #other>
+            <input style="width: 200px;" *ngIf="m.type == 'text'" nz-input placeholder="供应商名称" [formControlName]="m.eName">
+            <nz-select style="width: 200px;" *ngIf="m.type === 'select'" nzShowSearch nzAllowClear nzPlaceHolder="供应商类型"
+              formControlName="{{m.eName}}">
+              <nz-option *ngFor="let option of vendorTypeList" [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+              </nz-option>
+            </nz-select>
+            <input style="width: 200px;" *ngIf="m.type == 'text1'" nz-input placeholder="备注" [formControlName]="m.eName">
+            <nz-select style="width: 200px;" *ngIf="m.type === 'select1'" nzShowSearch nzAllowClear nzPlaceHolder="状态"
+              formControlName="{{m.eName}}">
+              <nz-option *ngFor="let option of statusList" [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+              </nz-option>
+            </nz-select>
+
+            <!-- <nz-input-number style="width: 200px;" *ngIf="m.type === 'num'" [nzMin]="0" [nzMax]="5000" [nzStep]="1" formControlName="{{m.eName}}"></nz-input-number> -->
+          </ng-template>
+          <nz-form-explain *ngIf="modalValidateForm1.get(m.eName) && modalValidateForm1.get(m.eName).dirty && modalValidateForm1.get(m.eName).errors">
+            <div *ngIf="modalValidateForm1.get(m.eName).errors.pattern;else erroInf">
+              {{ m.validators.patternErr}}
+            </div>
+            <ng-template #erroInf>
+              {{ m.validateCon}}
+            </ng-template>
+          </nz-form-explain>
+
+        </nz-form-control>
+
+      </nz-form-item>
+
+    </form>
+  </nz-modal>
+
+  <nz-modal [nzWidth]="'45%'" [(nzVisible)]="modalFormVisible2" nzTitle="{{ modalTitle }}" (nzOnCancel)="handleCancel()"
+  [nzOkLoading]="isOkLoading" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()">
+
+    <form nz-form [formGroup]="modalValidateForm2">
+      <nz-form-item *ngFor="let m of modalFormData2">
+        <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="12">
+
+          <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'; else other" formControlName="{{m.eName}}">
+            <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+          </nz-radio-group>
+
+          <ng-template #other>
+            <nz-select style="width: 200px;" *ngIf="m.type === 'vendorSelect'" nzShowSearch nzAllowClear nzPlaceHolder="供应商名称"
+              formControlName="{{m.eName}}">
+              <nz-option *ngFor="let option of vendorNameList" [nzLabel]="option.vendorName" [nzValue]="option.vendorCode">
+              </nz-option>
+            </nz-select>
+            <nz-tree-select style="width: 200px;" *ngIf="m.type === 'kindSelect'" [nzDefaultExpandedKeys]="expandKeys" [nzNodes]="nodes" nzShowSearch nzPlaceHolder="品种名称"
+              (ngModelChange)="onChange($event)" formControlName="{{m.eName}}" [nzDropdownStyle]="{ 'max-height': '300px' }">
+            </nz-tree-select>
+            <nz-input-number style="width: 200px;" *ngIf="m.type === 'num'" [nzMin]="0" [nzMax]="5000" [nzStep]="1" formControlName="{{m.eName}}"></nz-input-number>
+            <input style="width: 200px;" *ngIf="m.type == 'text1'" nz-input placeholder="备注" [formControlName]="m.eName">
+            <nz-select style="width: 200px;" *ngIf="m.type === 'select1'" nzShowSearch nzAllowClear nzPlaceHolder="状态"
+              formControlName="{{m.eName}}">
+              <nz-option *ngFor="let option of statusList" [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+              </nz-option>
+            </nz-select>
+
+            <!-- <nz-input-number style="width: 200px;" *ngIf="m.type === 'num'" [nzMin]="0" [nzMax]="5000" [nzStep]="1" formControlName="{{m.eName}}"></nz-input-number> -->
+          </ng-template>
+          <nz-form-explain *ngIf="modalValidateForm2.get(m.eName) && modalValidateForm2.get(m.eName).dirty && modalValidateForm2.get(m.eName).errors">
+            <div *ngIf="modalValidateForm2.get(m.eName).errors.pattern;else erroInf">
+              {{ m.validators.patternErr}}
+            </div>
+            <ng-template #erroInf>
+              {{ m.validateCon}}
+            </ng-template>
+          </nz-form-explain>
+
+        </nz-form-control>
+
+      </nz-form-item>
+
+    </form>
+  </nz-modal>

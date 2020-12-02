@@ -1,0 +1,104 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [btnDisable]="{'Binding':btnDis.Binding}"></tpl-buttons>
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+</app-grid-resize>
+
+<ng-template #one>
+  <app-table-form gridId="grid1" [dataSet]="data1" [totalPage]="totalpage" [pageSize]="pageSize" [trSelectedShow]="true"
+                  [listLoading]="loading" (updateDataResult)="selectData($event)" [isMutli]="false"
+                  [selfTableHeight]="gridOneHeight">
+  </app-table-form>
+</ng-template>
+<ng-template #two>
+  <nz-tabset>
+    <nz-tab nzTitle="竞价明细">
+      <app-table-form (pageIndexEmit)="pageIndexEmit($event)" (pageSizeEmit)="pageSizeEmit($event)" [dataSet]="data2"
+                      [isCheckBox]="false" [listLoading]="nextLoading" [pageFun]="true" [pageSize]="pageSize2"
+                      [selfTableHeight]="gridTwoHeight" [showCount]="false" [totalPage]="totalpage2" gridId="grid2">
+      </app-table-form>
+
+    </nz-tab>
+
+  </nz-tabset>
+</ng-template>
+
+
+<ng-container>
+  <ng-template #recordTitle>
+    {{recordTit}}
+  </ng-template>
+  <ng-template #recordContent>
+    <ng-container>
+      <p><i nz-icon type="form" theme="outline"></i><span>出价</span></p>
+      <div class="clearfix">
+        <div class="fl clearfix m-r" style="width:5%;"></div>
+        <div class="fl clearfix m-r" style="width:30%;">
+          <nz-form-label class="fl" style="width: 50%;">是否含税</nz-form-label>
+          <div class="fl" style="line-height: 40px;">
+            <span>{{selectData1[0]?.settleTypeName}}</span>
+          </div>
+        </div>
+        <div class="fl clearfix m-r" style="width:30%;">
+          <nz-form-label class="fl" style="width: 50%;">价格上限</nz-form-label>
+          <div class="fl" style="line-height: 40px;">
+            {{selectData1[0]?.settleType == '10' ? selectData1[0]?.ceilingPriceTax : selectData1[0]?.ceilingPriceTaxNo}}元/吨
+          </div>
+        </div>
+        <div class="fl clearfix m-r" style="width:30%;">
+          <nz-form-label class="fl" style="width: 50%;">价格下限</nz-form-label>
+          <div class="fl" style="line-height: 40px;">
+            {{selectData1[0]?.settleType == '10' ? selectData1[0]?.lowerPriceTax : selectData1[0]?.lowerPriceTaxNo}}元/吨
+          </div>
+        </div>
+      </div>
+      <div class="clearfix">
+        <div class="fl clearfix" style="width: 410px; margin: 20px auto;">
+          <nz-form-label class="fl" nzRequired style="width: 112px;">请输入单价</nz-form-label>
+          <nz-form-control class="fl" style="width: 200px;">
+            <!--<input nz-input name="price" [(ngModel)]="tempInfo.price">-->
+            <nz-input-number [nzMin]="0" class="day-input fl" [(ngModel)]="tempInfo.price"
+                             [nzStep]="1" (nzBlur)="verifyPrice(tempInfo.price)" [nzPrecision]="3"></nz-input-number>
+          </nz-form-control>
+          <span style="line-height: 40px;">元/吨</span>
+        </div>
+        <div class="fl clearfix" style=" margin: 20px auto;">
+          <nz-form-label class="fl" nzRequired>
+            车次
+          </nz-form-label>
+          <nz-form-control class="fl" >
+            <nz-input-number name="circulationRob" [(ngModel)]="tempInfo.offerTrainNum" [nzMin]="0" [nzPrecision]="0" [nzStep]="1">
+            </nz-input-number>
+
+          </nz-form-control>
+        </div>
+      </div>
+
+      <div class="clearfix">
+        <div class="clearfix m-r" style="width: 500px; margin: 0 auto;">
+          <nz-form-label class="fl" style="width: 230px;">参考金额</nz-form-label>
+          <div class="fl" style="line-height: 40px;">
+            {{tempInfo.totAmount}}元
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+  <ng-template #recordFooter>
+    <ng-container>
+      <button nz-button nzType="primary" (click)="bidConfirm()" [nzLoading]="comfirmLoading"
+              [disabled]="comfirmLoading">确定
+      </button>
+      <button nz-button nzType="default" (click)="cancel()">取消</button>
+    </ng-container>
+  </ng-template>
+</ng-container>
+<ng-container>
+  <ng-template #confirmTitle>提示信息</ng-template>
+  <ng-template #confirmContent>
+    <p class="text-center f-b" style="margin:0;"> {{confirmCon}} </p>
+  </ng-template>
+  <ng-template #confirmFooter>
+    <button nz-button nzType="primary" (click)="confirm()">确定</button>
+    <button nz-button nzType="default" (click)="cancel()">取消</button>
+  </ng-template>
+</ng-container>

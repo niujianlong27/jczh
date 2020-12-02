@@ -1,0 +1,24 @@
+<div class="grid-resize-box" grid-resize [formId]="tempFormId" [extraHeight]="extraHeight" (gridResizeResult)="result($event)" (boxHeight)="boxHeight($event)" [style.height.px]="h" [mode]="mode">
+  <div [ngClass]="{'horizontal-grid horizontal-grid-left':mode === 'horizontal'}" class="trans"
+  [ngStyle]="{width:leftWidth}">
+     <ng-template [ngTemplateOutlet]="gridOne"></ng-template>
+  </div>
+  <div class="line-box trans"  *ngIf="mode === 'horizontal'" [ngStyle]="{left:lineLeft}">
+    <div class="tableLine trans">
+      <span class="grid-line-btn" (click)="resizeGrid()">
+          <i nz-icon type="caret-right" theme="outline" [hidden]="lineShow"></i>
+          <i nz-icon type="caret-left" theme="outline" [hidden]="!lineShow"></i>
+      </span>
+    </div>
+  </div>
+ <div class="trans tableLine-vertical" *ngIf="mode === 'vertical'" [ngStyle]="{top:lineTop}">
+      <span class="grid-line-btn-vertical" (click)="resizeGrid()">
+          <i nz-icon nzType="caret-down" nzTheme="outline" [hidden]="lineShow"></i>
+          <i nz-icon nzType="caret-up" nzTheme="outline" [hidden]="!lineShow"></i>
+      </span>
+  </div>
+  <div [ngClass]="{'horizontal-grid horizontal-grid-right':mode === 'horizontal'}" class="trans" [style.margin-top.px]="mode === 'vertical'? 16 : 0"
+  [ngStyle]="{width:rightWidth,display:display}">
+      <ng-template [ngTemplateOutlet]="gridTwo"></ng-template>
+  </div>
+</div>

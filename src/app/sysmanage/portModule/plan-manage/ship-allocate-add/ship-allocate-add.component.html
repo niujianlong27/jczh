@@ -1,0 +1,41 @@
+<form nz-form [formGroup]="validateForm" class="clearfix" style="margin-top: 20px">
+  <nz-form-item  *ngFor="let m of formData" [hidden]='m.hidden' style="width: 20%;float: left;">
+    <nz-form-label [nzSpan]="9" style="text-align: right" [nzRequired]="m.require">
+      {{m.name}}
+    </nz-form-label>
+    <nz-form-control [nzSpan]="13">
+      <nz-range-picker *ngIf="m.type == 'range'" [formControlName]="m.eName"></nz-range-picker>
+      <nz-date-picker *ngIf="m.type == 'time'" [formControlName]="m.eName"></nz-date-picker>
+      <!--<nz-select style="width: 100px" nzAllowClear nzPlaceHolder="请选择" formControlName="{{m.eName}}" *ngIf="m.type == 'select'">-->
+        <!--<nz-option *ngFor="let o of m.selectArr" [nzValue]="o.value" [nzLabel]="o.name"></nz-option>-->
+      <!--</nz-select>-->
+      <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" nzMin="1" *ngIf="m.type == 'number'"   [attr.disabled]="m.disabled">
+      <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'" [readOnly]="m.readOnly" placeholder="{{m.placeholder}}"
+             [attr.disabled]="m.disabled">
+      <input-modal *ngIf="m.type == 'inputModal'" [DISABLED]='false' [isMutli]=false [findset]="m.findset" [inputModalModel]="boatBatchNum" [inputModalHiddenValue]="boatNum"
+                   (inpEmit)='inpEmit($event)' [validate]="m.validate" [showExplainFlag]="showExplainFlag"></input-modal>
+
+      <nz-form-explain style="position: absolute;bottom: -15px;left: 0px" *ngIf="validateForm.get(m.eName).dirty && validateForm.get(m.eName).errors">
+        <ng-container *ngIf="validateForm.get(m.eName).hasError('required')">
+          {{m.validateCon}}
+        </ng-container>
+        <ng-container *ngIf="validateForm.get(m.eName).hasError('pattern')">
+          {{m.validators.patternErr}}
+        </ng-container>
+
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+
+<tpl-buttons [formId]="'form_port_ship_allocate_add'" (btnClick)='btnClick($event)'></tpl-buttons>
+
+<app-table-form [formId]="'form_port_ship_allocate_add'" [gridId]="'grid1'"  [dataSet]="dataSet" [pageSize]="pageSize" [totalPage]="dataSet.length"
+                [gridOperate]="{show:true,title:'操作',template:g1}" [isCheckBox]="false"
+                 [isMutli]="true" [listLoading]="listLoading" (updateDataResult)="updateDataResult($event)">
+  <ng-template #g1 let-data let-index = "index">
+    <a (click)="delete(data,index)"a>删除</a>
+  </ng-template>
+</app-table-form>
+

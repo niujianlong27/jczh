@@ -1,0 +1,257 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnclick($event)"></tpl-buttons>
+<app-grid-resize [gridOne]="gridOne" [gridTwo]="gridTwo" (selfHeightResult)="gridHeight($event)">
+  <ng-template #gridOne>
+    <app-table-form gridId="grid1" [pageFun]='true' (pageIndexEmit)='getPageIndex($event)' class="bill-of-manage"
+                    (pageSizeEmit)='getPageSize1($event)' gridId='grid1' [dataSet]="dataSet" (listClick)="listClick1($event)"
+                    [pageSize]="pageSize" (updateDataResult)="updateDataResult($event)" [totalPage]="totalPage"
+                    [isMutli]="true" [selfTableHeight]="gridOneHeight" [listLoading]="loading"
+                    [trSelectedShow]="true" [showCount]="false" [paginationRef]="buttom"></app-table-form>
+    <ng-template #buttom>已选{{updatedata.length}}条，已选重量{{totalWeight22}}吨，已选根数{{totalPcs22}}根</ng-template>
+  </ng-template>
+
+  <ng-template #gridTwo>
+    <app-table-form (pageIndexEmit)='getPageIndex($event)' (pageSizeEmit)='getPageSize1($event)' gridId='grid2'
+                    [dataSet]="itemTable"
+                    [pageSize]="pageSize" (updateDataResult)="updateDataResultItem($event)" [totalPage]="totalPage"
+                    [isMutli]="true" [selfTableHeight]="gridTwoHeight"
+                    [trSelectedShow]="true" [showCount]="false" [nzShowPagination]="false" [disabledAllCheckBox]="true"
+                    [isCheckBox]="false"></app-table-form>
+  </ng-template>
+</app-grid-resize>
+
+<nz-modal
+  [(nzVisible)]="printVisible"
+  [nzTitle]="printModalTitle"
+  [nzContent]="printModalContent"
+  [nzFooter]="printModalFooter"
+  (nzOnCancel)="handlePrintCancel()"
+>
+  <ng-template #printModalTitle>
+    打印确认
+  </ng-template>
+
+  <ng-template #printModalContent>
+    <p>您确认要打印吗?</p>
+  </ng-template>
+
+  <ng-template #printModalFooter>
+    <button nz-button nzType="default" (click)="handlePrintCancel()">取消</button>
+    <button nz-button nzType="default" (click)="handlePrintSave()">保存</button>
+  </ng-template>
+</nz-modal>
+<nz-modal
+  [(nzVisible)]="updateVisible"
+  [nzTitle]="updateModalTitle"
+  [nzContent]="updateModalContent"
+  [nzFooter]="updateModalFooter"
+  (nzOnCancel)="handleUpdateCancel()"
+  nzWidth="90%"
+>
+  <ng-template #updateModalTitle>
+    提货单管理>修改
+  </ng-template>
+
+  <ng-template #updateModalContent>
+    <div nz-row>
+      <div nz-col nzSpan="3">车次号: {{loadTaskId}}</div>
+      <div nz-col nzSpan="3">总吨数: {{totalWeight}}吨</div>
+      <div nz-col nzSpan="3">总根数: {{totalQuantity}}根</div>
+      <div nz-col nzSpan="6">
+        <label for="">操作:</label>
+        <nz-select nzSize="small" [nzAllowClear]="false" [(ngModel)]="status" style="width: 50%">
+          <nz-option *ngFor="let item of optionArr" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
+        </nz-select>
+      </div>
+      <!--        <div nz-col nzSpan="3">-->
+      <!--          <nz-select *ngFor="let item of optionArr">-->
+      <!--            <nz-option >{{item.key}}</nz-option>-->
+      <!--          </nz-select>-->
+      <!--        </div>-->
+      <div nz-col nzSpan="3"></div>
+    </div>
+    <!--      <div nz-row *ngFor="let item of itemTable;let i = index" >-->
+    <!--        <div nz-col nzSpan="1">{{item.deliveryItemNo}}</div>-->
+    <!--        <div nz-col nzSpan="1">{{item.fWhs}}</div>-->
+    <!--        <div nz-col nzSpan="3">{{item.productId}}</div>-->
+    <!--        <div nz-col nzSpan="3">{{item.spec}}</div>-->
+    <!--        <div nz-col nzSpan="1">{{item.productName}}</div>-->
+    <!--        <div nz-col nzSpan="1">{{item.fLoc}}</div>-->
+    <!--        <div nz-col nzSpan="2">{{item.material}}</div>-->
+    <!--        <input type="number"  nz-col nzSpan="2" value="{{item.quantity}}">-->
+    <!--        <input type="number"  nz-col nzSpan="2" value="{{item.freePcs}}">-->
+    <!--&lt;!&ndash;        <div nz-col nzSpan="2">{{item.freePcs}}</div>&ndash;&gt;-->
+    <!--        <div nz-col nzSpan="1">{{item.weight}}</div>-->
+    <!--        <div nz-col nzSpan="2">{{dept}}</div>-->
+    <!--        <div nz-col nzSpan="2">{{saleman}}</div>-->
+    <!--        <div nz-col nzSpan="2">{{custUnit}}</div>-->
+    <!--        <div nz-col nzSpan="1"><button nz-button [nzType] = "'danger'" (click)="doDeleteItem(itemTable[i])">删除</button></div>-->
+    <!--      </div>-->
+    <!--    <app-table-form (pageIndexEmit)='getPageIndex($event)' (pageSizeEmit)='getPageSize1($event)' gridId='grid4'  [dataSet]="itemTable"-->
+    <!--                    [pageSize]="pageSize" (updateDataResult)="updateDataResultItem($event)" [totalPage]="totalPage" [isMutli]="true" [selfTableHeight]="gridTwoHeight"-->
+    <!--                    [trSelectedShow]="true" [showCount]="false" [nzShowPagination]="false"></app-table-form>-->
+    <app-table-form (pageIndexEmit)='getPageIndex($event)' (pageSizeEmit)='getPageSize1($event)' gridId='grid5'
+                    [dataSet]="itemTable"
+                    [pageSize]="pageSize" (updateDataResult)="updateDataResultItem($event)" [totalPage]="totalPage"
+                    [isMutli]="false" [selfTableHeight]="gridTwoHeight"
+                    [trSelectedShow]="true" [showCount]="false" [nzShowPagination]="false"
+                    [gridOperate]="{show: true, template: operate}" [isCheckBox]="false"
+                    (modelChange)="tableModelChange2($event)">
+      <ng-template #operate let-data>
+        <button nzType="danger" nz-button nzSize="large"
+                (click)="doDeleteItem(data)">{{data.Itemstatus ? '移除' : '删除'}}</button>
+      </ng-template>
+      <!--      <ng-template #operate1 let-data>-->
+      <!--        <button nzType="danger" nz-button nzSize="large"-->
+      <!--                (click)="doDeleteItem(data)" >移除</button>-->
+      <!--      </ng-template>-->
+    </app-table-form>
+  </ng-template>
+
+  <ng-template #updateModalFooter>
+    <div nz-row>
+      <div nz-col nzSpan="10">
+        <button nz-button nzType="default" (click)="handleUpdateSave()" nzSize="large" [nzLoading]="saveLoading">保存</button>
+      </div>
+      <div nz-col nzSpan="6">
+        <button nz-button nzType="default" (click)="handleShareBilling()" nzSize="large">拼单</button>
+      </div>
+    </div>
+  </ng-template>
+</nz-modal>
+
+<e-ngx-print (printComplete)="printComplete()" [showBtn]="false" #print1></e-ngx-print>
+<!-- 打印模板2.0 尚未启用-->
+<!--打印模板3.0-->
+<div style="display: none" >
+  <div id="print1">
+    <div style="width: 210mm;height: 98mm; background-color: #ffffff; " *ngFor="let p of printparam">
+      <div style="position: relative;top:5mm;">
+        <div style="position: absolute;left:170mm;font-size: 14px">第{{p.page}}页/总{{p.totalPage}}页</div>
+      </div>
+      <div style="position: relative;top:17mm">
+        <div style="position: absolute;left: 33mm;font-size: 14px">{{p.currentTime}}</div>
+        <div style="position: absolute;left: 99mm;font-size: 14px">{{p.deliveryNo}}</div>
+      </div>
+      <div style="position: relative;top:21mm">
+        <div style="position: absolute;left: 33mm;font-size: 14px">{{p.customerId}}</div>
+        <div style="position: absolute;left: 99mm;font-size: 14px">{{p.custname}}</div>
+      </div>
+      <div style="position: relative;top:35mm;width:210mm;height: 38mm">
+        <div *ngFor="let item of p.items; index as i" style="line-height: 16px">
+          <div style="position: absolute;left: 10mm;font-size: 14px">{{item.no}}</div>
+          <div style="position: absolute;left: 21mm;font-size: 14px">{{item.productName}}</div>
+          <div style="position: absolute;left: 40mm;font-size: 14px">{{item.spec}}</div>
+          <div style="position: absolute;left: 83mm;font-size: 14px">{{item.quantity}}件{{item.freePcs!=0?item.freePcs:''}}{{item.freePcs!=0?'根':''}}</div>
+          <div style="position: absolute;left: 110mm;font-size: 14px">{{item.unitPrice?item.unitPrice:''}}</div>
+          <div style="position: absolute;left: 128mm;font-size: 14px"></div>
+          <div style="position: absolute;left: 143mm;font-size: 14px">{{item.fLoc}}</div>
+          <div style="position: absolute;left: 161mm;font-size: 14px" *ngIf="i===0">{{p.remark?p.remark:''}}</div>
+          <br>
+        </div>
+
+      </div>
+      <div style="position: relative;top:35mm">
+        <div style="position: absolute;left: 85mm;font-size: 14px;width:15mm" *ngIf="p.page!==p.totalPage">转下页</div>
+        <div style="position: absolute;left: 83mm;font-size: 14px;width:15mm" *ngIf="p.page===p.totalPage">{{p.totalQuantity}}件{{p.totalPcs!=0?p.totalPcs:''}}{{p.totalPcs!=0?'根':''}}</div>
+        <div style="position: absolute;left: 126mm;font-size: 14px;width:15mm"></div>
+      </div>
+      <div style="position: relative;top:44mm">
+        <div style="position: absolute;left: 28mm;font-size: 14px;width:15mm">{{p.name}}</div>
+        <div style="position: absolute;left: 71mm;font-size: 14px;width:15mm">{{p.cname}}</div>
+        <div style="position: absolute;left: 106mm;font-size: 14px;width:15mm">{{p.maname}}</div>
+      </div>
+<!--      <div style="page-break-after: always;"></div>-->
+    </div>
+  </div>
+</div>
+
+<!-- 新的打印模板-->
+<!--<div style="display: none">-->
+<!--  <script>-->
+
+<!--  </script>-->
+<!--  <div style="width: 210mm;height: 95mm; background-color: #ffffff; " id="print1">-->
+<!--    <div style="position: absolute;top: 17mm;left: 33mm">{{currentTime}}</div>-->
+<!--    <div style="position: absolute;top: 17mm;left: 99mm">{{loadTaskId}}</div>-->
+<!--    <div style="position: absolute;top: 21mm;left: 33mm">{{custIdPrint}}</div>-->
+<!--    <div style="position: absolute;top: 21mm;left: 99mm">{{custNamePrint}}</div>-->
+<!--    <div style="margin-top: 35mm">-->
+<!--    <div *ngFor="let item of itemTable; index as i">-->
+<!--      <div style="position: absolute;left: 12mm">{{i + 1}}</div>-->
+<!--      <div style="position: absolute;left: 25mm">{{item.productName}}</div>-->
+<!--      <div style="position: absolute;left: 42mm">{{item.spec}}</div>-->
+<!--      <div style="position: absolute;left: 87mm">{{item.quantity}}</div>-->
+<!--&lt;!&ndash;      <div style="position: absolute;left: 110mm">单价</div>&ndash;&gt;-->
+<!--&lt;!&ndash;      <div style="position: absolute;left: 128mm">运费</div>&ndash;&gt;-->
+<!--      <div style="position: absolute;left: 147mm">{{item.fLoc}}</div>-->
+<!--      <div style="position: absolute;left: 161mm">{{item.remark}}</div>-->
+<!--      <br>-->
+<!--    </div>-->
+<!--    </div>-->
+<!--    <div style="position: absolute;top: 78mm;left: 85mm">25件</div>-->
+<!--    <div style="position: absolute;top: 78mm;left: 126mm">25.00</div>-->
+<!--    <div style="position: absolute;top: 87mm;left: 32mm">{{kaipiaorenPrint}}</div>-->
+<!--    <div style="position: absolute;top: 87mm;left: 75mm">{{yewukePrint}}</div>-->
+<!--    <div style="position: absolute;top: 87mm;left: 110mm">{{yewuyuanPrint}}</div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--  旧的打印模板-->
+<div style="display: none">
+  <div style="width: 176mm;height: 85mm; background-color: red;" id="print">
+    <div style="position: absolute;top: 10mm;left: 140mm;">第1页/共1页</div>
+    <div style="position: absolute;top: 12mm;left: 20mm">{{currentTime}}</div>
+    <div style="position: absolute;top: 12mm;left: 65mm">{{loadTaskId}}</div>
+    <div style="position: absolute;top: 16mm;left: 20mm">{{custId}}</div>
+    <div style="position: absolute;top: 16mm;left: 65mm">{{custName}}</div>
+    <div *ngFor="let item of itemTable; let i = index">
+      <div style="position: absolute;top: 30mm;left: 20mm">{{i + 1}}</div>
+      <div style="position: absolute;top: 30mm;left: 30mm">{{item.productName}}</div>
+      <div style="position: absolute;top: 30mm;left: 50mm">{{item.spec}}</div>
+      <div style="position: absolute;top: 30mm;left: 80mm">{{item.quantity}}</div>
+      <div style="position: absolute;top: 30mm;left: 100mm">单价</div>
+      <div style="position: absolute;top: 30mm;left: 115mm">运费</div>
+      <div style="position: absolute;top: 30mm;left: 140mm">{{item.fLoc}}</div>
+      <div style="position: absolute;top: 30mm;left: 140mm">备注</div>
+    </div>
+    <div style="position: absolute;top: 60mm;left: 70mm">25件</div>
+    <div style="position: absolute;top: 60mm;left: 90mm">25.00</div>
+    <div style="position: absolute;top: 60mm;left: 70mm">25件</div>
+    <div style="position: absolute;top: 70mm;left: 30mm">开票人</div>
+    <div style="position: absolute;top: 70mm;left: 50mm">业务科</div>
+    <div style="position: absolute;top: 70mm;left: 70mm">业务员</div>
+  </div>
+</div>
+
+
+<nz-modal
+  [(nzVisible)]="shareBillingVisible"
+  [nzTitle]="shareBillingModalTitle"
+  [nzContent]="shareBillingModalContent"
+  [nzFooter]="shareBillingModalFooter"
+  (nzOnCancel)="doShareCancel()"  nzWidth="80%"
+>
+  <ng-template #shareBillingModalTitle>
+    拼单
+  </ng-template>
+
+  <ng-template #shareBillingModalContent>
+    <app-table-form gridId="grid5 " [pageFun]='true' (pageIndexEmit)='getPageIndex($event)'
+                    (pageSizeEmit)='getPageSize1($event)' gridId='grid3' [dataSet]="shareBillingArr"
+                    [pageSize]="pageSize" (updateDataResult)="shareDataResult($event)" [totalPage]="totalPage233"
+                    [isMutli]="true" [selfTableHeight]="gridOneHeight" [listLoading]="loading"
+                    [trSelectedShow]="true" [showCount]="true" (listClick)="listClick($event)"></app-table-form>
+    <div>选择{{shareUpdateWeight}}吨，共{{shareTotalWeight}}吨</div>
+  </ng-template>
+
+  <ng-template #shareBillingModalFooter>
+    <button nz-button nzType="default" (click)="doShareBilling()">确定</button>
+    <button nz-button nzType="default" (click)="doShareCancel()">取消</button>
+  </ng-template>
+</nz-modal>
+
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="'提示信息'" [modalCon]="'是否立即删除？'"
+                   (modalConfirmResult)="modalConfirmResult($event)" [nzOkLoading]="deleteLoading">
+</app-modal-confirm>

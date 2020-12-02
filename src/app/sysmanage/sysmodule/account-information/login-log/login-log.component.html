@@ -1,0 +1,6 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+
+<common-page (search)="listSearch($event)" [pageSize]="pageSize" [totalPage]="totalPage" [listLoading]="listLoading"
+             [dataSet]="dataSet" [isMutli]="true" [extraTableHeight]="permissions ? 52 : 0">
+
+</common-page>

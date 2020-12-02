@@ -1,0 +1,12 @@
+<app-searchform [formId]="formId" [gridId]="gridId" (search)="listSearch($event)" (reset)="searchReset($event)"  [searchDataHiden]="searchDataHiden" [btnHiden]="btnHiden" (searchDataReturn)="searchDataFun($event)" [businessModuleNamecheck]="businessModuleNamecheck" [triggerSearch]="triggerSearch" (searchComponent)="searchComponentFun($event)">
+
+</app-searchform>
+<tpl-buttons [formId]="formId" [gridId]="gridId" [btnLoading]="btnLoading" [btnDisable]="btnDisable" (btnSearch)="btnSearchFun($event)" (btnClick)="buttonClick($event)" (btnDataRetur)="btnDataFun($event)" [btnHiden]="btnHiden">
+
+</tpl-buttons>
+<app-table-form [tabIndex]="tabIndex" [closeBgTr]="closeBgTr" [extraTableHeight]="extraTableHeight" [selfTableHeight]="selfTableHeight" [formId]="formId" [listWidth]="listWidth" [pageFun]="pageFun" [columns]="columns" (currentPageDataChangeEmit)="currentPageDataChange($event)"
+    [paginationRef]="paginationRef" [colSet]="colSet" (currentTableHeightFun)="tableHeightOut($event)" (listOver)="listOverFun($event)" (listLeave)="listLeaveFun($event)" [dataSet]="dataSet" [isMutli]="isMutli" [pageSize]="pageSize" [totalPage]="totalPage"
+    [listLoading]="listLoading" [isCheckBox]="isCheckBox" (listClick)="tdClick($event)" (modelChange)="onChange($event)" (inputBlurFun)="blurFun($event)" [tabArr]="tabArr" (tabResultFun)="tabclick($event)" [updateHeader]="updateHeader" [gridId]="gridId" [nzShowPagination]="nzShowPagination"
+    (updateDataResult)="updataClick($event)" [trSelectedShow]="trSelectedShow" [showCount]="showCount" (pageIndexEmit)="pageIndexFun($event)" (pageSizeEmit)="pageSizeFun($event)" (userColumnsEmit)="getUserColumns($event)" [gridOperate]="gridOperate" (inpEmit)='inpEmitFun($event)'
+    [caculateEnameArr]="caculateEnameArr" [trSelected]="trSelected">
+</app-table-form>

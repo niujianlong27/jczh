@@ -1,0 +1,58 @@
+<form nz-form [nzLayout]="'inline'">
+  <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" style="padding-right: 16px;">
+    <ng-container *ngFor="let condition of conditions">
+      <div nz-col nzSpan="6">
+        <nz-form-item>
+          <nz-form-label nzSpan="8">
+            <label *ngIf="checkBoxVisible" nz-checkbox [(ngModel)]="condition.checked" [ngModelOptions]="{standalone: true}"></label>
+            <span>{{condition.name}}</span>
+          </nz-form-label>
+          <nz-form-control nzSpan="16">
+            <nz-input-group [nzAddOnBefore]="before" [nzAddOnAfter]="after">
+              
+              <!-- 输入框 -->
+              <ng-container *ngIf="condition.queryBoxType == 'string'">
+                  <!-- <ng-container>
+                      <input nz-input [(ngModel)]="condition.value1" [ngModelOptions]="{standalone: true}">
+                    </ng-container> -->
+                <ng-container *ngIf="condition.query == '介于'">
+                  <input nz-input style="width:50%" [(ngModel)]="condition.value1" [ngModelOptions]="{standalone: true}">
+                  <input nz-input style="width:50%" [(ngModel)]="condition.value2" [ngModelOptions]="{standalone: true}">
+                </ng-container>
+                <ng-container *ngIf="condition.query == '包含' || condition.query == '等于'">
+                  <input nz-input [(ngModel)]="condition.value1" [ngModelOptions]="{standalone: true}">
+                </ng-container>
+              </ng-container>
+              <!--条件下拉-->
+              <nz-select *ngIf="condition.queryBoxType== 'select'" [(ngModel)]="condition.value1" [ngModelOptions]="{standalone: true}">
+                <nz-option *ngFor="let s of selectArr[condition.parameter]" [nzLabel]="s.name" [nzValue]="s.value"></nz-option>
+              </nz-select>
+              <!--日期-->
+              <nz-range-picker *ngIf="condition.queryBoxType == 'date'" [(ngModel)]="condition.value1" nzShowTime></nz-range-picker>
+            </nz-input-group>
+            <ng-template #before>
+              <nz-select [(ngModel)]="condition.query" [ngModelOptions]="{standalone: true}">
+                <nz-option [nzLabel]="'包含'" [nzValue]="'包含'"></nz-option>
+                <nz-option [nzLabel]="'等于'" [nzValue]="'等于'"></nz-option>
+                <nz-option [nzLabel]="'介于'" [nzValue]="'介于'"></nz-option>
+              </nz-select>
+            </ng-template>
+            <ng-template #after>
+              <nz-select [(ngModel)]="condition.postQuery" [ngModelOptions]="{standalone: true}">
+                <nz-option [nzLabel]="'且'" [nzValue]="'且'"></nz-option>
+                <nz-option [nzLabel]="'或'" [nzValue]="'或'"></nz-option>
+              </nz-select>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </ng-container>
+  </div>
+  <div nz-row>
+    <div nz-col nzSpan="24" style="text-align: right">
+      <button nz-button nzType="primary" (click)="button_query_onclick()">查询</button>
+      <button nz-button nzType="primary" (click)="button_resetInqu_onclick()" nzGhost>重置</button>
+      <button nz-button nzType="primary" (click)="button_findSet_onclick()" nzGhost>高级查询</button>
+    </div>
+  </div>
+</form>

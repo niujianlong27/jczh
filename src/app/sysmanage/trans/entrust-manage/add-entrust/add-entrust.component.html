@@ -1,0 +1,274 @@
+<header class="b-t p-sm-tb">
+  <button nz-button nzType="primary" [hidden]="isCopyUpdate" nzGhost class="m-r" (click)="add()">新增</button>
+  <button nz-button nzType="primary" nzGhost (click)="save()">保存</button>
+
+</header>
+<div class="clearfix" style="overflow: hidden;">
+  <div class="fl cw" style="width:20%">
+    <app-table-form [isCheckBox]="false" [formId]="formId" [nzShowPagination]="false" [trSelectedShow]="true"
+                    [showCount]="false" gridId="grid3" [dataSet]="data3" (listClick)="data3Click($event)">
+    </app-table-form>
+  </div>
+
+  
+
+  <div class="fl clearfix" style="width:80%;padding-left:10px;padding-bottom:10px;">
+    <div class="fl">
+      <form [formGroup]="addenForm">
+        <nz-form-item class="clearfix">
+          <nz-form-label class="fl" nzRequired>委托单位</nz-form-label>
+          <nz-form-control class="fl">
+            <input-modal [(inputModalModel)]="consignorCompany"
+                         [findset]="{formId:'company_pop',name:'委托单位',parameter:'companyName',parameterSend:'companyId'}"
+                         (inpEmit)="getCompanyId($event)"></input-modal>
+            <nz-form-explain
+              *ngIf="addenForm.get('consignorCompanyId').dirty && addenForm.get('consignorCompanyId').errors">
+              请输入委托单位
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <p><i nz-icon type="form" theme="outline"></i><span>运输方式</span></p>
+          <nz-radio-group formControlName="transType">
+            <label nz-radio nzValue="YSLX10">国外海运</label>
+            <label nz-radio nzValue="YSLX20">国内海运</label>
+            <label nz-radio nzValue="YSLX30">内河水运</label>
+          </nz-radio-group>
+          <nz-form-explain *ngIf="addenForm.get('transType').dirty && addenForm.get('transType').errors">
+            请输入运输方式
+          </nz-form-explain>
+        </nz-form-item>
+        <nz-form-item class="clearfix">
+          <p><i nz-icon type="form" theme="outline"></i><span>运输路线</span></p>
+          <div class="clearfix fl">
+            <nz-form-label class="fl" nzRequired>装货港</nz-form-label>
+            <nz-form-control class="fl">
+              <nz-select nzShowSearch nzAllowClear class="select-address" formControlName="startPoint"
+                         [nzServerSearch]="true" (nzScrollToBottom)="getPier()" (ngModelChange)="getdata($event,1)"
+                         (nzOpenChange)="openPier($event,1)" (nzOnSearch)="searchPier($event)">
+                <nz-option nzCustomContent *ngFor="let o of pierList" [nzLabel]="o.address" [nzValue]="o"><span
+                  [title]="o.address">{{o.address}}</span></nz-option>
+                <nz-option *ngIf="pierLoading" nzDisabled nzCustomContent>
+                  <i nz-icon type="loading" class="loading-icon"></i> 正在加载数据...
+                </nz-option>
+              </nz-select>
+              <nz-form-explain *ngIf="addenForm.get('startPoint').dirty && addenForm.get('startPoint').errors">请输入装货港
+              </nz-form-explain>
+            </nz-form-control>
+          </div>
+          <div class="clearfix fl m-l-sm m-r">
+            <nz-form-label class="fl">码头</nz-form-label>
+            <nz-form-control class="fl">
+              <nz-select nzShowSearch nzAllowClear class="select-address" formControlName="startAddress"
+                         [nzServerSearch]="true" (nzScrollToBottom)="getAddress()"
+                         (nzOpenChange)="openAddress($event,1)" (nzOnSearch)="searchAddress($event)">
+                <nz-option nzCustomContent *ngFor="let o of AddressList" [nzLabel]="o.address" [nzValue]="o"><span
+                  [title]="o.address">{{o.address}}</span></nz-option>
+                <nz-option *ngIf="startPid == ''" nzDisabled nzCustomContent>
+                  <i nz-icon type="loading" class="loading-icon"></i> 请先选择装货港...
+                </nz-option>
+                <nz-option *ngIf="addressLoading" nzDisabled nzCustomContent>
+                  <i nz-icon type="loading" class="loading-icon"></i> 正在加载数据...
+                </nz-option>
+              </nz-select>
+              <nz-form-explain *ngIf="addenForm.get('startAddress').dirty && addenForm.get('startAddress').errors">请选择码头
+              </nz-form-explain>
+            </nz-form-control>
+          </div>
+          <div class="clearfix fl">
+            <nz-form-label class="fl" nzRequired>卸货港</nz-form-label>
+            <nz-form-control class="fl ">
+              <nz-select nzShowSearch nzAllowClear class="select-address" [nzServerSearch]="true"
+                         (nzScrollToBottom)="getPier()" (ngModelChange)="getdata($event,2)"
+                         (nzOpenChange)="openPier($event,2)" formControlName="endPoint"
+                         (nzOnSearch)="searchPier($event)">
+                <nz-option nzCustomContent *ngFor="let o of pierList" [nzLabel]="o.address" [nzValue]="o"><span
+                  [title]="o.address">{{o.address}}</span></nz-option>
+                <nz-option *ngIf="pierLoading" nzDisabled nzCustomContent>
+                  <i nz-icon type="loading" class="loading-icon"></i> 正在加载数据...
+                </nz-option>
+              </nz-select>
+              <nz-form-explain *ngIf="addenForm.get('endPoint').dirty && addenForm.get('endPoint').errors">请选择卸货港
+              </nz-form-explain>
+            </nz-form-control>
+          </div>
+          <div class="clearfix fl m-l-sm">
+            <nz-form-label class="fl">码头</nz-form-label>
+            <nz-form-control class="fl">
+              <nz-select nzShowSearch nzAllowClear class="select-address" formControlName="endAddress"
+                         [nzServerSearch]="true" (nzScrollToBottom)="getAddress()"
+                         (nzOpenChange)="openAddress($event,2)" (nzOnSearch)="searchAddress($event)">
+                <nz-option nzCustomContent *ngFor="let o of AddressList" [nzLabel]="o.address" [nzValue]="o"><span
+                  [title]="o.address">{{o.address}}</span></nz-option>
+                <nz-option *ngIf="endPid == ''" nzDisabled nzCustomContent>
+                  <i nz-icon type="loading" class="loading-icon"></i> 请先选择卸货港...
+                </nz-option>
+                <nz-option *ngIf="addressLoading" nzDisabled nzCustomContent>
+                  <i nz-icon type="loading" class="loading-icon"></i> 正在加载数据...
+                </nz-option>
+              </nz-select>
+              <nz-form-explain *ngIf="addenForm.get('endAddress').dirty && addenForm.get('endAddress').errors">请选择码头
+              </nz-form-explain>
+            </nz-form-control>
+          </div>
+        </nz-form-item>
+        <nz-form-item>
+          <p><i nz-icon type="form" theme="outline"></i><span>运输条件</span></p>
+          <div class="clearfix">
+            <div class="fl clearfix">
+              <nz-form-label class="fl" nzRequired>船期</nz-form-label>
+              <nz-form-control class="fl">
+                <nz-date-picker formControlName="loadDateStart"
+                                [nzDisabledDate]="disabledStartDate"
+                                nzShowTime
+                                nzFormat="yyyy-MM-dd HH:mm:ss"
+                                nzPlaceHolder="开始">
+                </nz-date-picker>
+                <nz-date-picker class="m-l-sm"
+                                [nzDisabledDate]="disabledEndDate"
+                                nzShowTime formControlName="loadDateEnd"
+                                nzFormat="yyyy-MM-dd HH:mm:ss"
+                                nzPlaceHolder="结束">
+                </nz-date-picker>
+                <nz-form-explain *ngIf="addenForm.get('loadDateStart').dirty && addenForm.get('loadDateStart').errors">
+                  请输入船期
+                </nz-form-explain>
+              </nz-form-control>
+            </div>
+            <div class="fl clearfix m-r m-l-sm">
+              <nz-form-label class="fl" nzRequired>船级社</nz-form-label>
+              <nz-form-control class="fl">
+                <nz-select nzAllowClear class="select-common" formControlName="shipSociety">
+                  <nz-option nzValue="无限制" nzLabel="无限制"></nz-option>
+                  <nz-option nzValue="ABS" nzLabel="ABS"></nz-option>
+                  <nz-option nzValue="BV" nzLabel="BV"></nz-option>
+                  <nz-option nzValue="DNV" nzLabel="DNV"></nz-option>
+                  <nz-option nzValue="GL" nzLabel="GL"></nz-option>
+                  <nz-option nzValue="KR" nzLabel="KR"></nz-option>
+                  <nz-option nzValue="CCS" nzLabel="CCS"></nz-option>
+                  <nz-option nzValue="LR" nzLabel="LR"></nz-option>
+                  <nz-option nzValue="NK" nzLabel="NK"></nz-option>
+                  <nz-option nzValue="RS" nzLabel="RS"></nz-option>
+                  <nz-option nzValue="RINA" nzLabel="RINA"></nz-option>
+                  <nz-option nzValue="IACS" nzLabel="IACS"></nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="addenForm.get('shipSociety').dirty && addenForm.get('shipSociety').errors">
+                  请输入船级社
+                </nz-form-explain>
+              </nz-form-control>
+            </div>
+            <div class="fl clearfix">
+              <nz-form-label class="fl" nzRequired>预抵日期</nz-form-label>
+              <nz-form-control class="fl">
+                <nz-date-picker formControlName="targetDate"
+                                nzShowTime
+                                [nzDisabledDate]="disabledEndDate"
+                                nzFormat="yyyy-MM-dd HH:mm:ss">
+                </nz-date-picker>
+                <nz-form-explain *ngIf="addenForm.get('targetDate').dirty && addenForm.get('targetDate').errors">
+                  请输入预抵日期
+                </nz-form-explain>
+              </nz-form-control>
+            </div>
+            <div class="fl clearfix m-l-sm">
+              <nz-form-label class="fl" nzRequired>结算方式</nz-form-label>
+              <nz-form-control class="fl">
+                <nz-select nzAllowClear class="select-common" formControlName="settleNode">
+                  <nz-option nzValue="卸空前" nzLabel="卸空前"></nz-option>
+                  <nz-option nzValue="卸空后" nzLabel="卸空后"></nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="addenForm.get('settleNode').dirty && addenForm.get('settleNode').errors">
+                  请输入结算方式
+                </nz-form-explain>
+              </nz-form-control>
+            </div>
+            <div class="fl clearfix m-l-sm">
+              <nz-form-label class="fl" nzRequired>装载天数</nz-form-label>
+              <nz-form-control class="fl">
+                <nz-input-number [nzMin]="0" class="day-input" formControlName="loadDays"
+                                 [nzStep]="1"></nz-input-number>
+                <nz-form-explain *ngIf="addenForm.get('loadDays').dirty && addenForm.get('loadDays').errors">请输入装载天数
+                </nz-form-explain>
+              </nz-form-control>
+              <span class="fl day-style">天</span>
+
+            </div>
+          </div>
+          <div class="clearfix">
+            <div class="fl clearfix">
+              <nz-form-label class="fl" nzRequired>船龄</nz-form-label>
+              <nz-form-control class="fl">
+                <nz-input-number [nzMin]="0" formControlName="shipAge" [nzStep]="1"></nz-input-number>
+                <nz-form-explain *ngIf="addenForm.get('shipAge').dirty && addenForm.get('shipAge').errors">请输入船龄
+                </nz-form-explain>
+              </nz-form-control>
+            </div>
+            <div class="fl clearfix m-r m-l-sm">
+              <nz-form-label class="fl" nzRequired>装卸条款</nz-form-label>
+              <nz-form-control class="fl">
+                <nz-select nzAllowClear class="select-common" formControlName="shipmentTerm">
+                  <nz-option nzValue="无限制" nzLabel="无限制"></nz-option>
+                  <nz-option nzValue="FILO" nzLabel="FILO"></nz-option>
+                  <nz-option nzValue="FIO" nzLabel="FIO"></nz-option>
+                  <nz-option nzValue="FLT" nzLabel="FLT"></nz-option>
+                  <nz-option nzValue="LIFO" nzLabel="LIFO"></nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="addenForm.get('shipmentTerm').dirty && addenForm.get('shipmentTerm').errors">
+                  请输入装卸条款
+                </nz-form-explain>
+              </nz-form-control>
+            </div>
+            <div class="fl clearfix">
+              <nz-form-label class="fl" nzRequired>滞期费</nz-form-label>
+              <nz-form-control class="fl">
+                <nz-input-number [nzMin]="0" formControlName="demurrageFee" [nzStep]="1"></nz-input-number>
+                <nz-form-explain *ngIf="addenForm.get('demurrageFee').dirty && addenForm.get('demurrageFee').errors">
+                  请输入滞期费
+                </nz-form-explain>
+              </nz-form-control>
+
+              <nz-form-control class="fl m-l-sm">
+                <nz-select class="select-common" formControlName="demurrageFeeType">
+                  <nz-option nzValue="元/天" nzLabel="元/天"></nz-option>
+                  <nz-option nzValue="元/天/吨" nzLabel="元/天/吨"></nz-option>
+                </nz-select>
+              </nz-form-control>
+              <nz-form-control class="fl m-l-sm">
+                <nz-select class="select-common" formControlName="demurrageFeePoing">
+                  <nz-option nzValue="起始位置:码头" nzLabel="起始位置:码头"></nz-option>
+                  <nz-option nzValue="起始位置:锚地" nzLabel="起始位置:锚地"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </div>
+          </div>
+        </nz-form-item>
+      </form>
+
+    </div>
+    <div class="fl" style="width:100%;position: relative;">
+      <nz-tabset [(nzSelectedIndex)]="tabIndex">
+        <nz-tab nzTitle="货盘明细">
+          <p>
+            <button nz-button nzType="primary" nzGhost class="m-r" (click)="addData(1)">新增明细</button>
+            <button nz-button nzType="primary" nzGhost (click)="deleteData(1)">删除明细</button>
+          </p>
+          <app-table-form [formId]="formId" (userColumnsEmit)="getColums($event,1)" [dataSet]="data1" [isMutli]="true"
+                          gridId="grid1" [nzShowPagination]="false" [showCount]="false"></app-table-form>
+        </nz-tab>
+        <nz-tab nzTitle="捆包明细">
+          <p>
+            <button nz-button nzType="primary" nzGhost class="m-r" (click)="flowData1()">汇总生成货盘明细</button>
+            <button nz-button nzType="primary" nzGhost class="m-r" (click)="addData(2)">新增捆包</button>
+            <button nz-button nzType="primary" nzGhost class="m-r" (click)="deleteData(2)">删除捆包</button>
+
+            <input type="file" multiple="false" #inputFile style="display: none;" (change)="importExcel($event)"/>
+            <button nz-button nzType="primary" nzGhost class="m-r" (click)="openFile()">导入捆包</button>
+
+          </p>
+          <app-table-form [formId]="formId" [dataSet]="data2" (userColumnsEmit)="getColums($event,2)" [isMutli]="true"
+                          gridId="grid2" [nzShowPagination]="false" [showCount]="false"></app-table-form>
+        </nz-tab>
+      </nz-tabset>
+    </div>
+  </div>
+</div>

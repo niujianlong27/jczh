@@ -1,0 +1,55 @@
+<app-searchform  (search)="listSearch($event)"></app-searchform>
+
+<tpl-buttons  (btnClick)='btnClick($event)'></tpl-buttons>
+
+<div>
+  <p>需求信息</p>
+<app-table-form  [gridId]="'grid1'"  [pageFun]='true' (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)'
+                 [dataSet]="dataSet1" [pageSize]="pageSize1" [totalPage]="totalPages1" [trSelectedShow]="true" (listClick)="listClick($event)"
+                 [isMutli]="true" [listLoading]="listLoading1" (updateDataResult)="updateDataResult($event)"></app-table-form>
+</div>
+
+<div style="margin-top:30px;">
+  <p input-blur>需求明细</p>
+  <app-table-form  [gridId]="'grid2'"  [pageFun]='true' (pageIndexEmit)='getPageIndex2($event)' (pageSizeEmit)='getPageSize2($event)'
+                   [dataSet]="dataSet2" [pageSize]="pageSize2" [totalPage]="totalPages2" [showCount]="false" [isCheckBox]="false"
+                   [listLoading]="listLoading2"></app-table-form>
+</div>
+
+<!-- <nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.require" >
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="12">
+        <nz-date-picker *ngIf="m.type == 'time'" [formControlName]="m.eName"></nz-date-picker>
+        <nz-select style="width: 100px" nzAllowClear nzPlaceHolder="请选择" formControlName="{{m.eName}}" *ngIf="m.type == 'select'">-->
+          <!--<nz-option *ngFor="let o of typeDataArr" [nzValue]="o.value" [nzLabel]="o.name"></nz-option>-->
+        <!--</nz-select>-->
+        <!--
+                        <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+                            <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+                        </nz-radio-group> -->
+        <!--<input-modal *ngIf="m.type == 'inputModal'"  [(inputModalModel)]="popData[m.bindName].name" [(inputModalHiddenValue)]='popData[m.bindName].id' [findset]="m.findSet"-->
+                     <!--(inpEmit)='inpEmit($event,m.bindName)'></input-modal>-->
+
+        <!--<input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'number'" (blur)="blur()">-->
+        <!-- <app-input-number *ngIf="m.type == 'number'" formControlName="{{m.eName}}" [attr.id]="m.eName"></app-input-number>
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'" [readOnly]="m.readOnly">
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+            {{m.validators.patternErr}}
+          </ng-container>
+
+        </nz-form-explain>
+      </nz-form-control>
+
+    </nz-form-item> -->
+  <!-- </form>
+</nz-modal> --> -->

@@ -1,0 +1,24 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+  <ng-template #one>
+    <app-table-form gridId="grid1" [dataSet]="dataSet"
+                    [pageSize]="pageSize" [selfTableHeight]="gridOneHeight"
+                    [totalPage]="totalPage" [isMutli]="true" (updateDataResult)="selected($event)"
+                    [colSet]="true" [showCount]="true" [listLoading]="listLoading">
+
+    </app-table-form>
+
+  </ng-template>
+  <ng-template #two>
+    <app-table-form gridId="grid2" [dataSet]="dataSet2" [pageSize]="pageSize2"
+                    [selfTableHeight]="gridTwoHeight"
+                    [colSet]="true" [totalPage]="totalPage2" [isMutli]="false"
+                    [listLoading]="listLoading2" [nzShowPagination]="true"
+                    (pageIndexEmit)='getPageIndex2($event)'
+                    (pageSizeEmit)='getPageSize2($event)'>
+
+    </app-table-form>
+  </ng-template>
+</app-grid-resize>
+

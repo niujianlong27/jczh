@@ -1,0 +1,74 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+<tpl-buttons (btnClick)="btnClick($event)" [btnDisable]="btnDisable"></tpl-buttons>
+
+<div nz-row nzType="flex" nzJustify="space-around" style="padding-top: 20px">
+
+  <ng-template #roleTitle>
+    <div style="height: 81px">用户管理</div>
+  </ng-template>
+
+  <div nz-col nzSpan="12">
+    <nz-table [nzTitle]="roleTitle" #userTable [nzData]="userData" nzSize="small" [nzBordered]="false"
+              [nzShowPagination]=false [nzFrontPagination]=false [nzHideOnSinglePage]="true" [nzScroll]="{y: '300px'}">
+      <thead>
+      <tr>
+        <ng-container *ngFor="let user of userHeaderData">
+          <th [title]="user.cName" nzWidth="100px">{{user.cName}}</th>
+        </ng-container>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let data of userTable.data" [class.tr-selected]="data.isClick">
+        <ng-container *ngFor="let user of userHeaderData">
+          <td [title]="data[user.eName]" (click)="userClick(data)">
+            <span>{{ data[user.eName]}}</span>
+          </td>
+        </ng-container>
+      </tr>
+      </tbody>
+    </nz-table>
+
+
+  </div>
+
+  <div nz-col nzSpan="12">
+
+    <ng-template #tableHead>
+      <div>APP权限管理</div>
+      <nz-tabset [(nzSelectedIndex)]="nzSelectedIndex">
+        <nz-tab nzTitle="已选权限" (nzSelect)="tabClick('select')">
+        </nz-tab>
+        <nz-tab nzTitle="未选权限" (nzSelect)="tabClick('notToChoose')">
+        </nz-tab>
+      </nz-tabset>
+    </ng-template>
+
+    <nz-table #appTable nzSize="small" [nzTitle]="tableHead" [nzData]="appData"
+              [nzBordered]="false" [nzShowPagination]=false [nzFrontPagination]=false [nzHideOnSinglePage]="true"
+              [nzScroll]="{y: '300px'}">
+      <thead>
+      <tr>
+        <th nzShowCheckbox [(nzChecked)]="allChecked" [nzIndeterminate]="indeterminate"
+            (nzCheckedChange)="checkAll($event)" nzWidth="30px"></th>
+        <ng-container *ngFor="let app of appHeaderData">
+          <th [title]="app.cName" nzWidth="100px">{{app.cName}}</th>
+        </ng-container>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of appTable.data">
+        <td nzShowCheckbox [(nzChecked)]="data.checked" (nzCheckedChange)="refreshStatus(data)"></td>
+        <ng-container *ngFor="let app of appHeaderData">
+          <td [title]="data[app.eName]">
+            <span>{{ data[app.eName]}}</span>
+          </td>
+
+        </ng-container>
+      </tr>
+      </tbody>
+    </nz-table>
+
+  </div>
+
+</div>

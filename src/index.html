@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+  <meta charset="utf-8">
+  <title>汇好运</title>
+  <base href="/">
+
+  <meta name="description" content="京创智汇汇好运-最专业的大宗商品物流服务平台-大宗商品物流需求的客户提供信息化 的工作平台，帮助客户完成招标询 价、合同签订、运输全过程的引导 和监控、资金结算等工作。">
+  <meta name="Keywords" content="京创智汇,汇好运,汽运,国际海运,内河,沿海,大宗商品,物流,钢材,货源,车源">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone = no">
+  <meta name="format-detection" content="email = no">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script type="text/javascript" src="assets/xlsx/shim.min.js"></script>
+  <script type="text/javascript" src="assets/xlsx/xlsx.full.min.js"></script>
+  <script type="text/javascript" src="assets/jsonh/jsonh.js"></script>
+  <script type="text/javascript" src="assets/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="assets/svg/svg.intersections.js"></script>
+  <script type="text/javascript" src="assets/svg/svg.math.min.js"></script>
+  <script type="text/javascript" src="assets/svg/svg.min.js"></script>
+  <script type="text/javascript" src="assets/svg/svg.panzoom.min.js"></script>
+  <script type="text/javascript" src="assets/svg/svg.select.min.js"></script>
+  <script src="https://webapi.amap.com/maps?v=1.4.13&key=24439ce1b4282ea39235a851ba053c48"></script>
+  <script src="assets/socket.io.js"></script>
+  <script src="http://api.map.baidu.com/api?v=2.0&ak=TBYYTyC02owAqLuyq3zaw5urllFI7jql"></script>
+  <script type="text/javascript">
+      var _paq = window._paq || [];
+      var currentUrl = location.href;
+      var INFODatas = document.cookie
+
+
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+        window.$FUNSELF= function(data,buttonName) {
+          _paq.push(['setReferrerUrl', currentUrl]);
+          currentUrl = '/' + window.location.hash.substr(1);
+          _paq.push(['setCustomUrl', currentUrl]);
+          _paq.push(['setDocumentTitle',  document.title]);
+          if(buttonName){
+              _paq.push(['setCustomDimension', 1, `${data}-${document.title}`]);
+          }else{
+              _paq.push(['setUserId', data]);
+
+          }
+          // remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
+          _paq.push(['deleteCustomVariables', 'page']);
+          _paq.push(['setGenerationTimeMs', 0]);
+          _paq.push(['trackPageView']);
+          _paq.push(['setSessionCookieTimeout', timeoutInSeconds=43200])
+          // make Matomo aware of newly added content
+          var content = document.getElementById('content');
+          _paq.push(['MediaAnalytics::scanForMedia', content]);
+          _paq.push(['FormAnalytics::scanForForms', content]);
+          _paq.push(['trackContentImpressionsWithinNode', content]);
+          _paq.push(['enableLinkTracking']);
+      };
+      (function() {
+
+          var u="http://piwik.jczh56.com/";
+          _paq.push(['setTrackerUrl', u+'matomo.php']);
+          _paq.push(['setSiteId', '2']);
+          var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+          g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+      })();
+
+  </script>
+</head>
+
+<body>
+  <app-root></app-root>
+</body>
+
+</html>

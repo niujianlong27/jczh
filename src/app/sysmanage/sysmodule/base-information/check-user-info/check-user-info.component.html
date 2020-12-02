@@ -1,0 +1,131 @@
+<app-searchform (search)="searchList($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+<app-table-form [dataSet]="dataSet" [pageSize]="pageSize" [totalPage]="totalPage" [listLoading]="listLoading"
+                (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)' [gridOperate]="{show:true,title:'操作',template:g1}"  >
+        <ng-template #g1 let-data>
+          <button *ngIf="data.auditStatus!=='PTSHZT20'" (click)="seeData(data)">查看</button>
+          <button *ngIf="data.auditStatus==='PTSHZT20'" (click)="auditData(data)">审核</button>
+        </ng-template>
+</app-table-form>
+
+
+<ng-template #tplTitle>
+  <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent>
+  <form nz-form  style="padding-top: 2%">
+    <div nz-row [nzGutter]="1" [nzType]="'flex'">
+      <p style="font-size:10px; font-weight:bold">用户基本信息</p>
+      <div nz-col [nzSpan]="24">
+        <div nz-row [nzGutter]="1" [nzType]="'flex'">
+          <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="10">姓名</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <div>{{userData.name}}</div>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="10">手机号</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <div>{{userData.mobile}}</div>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="10">业务类型</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <div>{{userData.companyTypeName}}</div>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="1" [nzType]="'flex'">
+        <p style="font-size:10px; font-weight:bold">个人身份信息</p>
+        <div nz-col [nzSpan]="24">
+          <div nz-row [nzGutter]="1" [nzType]="'flex'">
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-label [nzSpan]="4" style="margin-left: 23px">身份证号</nz-form-label>
+                <nz-form-control [nzSpan]="15">
+                  <div>{{userData.cardId}}</div>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="12">
+              <nz-form-item>
+                <nz-form-label [nzSpan]="10">身份证照片</nz-form-label>
+                <nz-form-control [nzSpan]="14">
+                  <img src="{{userData.cardPhoto}}" style="height:60px;width: 100px" (click)="imgClick('cardPhoto')" >
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="12">
+              <nz-form-item>
+                <nz-form-control [nzSpan]="14">
+                  <img src="{{userData.cardPhotoBadge}}" style="height:60px;width: 100px" (click)="imgClick('cardPhotoBadge')">
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+        <div nz-row [nzGutter]="1" [nzType]="'flex'">
+          <p style="font-size:10px; font-weight:bold">企业资质信息</p>
+          <div nz-col [nzSpan]="24">
+            <div nz-row [nzGutter]="1" [nzType]="'flex'">
+              <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                  <nz-form-label [nzSpan]="10">公司名称</nz-form-label>
+                  <nz-form-control [nzSpan]="14">
+                    <div>{{userData.companyName}}</div>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="12">
+                <nz-form-item>
+                  <nz-form-label [nzSpan]="10" style="margin-left: 23px">公司税号</nz-form-label>
+                  <nz-form-control [nzSpan]="12">
+                    <div>{{userData.creditCode}}</div>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="24">
+                <nz-form-item>
+                  <nz-form-label [nzSpan]="4" style="margin-left: 23px">营业执照</nz-form-label>
+                  <nz-form-control [nzSpan]="15">
+                    <img src="{{userData.busiLicense}}" style="height:60px;width: 100px" (click)="imgClick('busiLicense')" >
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="24">
+                <nz-form-item>
+                  <nz-form-label [nzSpan]="4" style="margin-left: 23px">道路运输许可证</nz-form-label>
+                  <nz-form-control [nzSpan]="15">
+                    <img src="{{userData.transRoadPermit}}" style="height:60px;width: 100px" (click)="imgClick('transRoadPermit')" >
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="24">
+                <nz-form-item>
+                  <nz-form-label [nzSpan]="4" style="margin-left: 23px">审核说明</nz-form-label>
+                  <nz-form-control [nzSpan]="15">
+                    <textarea [(ngModel)]="userData.remark" nz-input [disabled]="userData.auditStatus!='PTSHZT20'" name="remark"></textarea>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>
+<ng-template #tplFooter>
+  <button nz-button (click)="auditPass()" [nzLoading]="btnLoading" *ngIf="userData.auditStatus==='PTSHZT20'">审核通过</button>
+  <button nz-button (click)="auditreject()" [nzLoading]="btnLoading" *ngIf="userData.auditStatus==='PTSHZT20'">审核驳回</button>
+  <button nz-button (click)="handerCancel()" [nzLoading]="btnLoading" *ngIf="userData.auditStatus!=='PTSHZT20'">关闭</button>
+</ng-template>

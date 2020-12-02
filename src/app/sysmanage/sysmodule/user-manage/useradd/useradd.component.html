@@ -1,0 +1,180 @@
+<form nz-form [formGroup]="validateForm" nzLayout="horizontal" style="padding:15px 20px 0px 0px;">
+  <nz-form-item>
+    <nz-form-label [nzXs]="2" nzRequired nzFor="companyId">公司ID</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="companyId" id="companyId">
+      <nz-form-explain *ngIf="validateForm.get('companyId').dirty && validateForm.get('companyId').errors">请输入公司ID
+      </nz-form-explain>
+    </nz-form-control>
+
+    <nz-form-label [nzXs]="2" nzRequired nzFor="companyName">公司名称</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input-modal [isMutli]="false" [findset]="formIdFindset" [inputModalModel]="inputModalModel"
+                   (inpEmit)="inpEmit($event)" [borderRed]="borderRed" [DISABLED]="true"></input-modal>
+      <!--<nz-form-explain *ngIf="validateForm.get('companyName').dirty && validateForm.get('companyName').errors">请输入公司名称</nz-form-explain>-->
+    </nz-form-control>
+
+    <nz-form-label [nzXs]="2" nzRequired nzFor="loginName">用户名</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="loginName" id="loginName">
+      <nz-form-explain *ngIf="validateForm.get('loginName').dirty && validateForm.get('loginName').errors">请输入用户名
+      </nz-form-explain>
+    </nz-form-control>
+
+    <nz-form-label [nzXs]="2" nzRequired nzFor="name">姓名</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="name" id="name">
+      <nz-form-explain *ngIf="validateForm.get('name').dirty && validateForm.get('name').errors">请输入姓名</nz-form-explain>
+    </nz-form-control>
+
+  </nz-form-item>
+
+  <nz-form-item>
+
+    <nz-form-label [nzXs]="2" nzFor="mobile" nzRequired>手机号</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="mobile" id="mobile">
+
+      <nz-form-explain *ngIf="validateForm.get('mobile').dirty && validateForm.get('mobile').errors">
+        <ng-container *ngIf="validateForm.get('mobile').hasError('required')">
+          请输入手机号
+        </ng-container>
+        <ng-container *ngIf="validateForm.get('mobile').hasError('pattern')">
+          手机号不正确请重新输入！
+        </ng-container>
+      </nz-form-explain>
+    </nz-form-control>
+
+    <nz-form-label nzFor="gender" nzFor="gender" nzRequired [nzXs]="2">性别</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <nz-radio-group formControlName="gender">
+        <label nz-radio *ngFor="let item of radioOptionsSexArr" nzValue="{{item.value}}">{{item.name}}</label>
+      </nz-radio-group>
+      <nz-form-explain *ngIf="validateForm.get('gender').dirty && validateForm.get('gender').errors">请输入性别
+      </nz-form-explain>
+    </nz-form-control>
+
+    <nz-form-label nzFor="status" nzRequired [nzXs]="2">状态</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <nz-radio-group formControlName="status">
+        <label nz-radio *ngFor="let item of statusArr" nzValue="{{item.value}}">{{item.name}}</label>
+      </nz-radio-group>
+      <nz-form-explain *ngIf="validateForm.get('status').dirty && validateForm.get('status').errors">请选择状态
+      </nz-form-explain>
+    </nz-form-control>
+
+    <nz-form-label nzFor="loginAuthz" nzXs="2" nzRequired>登录授权</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <nz-select style="width: 200px;margin-top: 5px" formControlName="loginAuthz"
+                 nzAllowClear nzPlaceHolder="--请选择--">
+        <nz-option *ngFor="let elem of loginPowerArr" nzValue="{{elem.value}}" nzLabel="{{elem.name}}"></nz-option>
+      </nz-select>
+      <nz-form-explain *ngIf="validateForm.get('loginAuthz').dirty && validateForm.get('loginAuthz').errors">请选择登录授权
+      </nz-form-explain>
+    </nz-form-control>
+
+  </nz-form-item>
+
+  <nz-form-item>
+
+
+    <nz-form-label [nzXs]="2" nzFor="employeeId">工号</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="employeeId" id="employeeId">
+      <nz-form-explain *ngIf="validateForm.get('employeeId').hasError('pattern')">工号格式不正确，请重新输入！
+      </nz-form-explain>
+    </nz-form-control>
+
+    <nz-form-label [nzXs]="2" nzFor="email">邮箱</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="email" type="email" id="email">
+      <nz-form-explain *ngIf="validateForm.get('email').hasError('email')">邮箱格式不正确请重新输入！
+      </nz-form-explain>
+    </nz-form-control>
+
+    <nz-form-label [nzXs]="2" nzFor="cardId">身份证号</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="cardId" id="cardId">
+      <nz-form-explain *ngIf="validateForm.get('cardId').hasError('pattern')">身份证号格式不正确请重新输入！
+      </nz-form-explain>
+    </nz-form-control>
+
+    <nz-form-label [nzXs]="2" nzFor="remark">备注</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="remark" id="remark">
+    </nz-form-control>
+
+  </nz-form-item>
+
+
+  <nz-form-item>
+
+    <nz-form-label nzFor="status" [nzXs]="2">业务板块</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <nz-input-group [nzSuffix]="suffixIconSearch">
+        <input type="text" nz-input (ngModelChange)="segmentChange($event)" formControlName="segmentName">
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon type="search" (click)="inputClick()"></i>
+      </ng-template>
+
+    </nz-form-control>
+
+    <nz-form-label nzFor="status" [nzXs]="2">身份证照片</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <nz-upload [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="cardPhotoList"
+                 nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData"
+                 (nzChange)="handleChange($event,'cardPhoto')"
+                 [nzShowButton]="cardPhotoList.length < 2">
+        <i class="anticon anticon-plus"></i>
+        <div class="ant-upload-text">Upload</div>
+      </nz-upload>
+      <input type="hidden" formControlName="cardPhoto" readonly="readonly">
+      <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+                (nzOnCancel)="previewVisible=false">
+        <ng-template #modalContent>
+          <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }"/>
+        </ng-template>
+      </nz-modal>
+    </nz-form-control>
+
+  </nz-form-item>
+
+
+  <nz-form-item style="margin-bottom:20px;">
+    <nz-form-control [nzSpan]="1" [nzOffset]="19">
+      <button nz-button nzType="primary" class="btn" (click)="submitForm()">确定</button>
+    </nz-form-control>
+    <nz-form-control [nzSpan]="1" [nzOffset]="1">
+      <button nz-button nzType="primary" class="btn btn-stroke" (click)="cancel()">取消</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+
+<nz-modal [(nzVisible)]="inputMoadlVisible" nzTitle="业务模块>选择" (nzOnCancel)="inputMoadleCancel()"
+          (nzOnOk)="inputMoadlOk()">
+  <nz-table
+    #inputMoadlTable
+    nzSize="small"
+    [nzData]="inputMoadlTableData"
+    [nzShowPagination]="false"
+    [nzFrontPagination]="false"
+  >
+    <thead>
+    <tr>
+      <th nzShowCheckbox [(nzChecked)]="allChecked" [nzIndeterminate]="indeterminate"
+          (nzCheckedChange)="checkAll($event)"></th>
+      <th>业务ID</th>
+      <th>业务名字</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of inputMoadlTable.data">
+      <td nzShowCheckbox [(nzChecked)]="data.checked" (nzCheckedChange)="refreshStatus()"></td>
+      <td>{{data.segmentId}}</td>
+      <td>{{data.segmentName}}</td>
+    </tr>
+    </tbody>
+  </nz-table>
+</nz-modal>

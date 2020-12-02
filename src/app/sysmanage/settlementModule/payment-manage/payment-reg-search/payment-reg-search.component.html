@@ -1,0 +1,14 @@
+<app-searchform (search)='listSearch($event)' [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+  <ng-template #one>
+      <app-table-form [isMutli]="isMulti" [gridId]='"grid1"' [selfTableHeight]="gridOneHeight"
+      [caculateEnameArr]='caculateEnameArr' [dataSet]='dataSet' [totalPage]='totalPages'
+      (listClick)='listClick($event)' [listLoading]='listLoading'
+      (updateDataResult)='updateData($event)'></app-table-form>
+  </ng-template>
+  <ng-template #two>
+      <app-table-form [isMutli]="isMultiChild" [gridId]='"grid2"' [listLoading]='listLoading2' [dataSet]='childrenDataSet' [selfTableHeight]="gridTwoHeight"
+      [nzShowPagination]="false" (updateDataResult)="updataDataChild($event)"></app-table-form>
+  </ng-template>
+</app-grid-resize>

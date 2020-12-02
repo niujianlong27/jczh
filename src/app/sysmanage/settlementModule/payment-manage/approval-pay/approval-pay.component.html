@@ -1,0 +1,74 @@
+<app-searchform [formId]="'form_approval_pay'" (search)="listSearch($event)"></app-searchform>
+<tpl-buttons [formId]="'form_approval_pay'" (btnClick)='btnClick($event)'></tpl-buttons>
+
+<div>
+  <app-table-form [formId]="'form_approval_pay'" [gridId]="'grid1'" [dataSet]="dataSet"
+                  [pageSize]="pageSize" [totalPage]="totalPages"
+                  [isMutli]="true" [listLoading]="listLoading"
+                  [isCheckBox]="true" [showCount]="true" (updateDataResult)="selectData($event)">
+
+  </app-table-form>
+</div>
+
+<nz-modal [(nzVisible)]="modalFormVisible" nzWidth="40%" [nzTitle]="modalTitle" [nzMaskClosable]="false"
+          (nzAfterClose)="nzAfterClose()" (nzOnCancel)="handleCancel()" (nzOnOk)="nzOnOk()">
+  <div *ngIf="status == 'detail'">
+    <p style="font-size: 16px"><span nz-icon [nzType]="'form'"></span> 审批配置</p>
+    <main class="detail">
+
+      <ng-container *ngFor="let item of itemData.approvalRecordModels , let i = index">
+        <section *ngIf="item.level == '0'">
+        <p>申请人：{{item.auths[0].userName}}</p>
+        <div class="detail-div">
+          <span class="side" [ngStyle]="{borderLeft :i !== itemData.approvalRecordModels.length -1 ? '1px solid #094f7b' : ''}"></span>
+        </div>
+        </section>
+        <section *ngIf="item.level != '0'">
+          <p>
+            <span class="icon">{{item.level}}</span>
+            <span>{{item.levelName}}</span>
+            <span>{{item.status}}</span>
+            <span *ngIf="item.status == '通过'">抄送人:{{item.copys[0].userName}}</span>
+            <span style="color:blue;cursor: pointer" *ngIf="item.status == '审核中' || item.status == '待审核'" (mouseover)="onmouseMove(item)" (mouseleave)="onmouseLever(item)">详情</span>
+            <span style="color:red" *ngIf="item.isShow">{{item.message}}</span>
+
+          </p>
+          <div class="detail-div">
+            <span class="side" [ngStyle]="{borderLeft :i !== itemData.approvalRecordModels.length -1 ? '1px solid #094f7b' : ''}"></span>
+         <div class="left">
+
+           <ng-container *ngFor="let data of item.auths">
+             <p><span>{{data.userName}}</span> <span>{{data.result}}</span> <span>{{data.resultDate}}</span> <span>{{data.remark}}</span></p>
+           </ng-container>
+         </div>
+          </div>
+        </section>
+      </ng-container>
+    </main>
+  </div>
+  <div *ngIf="status == 'reject' || status == 'pass'">
+    <p style="letter-spacing:1px;text-align: center;font-size: 16px">是否确定{{status == 'pass' ? '通过' : '驳回'}}？</p>
+    <form nz-form [formGroup]="modalValidateForm">
+      <nz-form-item *ngFor="let m of modalFormData">
+        <nz-form-control [nzSpan]="24">
+          <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+            {{m.name}}
+          </nz-form-label>
+          <nz-form-control [nzSpan]="13">
+            <textarea *ngIf="m.type == 'textarea'" placeholder="备注信息不能超过25个汉字" rows="4" nz-input [attr.id]="m.eName"
+                      [maxlength]="m.maxLength" [formControlName]="m.eName"></textarea>
+            <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+              <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+                {{m.validateCon}}
+              </ng-container>
+              <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+                {{m.validators.patternErr}}
+              </ng-container>
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-control>
+
+      </nz-form-item>
+    </form>
+  </div>
+</nz-modal>

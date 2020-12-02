@@ -1,0 +1,90 @@
+.transition .ant-row {
+  width: 100%;
+  word-wrap: break-word;
+}
+
+:host ::ng-deep .ant-form-inline .ant-form-item {
+  margin-right: 0px !important;
+}
+
+a.tableIcon{
+  position:absolute;
+  left:3px;
+  height:100%;
+  width:8px;
+  font-size:16px;
+  background:#fafafa;
+  z-index: 1;
+}
+.tableIcon-btn{
+  position: absolute;
+  top:100px;
+  margin:auto;
+  width:8px;
+  left:0;
+  height:50px;
+  line-height: 50px;
+  background:#eee;
+}
+.tableIcon-btn i{
+  margin-left:-3px;
+}
+.transition{
+  transition: all 50ms cubic-bezier(0, 0, 0.2, 1);
+}
+.transition ::ng-deep .ant-calendar-picker{
+  width:100%;
+}
+.order-registration ::ng-deep .ant-tabs-bar{
+  margin:0;
+}
+
+.btns-line{
+  text-align: right;
+}
+.selected-tags{
+  margin-right: 0.5rem;
+  margin-bottom: 0.25rem;
+  padding: 4px;
+  border-radius: 5px;
+  border-color: #cccccc;
+  border-width: 1px;
+  background-color: #a6c6da;
+}
+.selected-tags:hover{
+  background-color: #094f7b;
+  color: #ffffff;
+}
+.selected-tags > i {
+  cursor: pointer;
+}
+
+/* 用户管理高度设置 */
+.user-table ::ng-deep div.ant-table-body{
+  min-height: 100px;
+  max-height: 300px;
+}
+.push-btn{
+  padding: 0.5rem 0;
+  text-align: center;
+}
+::ng-deep .ant-modal-title{
+  color:#78abff;
+}
+.contTitle ::ng-deep .anticon{
+  color:#4573ff;
+}
+.marl10{
+  margin-left: 10px;
+}
+.recbutt{
+  text-align: right;
+  margin-top: 15px;
+}
+nz-select {
+  width: 200px;
+}
+.addbtn{
+  text-align: center;
+  margin-bottom: 15px;
+}

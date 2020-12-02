@@ -1,0 +1,141 @@
+
+
+<app-searchform (search)="listSearch($event)" [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)' [btnLoading]="{AddAll: btnLoading?.addall}"></tpl-buttons>
+<nz-tabset [nzSelectedIndex]="tabIndex">
+    <nz-tab nzTitle="结算单" (nzClick)="tabResultFun(0)">
+        <app-table-form [extraTableHeight]="60" [isMutli]='true' [listLoading]='listLoading' [dataSet]="dataSet" [totalPage]="totalPage"
+           [gridId]="'grid1'" (updateDataResult)="selectData($event,0)" [paginationRef]="panation">
+           <ng-template #panation>
+               <span>已选重量{{totalWeight | number:'1.3-3'}}吨，</span>
+               <span>总价{{totalPrice | number:'1.2-2'}}元</span>
+           </ng-template>
+        </app-table-form>
+    </nz-tab>
+    <nz-tab nzTitle="按运单" (nzClick)="tabResultFun(1)">
+    <app-table-form [listLoading]='listLoading' [dataSet]="dataSet1" [extraTableHeight]="60" [nzShowPagination]=false [showCount]=false [isCheckBox]=false
+        [gridId]="'grid2'"></app-table-form>
+    </nz-tab>
+    <nz-tab nzTitle="按合同号" (nzClick)="tabResultFun(2)">
+        <app-table-form  [listLoading]='listLoading' [dataSet]="dataSet2" [extraTableHeight]="60"  [nzShowPagination]=false [showCount]=false [isCheckBox]=false
+          [gridId]="'grid3'"></app-table-form>
+    </nz-tab>
+    <nz-tab nzTitle="按委托单号" (nzClick)="tabResultFun(3)">
+       
+    </nz-tab>
+    <nz-tab nzTitle="按装车清单号" (nzClick)="tabResultFun(4)">
+     
+    </nz-tab>
+</nz-tabset>
+
+<div>
+    <ng-template #tplTitle>
+        <span>{{modalTitle}}</span>
+    </ng-template>
+    <ng-template #tplContent>
+        <form nz-form #formVal>
+
+            <ng-container *ngIf='this.buttonType === "BatchAdd"'>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="7">委托单位</nz-form-label>
+                    <nz-form-control [nzSpan]="12">
+                        <input-modal [isMutli]=false (inpEmit)='inpEmitCon($event)' [findset]="findset" [(inputModalModel)]="consignorCompanyName"
+                            [inputModalHiddenValue]="consignorCompanyId"></input-modal>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="7">业务板块</nz-form-label>
+                    <nz-form-control [nzSpan]="12">
+                        <!-- <input nz-input type="text" [(ngModel)]="businessType" [ngModelOptions]="{standalone: true}"> -->
+                        <nz-select [(ngModel)]="businessType" [ngModelOptions]="{standalone: true}">
+                            <nz-option nzValue="{{i.segmentId}}" nzLabel="{{i.segmentName}}" *ngFor="let i of workPart"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+              <nz-form-item>
+                <nz-form-label [nzSpan]="7">费用类型</nz-form-label>
+                <nz-form-control [nzSpan]="12">
+                  <!-- <input nz-input type="text" [(ngModel)]="businessType" [ngModelOptions]="{standalone: true}"> -->
+                  <nz-select [(ngModel)]="feeType" [ngModelOptions]="{standalone: true}">
+                    <nz-option nzValue="" nzLabel="全部" ></nz-option>
+                    <nz-option nzValue="{{i.feeId}}" nzLabel="{{i.feeName}}" *ngFor="let i of feeArr"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="7">时间</nz-form-label>
+                    <nz-form-control [nzSpan]="12">
+                        <!-- <input nz-input type="text" [(ngModel)]="reportName" [ngModelOptions]="{standalone: true}"> -->
+                        <nz-range-picker class="rangePicker" [(ngModel)]="dateRange" [ngModelOptions]="{standalone: true}" nzShowTime
+                            [nzFormat]="'yyyy-MM-dd HH:mm:ss'"></nz-range-picker>
+                
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item style="padding-left:70px;">
+                    <span>已选 {{ (calInfo.number && calInfo.number!=0) ? calInfo.number : 0}} 条，
+                        已选件数 {{ (calInfo.totSheetCount && calInfo.totSheetCount!=0) ? calInfo.totSheetCount :'0.00'}} 件，
+                        重量 {{(calInfo.weight && calInfo.weight!=0)?calInfo.weight : '0.000'}} 吨，
+                        总价 {{(calInfo.totalPrice && calInfo.totalPrice!=0) ? calInfo.totalPrice : '0.00'}} 元</span>
+                </nz-form-item>
+               
+            </ng-container>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="7">收款单位</nz-form-label>
+                    <nz-form-control [nzSpan]="12">
+                        <input-modal [isMutli]=false (inpEmit)='inpEmitCarrier($event)' [findset]="{formId: 'form_rec_test', name: '收款单位', parameter: 'companyName', parameterSend: 'settleCompanyId',url:'getRecCompany'}"
+                        [(inputModalModel)]="carrierCompany"
+                            [inputModalHiddenValue]="carrierCompanyId"></input-modal>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="7">付款单位</nz-form-label>
+                    <nz-form-control [nzSpan]="12">
+                        <input-modal [isMutli]=false (inpEmit)='inpEmit($event)' [findset]="findset"
+                         [(inputModalModel)]="settleCompany"
+                            [inputModalHiddenValue]="settleCompanyId"></input-modal>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="7">报表名称</nz-form-label>
+                    <nz-form-control [nzSpan]="12">
+                        <input nz-input type="text" [(ngModel)]="reportName" [ngModelOptions]="{standalone: true}">
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="7">备注</nz-form-label>
+                    <nz-form-control [nzSpan]="12">
+                        <textarea nz-input rows="2" [(ngModel)]="reportRemark" [ngModelOptions]="{standalone: true}"></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+            
+        </form>
+    </ng-template>
+    <ng-template #tplFooter>
+        <div>
+             <button *ngIf='this.buttonType === "BatchAdd"' nz-button nzType="primary" 
+             (click)="modalGetInfo()">统计</button>
+            <button nz-button nzType="primary" (click)="modalConfirm()" [disabled]="btnDis">确认</button>
+            <button nz-button nzType="default" (click)="modalCancel()">取消</button>
+        </div>
+    </ng-template>
+</div>
+<!-- 
+<nz-table #table (nzPageIndexChange)="refreshStatus()" [nzData]="dataSet"
+      (nzPageSizeChange)="refreshStatus()" [nzPageSize]="1000" [nzScroll]="{x:'200%',y:'300px' }" [nzFrontPagination]=true>
+  <thead>
+    <tr>
+        <th nzShowCheckbox  [(nzChecked)]="allChecked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="checkAll($event)" [nzWidth]="'50px'" nzLeft="0px"></th>
+        <ng-container *ngFor="let h of dataHeader">
+            <th>{{h.colCname}}</th>
+        </ng-container>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of table.data;let dex = index" >
+        <td nzShowCheckbox [(nzChecked)]="data.checked" (nzCheckedChange)="refreshStatus()" nzLeft="0px"></td>
+        <ng-container *ngFor="let h of dataHeader">
+            <td>{{data[h.colEname]}}</td>
+        </ng-container>
+    </tr>
+  </tbody>
+</nz-table> -->

@@ -1,0 +1,45 @@
+<app-searchform  (search)="listSearch($event)" (inpEmit)="inpEmit($event)"></app-searchform>
+
+<tpl-buttons  (btnClick)='btnClick($event)'></tpl-buttons>
+
+<form nz-form [formGroup]="validateForm" style="margin-bottom: 15px">
+  <div nz-row [nzGutter]="24">
+    <div nz-col [nzSpan]="6" *ngFor="let m of formData">
+      <nz-form-item>
+        <nz-form-label  [nzSpan]="8" [nzRequired]="m.require" >
+          {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control style="margin-left: -10px" [nzSpan]="16">
+          <nz-date-picker class="rangePicker" *ngIf="m.type == 'time'" [formControlName]="m.eName" [nzShowTime]="'true'"></nz-date-picker>
+          <!--<nz-select style="width: 100px" nzAllowClear nzPlaceHolder="请选择" formControlName="{{m.eName}}" *ngIf="m.type == 'select'">-->
+          <!--<nz-option *ngFor="let o of typeDataArr" [nzValue]="o.value" [nzLabel]="o.name"></nz-option>-->
+          <!--</nz-select>-->
+          <!--
+                          <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+                              <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+                          </nz-radio-group> -->
+          <input-modal  *ngIf="m.type == 'inputModal'" [DISABLED]='false' [isMutli]=false [findset]="m.findset" [inputModalModel]="boatBatchNum" [inputModalHiddenValue]="boatNum"
+                       (inpEmit)='inpEmit($event)' [validate]="m.validate" [showExplainFlag]="showExplainFlag"></input-modal>
+          <!--<input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'number'" (blur)="blur()">-->
+          <app-input-number *ngIf="m.type == 'number'" formControlName="{{m.eName}}" [attr.id]="m.eName"></app-input-number>
+          <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'" [readOnly]="m.readOnly">
+          <nz-form-explain *ngIf="validateForm.get(m.eName).dirty && validateForm.get(m.eName).errors">
+
+            <ng-container *ngIf="validateForm.get(m.eName).hasError('required')">
+              {{m.validateCon}}
+            </ng-container>
+            <ng-container *ngIf="validateForm.get(m.eName).hasError('pattern')">
+              {{m.validators.patternErr}}
+            </ng-container>
+
+          </nz-form-explain>
+        </nz-form-control>
+
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+
+<app-table-form [gridId]="'grid1'"  [dataSet]="dataSet1" [pageSize]="pageSize1" [totalPage]="totalPages1"
+                 [isMutli]="true" [listLoading]="listLoading1" (updateDataResult)="updateDataResult($event)"></app-table-form>

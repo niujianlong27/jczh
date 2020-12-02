@@ -1,0 +1,137 @@
+<app-searchform (search)="query($event)" [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"
+             [btnDisable]="{'waybillReturn': selectedWaybillData.length < 1}"></tpl-buttons>
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+  <ng-template #one>
+    <app-table-form gridId="grid1" [dataSet]="waybillData" [pageSize]="pageSize" tabIndex="1"
+                    [totalPage]="total" [isMutli]="true" (updateDataResult)="selectedWaybill($event)"
+                    (listClick)="rowCilcked($event)" [selfTableHeight]="gridOneHeight"
+                    [colSet]="true" [paginationRef]="totalStats" [listLoading]="loading"></app-table-form>
+
+    <ng-template #totalStats>
+      已选总件数: {{totalSheet | number}} 件 已选总重量: {{totalWeight | number}} 吨
+    </ng-template>
+  </ng-template>
+  <ng-template #two>
+    <nz-tabset>
+      <nz-tab nzTitle="运单捆包">
+        <app-table-form gridId="waybillPack" [dataSet]="packData" isMutli="true" [nzShowPagination]="false" [selfTableHeight]="gridTwoHeight"
+                        (updateDataResult)="selected($event)" [paginationRef]="packTotal">
+                        <ng-template #packTotal>
+                          <span>已选件数: <em>{{packNum}}</em></span> &nbsp;
+                          <span>已选重量: <em>{{packWeight | number:'1.3-3'}}</em></span>
+                        </ng-template>
+        </app-table-form>
+      </nz-tab>
+      <nz-tab nzTitle="运单司机">
+        <app-table-form gridId="driver" [dataSet]="driverData" isMutli="true" [selfTableHeight]="gridOneHeight"
+                        [nzShowPagination]="false">
+        </app-table-form>
+      </nz-tab>
+    </nz-tabset>
+  </ng-template>
+</app-grid-resize>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="运单返单" [nzFooter]="modalFooter"
+          (nzOnCancel)="isVisible=false"
+          (nzOnOk)="waybillReturnSubmit()" [nzMaskClosable]="false" >
+    <form nz-form [formGroup]="returnValidate">
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5" nzRequired>运输车队</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input-modal [(inputModalModel)]="carrierCompanyName"
+                       [findset]="{formId:'company_pop',name:'运输车队',parameter:'companyName',parameterSend:'companyId'}"
+                       [showExplainFlag] = "returnValidate.get('carrierCompanyId')?.dirty && returnValidate.get('carrierCompanyId')?.errors"
+                       [validate]="{validateOpt:'inpValue',validateCon:'请选择运输车队'}"
+                       (inpEmit)="setPopSelectedValueId($event, 'carrierCompanyId')"></input-modal>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+
+        <nz-form-label [nzSpan]="5" nzRequired>件数</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+
+          <nz-input-number formControlName="totalSheet" [nzMin]="0.1" [nzStep]="1"
+                           [nzDisabled]="true"></nz-input-number>
+          <nz-form-explain *ngIf="returnValidate.get('totalSheet')?.dirty && returnValidate.get('totalSheet')?.errors">
+            返单件数不能为空!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5" nzRequired>确认件数</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <nz-input-number formControlName="returnSheet" [nzMin]="0.1" [nzStep]="1"
+                           [nzDisabled]="true"></nz-input-number>
+          <nz-form-explain
+          *ngIf="returnValidate.get('returnSheet')?.dirty && returnValidate.get('returnSheet')?.errors">确认件数不能为空!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5" nzRequired>重量</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <nz-input-number formControlName="totalWeight" [nzMin]="0.1" [nzStep]="1"
+                           [nzDisabled]="true"></nz-input-number>
+          <nz-form-explain
+            *ngIf="returnValidate.get('totalWeight')?.dirty && returnValidate.get('totalWeight')?.errors">返单重量不能为空!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5" nzRequired>确认重量</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <nz-input-number formControlName="returnTotalWeight" [nzMin]="0.1" [nzStep]="1"
+                           [nzDisabled]="true"></nz-input-number>
+          <nz-form-explain
+          *ngIf="returnValidate.get('returnTotalWeight')?.dirty && returnValidate.get('returnTotalWeight')?.errors">确认重量不能为空!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5">运输车队简称</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input formControlName="groupDriverName" [readonly]="true">
+          <nz-form-explain
+            *ngIf="returnValidate.get('groupDriverName')?.dirty && returnValidate.get('groupDriverName')?.errors">
+            返单重量不能为空!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5" nzRequired>载重标记</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <nz-select nzShowSearch  formControlName="weight">
+            <nz-option *ngFor="let i of weitghtType" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+          </nz-select>
+          <nz-form-explain
+            *ngIf="returnValidate.get('weight')?.dirty && returnValidate.get('weight')?.errors">
+            载重类型不能为空!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5">备注</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input formControlName="returnBillRemark">
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="isVisible=false">取消</button>
+    <button nz-button nzType="primary" (click)="waybillReturnSubmit()" [nzLoading]="returnLoading"
+            [disabled]="returnLoading">确定
+    </button>
+  </ng-template>
+</nz-modal>
+
+

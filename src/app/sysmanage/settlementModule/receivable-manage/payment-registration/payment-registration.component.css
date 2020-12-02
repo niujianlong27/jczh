@@ -1,0 +1,6 @@
+.payment-registration ::ng-deep .ant-form-item{
+    margin-bottom:0;
+}
+.payment-registration ::ng-deep .ant-calendar-picker{
+  width: 100%;
+}

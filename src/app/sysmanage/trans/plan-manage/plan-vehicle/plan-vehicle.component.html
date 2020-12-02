@@ -1,0 +1,11 @@
+<app-searchform (search)="query($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [btnDisable]="{'update': selectedPlanData.length != 1}"></tpl-buttons>
+
+<app-table-form gridId="plan" [dataSet]="planData" [pageSize]="pageSize" tabIndex="1" [totalPage]="total" isMutli="true"
+  (updateDataResult)="selectedPlan($event)" (listClick)="rowCilcked($event)" [colSet]="true" [paginationRef]="totalStats" [showCount]="false" [listLoading]="loading"></app-table-form>
+
+<ng-template #totalStats>
+  已选&nbsp;{{selectedPlanData.length}}&nbsp;条&nbsp;已选总重量:{{totalWeight | number}}吨 已选总件数:{{totalSheet | number}}件
+</ng-template>
+
+<app-table-form gridId="item" [dataSet]="itemData" isMutli="true" [nzShowPagination]="false"></app-table-form>

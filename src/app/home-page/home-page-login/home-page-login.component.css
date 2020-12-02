@@ -1,0 +1,157 @@
+
+.text-dark {
+  color: #3a3f51;
+}
+
+.background {
+  position: relative;
+  min-width: 1300px;
+  min-height: 528px;
+  width: 100%;
+  height: 100%;
+  background: url("src/assets/static/background-login.png") 0 0 / 100% 100% no-repeat;
+}
+
+.app-layout {
+  height: 100%;
+  min-width: 1300px;
+  min-height: 600px;
+}
+
+.login {
+  position: absolute;
+  max-width: 346px;
+  top: 110px;
+  right: 150px;
+  background: url("src/assets/static/denglubg@2x.png") 0 0 / 100% 100% no-repeat;
+}
+
+.login ::ng-deep .ant-tabs-nav-wrap {
+  padding-top: 30px;
+}
+
+.login ::ng-deep .ant-tabs-bar {
+  border-bottom-color: #9fd7fd;
+}
+
+.login ::ng-deep .ant-tabs-tab-active {
+  color: #fff;
+}
+
+.login ::ng-deep .ant-tabs-ink-bar {
+  background-color: #fff;
+}
+
+.login ::ng-deep .ant-tabs-tab {
+  font-size: 16px;
+}
+
+.login-form {
+  /*max-width: 300px;*/
+}
+
+.login-form-forgot {
+  float: right;
+}
+
+.login-form-button {
+  width: 100%;
+  background-color: #00A8FF;
+  border-color: #00A8FF;
+  font-family: PingFangSC-Semibold;
+}
+
+.label-text {
+  color: #ffffff;
+  font-size: 8pt;
+  font-family: PingFangSC-Regular;
+  /*line-height: 0.4vw;*/
+}
+
+.v1-label-text {
+  font-size: 10px;
+}
+
+/* .login-checkbox-auto-login  {*/
+/*float: left;*/
+/*color: #ffffff;
+font-size: 8pt;
+font-family: PingFangSC-Regular;
+} */
+
+:host ::ng-deep .ant-checkbox-inner::after {
+  left: 20%;
+}
+
+.login-other-text {
+  overflow: hidden;
+  color: #f7f7f7;
+  font-size: 10pt;
+  margin: 0;
+  font-family: PingFangSC-Regular;
+}
+
+.login-other-text span:first-child {
+  float: left;
+  cursor: pointer;
+}
+
+.login-other-text span:last-child {
+  float: right;
+  cursor: pointer;
+
+}
+
+:host ::ng-deep .ant-checkbox-inner {
+  /*width: 12px;*/
+  /*height: 12px;*/
+}
+
+:host ::ng-deep .platform .ant-radio-inner {
+  background: #ffffff00;
+}
+
+:host ::ng-deep .platform .ant-radio-checked .ant-radio-inner {
+  border-color: #ffffff;
+}
+
+:host ::ng-deep .platform .ant-radio-inner::after {
+  background-color: #ffffff
+}
+
+.loginText {
+  font-size: 16.7pt;
+  color: #ffffff;
+  margin-top: 24.5pt;
+  text-align: center;
+  font-family: PingFangSC-Medium;
+  font-weight: bold;
+}
+
+:host ::ng-deep .ant-radio-disabled + span {
+  /*color: #ffffff;*/
+}
+
+input:-ms-input-placeholder {
+  font-family: PingFangSC-Regular;
+  font-size: 8.2pt;
+  color: #656565;
+}
+
+input::-webkit-input-placeholder {
+  font-family: PingFangSC-Regular;
+  font-size: 8.2pt;
+  color: #656565;
+}
+.massge {
+  /*font-weight: 700;*/
+  font-size: 16px;
+  text-align: center;
+}
+
+.jump {
+  text-align: right;
+  padding-right: 10px;
+  color: #1EA5EB;
+  cursor: pointer;
+}

@@ -1,0 +1,66 @@
+
+<nz-tabset  [(nzSelectedIndex)]="carNum" (nzSelectChange)="selectChange()">
+    <nz-tab nzTitle="仓库维护">         
+        <common-page [pageFun]='true' (pageIndexEmit)='getPageIndex($event)' (pageSizeEmit)='getPageSize($event)' (search)="listSearch($event)" (btnAdd)="btnAdd()" [formId]="'form_warehouse'"  
+        (btnDelete)="delete($event)" (btnUpdate)="btnUpdate($event)" [totalPage]="totalPage" [pageSize]="pageSize" [listLoading]="listLoading" [dataSet]="dataSet" [isMutli]="false"></common-page>
+    </nz-tab>
+
+    <nz-tab nzTitle="装载位维护">         
+        <common-page [pageFun]='true' (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)' (search)="listSearch1($event)" [listLoading]="listLoading" 
+        (btnUpdate)="btnUpdate($event)" [formId]="'form_warehouse_stow'" (btnAdd)="btnAdd()" (btnDelete)="delete($event)" [totalPage]="totalPage" [pageSize]="pageSize"  [isMutli]="false" [dataSet]="dataSet"></common-page>
+    </nz-tab>
+</nz-tabset>
+
+<nz-modal [nzWidth]="'45%'" [(nzVisible)]="modalFormVisible" nzTitle="{{ modalTitle }}" (nzOnCancel)="handleCancel()"
+  [nzOkLoading]="isOkLoading" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()">
+
+    <form nz-form [formGroup]="modalValidateForm">
+      <nz-form-item *ngFor="let m of modalFormData">
+        <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="12">
+
+          <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'; else other" formControlName="{{m.eName}}">
+            <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+          </nz-radio-group>
+
+          <ng-template #other>
+            <input style="width: 200px;" *ngIf="m.type == 'text'" nz-input placeholder="仓库名称" [formControlName]="m.eName">
+            <nz-select style="width: 200px;" *ngIf="m.type === 'warehouseSelect'" nzShowSearch nzAllowClear nzPlaceHolder="仓库名称"
+              formControlName="{{m.eName}}">
+              <nz-option *ngFor="let option of warehouseNameList" [nzLabel]="option.warehouseName" [nzValue]="option.warehouseCode">
+              </nz-option>
+            </nz-select>
+            <input style="width: 200px;" *ngIf="m.type == 'StowText'" nz-input placeholder="装载位名称" [formControlName]="m.eName">
+            <nz-select style="width: 200px;" *ngIf="m.type === 'warehouseTypeSelect'" nzShowSearch nzAllowClear nzPlaceHolder="仓库类型"
+              formControlName="{{m.eName}}">
+              <nz-option *ngFor="let option of warehouseTypeList" [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+              </nz-option>
+            </nz-select>
+            <input style="width: 200px;" *ngIf="m.type == 'sortText'" nz-input placeholder="序号" [formControlName]="m.eName">
+            <input style="width: 200px;" *ngIf="m.type == 'text1'" nz-input placeholder="备注" [formControlName]="m.eName">
+            <nz-select style="width: 200px;" *ngIf="m.type === 'select1'" nzShowSearch nzAllowClear nzPlaceHolder="状态"
+              formControlName="{{m.eName}}">
+              <nz-option *ngFor="let option of statusList" [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+              </nz-option>
+            </nz-select>
+            
+            <!-- <nz-input-number style="width: 200px;" *ngIf="m.type === 'num'" [nzMin]="0" [nzMax]="5000" [nzStep]="1" formControlName="{{m.eName}}"></nz-input-number> -->
+          </ng-template>
+          <nz-form-explain *ngIf="modalValidateForm.get(m.eName) && modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+            <div *ngIf="modalValidateForm.get(m.eName).errors.pattern;else erroInf">
+              {{ m.validators.patternErr}}
+            </div>
+            <ng-template #erroInf>
+              {{ m.validateCon}}
+            </ng-template>
+          </nz-form-explain>
+
+        </nz-form-control>
+
+      </nz-form-item>
+
+    </form>
+  </nz-modal>

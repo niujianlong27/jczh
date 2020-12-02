@@ -1,0 +1,32 @@
+
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons  (btnClick)="btnClick($event)"></tpl-buttons>
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+  <ng-template #one>
+    <app-table-form  gridId="grid1" [dataSet]="waybillData" [pageSize]="pageSize"
+                     [selfTableHeight]="gridOneHeight" [totalPage]="total" [listLoading]="loading"
+                     [isMutli]="true" (updateDataResult)="selectedWaybill($event)"
+                     (listClick)="rowCilcked($event)" (userColumnsEmit)="columns($event)"
+                     [paginationRef]="totalStats" [showCount]="false"  [colSet]="true">
+      <ng-template #urlImg let-data>
+        <div *ngIf="data.returnPic" (click)="getView($event,data.returnPic, data)">
+          <nz-avatar *ngFor="let img of data.returnPic.split(';')" [nzSrc]="img" nzSize="small" style="width:17px;height:17px;line-height:17px;"></nz-avatar>
+        </div>
+      </ng-template>
+    </app-table-form>
+
+    <ng-template #totalStats>
+      已选&nbsp;{{selectedWaybillData.length}}&nbsp;条&nbsp;已选总重量:{{totalWeight | number}}吨 已选总件数:{{totalSheet | number}}件
+    </ng-template>
+  </ng-template>
+  <ng-template #two>
+    <app-table-form  [gridId]="childGridId" [dataSet]="childData" [pageSize]="childPageSize"
+                     [updateHeader]="true" [selfTableHeight]="gridTwoHeight" [colSet]="true"
+                     [totalPage]="childTotal" [isMutli]="false" [tabArr]="tabArr" [tabIndex]="childIndex"
+                     (tabResultFun)="tabChange($event)" [listLoading]="childLoading"
+                     [nzShowPagination]="false">
+    </app-table-form>
+  </ng-template>
+</app-grid-resize>
+
+

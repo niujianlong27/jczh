@@ -1,0 +1,52 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+
+<div>
+  <!--<p>储位信息</p>-->
+  <app-table-form [gridId]="'grid1'"
+                  [dataSet]="dataSet1" [extraTableHeight]="25"
+                  [pageSize]="pageSize1" [totalPage]="totalPages1"
+                  [isMutli]="true"
+                  (updateDataResult)="updateDataResult($event)"
+                  [listLoading]="listLoading1"></app-table-form>
+</div>
+<!--数据弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="12">
+        <input type="{{m.type}}" *ngIf="m.eName!=='stockName' && m.eName!=='areaName'" nz-input
+               formControlName="{{m.eName}}" [attr.id]="m.eName">
+        <nz-select *ngIf="m.eName==='stockName'" nzShowSearch nzAllowClear formControlName="{{m.eName}}"
+                   (ngModelChange)="stockNameChange($event)">
+          <nz-option [nzLabel]="i.stockName" [nzValue]="i.stockName" *ngFor="let i of stockNameArr"></nz-option>
+        </nz-select>
+        <nz-select *ngIf="m.eName==='areaName'" nzShowSearch nzAllowClear formControlName="{{m.eName}}">
+          <nz-option [nzLabel]="i.areaName" [nzValue]="i.areaName" *ngFor="let i of stockAreaNameArr"></nz-option>
+        </nz-select>
+
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+          <div *ngIf="modalValidateForm.get(m.eName).errors.pattern;else erroInf">
+            {{ m.validators.patternErr}}
+          </div>
+          <ng-template #erroInf>
+            {{ m.validateCon}}
+          </ng-template>
+        </nz-form-explain>
+
+      </nz-form-control>
+
+    </nz-form-item>
+
+  </form>
+</nz-modal>
+
+<!--确认弹窗-->
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+
+</app-modal-confirm>

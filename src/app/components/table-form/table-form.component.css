@@ -1,0 +1,115 @@
+.grid-box ::ng-deep .ant-table-thead>tr>th .ant-table-header-column .ant-table-column-sorters>*:not(.ant-table-column-sorter) {
+    position: static;
+}
+.grid-box ::ng-deep .cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper{
+  min-height: 1px;
+}
+.grid-box ::ng-deep .ant-table-placeholder {
+    padding: 0;
+}
+
+.form-btn {
+    display: inline-block;
+}
+
+.b-t {
+    padding-top: 15px;
+    border-bottom: 1px #ddd solid;
+    margin-bottom: 30px;
+}
+
+
+/*标签栏重置*/
+
+.table-list ::ng-deep .ant-tabs-bar {
+    border-bottom-width: 0;
+    margin: 1px;
+}
+
+.grid-operate a {
+    padding: 0 5px;
+}
+
+.grid-operate a:not(:last-child) {
+    border-right: 1px#999 solid;
+}
+
+.table-th {
+    position: relative;
+    cursor: pointer;
+}
+
+.resize-handle {
+    display: inline-block;
+    position: absolute !important;
+    right: -3px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    padding: 0;
+    height: 100%;
+    border-left: 1px #000 dashed;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 999;
+    cursor: col-resize;
+    transition: right ease 0.3s;
+}
+
+.resize-handle:after {
+    position: absolute;
+    content: '';
+    display: block;
+    width: 6px;
+    height: 100%;
+    left: -3px;
+    top: 0;
+}
+
+::ng-deep .ant-table-filter-dropdown-link.clear {
+    clear: none;
+}
+
+::ng-deep .ant-table-filter-dropdown .ant-dropdown-menu {
+    max-height: 300px;
+    overflow: auto;
+}
+
+.bg-grid-tr {
+    background-color: #edf7fb;
+}
+
+.grid-operate {
+    text-align: center;
+}
+/*排序样式*/
+.sort-box{
+    display: inline-block;
+    font-size: 12px;
+    color: #bfbfbf;
+    width: 12px;
+    margin-left: 3px;
+    white-space: normal;
+    line-height:0; 
+    vertical-align: top;
+}
+.sort-box .sort-up{
+    margin-top: 1px;
+}
+.sort-box .sort-down{
+    margin-top: -5px;
+}
+
+.h-active{
+   color: #094f7b !important;
+}
+.filter-bottom{
+    border-top: 1px solid #ededed;
+    padding: 3px 10px;
+}
+.filter-content{
+    height: 200px;
+}
+.filter-open{
+    background: #e5e5e5;
+}

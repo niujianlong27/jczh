@@ -1,0 +1,36 @@
+<app-searchform
+        (search)="listSearch($event)"
+        [triggerSearch]="true"
+>
+</app-searchform>
+<tpl-buttons>
+</tpl-buttons>
+<nz-tabset [nzTabPosition]="'top'" [nzType]="'card'" (nzSelectChange)="tabSetSelectChange($event)">
+    <nz-tab *ngFor="let tab of tabs" [nzTitle]="tab">
+    </nz-tab>
+</nz-tabset>
+<app-table-form
+        [dataSet]="dataSet"
+        [isMutli]="false"
+        [listLoading]="listLoading"
+        [pageSize]="pageSize"
+        [totalPage]="totalPage"
+        gridId="grid1"
+>
+    <ng-template grid-row="tpl-grid1-details" let-obj let-index="index" let-key="key">
+        <button nz-button [nzSize]="'small'" [nzType]="'primary'" (click)="detailsClick(obj)">查看明细</button>
+    </ng-template>
+</app-table-form>
+
+<ng-template #detailsModal>
+    <app-table-form
+            [dataSet]="modalDataSet"
+            [listLoading]="modalSpin"
+            [pageFun]="true"
+            [isCheckBox]="false"
+            [selfTableHeight]="'450px'"
+            [nzShowPagination]="false"
+            gridId="grid2"
+    >
+    </app-table-form>
+</ng-template>

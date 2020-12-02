@@ -1,0 +1,24 @@
+<div class="clearfix" style="padding-top: 10px">
+  <form nz-form [formGroup]="validateForm"  >
+    <nz-form-item>
+
+      <nz-form-label class="fl"  nzSpan="2">时间范围</nz-form-label>
+      <nz-form-control class="fl m-r" style="width: 215px;">
+        <nz-range-picker formControlName="chooseTime"></nz-range-picker>
+
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+<div class="app">
+
+  <app-searchform (search)="listSearch($event)"></app-searchform>
+  <tpl-buttons (btnClick)="btnClick($event)" [btnHiden]="{mutiSearch:true}"></tpl-buttons>
+   <app-table-form [dataSet]="dataSet" [pageSize]="pageSize" tabIndex="1"  isMutli="true" [extraTableHeight]="87"
+                   (updateDataResult)="selectlist($event)"  [colSet]="true"    [totalPage]="totalPage" [showCount]="false" [listLoading]="listLoading"></app-table-form>
+   <p>
+     <span class="fl">总登录次数</span>
+     <span class="fr">{{num}}</span>
+   </p>
+</div>
+</div>
+

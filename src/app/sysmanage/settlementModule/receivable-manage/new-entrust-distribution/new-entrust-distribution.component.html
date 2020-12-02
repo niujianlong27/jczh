@@ -1,0 +1,45 @@
+<app-searchform (search)="listSearch($event)" [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+<div>
+
+    <p nz-col>收款登记记录</p>
+    <app-table-form [gridId]="'grid1'" [dataSet]="settleReport" [pageSize]="pageSize2" [listLoading]="loading" (updateDataResult)="selectData1Fun($event)" [totalPage]="total2" selfTableHeight="270px" [pageFun]="true" (listClick)="reportRowCilcked($event)"
+        (pageIndexEmit)="settleReportIndexEmit($event)" [isMutli]="true" (pageSizeEmit)="settleReportSizeEmit($event)" [paginationRef]="totalStats2"></app-table-form>
+    <ng-template #totalStats2>
+        <!--&nbsp;<span> 已选 {{selectData1.length}} 条</span>-->
+        &nbsp;<span> 收款总金额: {{itemTotalSum| number:'1.2-2'  }}元</span>
+
+    </ng-template>
+</div>
+
+<div style="margin-top:30px;">
+    <div nz-row nzType="flex" nzJustify="start" nzAlign="middle" style="margin-bottom: 5px">
+        <p nz-col>委托记录</p>
+        <nz-input-group nz-col nzSearch [nzAddOnAfter]="suffixIconButton" style="width: 265px;margin-left: 50px">
+            <input type="text" nz-input placeholder="输入，回车触发" nzSize="small" [(ngModel)]="receiptData" (keyup.enter)="receiptSearch()">
+        </nz-input-group>
+        <ng-template #suffixIconButton>
+            <button nz-button nzType="primary" nzSearch (click)="receiptSearch()"><i nz-icon type="search"></i></button>
+        </ng-template>
+    </div>
+    <app-table-form [gridId]="'grid2'" (updateDataResult)="selectData2Fun($event)" [dataSet]="settleRec" (modelChange)="inputModelFun($event)" [pageSize]="pageSize1" [totalPage]="total1" [isMutli]="isTrueGrid1" selfTableHeight="270px" [listLoading]="isLoading"
+        [pageFun]="true" (pageIndexEmit)="settleRecIndexEmit($event)" (listClick)="rowCilcked($event)" (pageSizeEmit)="settleRecSizeEmit($event)" [paginationRef]="totalStats" [nzShowPagination]="false"></app-table-form>
+    <ng-template #totalStats>
+        <!--&nbsp;<span> 已选 {{selectData1.length}} 条</span>-->
+        &nbsp;<span> 合同总金额: {{totalSum| number:'1.2-2'  }}元</span> &nbsp;
+        <span> 未收总金额: {{uncollectedAmount | number:'1.2-2'}}元</span> &nbsp;
+        <span> 已收总金额: {{collectedAmount | number:'1.2-2' }}元</span>
+
+    </ng-template>
+</div>
+
+<ng-template #tplTitle>
+    <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #confirmContent>
+    <div class="text-center f-b">{{modalContent}}</div>
+</ng-template>
+<ng-template #confirmFooter>
+    <button nz-button nzType="default" (click)="modalCancel(2)">取消</button>
+    <button nz-button nzType="primary" (click)="modalConfirm()" [nzLoading]="confrimLoading">确定</button>
+</ng-template>

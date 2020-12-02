@@ -1,0 +1,23 @@
+.label{
+    margin:0 75px 0 62px;
+}
+.select{
+    width:236px;
+    margin:0 -65.5px;
+}
+.lab1 .ant-input{
+    position: absolute;
+    top:5px;
+    left: 118px;
+    width: 236px;
+    height: 32px;
+}
+.required:before {
+    display: inline-block;
+    margin-right: 4px;
+    content: "*";
+    font-family: SimSun;
+    line-height: 1;
+    font-size: 14px;
+    color: #f5222d;
+}

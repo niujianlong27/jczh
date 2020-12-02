@@ -1,0 +1,26 @@
+<nz-tabset>
+    <nz-tab *ngFor="let tab of tabs;let i = index;" [nzTitle]='tab.itemCname+tab.itemCount' (nzSelect)="nzSelect(tab.itemCode)">
+      <ng-container>
+          <app-searchform formId="form_rgDisp_jgwlqueue0" (search)="listSearch($event)"></app-searchform>
+          <tpl-buttons formId="form_rgDisp_jgwlqueue0" (btnClick)="btnClick($event)"
+          [btnHiden]="{'Find':false,'Confirm':!(tab.formId=='form_rgDisp_jgwlqueue0'||tab.formId=='form_rgDisp_jgwlqueue1')}"></tpl-buttons>
+          <app-table-form
+                            [formId]="tab.formId" [gridId]="'grid1'"
+                            [isMutli]="false"
+                            [dataSet]="dataSet"
+                            [isCheckBox]="true"
+                  (updateDataResult)="updateDataResult($event)"
+                            [listLoading]="listLoading"  [showCount]='true'
+                            (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)'
+                            [pageSize]="pageSize1"
+                            [totalPage]="totalPage"
+                            [showCount]="false"
+          >
+              <!-- <ng-template #g1 let-data let-index="index" >
+                <a (click)="dellete(data,index)" *ngIf="status=='disp_queueDetailStatus_20'">确认进场</a>
+
+              </ng-template> -->
+            </app-table-form>
+      </ng-container>
+    </nz-tab>
+  </nz-tabset>

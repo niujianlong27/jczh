@@ -1,0 +1,31 @@
+<common-page
+  (btnClick)="btnClick($event)"
+  (search)="listSearch($event)"
+  (updateDataResult)="updateDataResult($event)"
+  [dataSet]="dataSet"
+  [isMutli]="false"
+  [listLoading]="listLoading"
+  [pageSize]="pageSize"
+  [totalPage]="totalPage"
+  [triggerSearch]="true"
+  gridId="grid1"
+  [gridOperate]=" {show: true, title: '操作', width: '120px', template: operate}"
+  [btnDisable]="{Update:selectData.length!==1}"
+  (modelChange)="modelChange($event)"
+>
+</common-page>
+
+<ng-template
+  #operate
+  let-data
+>
+  <button
+    nz-button
+    nzType="default"
+    nzSize="small"
+    [disabled]="!data.EDIT"
+    (click)="btnSave(data)"
+  >
+    保存
+  </button>
+</ng-template>

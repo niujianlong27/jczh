@@ -1,0 +1,84 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+
+<common-page [dataSet]="dataSet" [pageSize]="pageSize" [totalPage]="totalPage" [listLoading]="listLoading" [extraTableHeight]="permissions ? 52 : 0"
+             [isMutli]="true" (search)="listSearch($event)" (btnAdd)="btnAdd()" (btnUpdate)="btnUpdate($event)"
+             (btnDelete)="btnDelete($event)" (updateDataResult)="updateDataResult($event)"  (btnClick)="btnClick($event)"></common-page>
+
+
+<nz-modal  [nzWidth]="'65%'"[(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+          (nzAfterClose)="closeResult()" [nzMaskClosable]="false" >
+  <form nz-form [formGroup]="modalValidateForm">
+    <div nz-row [nzGutter]="8" [nzType]="'flex'">
+      <div nz-col [nzSpan]="11" *ngFor="let m of modalFormData" [hidden]='m.hidden'>
+        <nz-form-item class="in">
+      <nz-form-label [nzSpan]="7" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="15">
+        <nz-input-number class="number-width"   *ngIf="m.type == 'number'" [nzPrecision]="3"
+                         [formControlName]="m.eName" [nzMin]="0"
+                         [nzStep]="1">
+        </nz-input-number>
+        <input-modal *ngIf="m.type == 'modal'" [isMutli]="false" [findset]="formIdFindset"
+                     [inputModalModel]="inputModalModel" (inpEmit)="inpEmit($event)" [borderRed]="borderRed"
+                     [DISABLED]="true"></input-modal>
+        <input-modal *ngIf="m.type == 'company'" [isMutli]="false" [findset]="plateCompanyFindset"
+                     [(inputModalModel)]="companyModel" (inpEmit)="plateCompanyEmit($event)" [borderRed]="borderRed2"
+                     [DISABLED]="false"></input-modal>
+        <input-modal *ngIf="m.type == 'recName'" [isMutli]="false" [findset]="plateCompanyFindset"
+                     [(inputModalModel)]="recNameModel" (inpEmit)="recNameEmit($event)" [borderRed]="borderRed3"
+                     [DISABLED]="false"></input-modal>
+        <input-modal *ngIf="m.type == 'bankName'" [isMutli]="false" [findset]="bankFindset"
+                     [(inputModalModel)]="bankNameModel" (inpEmit)="bankNameEmit($event)" [borderRed]="borderRed3"
+                     [DISABLED]="false"></input-modal>
+
+        <input type="{{m.type}}" *ngIf="m.type == 'text'" nz-input formControlName="{{m.eName}}" [id]="m.eName">
+
+        <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+          <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+        </nz-radio-group>
+
+        <nz-select [attr.id]="m.eName" *ngIf="m.type == 'accountType'" [formControlName]="m.eName">
+          <nz-option *ngFor="let i of accountTypeArr" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+        </nz-select>
+        <nz-select nzShowSearch [attr.id]="m.eName" *ngIf="m.type == 'province'" [formControlName]="m.eName" (ngModelChange)="addressChange($event,'DZDJ10')">
+          <nz-option *ngFor="let i of provinceArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+        </nz-select>
+        <nz-select nzShowSearch [attr.id]="m.eName" *ngIf="m.type == 'city'" [formControlName]="m.eName" (ngModelChange)="addressChange($event,'DZDJ20')">
+          <nz-option *ngFor="let i of cityArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+        </nz-select>
+<!--        <nz-select nzShowSearch [attr.id]="m.eName" *ngIf="m.type == 'bankName'" [formControlName]="m.eName" (ngModelChange)="bankChange($event,'YHDZ10')"-->
+<!--        (nzOpenChange)="bankOpen($event)" nzServerSearch (nzOnSearch)="bankFilter($event)">-->
+<!--          <nz-option nzCustomContent *ngFor="let i of bankLoadArr" [nzLabel]="i.bankName" [nzValue]="i.bankName">-->
+<!--             <div [title]="i.bankName">{{i.bankName}}</div>-->
+<!--          </nz-option>-->
+<!--        </nz-select>-->
+        <nz-select nzShowSearch [nzAllowClear]="true" [attr.id]="m.eName" *ngIf="m.type == 'bankSubName'" [formControlName]="m.eName" (ngModelChange)="bankChange($event,'YHDZ20')"
+        (nzOpenChange)="bankSubOpen($event)"  (nzOnSearch)="bankSubFilter($event)"  (nzScrollToBottom)="loadMore()">
+          <nz-option  *ngFor="let i of bankSubLoadArr" [nzLabel]="i.bankSubbranchName" [nzValue]="i.bankSubbranchName">
+          </nz-option>
+        </nz-select>
+
+
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+        </nz-form-explain>
+        <nz-form-explain style="color: #f5222d;" *ngIf="m.modal">请输入公司</nz-form-explain>
+        <nz-form-explain style="color: #f5222d;" *ngIf="m.type == 'company'&&borderRed2">请输入业务公司名称</nz-form-explain>
+        <nz-form-explain style="color: #f5222d;" *ngIf="m.type == 'recName'&&borderRed3">请输入收款单位</nz-form-explain>
+
+      </nz-form-control>
+
+    </nz-form-item>
+      </div>
+    </div>
+  </form>
+</nz-modal>
+
+<!--确认弹窗-->
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>

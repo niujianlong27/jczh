@@ -1,0 +1,3 @@
+::ng-deep .ant-table-tbody > tr > td.number, .ant-table-tbody > tr > td.number input{
+    text-align: left;
+}

@@ -1,0 +1,20 @@
+<div>
+  <app-searchform (search)="listSearch($event)"></app-searchform>
+  <tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+  <app-table-form tabIndex="1"
+                  isMutli="true"
+                  [colSet]="true"
+                  [showCount]="true"
+                  [dataSet]="dataSet"
+                  [pageSize]="pageSize"
+                  [totalPage]="totalPage"
+                  [listLoading]="listLoading"
+                  [paginationRef]="totalTpl"
+                  (updateDataResult)="selectData($event)">
+                  <ng-template #totalTpl>
+                     <span>已选总重量: {{ totalWeight |  number:'1.3-3' }} 吨</span>&nbsp;
+                     <span>已选总件数: {{ totalNumber |  number:'1.2-2' }} 件</span>
+                  </ng-template>
+  </app-table-form>
+</div>
+

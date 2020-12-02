@@ -1,0 +1,99 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+<div nz-row nzType="flex" nzJustify="space-around" style="padding-top: 20px">
+  <div nz-col nzSpan="12">
+    <nz-table nzTitle="角色管理" nzSize="small" #roleTable [nzData]="roleData" [nzBordered]="false" 
+              [nzShowPagination]=false [nzFrontPagination]=false [nzHideOnSinglePage]="true" reNzTable (heightEmit)="heightFun($event,0)" [extraTableHeight]="permissions ? 110 : 60"
+              [nzScroll]="{x:'250px',y:roleHeight}">
+      <thead>
+      <tr>
+        <ng-container *ngFor="let role of roleHeaderData">
+          <th [title]="role.cName" nzWidth="100px">{{role.cName}}</th>
+        </ng-container>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let data of roleTable.data" [class.tr-selected]="data.isClick">
+        <ng-container *ngFor="let role of roleHeaderData">
+          <td [title]="data[role.eName]" (click)="roleClick(data)">{{ data[role.eName]}}</td>
+        </ng-container>
+      </tr>
+      </tbody>
+    </nz-table>
+  </div>
+
+  <div nz-col nzSpan="12">
+    <nz-table nzTitle="列管理" nzSize="small" #colTable [nzData]="colData" [nzBordered]="false"
+              [nzShowPagination]=false [nzFrontPagination]=false [nzHideOnSinglePage]="true"  reNzTable (heightEmit)="heightFun($event,1)" [extraTableHeight]="permissions ? 110 : 60"
+              [nzScroll]="{x:'250px',y: colHeight}">
+      <thead>
+      <tr>
+        <th nzWidth="50px" nzShowCheckbox nzDisabled></th>
+        <ng-container *ngFor="let col of colHeaderData">
+          <th [title]="col.cName" nzWidth="100px">{{col.cName}}</th>
+        </ng-container>
+      </tr>
+      </thead>
+
+      <tbody>
+      <ng-container *ngFor="let data of colTable.data">
+        <tr>
+          <td nzShowCheckbox [(nzChecked)]="data.checked" (nzCheckedChange)="refreshStatusCol(data)"></td>
+          <ng-container *ngFor="let col of colHeaderData">
+            <td [title]="data[col.eName]"
+                [nzExpand]="data.tRoleColumnModels && data.tRoleColumnModels.length !== 0">{{ data[col.eName]}}</td>
+          </ng-container>
+        </tr>
+        <tr [nzExpand]="data.tRoleColumnModels && data.tRoleColumnModels.length !== 0">
+          <td [attr.colspan]="3">
+            <ng-container *ngFor="let col of data.tRoleColumnModels">
+              <div nz-row nzType="flex" nzJustify="center">
+                {{col.gridId}}-----{{col.colCname | slice:0:10}}
+              </div>
+            </ng-container>
+          </td>
+        </tr>
+      </ng-container>
+
+      </tbody>
+    </nz-table>
+  </div>
+
+</div>
+
+<nz-modal [(nzVisible)]="colVisible" nzTitle="角色权限管理 > 列设置" (nzOnOk)="colHandleOk()" (nzOnCancel)="colHandleCancel()"
+          [nzFooter]="colSettingFooter">
+  <nz-table #colSettingTable nzSize="small" [nzTitle]="colVisible?'界面ID:'+colSelectData.formId:''"
+            [nzData]="colSettingData" [nzShowPagination]="false" [nzFrontPagination]="false"
+            [nzScroll]="{x:'230px', y: '300px'}">
+    <thead>
+    <tr>
+      <th nzShowCheckbox nzWidth="30px" [(nzChecked)]="allChecked" [nzIndeterminate]="indeterminate"
+          (nzCheckedChange)="colSettingAllChecked($event)"></th>
+      <ng-container *ngFor="let colSettingHead of colSettingHeaderData">
+        <th nzWidth="100px">{{ colSettingHead.cName }}</th>
+      </ng-container>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let data of colSettingTable.data">
+      <td nzShowCheckbox [(nzChecked)]="data.checked" (nzCheckedChange)="refreshStatusColSetting()"></td>
+      <ng-container *ngFor="let colSettingHead of colSettingHeaderData">
+        <td>{{ data[colSettingHead.eName]}}</td>
+      </ng-container>
+    </tr>
+    </tbody>
+
+  </nz-table>
+</nz-modal>
+
+<ng-template #colSettingFooter>
+  <div nz-row nzType="flex" nzJustify="center">
+    <div nz-col>
+      <button nz-button nzType="primary" (click)="save()">保存</button>
+      <button nz-button (click)="reset()">重置</button>
+    </div>
+  </div>
+</ng-template>

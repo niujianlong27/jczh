@@ -1,0 +1,84 @@
+<common-page (btnClick)='btnClick($event)' (search)="listSearch($event)" (btnAdd)="btnAdd()" [pageSize]="pageSize" [totalPage]="totalPage" [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" (btnDelete)="btnDelete($event)" [dataSet]="dataSet"
+    [isMutli]="true" [triggerSearch]="true">
+
+</common-page>
+
+<!--弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()" [nzContent]="modalFormContent" [nzMaskClosable]="false">
+    <ng-template #modalFormContent>
+        <form nz-form [formGroup]="modalValidateForm">
+            <nz-form-item *ngFor="let m of modalFormData">
+                <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+                    {{m.name}}
+                </nz-form-label>
+
+                <nz-form-control [nzSpan]="12">
+
+                    <input type="{{m.type}}" *ngIf="m.type == 'text'" nz-input formControlName="{{m.eName}}" [id]="m.eName">
+                    <nz-input-number class="width-236" *ngIf="m.type == 'number'" formControlName="{{m.eName}}" [nzMin]="m.min || 0" (ngModelChange)="numberChange($event,m.eName)" [nzFormatter]="m.nzFormatter || defaultFormat" [nzParser]="m.nzParser || defaultFormat"></nz-input-number>
+
+                    <nz-select [attr.id]="m.eName" *ngIf="m.type == 'prodKindPrice'" [formControlName]="m.eName">
+                        <nz-option *ngFor="let i of prodKindPriceArr" [nzLabel]="i.prodKindPriceOut" [nzValue]="i.prodKindPriceOut"></nz-option>
+                    </nz-select>
+
+                    <nz-select [attr.id]="m.eName" *ngIf="m.type == 'select'" [formControlName]="m.eName" (ngModelChange)="selectData($event)">
+                        <nz-option *ngFor="let i of m.selectArr" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+                    </nz-select>
+
+                    <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+                        <label nz-radio nzValue="{{r.value}}" *ngFor="let r of radioArr">{{r.name}}</label>
+                    </nz-radio-group>
+
+                    <nz-date-picker [nzShowTime]="!m.noShowTime" [nzFormat]="m.format || 'yyyy-MM-dd HH:mm:ss'" [nzPlaceHolder]="m.cName" *ngIf="m.type == 'date'" [nzStyle]="{width:'236px'}" [formControlName]="m.eName"></nz-date-picker>
+
+                    <input-modal *ngIf="m.type == 'inputModal'" [isMutli]="false" [findset]="findset" [(inputModalModel)]="inputModalModel" (inpEmit)="inpEmit($event)" [DISABLED]="false"></input-modal>
+
+                    <nz-select nzShowSearch nzAllowClear [attr.id]="m.eName" *ngIf="m.type == 'province'" [formControlName]="m.eName" (ngModelChange)="addressChange($event,'DZDJ10')">
+                        <nz-option *ngFor="let i of provinceArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+                    </nz-select>
+                    <nz-select nzShowSearch nzAllowClear [attr.id]="m.eName" *ngIf="m.type == 'city'" [formControlName]="m.eName" (ngModelChange)="addressChange($event,'DZDJ20')">
+                        <nz-option *ngFor="let i of cityArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+                    </nz-select>
+                    <nz-select nzShowSearch nzAllowClear [attr.id]="m.eName" *ngIf="m.type == 'area'" [formControlName]="m.eName" (ngModelChange)="addressChange($event,'DZDJ30')">
+                        <nz-option *ngFor="let i of areaArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+                    </nz-select>
+                    <nz-select nzShowSearch nzAllowClear [attr.id]="m.eName" *ngIf="m.type == 'town'" [formControlName]="m.eName" (ngModelChange)="addressChange($event,'DZDJ40')" [nzMode]="m.mode || 'default'">
+                        <ng-container *ngIf="'RaisePrice' !== status">
+                            <nz-option *ngFor="let i of townArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+                        </ng-container>
+                        <ng-container *ngIf="'RaisePrice' === status">
+                            <nz-option *ngFor="let i of townArr" nzCustomContent [nzLabel]="i.townName" [nzValue]="i.town">
+                                <div style="height: 22px;">{{i.townName}}</div>
+                            </nz-option>
+                        </ng-container>
+                    </nz-select>
+
+                    <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+
+                        <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+                            {{m.validateCon}}
+                        </ng-container>
+                        <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+                            {{m.validators.patternErr}}
+                        </ng-container>
+
+                    </nz-form-explain>
+
+                </nz-form-control>
+
+            </nz-form-item>
+
+        </form>
+    </ng-template>
+</nz-modal>
+<nz-modal [(nzVisible)]="importModal.visible" [nzTitle]="importModal.title" (nzOnCancel)="importModal.visible = false" [nzContent]="importContent" [nzOkLoading]="importModal.loading" (nzOnOk)="import()" [nzOkDisabled]="importModal.fileList?.length === 0">
+    <ng-template #importContent>
+        <nz-upload [nzAccept]="importModal.format" [nzFileType]="importModal.format" [(nzFileList)]="importModal.fileList" [nzBeforeUpload]="beforeUpload" [nzLimit]="1" [nzDisabled]="importModal.fileList?.length > 0">
+            <button nz-button><i nz-icon nzType="upload"></i><span>请上传应付价格数据</span></button>
+        </nz-upload>
+    </ng-template>
+</nz-modal>
+
+<!--确认弹窗-->
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon" (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>

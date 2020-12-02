@@ -1,0 +1,9 @@
+.dispatch ::ng-deep .grid-pagination {
+  position: relative;
+}
+
+.total {
+  position: absolute;
+  right: 50px;
+  top: 5px;
+}

@@ -1,0 +1,87 @@
+<common-page (searchComponent)="searchComponent($event)" (btnClick)="btnClick($event)" (search)="listSearch($event)"
+             (updateDataResult)="updateDataResult($event)" [dataSet]="dataSet" [isMutli]="false"
+             [listLoading]="listLoading" [pageSize]="pageSize" [totalPage]="totalPage" triggerSearch="true"
+             gridId="grid1">
+</common-page>
+<nz-modal (nzOnCancel)="handleCancel()" (nzAfterClose)="nzAfterClose()" [(nzVisible)]="nzVisible"
+          [nzMaskClosable]="false" [nzTitle]="nzTitle" [nzFooter]="modalFooter" [nzWidth]="1500"
+          [nzStyle]="{ top: '10px' }" >
+  <form [formGroup]="validateForm" nz-form style="margin-top: 1%">
+    <div [nzGutter]="24" nz-row nzAlign="middle" nzJustify="space-around">
+      <div *ngFor="let control of controlArray" [nzSpan]="8" nz-col>
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="control.eName" [nzRequired]="control.require" [nzSpan]="6">
+            {{ control.cName }}
+          </nz-form-label>
+          <nz-form-control [nzSpan]="18">
+            <ng-container *ngIf="control?.extra">
+              <nz-input-group [nzSuffix]="extraContent">
+                <input trim *ngIf="control.type==='text'" [attr.readonly]="control.readOnly" [attr.id]="control.eName"
+                       [formControlName]="control.eName" nz-input style="width: 90%"/>
+              </nz-input-group>
+              <ng-template #extraContent>
+                {{ control.extraContent }}
+              </ng-template>
+            </ng-container>
+            <ng-container *ngIf="!control?.extra">
+              <input trim *ngIf="control.type==='text'" [attr.readonly]="control.readOnly" [attr.id]="control.eName"
+                     [formControlName]="control.eName"
+                     nz-input/>
+
+              <nz-select *ngIf="control.type==='select'" [attr.id]="control.eName" [formControlName]="control.eName"
+                         nzMode="multiple">
+                <nz-option *ngFor="let option of control.selectList" [nzLabel]="option.name" [nzValue]="option.value">
+                </nz-option>
+              </nz-select>
+
+              <nz-input-number *ngIf="control.type==='number'" [attr.id]="control.eName"
+                               [formControlName]="control.eName"
+                               [nzMin]="0" [nzPrecision]="3" [nzStep]="1" style="width: 100%">
+              </nz-input-number>
+            </ng-container>
+            <nz-form-explain *ngIf="validateForm.get(control.eName).dirty  && validateForm.get(control.eName).errors">
+
+              <ng-container *ngIf="validateForm.get(control.eName).hasError('required')">
+                {{control.validateCon}}
+              </ng-container>
+
+              <ng-container *ngIf="validateForm.get(control.eName).hasError('pattern')">
+                {{control.validators.patternErr}}
+              </ng-container>
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+</nz-modal>
+
+<ng-template #modalFooter>
+  <div nz-row [nzGutter]="32" nzAlign="middle" nzJustify="center" nzType="flex">
+    <div nz-col>
+      <button (click)="modalButtonClick('pass')"
+              [disabled]="this.selectData[0]?.authStatus === AuthStatus.verified" [nzLoading]="buttonLoading"
+              nz-button nzType="primary">
+        审核通过
+      </button>
+    </div>
+    <div nz-col>
+      <button (click)="modalButtonClick('reject')"
+              [disabled]="this.selectData[0]?.authStatus === AuthStatus.AuthenticationFailed"
+              [nzLoading]="buttonLoading" nz-button nzType="default">
+        驳回
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #reasonForRejection>
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-label nzSpan="6" nzFor="reasonForRejection">驳回理由</nz-form-label>
+      <nz-form-control nzSpan="14">
+        <input [(ngModel)]="rejectReason" id="reasonForRejection" name="reasonForRejection" nz-input type="text">
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</ng-template>

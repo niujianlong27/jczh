@@ -1,0 +1,15 @@
+<nz-tabset>
+  <nz-tab *ngFor="let tab of tabs;let i = index;" [nzTitle]="tab.itemCname + '(' + tab.itemCount + ')'"
+          (nzSelect)="selectChange(tab.itemCode)">
+        </nz-tab>
+      </nz-tabset>
+    <app-searchform  (search)="listSearch($event)" [staticData]="staticData"  [btnHiden]={mutiSearch:true}>
+    </app-searchform>
+    <tpl-buttons (btnClick)="btnClick($event)" >
+    </tpl-buttons>
+    <app-table-form (updateDataResult)="updateDataResult($event)" [dataSet]="dataSet" [isMutli]="false"  [extraTableHeight]="90"
+                    [listLoading]="loading" [pageSize]="pageSize" [showCount]="false" [totalPage]="totalPage"
+                    [trSelectedShow]="true" gridId='grid1'>
+    </app-table-form>
+    <div style="text-align: center;margin-top:-25px;color: #20a8d8;"> <span>合计:</span><span style="margin-left:26px">车辆</span><span style="margin-left:10px">{{this.vehicleNum}}</span><span>辆</span></div>
+

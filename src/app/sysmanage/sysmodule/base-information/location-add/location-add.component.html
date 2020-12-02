@@ -1,0 +1,59 @@
+<form nz-form [formGroup]="validateForm" class="ant-advanced-search-form" style="padding:15px 20px 0px 0px">
+  <div nz-row [nzGutter]="24" nzAlign="top" nzJustify="space-around">
+    <div nz-col [nzSpan]="8" *ngFor="let control of controlArray">
+      <nz-form-item nzFlex>
+        <nz-form-label [nzRequired]="control.require" [nzSpan]="6"
+                       [nzFor]="control.eName">{{ control.cName}}</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+
+          <input-modal *ngIf="control.type == 'modal'" [isMutli]="false" [findset]="formIdFindset"
+                       [inputModalModel]="inputModalModel" (inpEmit)="inpEmit($event)" [borderRed]="borderRed"
+                       [DISABLED]="true"></input-modal>
+          <input *ngIf="control.type == 'text'" nz-input [type]="control.type" [formControlName]="control.eName"
+                 [attr.id]="control.eName">
+          <input *ngIf="control.type == 'number'" nz-input [type]="control.type" [formControlName]="control.eName"
+                 [attr.id]="control.eName">
+
+          <nz-radio-group [attr.id]="control.eName" *ngIf="control.type == 'radio'" [formControlName]="control.eName">
+            <label nz-radio nzValue="{{r.value}}" *ngFor="let r of control.radioArr">{{r.name}}</label>
+          </nz-radio-group>
+
+          <!--<nz-select style="width: 120px;" *ngIf="control.type == 'select'" nzAllowClear nzPlaceHolder="Choose">-->
+            <!--<nz-option nzValue="test" nzLabel="test"></nz-option>-->
+            <!--<nz-option nzValue="test2" nzLabel="test2"></nz-option>-->
+          <!--</nz-select>-->
+
+          <nz-select nzShowSearch [attr.id]="control.eName" *ngIf="control.type == 'province'" [formControlName]="control.eName"
+                     (ngModelChange)="addressChange($event,'DZDJ10')">
+            <nz-option *ngFor="let i of provinceArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+          </nz-select>
+          <nz-select nzShowSearch [attr.id]="control.eName" *ngIf="control.type == 'city'" [formControlName]="control.eName"
+                     (ngModelChange)="addressChange($event,'DZDJ20')">
+            <nz-option *ngFor="let i of cityArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+          </nz-select>
+          <nz-select nzShowSearch [attr.id]="control.eName" *ngIf="control.type == 'area'" [formControlName]="control.eName"
+                     (ngModelChange)="addressChange($event,'DZDJ30')">
+            <nz-option *ngFor="let i of areaArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+          </nz-select>
+          <nz-select nzShowSearch [attr.id]="control.eName" *ngIf="control.type == 'town'" [formControlName]="control.eName"
+                     (ngModelChange)="addressChange($event,'DZDJ40')">
+            <nz-option *ngFor="let i of townArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+          </nz-select>
+
+          <nz-form-explain *ngIf="validateForm.get(control.eName).dirty && validateForm.get(control.eName).errors">
+            <ng-container *ngIf="validateForm.get(control.eName).hasError('required')">
+              {{control.validateCon}}
+            </ng-container>
+          </nz-form-explain>
+
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col [nzSpan]="24" style="text-align: right;">
+      <button nz-button [nzType]="'primary'" (click)="submitForm()">确定</button>
+      <button nz-button (click)="cancel()">取消</button>
+    </div>
+  </div>
+</form>

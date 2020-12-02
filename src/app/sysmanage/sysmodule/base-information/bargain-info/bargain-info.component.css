@@ -1,0 +1,12 @@
+.number-width{
+  width: 100%;
+}
+
+.ant-form-item-control-wrapper {
+  margin-bottom: 10px;
+}
+.in  .ant-form-explain {
+  position: absolute;
+  bottom: -17px;
+  left: 0;
+}

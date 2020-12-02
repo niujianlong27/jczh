@@ -1,0 +1,478 @@
+<app-searchform [triggerSearch]="true" (search)="listSearch($event)"></app-searchform>
+<tpl-buttons
+  [btnDisable]="{'Anew':btnDis.Anew,'Withdraw':btnDis.Withdraw,
+                 'Select': btnDis.Select, 'Detail': btnDis.Detail,UpdateTrainNum:btnDis.UpdateTrainNum,Stop:btnDis.Stop}"
+  (btnClick)="btnClick($event)">
+</tpl-buttons>
+
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+</app-grid-resize>
+<ng-template #one>
+  <app-table-form (updateDataResult)="selectData($event)" [dataSet]="data1" [isMutli]="false"
+                  [listLoading]="loading" [pageSize]="pageSize" [selfTableHeight]="gridOneHeight"
+                  [totalPage]="totalpage" [trSelectedShow]="true" gridId="grid1">
+  </app-table-form>
+</ng-template>
+<ng-template #two>
+  <nz-tabset>
+    <nz-tab nzTitle="抢单明细">
+      <app-table-form (pageIndexEmit)="pageIndexEmit($event)" (pageSizeEmit)="pageSizeEmit($event)" [dataSet]="data2"
+                      [isCheckBox]="false"
+                      [listLoading]="nextLoading" [pageFun]="true" [pageSize]="pageSize2"
+                      [selfTableHeight]="gridTwoHeight" [showCount]="false" [totalPage]="totalpage2"
+                      gridId="grid2">
+      </app-table-form>
+    </nz-tab>
+  </nz-tabset>
+</ng-template>
+
+
+<ng-container>
+  <ng-template #recordTitle>
+    {{modalTitle}}
+  </ng-template>
+  <ng-template #recordContent>
+    <p>
+      <span *ngIf="!isDriverGrab"><i nz-icon type="form" theme="outline"></i><!--日钢状态不显示司机-->
+        <ng-container *ngIf="!riZhaoSteelStatus()">
+          选择参与抢单的承运人或司机
+        </ng-container>
+        <ng-container *ngIf="riZhaoSteelStatus()">
+          选择参与抢单的承运人
+        </ng-container>
+      </span>
+      <span *ngIf="isDriverGrab"><i nz-icon type="form" theme="outline"></i>选择参与抢单的司机</span>
+    </p>
+    <ng-container>
+      <nz-radio-group [(ngModel)]="bidPriceType" class="m-b-sm">
+        <!--<label nz-radio nzValue="10">按均价</label>
+        <label nz-radio nzValue="20">分别报价</label>-->
+        <label nz-checkbox nzValue="10" *ngIf="!isDriverGrab" [(ngModel)]="tempInfo.carriiagePrice"
+               style="margin-right: 210px; margin-left: 20px;" (ngModelChange)="selectChange($event)">承运人参与抢单</label>
+        <label nz-checkbox nzValue="20" *ngIf="!riZhaoSteelStatus()||isDriverGrab" [(ngModel)]="tempInfo.driverPrice"
+               (ngModelChange)="changeDriver($event)">司机参与抢单</label>
+      </nz-radio-group>
+    </ng-container>
+
+    <div class="clearfix">
+      <div style="background-color:#f5f5f5;height:60px;padding:8px 0 7px 19px">
+        <div nz-row>
+          <div style="width: 50%; float: left;" *ngIf="!isDriverGrab">
+            <ng-container>
+              <nz-radio-group [(ngModel)]="bidPriceType" (ngModelChange)="carriageChuange($event)">
+                <label nz-radio nzValue="10" [nzDisabled]="!tempInfo.carriiagePrice"
+                       style="float: left; line-height: 28px;">全部承运人</label>
+                <label nz-radio nzValue="20" [nzDisabled]="!tempInfo.carriiagePrice"
+                       style="float: left; clear: left; line-height: 28px;">部分承运人</label>
+                <ng-container *ngIf="bidPriceType === '20'" [ngTemplateOutlet]="carriage">
+                </ng-container>
+                <!--                <nz-select class="fl selectCarriage" [nzDisabled]="!tempInfo.carriiagePrice || bidPriceType != '20'"
+                                           style="width: 200px;"
+                                           nzMode="multiple"
+                                           nzShowSearch
+                                           appSelectLocalLoad
+                                           [storageData]="driverData.bidderCompanyListStorage"
+                                           [selectValue]="driverData"
+                                           [toObj]="'bidderCompanyList'"
+                                           nzPlaceHolder=""
+                                           nzMaxTagPlaceholder=""
+                                           [nzMaxTagCount]="0"
+                                           [nzAutoClearSearchValue]="false"
+                                           [(ngModel)]="carriageOfSelectedValue">
+                                  <ng-container *ngFor="let option of driverData.bidderCompanyList">
+                                    &lt;!&ndash;<nz-option [nzLabel]="option.companyName" [nzValue]="option.companyName" *ngIf="isNotSelected(option.companyName,'carriage')">
+
+                                    </nz-option>&ndash;&gt;
+                                    <nz-option [nzLabel]="option.companyName" nzCustomContent [nzValue]="option.companyName"
+                                               *ngIf="isNotSelected(option.companyName,'carriage')">
+                                      <span [title]="option.companyName">{{option.companyName}}</span>
+                                    </nz-option>
+                                  </ng-container>
+                                </nz-select>-->
+              </nz-radio-group>
+            </ng-container>
+          </div>
+          <div style="width: 50%; float: left;">
+            <ng-container *ngIf="!riZhaoSteelStatus()||isDriverGrab"> <!--日钢状态不显示司机-->
+              <nz-radio-group [(ngModel)]="driverType" (ngModelChange)="driverChuange($event)">
+                <label nz-radio nzValue="10" [nzDisabled]="!tempInfo.driverPrice"
+                       style="float: left; line-height: 28px;">全部司机</label>
+                <label nz-radio nzValue="20" [nzDisabled]="!tempInfo.driverPrice"
+                       style="float: left; clear: left; line-height: 28px;">部分司机</label>
+                <ng-container *ngIf="driverType === '20'" [ngTemplateOutlet]="driver">
+                </ng-container>
+                <!--                <nz-select class="fl selectCarriage" [nzDisabled]="!tempInfo.driverPrice || driverType != '20'"
+                                           style="width: 200px;"
+                                           nzMode="multiple"
+                                           appSelectLocalLoad
+                                           [storageData]="driverData.driverListStorage"
+                                           [selectValue]="driverData"
+                                           [toObj]="'driverList'"
+                                           nzShowSearch
+                                           nzPlaceHolder=""
+                                           nzMaxTagPlaceholder=""
+                                           [nzMaxTagCount]="0"
+                                           [nzAutoClearSearchValue]="false"
+                                           [(ngModel)]="listOfSelectedValue">
+                                  <ng-container *ngFor="let option of driverData.driverList">
+                                    <nz-option [nzLabel]="option.name" nzCustomContent [nzValue]="option.name"
+                                               *ngIf="isNotSelected(option.name,'driver')">
+                                      <span [title]="option.name">{{option.name}}</span>
+                                    </nz-option>
+                                  </ng-container>
+                                </nz-select>-->
+              </nz-radio-group>
+            </ng-container>
+          </div>
+
+          <ng-template #carriage>
+            <app-table-form selfTableHeight="200px" listWidth="437px" [colSet]="false" [tableTitle]="carriageSearch"
+                            [columns]="[{colCname:'承运人',colEname:'companyName',visible:'XSBJ10'}]"
+                            [dataSet]="driverData.bidderCompanyList" [isMutli]="true" [pageFun]="true"
+                            [nzShowPagination]="false" [pageSize]="pageCarriageSize" [totalPage]="totalCarriagePage"
+                            (selectedChangeEmit)="updateCarriageDataResult($event)"
+                            (pageIndexEmit)="pageIndexCarriageEmit($event)"
+                            (pageSizeEmit)="pageSizeCarriageEmit($event)">
+            </app-table-form>
+            <!-- <app-table-form [dataSet]="driverData.bidderCompanyList"  selfTableHeight="200px"
+                            [colSet]="false" [pageSize]="userPageSize" [totalPage]="userTotalPage" [isMutli]="true"
+                            [pageFun]="true"
+                            (pageIndexEmit)='getPageIndex($event)' (pageSizeEmit)='getPageSize($event)'
+                            (updateDataResult)="updateDataResult($event)"></app-table-form>-->
+          </ng-template>
+
+          <ng-template #carriageSearch>
+            <nz-input-group nzSearch [nzAddOnAfter]="carriageSearchSuffixIconButton">
+              <input type="text" nz-input [(ngModel)]="searchCarriageValue"/>
+            </nz-input-group>
+            <ng-template #carriageSearchSuffixIconButton>
+              <button nz-button nzType="primary" nzSearch (click)="search('carriageSearch')">
+                <i nz-icon nzType="search">
+                </i>
+              </button>
+            </ng-template>
+            <!--
+                        <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown>
+                          <i
+                            nz-icon
+                            nzType="search"
+                            class="ant-table-filter-icon"
+                            [class.ant-table-filter-open]="dropdown.nzVisible"
+                            nz-dropdown
+                          >
+                          </i>
+                          <div class="search-box">
+                            <input type="text" nz-input [(ngModel)]="searchCarriageValue"/>
+                            <button nz-button nzSize="small" nzType="primary" (click)="search('carriageSearch')"
+                                    class="search-button">
+                              搜索
+                            </button>
+                            <button nz-button nzSize="small" (click)="reset('carriageSearch')">重置</button>
+                          </div>
+                        </nz-dropdown>-->
+          </ng-template>
+          <ng-template #driverSearch>
+            <nz-input-group nzSearch [nzAddOnAfter]="driverSearchSuffixIconButton">
+              <input type="text" nz-input [(ngModel)]="searchDriverValue"/>
+            </nz-input-group>
+            <ng-template #driverSearchSuffixIconButton>
+              <button nz-button nzType="primary" nzSearch (click)="search('driverSearch')">
+                <i nz-icon nzType="search">
+                </i>
+              </button>
+            </ng-template>
+            <!--            <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" [nzClickHide]="false" nzTableFilter #dropdown>
+                          <i
+                            nz-icon
+                            nzType="search"
+                            class="ant-table-filter-icon"
+                            [class.ant-table-filter-open]="dropdown.nzVisible"
+                            nz-dropdown
+                          ></i>
+                          <div class="search-box">
+                            <input type="text" nz-input [(ngModel)]="searchDriverValue"/>
+                            <button nz-button nzSize="small" nzType="primary" (click)="search('driverSearch')"
+                                    class="search-button">
+                              搜索
+                            </button>
+                            <button nz-button nzSize="small" (click)="reset('driverSearch')">重置</button>
+                          </div>
+                        </nz-dropdown>-->
+          </ng-template>
+
+          <ng-template #driver>
+            <app-table-form selfTableHeight="200px" listWidth="437px" [colSet]="false" [tableTitle]="driverSearch"
+                            [columns]="[{colCname:'司机',colEname:'name',visible:'XSBJ10'}]"
+                            [dataSet]="driverData.driverList" [isMutli]="true" [pageFun]="true"
+                            [nzShowPagination]="false" [pageSize]="pageDriverSize" [totalPage]="totalDriverPage"
+                            (selectedChangeEmit)="updateDriverDataResult($event)"
+
+                            (pageIndexEmit)="pageIndexDriverEmit($event)" (pageSizeEmit)="pageSizeDriverEmit($event)">
+            </app-table-form>
+          </ng-template>
+
+
+        </div>
+        <!--        <div nz-row>
+                  <div *ngIf="!isDriverGrab"
+                       style="width: 48%; float: left; height: 124px; overflow: auto; border-right: solid 1px #eeeeee;">
+                    <div *ngFor="let name of carriageOfSelectedValue;let dex = index">
+                      <div class="clearfix">
+                        <span class="fl" style="margin-left: 20px;">{{name}}</span>
+                        <span class="fr am-icon-times-circle" (click)="delectDriver('carriage',dex)">
+                          <img width="16px;" src="./assets/img/delect.svg">
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 48%; float: left; height: 124px; overflow: auto;">
+                    <div *ngFor="let name of listOfSelectedValue;let dex = index">
+                      <div class="clearfix">
+                        <span class="fl" style="margin-left: 20px;">{{name}}</span>
+                        <span class="fr am-icon-times-circle" (click)="delectDriver('driver',dex)"><img width="16px;"
+                                                                                                        src="./assets/img/delect.svg"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>-->
+      </div>
+
+    </div>
+    <p><i nz-icon type="form" theme="outline"></i><span>抢单信息</span></p>
+    <div class="clearfix" *ngIf="info.get('USER').companyId !== 'C000000888'">
+      <ng-container>
+        <nz-radio-group [(ngModel)]="taxInclusive" class="m-b-sm">
+          <nz-form-label class="fl">是否含税</nz-form-label>
+          <label nz-radio nzValue="10" style="line-height: 40px;">含税</label>
+          <label nz-radio nzValue="20" style="line-height: 40px;">不含税</label>
+        </nz-radio-group>
+      </ng-container>
+    </div>
+    <div class="clearfix">
+      <nz-form-label class="fl" style="text-align: left;">价格</nz-form-label>
+      <nz-radio-group [(ngModel)]="unitPrice" class="m-b-sm">
+        <div class="fl clearfix" style="width: 250px;">
+          <label nz-radio nzValue="10" style="line-height: 40px; float: left;">单价</label>
+          <nz-form-control class="fl">
+            <!--<input nz-input [disabled] = "unitPrice == '20'" [(ngModel)]="unitPrice == '20'?'':tempInfo.unitPrice" style="width: 100px;">-->
+            <nz-input-number [nzMin]="0" [nzMax]="999999999999" [nzDisabled]="unitPrice == '20'" class="day-input fl"
+                             [(ngModel)]="unitPrice == '20'?'':tempInfo.unitPrice" [nzStep]="1" style="width: 100px;"
+                             [nzPrecision]="3" (ngModelChange)="inputNumberChange($event)"
+            ></nz-input-number>
+          </nz-form-control>
+          <div class="fl ant-form-item-label">&nbsp;元/吨</div>
+        </div>
+        <div class="fl clearfix" style="width: 250px;">
+          <label nz-radio nzValue="20" style="line-height: 40px; float: left;">包车</label>
+          <nz-form-control class="fl">
+            <!--<input nz-input [disabled] = "unitPrice == '10'" [(ngModel)]="unitPrice == '10'?'':tempInfo.include" style="width: 100px;">-->
+            <nz-input-number [nzMin]="0" [nzMax]="999999999999" [nzDisabled]="unitPrice == '10'" class="day-input fl"
+                             [(ngModel)]="unitPrice == '10'?'':tempInfo.include" [nzStep]="1" style="width: 100px;"
+                             [nzPrecision]="3" (ngModelChange)="inputNumberChange($event)"
+            ></nz-input-number>
+          </nz-form-control>
+          <div class="fl ant-form-item-label">&nbsp;元</div>
+        </div>
+      </nz-radio-group>
+    </div>
+    <div class="clearfix">
+      <div class="fl clearfix" style="width: 350px;">
+        <nz-form-label class="fl">抢单开始时间</nz-form-label>
+        <nz-form-control class="fl">
+          <nz-date-picker [(ngModel)]="modalForm.executionTimeStart"
+                          [nzDisabledDate]="disabledStartDate" [nzShowTime]="{nzFormat:'HH:mm'}" [nzShowToday]="false"
+                          nzFormat="yyyy-MM-dd HH:mm" (ngModelChange)="getStartTime($event)"
+                          nzPlaceHolder="开始">
+          </nz-date-picker>
+        </nz-form-control>
+      </div>
+      <div class="fl clearfix" style="width: 350px;">
+        <nz-form-label class="fl">抢单持续时间</nz-form-label>
+        <nz-form-control class="fl">
+          <nz-select style="width: 90px; float: left;" nzAllowClear [(ngModel)]="modalForm.continueTime"
+                     (ngModelChange)="duration($event,'select')">
+            <!--            <nz-option [nzValue]="i.value" [nzLabel]="i.name" *ngFor="let i of continueTimeArr"></nz-option>-->
+            <ng-container *ngIf="this.selectData1[0].robbedType !== 'QTLX30'">
+              <nz-option [nzValue]="i.value" [nzLabel]="i.name" *ngFor="let i of continueTimeArr"></nz-option>
+            </ng-container>
+            <ng-container *ngIf="this.selectData1[0].robbedType === 'QTLX30'">
+              <nz-option [nzValue]="i.value" [nzLabel]="i.name"
+                         *ngFor="let i of circulationRobContinueTimeArr"></nz-option>
+            </ng-container>
+          </nz-select>
+          <nz-input-number [nzMin]="0" class="day-input fl" *ngIf="modalForm.continueTime == '0' || inputShow"
+                           style="width: 100px; margin-left: 4px;" [(ngModel)]="modalForm.continueTimeNew" [nzStep]="1"
+                           [nzPrecision]="0" (nzBlur)="duration(modalForm.continueTimeNew,'input')">
+          </nz-input-number>
+          <span class="fl" *ngIf="modalForm.continueTime == '0' || inputShow">
+             <ng-container *ngIf="this.selectData1[0].robbedType !== 'QTLX30'">分钟</ng-container>
+            <ng-container *ngIf="this.selectData1[0].robbedType === 'QTLX30'">天</ng-container>
+          </span>
+        </nz-form-control>
+      </div>
+    </div>
+    <div class="clearfix">
+      <div class="fl clearfix" style="width: 350px;">
+        <nz-form-label class="fl">抢单结束时间</nz-form-label>
+        <nz-form-control class="fl">
+          <nz-date-picker [(ngModel)]="modalForm.executionTimeEnd"
+                          [nzDisabledDate]="disabledEndDate" [nzShowTime]="{nzFormat:'HH:mm'}" [nzShowToday]="false"
+                          nzFormat="yyyy-MM-dd HH:mm" (ngModelChange)="getTime($event)"
+                          nzPlaceHolder="结束">
+          </nz-date-picker>
+        </nz-form-control>
+      </div>
+
+
+      <div class="fl clearfix">
+        <nz-form-label class="fl" *ngIf="this.selectData1[0].robbedType === 'QTLX30'">
+          车次
+        </nz-form-label>
+        <nz-form-control class="fl" *ngIf="this.selectData1[0].robbedType === 'QTLX30'">
+          <nz-input-number name="circulationRob" [(ngModel)]="modalForm.totalTrainNum" [nzMin]="0" [nzStep]="1">
+          </nz-input-number>
+
+        </nz-form-control>
+      </div>
+
+    </div>
+    <ng-container>
+      <p><i nz-icon type="form" theme="outline"></i><span>备注</span></p>
+      <textarea rows="4" maxLength="200" nz-input [(ngModel)]="modalForm.remark"></textarea>
+    </ng-container>
+  </ng-template>
+  <ng-template #recordFooter>
+    <button nz-button nzType="primary" (click)="confirmPublish(buttonId)" [nzLoading]="confirmLoading"
+            [disabled]="confirmLoading">确认发布
+    </button>
+    <button nz-button nzType="default" (click)="cancel()">取消</button>
+  </ng-template>
+</ng-container>
+<nz-modal [nzWidth]="'75%'" [nzVisible]="historyIsVisible" [nzTitle]="historyTitle" [nzContent]="historyContent"
+          [nzFooter]="historyFooter" (nzOnCancel)="historyIsVisible=false">
+  <ng-template #historyTitle>
+    <span *ngIf="buttonId == 'Detail'">查看抢单详情</span>
+    <span *ngIf="buttonId == 'Select'">抢单选择</span>
+  </ng-template>
+  <ng-template #historyContent>
+    <div style="margin-bottom: 10px; overflow: hidden; width: 100%;">
+      <p style="float: left;" *ngIf="buttonId == 'Select'"><i nz-icon type="form" theme="outline"></i><span>抢单选择</span>
+      </p>
+      <button nz-button nzType="primary" *ngIf="buttonId == 'Select'" style="float: right;" (click)="giveUpGrab()">
+        放弃抢单
+      </button>
+    </div>
+    <nz-tabset *ngIf="buttonId == 'Detail'" [(nzSelectedIndex)]="selectedIndex" (nzSelectedIndexChange)="getHistory()">
+      <nz-tab nzTitle="抢单结果">
+      </nz-tab>
+      <!-- <nz-tab nzTitle="抢单历史">
+      </nz-tab> -->
+    </nz-tabset>
+    <nz-table class="modal-table" #historyTable [nzData]="bidHistory" [nzScroll]="{x:'150%',y:'500px'}"
+              [nzFrontPagination]="false" [nzBordered]="false"
+              nzShowPagination="false" [nzLoading]="queryHistoryLoading" nzFooter="{{footerText}}">
+      <thead>
+      <tr>
+        <th width="100px" *ngIf="buttonId == 'Select'"
+            nzShowCheckbox
+            [(nzChecked)]="isAllDisplayDataChecked"
+            [nzIndeterminate]="isIndeterminate"
+            (nzCheckedChange)="checkAll($event)"></th>
+        <th>司机</th>
+        <th>单价（含税）</th>
+        <th>单价（不含税）</th>
+        <th>参考总金额（含税）</th>
+        <th width="200px">参考总金额（不含税）</th>
+        <th>出价时间</th>
+        <th>运力</th>
+        <th>车牌号</th>
+        <th>联系电话</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-template ngFor let-item [ngForOf]="historyTable.data">
+        <tr>
+
+          <td width="100px" *ngIf="buttonId == 'Select'" nzShowCheckbox
+              [(nzChecked)]="item.isCheckedButton"
+              (nzCheckedChange)="refreshStatus()">
+            <!-- <label nz-checkbox [(ngModel)]="item.isCheckedButton" [ngModelOptions]="{standalone: true}"></label> -->
+          </td>
+          <td [title]="item.robberCompanyName">
+            {{item.robberCompanyName}}
+          </td>
+          <td [title]="item.unitPriceTax">
+            {{item.unitPriceTax}}
+          </td>
+          <td [title]="item.unitPriceTaxNo">
+            {{item.unitPriceTaxNo}}
+          </td>
+          <td [title]="item.totalPriceTax">
+            {{item.totalPriceTax}}
+          </td>
+          <td [title]="item.totalPriceTaxNo" width="200px">
+            {{item.totalPriceTaxNo}}
+          </td>
+          <td [title]="item.robberTime">
+            {{item.robberTime}}
+          </td>
+          <td [title]="item.weight">
+            {{item.weight}}
+          </td>
+          <td [title]="item.vehicleNo">
+            {{item.vehicleNo}}
+          </td>
+          <td [title]="item.robberCompanyPhone">
+            {{item.robberCompanyPhone}}
+          </td>
+        </tr>
+      </ng-template>
+      </tbody>
+    </nz-table>
+  </ng-template>
+  <ng-template #historyFooter>
+    <button nz-button nzType="primary" *ngIf="buttonId == 'Select'" (click)="robConfirm()" [nzLoading]="confirmLoading">
+      确定
+    </button>
+    <button nz-button nzType="default" (click)="historyIsVisible = false">关闭</button>
+  </ng-template>
+</nz-modal>
+<ng-container>
+  <ng-template #confirmTitle>提示信息</ng-template>
+  <ng-template #confirmContent>
+    <p class="text-center f-b" style="margin:0;"> {{confirmCon}} </p>
+  </ng-template>
+  <ng-template #confirmFooter>
+    <button nz-button nzType="primary" (click)="confirm()">确定</button>
+    <button nz-button nzType="default" (click)="cancel()">取消</button>
+  </ng-template>
+</ng-container>
+
+<ng-template #trainNumContent>
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzFor="totalTrainNum">总车次</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <nz-input-number name="totalTrainNum" [(ngModel)]="totalTrainNum" [nzMin]="remaindTrainNum"
+                         [nzStep]="1" (ngModelChange)="totalTrainNumChange()">
+        </nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzFor="surplusTrainNum">剩余车次</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <nz-input-number name="surplusTrainNum" [(ngModel)]="surplusTrainNum" [nzMin]="0" [nzStep]="1"
+                         disabled>
+        </nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzFor="remaindTrainNum">已分配车次</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <nz-input-number name="remaindTrainNum" [(ngModel)]="remaindTrainNum" [nzMin]="0" [nzStep]="1"
+                         disabled>
+        </nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</ng-template>

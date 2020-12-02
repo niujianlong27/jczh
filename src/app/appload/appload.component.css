@@ -1,0 +1,29 @@
+.appload-box{
+    padding: 50px 70px 10px;
+    text-align: center;
+}
+.appload-img{
+    height: 80px;
+    width: 80px;
+    margin: auto;
+    margin-bottom: 20px;
+}
+.appload-img img{
+    display: block; 
+    width: 100%;
+    height: 100%;
+}
+.appload-title{
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+}
+.appload-version{
+    color: #000;
+    font-weight: bold;
+}
+.appload-remark{
+    font-weight: bold; 
+    margin-bottom: 15px;
+    word-wrap: break-word;
+}

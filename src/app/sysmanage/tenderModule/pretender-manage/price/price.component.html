@@ -1,0 +1,6 @@
+<common-page gridId="grid1" (search)="listSearch($event)" (updateDataResult)="selectData($event)"
+             (btnClick)="btnClick($event)" (listClick)="listClick($event)" [listLoading]="loading"
+             [totalPage]="totalpage" [pageSize]="pageSize" [isMutli]="true" [dataSet]="dataList"
+             [btnDisable]="{'copy':btnDisabled?.copy,'Update':btnDisabled?.update,Delete:btnDisabled?.delete,issue:btnDisabled?.issue,issues:btnDisabled?.issues,preview:btnDisabled?.preview}">
+
+</common-page>

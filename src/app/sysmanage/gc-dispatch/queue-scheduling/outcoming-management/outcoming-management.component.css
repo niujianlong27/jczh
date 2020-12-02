@@ -1,0 +1,6 @@
+.btn-box-1 ::ng-deep .btn-box {
+  width: 40%;
+  float: left;
+  border: none;
+  padding: 0;
+}

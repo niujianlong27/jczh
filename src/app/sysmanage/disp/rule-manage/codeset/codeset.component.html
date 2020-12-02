@@ -1,0 +1,93 @@
+<common-page (search)="listSearch($event)" (btnAdd)="btnAdd()" (btnClick)="addChild($event)" (updateDataResult)="updateDataResult($event)"
+    (btnDelete)="delete($event)" (btnUpdate)="btnUpdate($event)" [totalPage]="totalPage" [pageSize]="pageSize"
+    [listLoading]="listLoading" [dataSet]="dataSet" [isMutli]="false"></common-page>
+
+<!-- 新增代码集 -->
+<!--弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzOkLoading]="isOkLoading"
+    (nzAfterClose)="closeResult()">
+    <form nz-form [formGroup]="modalValidateForm">
+        <nz-form-item *ngFor="let m of modalFormData">
+            <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+                {{m.name}}
+            </nz-form-label>
+
+            <nz-form-control [nzSpan]="12">
+
+                <input type="{{m.type}}" *ngIf="m.type == 'text'" nz-input formControlName="{{m.eName}}" [id]="m.eName">
+
+                  <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+                    <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+                </nz-radio-group>
+
+                <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+                    <div *ngIf="modalValidateForm.get(m.eName).errors.pattern;else erroInf">
+                        {{ m.validators.patternErr}}
+                    </div>
+                    <ng-template #erroInf>
+                        {{ m.validateCon}}
+                    </ng-template>
+                </nz-form-explain>
+
+            </nz-form-control>
+
+        </nz-form-item>
+    </form>
+</nz-modal>
+
+
+<!-- 新增子项 -->
+<nz-modal [(nzVisible)]="modalFormVisible2" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzOkLoading]="isOkLoading"
+    (nzAfterClose)="closeResult()">
+
+    <form nz-form [formGroup]="modalValidateForm2">
+        <nz-form-item *ngFor="let m2 of modalFormData2">
+            <nz-form-label [nzSpan]="6" [nzRequired]="m2.require">
+                {{m2.name}}
+            </nz-form-label>
+            <nz-form-control [nzSpan]="12">
+
+
+                <nz-radio-group [attr.id]="m2.eName" *ngIf="m2.type == 'radio'" formControlName="{{m2.eName}}">
+                    <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m2.radioArr">{{r.name}}</label>
+                </nz-radio-group>
+
+                <input type="{{m2.type}}" *ngIf="m2.type == 'text'" nz-input formControlName="{{m2.eName}}" [id]="m2.eName">
+
+
+                <nz-select [nzDisabled]=isTrue  #select  style="width: 236px;" *ngIf="m2.eName === 'codesetCode'"
+                nzShowSearch nzAllowClear nzPlaceHolder="代码集名称" [(ngModel)]="codesetDesc" [formControlName]="m2.eName">
+                    <nz-option *ngFor="let i of themeArr" [nzLabel]="i.codesetDesc" [nzValue]="i.codesetCode"></nz-option>
+                </nz-select>
+
+                
+                <nz-select #select  style="width: 236px;" *ngIf="m2.eName === 'status1'" 
+                    nzShowSearch nzAllowClear nzPlaceHolder="状态" [(ngModel)]="status1" [formControlName]="m2.eName">
+                    <nz-option *ngFor="let i of themeArrZ" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+                </nz-select>
+
+                <nz-form-explain *ngIf="modalValidateForm2.get(m2.eName).dirty && modalValidateForm2.get(m2.eName).errors">
+                    <div *ngIf="modalValidateForm2.get(m2.eName).errors.pattern;else erroInf">
+                        {{ m2.validators.patternErr}}
+                    </div>
+                    <ng-template #erroInf>
+                        {{ m2.validateCon}}
+                    </ng-template>
+                </nz-form-explain>
+
+            </nz-form-control>
+
+        </nz-form-item>
+    </form>
+
+
+
+    <!-- <div *ngIf=isShow>
+        <label class="label">状态 :</label>
+        <nz-select class="select"  [(ngModel)]="status1"
+           nzShowSearch nzAllowClear nzPlaceHolder="状态"  >
+           <nz-option *ngFor="let i of themeArrZ" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+        </nz-select>
+    </div> -->
+
+</nz-modal>

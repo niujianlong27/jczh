@@ -1,0 +1,44 @@
+<app-searchform [triggerSearch]="true" (search)="listSearch($event)" [btnHiden]="{'mutiSearch': true}">
+</app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)">
+</tpl-buttons>
+<app-table-form (updateDataResult)="updateDataResult($event)" [dataSet]="dataSet" [isMutli]="false"
+                [listLoading]="loading" [pageSize]="pageSize" [showCount]="false" [totalPage]="totalPage"
+                [trSelectedShow]="true" gridId='grid1'>
+</app-table-form>
+<nz-modal [nzWidth]="'45%'" [(nzVisible)]="InsertFormVisible" [nzTitle]="modalTitle " (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()" [nzOkLoading]="isOkLoading" >
+仓库管理>新增
+  <form nz-form [formGroup]="modalValidateForm" >
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input type="{{m.type}}" *ngIf="m.type === 'input'" nz-input formControlName="{{m.eName}}"  [attr.id]="m.eName">
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+
+</nz-modal>
+
+
+
+<nz-modal [nzWidth]="'45%'" [(nzVisible)]="UpdateFormVisible" [nzTitle]="modalTitle " (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()" [nzOkLoading]="isOkLoading" >
+  仓库管理>修改
+  <form nz-form [formGroup]="modalValidateForm" >
+    <nz-form-item *ngFor="let m of modalFormData2">
+      <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input type="{{m.type}}" *ngIf="m.type === 'input'" nz-input formControlName="{{m.eName}}"  [attr.id]="m.eName" [value]= "m.value">
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+
+  <app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="deletemodaltitle" [modalCon]="finishCon"
+                     (modalConfirmResult)="deleteData($event)">
+  </app-modal-confirm>
+
+</nz-modal>
+

@@ -1,0 +1,375 @@
+
+<nz-card [nzBordered]="false">
+    <form nz-form [formGroup]="form" [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="24">
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8">船只代码</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <!-- <input type="hidden" [(ngModel)]="ship.id" formControlName="id" readonly="readonly"> -->
+                        <input type="hidden"  formControlName="shipId" readonly="readonly">
+                        <input nz-input  formControlName="carrierCode">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8" nzRequired>船只名称</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input  formControlName="carrierName">
+                        <nz-form-explain *ngIf="form.get('carrierName').dirty && form.get('carrierName').errors">请输入船只名称!</nz-form-explain>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8">船旗</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input  formControlName="flagCountry">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row [nzGutter]="24">
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8" nzRequired>联系人姓名</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input  formControlName="contact">
+                        <nz-form-explain *ngIf="form.get('contact').dirty && form.get('contact').errors">请输入联系人姓名!</nz-form-explain>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="8">
+
+
+                <nz-form-item>
+                    <nz-form-label nzSpan="8" nzRequired>联系电话</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input  formControlName="contactPhone">
+                        <nz-form-explain *ngIf="form.get('contactPhone').dirty && form.get('contactPhone').errors">请输入联系电话!</nz-form-explain>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8" nzRequired>类型</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <nz-select nzAllowClear formControlName="type" style="width: 120px;" nzPlaceHolder="请选择">
+
+                            <nz-option nzValue="1" nzLabel="近洋"></nz-option>
+                            <nz-option nzValue="2" nzLabel="远洋"></nz-option>
+                            <nz-option nzValue="0" nzLabel="全部"></nz-option>
+
+                        </nz-select>
+                        <nz-form-explain *ngIf="form.get('type').dirty && form.get('type').errors">请选择类型!</nz-form-explain>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <nz-card nzTitle="船只规格" [nzBordered]="true" style="margin: 0px 24px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8" nzRequired>长</nz-form-label>
+                            <nz-form-control nzSpan="16">
+                                <input nz-input  formControlName="shipLength">
+                                <nz-form-explain *ngIf="form.get('shipLength').dirty && form.get('shipLength').errors">请输入长度!</nz-form-explain>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>宽</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="shipWidth">
+                            <nz-form-explain *ngIf="form.get('shipWidth').dirty && form.get('shipWidth').errors">请输入宽度!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>高</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="shipHeight">
+                            <nz-form-explain *ngIf="form.get('shipHeight').dirty && form.get('shipHeight').errors">请输入高度!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-card>
+
+        <nz-card nzTitle="吨位信息" [nzBordered]="true" style="margin: 0px 24px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>满载吃水</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="draft">
+                            <nz-form-explain *ngIf="form.get('draft').dirty && form.get('draft').errors">请输入满载吃水!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>总重(吨)</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="deadWeight">
+                            <nz-form-explain *ngIf="form.get('deadWeight').dirty && form.get('deadWeight').errors">请输入总重!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>净重(吨)</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="netDeadWeight">
+                            <nz-form-explain *ngIf="form.get('netDeadWeight').dirty && form.get('netDeadWeight').errors">请输入净重!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>载重(吨)</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="capacity">
+                            <nz-form-explain *ngIf="form.get('capacity').dirty && form.get('capacity').errors">请输入载重!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>净载重(吨)</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="netCapacit">
+                            <nz-form-explain *ngIf="form.get('netCapacit').dirty && form.get('netCapacit').errors">请输入净载重!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-card>
+
+        <nz-card nzTitle="仓容信息" [nzBordered]="true" style="margin: 0px 24px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">散装仓容</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  id="bulkCapacity" formControlName="bulkCapacity">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">包装仓容</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  id="baleCapacity" formControlName="baleCapacity">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">舱口</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  id="hatchSize" formControlName="hatchSize">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">航速</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  id="speed" formControlName="speed">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">船级社</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <nz-select formControlName="shipClass" nzPlaceHolder="请选择船级社">
+                                <nz-option *ngFor="let option of codesetsOption['hw.shipSociety']" [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+                                </nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-card>
+
+        <nz-card nzTitle="装置信息" [nzBordered]="true" style="margin: 0px 24px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">imo号</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="imo">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">crane号</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input formControlName="crane">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">mmsi号</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="mmsi">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">出厂年月</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <nz-month-picker  formControlName="buildDate" (ngModelChange)="onChange($event)" [nzFormat]="monthFormat"
+                                nzPlaceHolder="请选择年月"></nz-month-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">船上电话</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="shipPhone">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">船东公司名称</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="shipOwner">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-card>
+
+        <nz-card nzTitle="证书图片" [nzBordered]="true" style="margin: 0px 24px;">
+            <div nz-row [nzGutter]="24">
+  
+
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">PI证书</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <div class="clearfix">
+                                <nz-upload [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="piCertFileList"
+                                    nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData" (nzChange)="handleChange($event,'piCertUrl')"
+                                    [nzShowButton]="piCertFileList.length < 1">
+                                    <i class="anticon anticon-plus"></i>
+                                    <div class="ant-upload-text">Upload</div>
+                                </nz-upload>
+                                <input type="hidden"   ngDefaultControl formControlName="piCertUrl" readonly="readonly">
+                                <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+                                    <ng-template #modalContent>
+                                        <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+                                    </ng-template>
+                                </nz-modal>
+                            </div>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col nzXl="8">
+                        <nz-form-item>
+                            <nz-form-label nzSpan="8">ISSC证书</nz-form-label>
+                            <nz-form-control nzSpan="16">
+                                <div class="clearfix">
+                                    <nz-upload [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="isscCertFileList"
+                                        nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData" (nzChange)="handleChange($event,'isscCertUrl')"
+                                        [nzShowButton]="isscCertFileList.length < 1">
+                                     <i class="anticon anticon-plus"></i>
+                                        <div class="ant-upload-text">Upload</div>
+                                    </nz-upload>
+                                    <input type="hidden"  ngDefaultControl  formControlName="isscCertUrl" readonly="readonly">
+                                    <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+                                        <ng-template #modalContent>
+                                            <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+                                        </ng-template>
+                                    </nz-modal>
+                                </div>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">CLASS证书</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <nz-upload [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="classCertFileList"
+                                nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData" (nzChange)="handleChange($event,'classCertUrl')"
+                                [nzShowButton]="classCertFileList.length < 1">
+                                <i class="anticon anticon-plus"></i>
+                                <div class="ant-upload-text">Upload</div>
+                            </nz-upload>
+                            <input type="hidden"  ngDefaultControl formControlName="classCertUrl" readonly="readonly">
+                            <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+                                <ng-template #modalContent>
+                                    <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+                                </ng-template>
+                            </nz-modal>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-card>
+
+        <nz-card nzTitle="船只照片" [nzBordered]="true" style="margin: 0px 24px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXl="24">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="4">船只照片</nz-form-label>
+                        <nz-form-control nzSpan="20">
+                            <div class="clearfix">
+                                <nz-upload [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="shipImgFileList"
+                                    nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData" (nzChange)="handleChange($event,'shipImgUrl')"
+                                    [nzShowButton]="shipImgFileList.length < 4">
+                                    <i class="anticon anticon-plus"></i>
+                                    <div class="ant-upload-text">Upload</div>
+                                </nz-upload>
+                                <input type="hidden" ngDefaultControl formControlName="shipImgUrl" readonly="readonly">
+                                <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+                                    <ng-template #modalContent>
+                                        <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+                                    </ng-template>
+                                </nz-modal>
+                            </div>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-card>
+
+        <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="24" style="text-align: center;" *ngIf="!auditFlag; else elseBlock">
+                <p class="b-t p-sm-tb">
+                <button nz-button [nzType]="'primary'" class="m-r" (click)="save()">
+                    <span>保存</span>
+                </button>
+                <button nz-button [nzType]="'primary'" class="m-r" (click)="cancel($event)">
+                    <span>取消</span>
+                </button>
+                </p>
+            </div>
+            <ng-template #elseBlock>
+            </ng-template>
+        </div>
+    </form>
+</nz-card>

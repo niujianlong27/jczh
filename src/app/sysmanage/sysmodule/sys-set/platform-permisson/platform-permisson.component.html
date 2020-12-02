@@ -1,0 +1,31 @@
+<common-page (search)="listSearch($event)" (btnAdd)="btnAdd($event)" [pageSize]="pageSize" [totalPage]="totalPage"
+             [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" (btnDelete)="btnDelete($event)"
+             [dataSet]="dataSet" [isMutli]="true">
+
+</common-page>
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+
+</app-modal-confirm>
+
+
+<!--数据弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+          (nzAfterClose)="closeResult()">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="12">
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName">
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+          {{ m.ErroInf}}
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+
+  </form>
+</nz-modal>

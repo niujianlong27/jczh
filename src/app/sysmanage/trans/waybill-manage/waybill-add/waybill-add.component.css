@@ -1,0 +1,32 @@
+.ant-row {
+    width: 100%;
+    word-wrap: break-word;
+}
+.btn{
+  border-radius: 5px;
+  border:solid 1px #1f6387;
+  color:#1f6387;
+  margin:15px 10px ;
+}
+
+:host ::ng-deep .ant-calendar-picker {
+    width: 100% !important;
+}
+
+:host ::ng-deep .ant-form-inline .ant-form-item {
+    margin-right: 0px !important;
+}
+
+/*.box ::ng-deep div.ant-table-body{
+  min-height: 278px!important;
+  height: 278px!important;
+}*/
+.box ::ng-deep .table-grid .ant-table-placeholder{
+  top:35%;
+}
+.waybilladdModal ::ng-deep .ant-modal-body{
+  padding:0 24px 24px;
+}
+.waybill-add-box ::ng-deep .ant-card-body{
+  padding:12px 24px;
+}

@@ -1,0 +1,280 @@
+<!-- 按钮栏 -->
+<tpl-buttons
+  (btnClick)="btnClick($event)"
+  [btnDisable]="btnDisable"
+></tpl-buttons>
+<!-- 订阅公司与主题区域 -->
+<div nz-row nzType="flex" nzJustify="space-around" style="padding-top: 20px">
+  <div nz-col nzSpan="12">
+    <!-- 订阅公司表 -->
+    <nz-table
+      class="user-table"
+      #companyTable
+      nzSize="small"
+      [nzTitle]="roleTitle"
+      [nzData]="companyData"
+      reNzTable
+      (heightEmit)="heightFun($event, 1)"
+      [extraTableHeight]="permissions ? 97 : 61"
+      [nzBordered]="false"
+      [nzFrontPagination]="false"
+      [nzHideOnSinglePage]="true"
+      [(nzPageSize)]="pageSize"
+      [nzTotal]="totalPage"
+      [nzLoading]="listLoading"
+      (nzPageIndexChange)="pageChange($event)"
+      [(nzPageIndex)]="pageIndex"
+      [nzScroll]="{ y: userHeight, x: '500px' }"
+    >
+      <!-- 订阅公司表头区域 -->
+      <thead>
+        <tr>
+          <!-- 表头全选checkbox -->
+          <th
+            nzShowCheckbox
+            [nzDisabled]="companyData.length < 1"
+            [(nzChecked)]="allCheckCompany"
+            [nzIndeterminate]="indeterminateCompany"
+            (nzCheckedChange)="checkAllCompany($event)"
+            nzWidth="30px"
+          ></th>
+          <ng-container *ngFor="let user of companyHeaderData">
+            <th [title]="user.cName" nzWidth="150px">{{ user.cName }}</th>
+          </ng-container>
+        </tr>
+      </thead>
+      <!-- 订阅公司表内容区域 -->
+      <tbody>
+        <tr *ngFor="let data of companyTable.data">
+          <!-- 单选checkbox -->
+          <td
+            nzShowCheckbox
+            [(nzChecked)]="data.checked"
+            (nzCheckedChange)="refreshStatusCompany(data)"
+          ></td>
+          <ng-container *ngFor="let user of companyHeaderData">
+            <td [title]="data[user.eName]">
+              <span>{{ data[user.eName] }}</span>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </nz-table>
+    <!-- 订阅公司搜索区域 -->
+    <ng-template #roleTitle>
+      <div>订阅公司</div>
+      <form
+        nz-form
+        nzLayout="inline"
+        [formGroup]="companyValidateForm"
+        (ngSubmit)="searchCompany()"
+      >
+        <nz-form-item>
+          <nz-form-label>公司名称</nz-form-label>
+          <nz-form-control>
+            <input
+              type="text"
+              nz-input
+              id="searchValue"
+              formControlName="searchValue"
+              placeholder="公司名搜索"
+            />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control>
+            <button nz-button nzType="primary">查询</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ng-template>
+  </div>
+
+  <div nz-col nzSpan="12">
+    <!-- 订阅主题表 -->
+    <nz-table
+      class="user-table"
+      #roleTable
+      nzSize="small"
+      [nzTitle]="tableHead"
+      [nzData]="topicData"
+      reNzTable
+      (heightEmit)="heightFun($event, 0)"
+      [extraTableHeight]="permissions ? 97 : 61"
+      [nzBordered]="false"
+      [nzShowPagination]="false"
+      [nzFrontPagination]="false"
+      [nzHideOnSinglePage]="true"
+      [nzLoading]="listLoading1"
+      [nzScroll]="{ y: roleHeight, x: '500px' }"
+    >
+      <!-- 订阅主题表头 -->
+      <thead>
+        <tr>
+          <!-- 全选checkbox -->
+          <th
+            nzShowCheckbox
+            [nzDisabled]="topicData.length < 1 || canCheckAll(topicData)"
+            [(nzChecked)]="allChecked"
+            [nzIndeterminate]="indeterminate"
+            (nzCheckedChange)="checkAll($event)"
+            nzWidth="30px"
+          ></th>
+          <ng-container *ngFor="let user of topicCodeHeader">
+            <th [title]="user.cName" nzWidth="150px">{{ user.cName }}</th>
+          </ng-container>
+        </tr>
+      </thead>
+      <!-- 表内容 -->
+      <tbody>
+        <tr *ngFor="let data of roleTable.data">
+          <!-- 单选checkbox -->
+          <td
+            nzShowCheckbox
+            [(nzChecked)]="data.checked"
+            [nzDisabled]="data.math === 'XF'"
+            (nzCheckedChange)="refreshStatus(data)"
+          ></td>
+          <ng-container *ngFor="let user of topicCodeHeader; let i = index">
+            <td [title]="data[user.eName]">
+              <!--公司多选下
+                已订阅主题：主题未被所选公司全订阅的显示标记
+                未订阅主题：主题已被部分公司订阅的显示标记
+              -->
+              <nz-badge
+                nzColor="#f5222d"
+                *ngIf="i === 0 && data.math === 'XF'"
+              ></nz-badge>
+              <span>{{ data[user.eName] }}</span>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </nz-table>
+    <!-- 订阅主题搜索区域 -->
+    <ng-template #tableHead>
+      <div>订阅主题</div>
+      <nz-tabset [(nzSelectedIndex)]="nzSelectedIndex">
+        <nz-tab
+          nzTitle="已订阅"
+          [nzDisabled]="companyData.length === 0"
+          (nzSelect)="tabClick('select')"
+        >
+          <!-- 主题已订阅tab -->
+          <form
+            nz-form
+            nzLayout="inline"
+            [formGroup]="bindValidateForm"
+            (ngSubmit)="submitForm('bind')"
+          >
+            <nz-form-item>
+              <nz-form-label>主题名称</nz-form-label>
+              <nz-form-control>
+                <input
+                  type="text"
+                  nz-input
+                  id="searchValueBind"
+                  formControlName="searchValueBind"
+                  placeholder="主题名搜索"
+                />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-control>
+                <button nz-button nzType="primary">查询</button>
+              </nz-form-control>
+            </nz-form-item>
+          </form>
+        </nz-tab>
+        <nz-tab
+          nzTitle="未订阅"
+          [nzDisabled]="companyData.length === 0"
+          (nzSelect)="tabClick('notToChoose')"
+        >
+          <!-- 主题未订阅tab -->
+          <form
+            nz-form
+            nzLayout="inline"
+            [formGroup]="unBindValidateForm"
+            (ngSubmit)="submitForm('unbind')"
+          >
+            <nz-form-item>
+              <nz-form-label>主题名称</nz-form-label>
+              <nz-form-control>
+                <input
+                  type="text"
+                  nz-input
+                  id="searchValueUnBind"
+                  formControlName="searchValueUnBind"
+                  placeholder="主题名搜索"
+                />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-control>
+                <button nz-button nzType="primary">查询</button>
+              </nz-form-control>
+            </nz-form-item>
+          </form>
+        </nz-tab>
+      </nz-tabset>
+    </ng-template>
+  </div>
+</div>
+<!-- 复制弹框 -->
+<nz-modal
+  [(nzVisible)]="modalFormVisible"
+  [nzTitle]="'公司主题复制'"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  (nzAfterClose)="closeResult()"
+>
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="8">
+        源公司
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-form-text>
+          {{ modalValidateForm.get('companyName').value }}
+        </nz-form-text>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="8" nzRequired>
+        目标公司
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-select
+          nzShowSearch
+          id="targetCompanys"
+          nzMode="multiple"
+          formControlName="targetCompanys"
+          appInputThrottle
+          (throttleSearch)="SearchChange($event)"
+          (nzScrollToBottom)="scrollToBottom()"
+          [nzAllowClear]="true"
+          [nzAutoClearSearchValue]="false"
+        >
+          <nz-option
+            *ngFor="let i of companys"
+            [nzLabel]="i.companyName"
+            [nzValue]="i.companyId"
+          ></nz-option>
+          <nz-option *ngIf="isLoadingCompany" nzDisabled nzCustomContent>
+            <i nz-icon nzType="loading" class="loading-icon"></i> Loading
+            Data...
+          </nz-option>
+        </nz-select>
+        <nz-form-explain
+          *ngIf="
+            modalValidateForm.get('targetCompanys')?.dirty &&
+            modalValidateForm.get('targetCompanys')?.errors
+          "
+        >
+          复制目标公司不能为空
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>

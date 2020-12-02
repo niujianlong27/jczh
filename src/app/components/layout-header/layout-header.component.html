@@ -1,0 +1,127 @@
+<div class="top-nav clearfix">
+    <div class="fl">
+        <div class="top-logo">
+           <img src="./assets/img/logo.svg">
+        </div>
+        <div class="top-info" (click)="companySelect($event)">
+           <i></i>
+           <em>{{info.companyName}}</em>
+        </div>
+    </div>
+    <div class="fl" style="margin-left: 60px;max-width: 520px;">
+        <app-top-nav></app-top-nav>
+    </div>
+    <ul class="clearfix fr top-right">
+        <li class="fullScreen" title="{{fullScreenInfo.title}}" fullScreen (isFullScreen)="isFullScreen($event)">
+            <i nz-icon type="arrows-alt" theme="outline" [hidden]="fullScreenInfo.isFull"></i>
+            <i nz-icon type="shrink" theme="outline" [hidden]="!fullScreenInfo.isFull"></i>
+        </li>
+        <li (click)="toPortal()" title='首页'>
+            <i nz-icon type="home" theme="outline"></i>
+        </li>
+        <li [routerLink]="[ '/system/message/messageView' ]">
+         <i class="mess-icon"></i>
+         <nz-badge [nzCount]="mesCount" [nzStyle]="{ backgroundColor: '#f5222d', right: '-10px', borderColor: 'transparent', padding: '0 4px' }">
+            <span>消息</span>
+         </nz-badge>
+        </li>
+        <li class="person-box">
+            <nz-avatar nzSrc="./assets/img/icon.jpg" nzIcon="anticon anticon-user"></nz-avatar>
+            <span class="login-name" title="{{info.name}}">{{info.name}}</span>
+            <i class="down"></i>
+            <!--个人信息-->
+            <ul class="user-profile">
+                <li (click)="companySelect($event)">
+                    <i nz-icon type="interation" theme="outline"></i>
+                    <span> 切换服务公司</span>
+                </li>
+                <li (click)="openSet()">
+                    <i nz-icon type="setting" theme="outline"></i>
+                    <span>设置</span>
+                </li>
+                <li (click)="passwordChange($event)">
+                    <i nz-icon type="lock" theme="outline"></i>
+                    <span>密码修改</span>
+                </li>
+                <li (click)="loginOut($event)">
+                    <i nz-icon type="logout" theme="outline"></i>
+                    <span>退出系统</span>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<!--主题-->
+<nz-drawer [nzWidth]="320" [nzVisible]="visible" nzTitle="系统设置" (nzOnClose)="setClose()">
+    <form class="theme-box">
+        <nz-form-item>
+            <nz-form-label [nzSm]="8" [nzXs]="24">主题风格</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24">
+                <nz-select [(ngModel)]="settingData.themeVal" [ngModelOptions]="{standalone: true}">
+                    <nz-option *ngFor="let i of themeArr" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="8" [nzXs]="24">系统字体</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24">
+                <nz-select [(ngModel)]="settingData.font" [ngModelOptions]="{standalone: true}">
+                    <nz-option *ngFor="let f of fontArr" [nzLabel]="f.name" [nzValue]="f.value"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="8" [nzXs]="24">查询选择框</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24">
+                <nz-select [(ngModel)]="settingData.checkBoxVisible" [ngModelOptions]="{standalone: true}">
+                    <nz-option [nzLabel]="'显示'" [nzValue]=true></nz-option>
+                    <nz-option [nzLabel]="'不显示'" [nzValue]=false></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="8" [nzXs]="24">表格边框设置</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24">
+                <nz-select [(ngModel)]="settingData.gridLine" [ngModelOptions]="{standalone: true}">
+                    <nz-option [nzLabel]="'显示'" [nzValue]=true></nz-option>
+                    <nz-option [nzLabel]="'不显示'" [nzValue]=false></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="8" [nzXs]="24">功能菜单伸缩</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24">
+                <nz-select [(ngModel)]="settingData.menuCol" [ngModelOptions]="{standalone: true}">
+                    <nz-option nzLabel="是" [nzValue]=true></nz-option>
+                    <nz-option nzLabel="否" [nzValue]=false></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="8" [nzXs]="24">切换页面信息</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24">
+                <nz-select [(ngModel)]="settingData.infoStore" [ngModelOptions]="{standalone: true}">
+                    <nz-option nzLabel="保存" [nzValue]=true></nz-option>
+                    <nz-option nzLabel="不保存" [nzValue]=false></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="8" [nzXs]="24">主次表显示</nz-form-label>
+            <nz-form-control [nzSm]="12" [nzXs]="24">
+                <nz-select [(ngModel)]="settingData.moreGridShow" [ngModelOptions]="{standalone: true}">
+                    <nz-option nzLabel="上下" [nzValue]=true></nz-option>
+                    <nz-option nzLabel="左右" [nzValue]=false></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+    <div class="footer">
+        <button type="button" (click)="setClose()" class="ant-btn" style="margin-right: 8px;"><span>取消</span></button>
+        <button type="button" class="ant-btn ant-btn-primary" (click)="userSetConfirm()"><span>确认</span></button>
+    </div>
+</nz-drawer>
+<!--密码修改-->
+<app-reset-psw [pswModalOpen]="pswModalOpen" (pswCancel)="pswModalCancel()" (pswResult)="pswModalResult($event)"></app-reset-psw>
+<!--服务公司-->
+<app-switch-company [modalVisible]='modalVisible' [data]='modalData' (modalClose)="modalClose()" (modalResult)="modalResult($event)"></app-switch-company>

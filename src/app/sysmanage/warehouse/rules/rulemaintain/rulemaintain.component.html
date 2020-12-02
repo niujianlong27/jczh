@@ -1,0 +1,42 @@
+<nz-tabset>
+    <nz-tab *ngFor="let tab of tabs;let i = index;" [nzTitle]='tab.itemCname'
+                (nzSelect)="selectChange(tab)">
+        <app-searchform (search)="listSearch($event,tab.ruleType)" [formId]="tab.formId" [staticData]="staticData" [btnHiden]="{'mutiSearch': true}"
+        (searchDataReturn)="searchData($event)">
+        </app-searchform>
+        <tpl-buttons (btnClick)="btnClick($event,tab)" [formId]="tab.formId" [btnHiden]="{Update: true}"
+        (btnDataReturn)="btnData($event, i)">
+        </tpl-buttons>
+        <app-table-form (updateDataResult)="updateDataResult($event)" [dataSet]="dataSet" [isMutli]="false" [formId]="tab.formId"
+                        [listLoading]="loading" [showCount]="false" [totalPage]="totalPage" [extraTableHeight]="i===0 ? 60 : 140"
+                        [trSelectedShow]="true" gridId='grid1' [staticCode]="staticData"
+                        [gridOperate]="isUpdate[i] ? {show: true, template: operate} : ''">
+                        <ng-template #operate let-data>
+                            <button nzType="primary" nz-button nzSize="small" [hidden]="data._setUpdate"
+                            (click)="update(data,1)">修改</button>
+                            <div [hidden]="!data._setUpdate">
+                                <button nzType="danger" [nzLoading]="data.btnloading" nz-button nzSize="small" (click)="save(data)" style="margin-right: 5px;">保存</button>
+                                <button nzType="default" [disabled]="data.btnloading" nz-button nzSize="small" (click)="update(data,0)">取消</button>
+                            </div>
+                        </ng-template>
+        </app-table-form>
+    </nz-tab>
+</nz-tabset>
+<nz-modal [nzContent]="modalContent" [nzVisible]="modalVisible" [nzTitle]="modalTitle"
+    (nzOnCancel)="modalVisible = false" (nzOnOk)="ok()" [nzOkLoading]="okloading">
+    <ng-template #modalContent>
+            <form nz-form [formGroup]="modalForm" >
+                <nz-form-item *ngFor="let item of modalFormData">
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired [nzFor]="item.eName">{{item.cName}}</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" [ngSwitch]="item.type">
+                        <ng-template [ngSwitchCase]="'select'">
+                            <nz-select nzAllowClear nzShowSearch [formControlName]="item.eName">
+                                <nz-option *ngFor="let data of item.data" [nzValue]="data.value" [nzLabel]="data.name"></nz-option>
+                            </nz-select>
+                            <nz-form-explain *ngIf="modalForm.get(item.eName).dirty && modalForm.get(item.eName)?.errors">{{item.cName}}为必填项!</nz-form-explain>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+    </ng-template>
+</nz-modal>

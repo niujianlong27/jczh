@@ -1,0 +1,125 @@
+
+.search-form{
+  padding:10px 15px 10px 0;
+}
+.search-form>div{
+  margin:10px 0;
+}
+.search-input-group{
+  position: relative;
+}
+.search-input-group input{
+  height:26px;
+  float: left;
+  font-size:12px;
+  width:auto;
+}
+.first-input{
+  padding-left:55px;
+}
+.search-input-label{
+  height:26px;
+  line-height:26px;
+  font-size:12px;
+}
+.search-input-label .search-checkbox{
+  margin-left:12px;
+}
+.search-query{
+  width:50px;
+  font-size:12px;
+  float: left;
+  position: absolute;
+  top:0;
+  left:0;
+  z-index:50;
+}
+.search-query ::ng-deep div.ant-select-selection--single,.post-query ::ng-deep div.ant-select-selection--single{
+  height:26px;
+}
+.search-query ::ng-deep .ant-select-selection__rendered {
+  line-height:26px;
+  margin-left:5px;
+  margin-right:0;
+}
+.search-query ::ng-deep .ant-select-selection-selected-value,.post-query ::ng-deep .ant-select-selection-selected-value{
+  padding-right:0;
+}
+.search-query ::ng-deep .ant-select-arrow,.post-query ::ng-deep .ant-select-arrow{
+  right:5px;
+}
+::ng-deep .ant-select-dropdown{
+  font-size:12px;
+}
+.search-query ::ng-deep .ant-select-selection,.search-query ::ng-deep .ant-select-selection:hover, .search-query ::ng-deep .ant-select-selection:focus{
+  border:none;
+  background-color:transparent;
+}
+.search-query.ant-select-open ::ng-deep .ant-select-selection,.search-query ::ng-deep .ant-select-selection:focus{
+  box-shadow: none;
+}
+.search-query ::ng-deep .ant-select-selection,.search-query ::ng-deep .ant-select-selection:hover, .search-query ::ng-deep .ant-select-selection:focus{
+  border-right:1px #d9d9d9 solid;
+}
+.post-query{
+  width:36px;
+  font-size:12px;
+  float: left;
+  margin-left:12px;
+}
+.post-query ::ng-deep .ant-select-selection__rendered {
+  line-height:23px;
+  margin-left:5px;
+  margin-right:0;
+}
+.search-date{
+  font-size:12px;
+}
+.search-date ::ng-deep .ant-calendar-picker{
+  font-size:12px;
+}
+.last-date{
+  margin-left:4px;
+}
+.search-date ::ng-deep .ant-input,.last-date ::ng-deep .ant-input{
+  height:26px;
+  line-height:23px;
+  font-size:12px;
+  padding:0;
+}
+.last-date ::ng-deep .ant-input{
+  padding-left:10px;
+}
+.single-date ::ng-deep .ant-input{
+  padding-left:55px;
+}
+.search-select ::ng-deep .ant-select-selection--single{
+  height:26px;
+  width:211px;
+  padding-left:55px;
+}
+.search-select ::ng-deep .ant-select-selection__rendered{
+  line-height:26px;
+  height:26px;
+}
+.search-pop ::ng-deep .ant-input{
+  height:26px;
+  line-height:26px;
+  font-size:12px;
+  padding-left:55px;
+}
+.number-input ::ng-deep .ant-input,.number-input-last ::ng-deep .ant-input{
+  height:26px;
+  line-height:26px;
+  font-size:12px;
+}
+.search-input-group ::ng-deep .ant-input-number{
+  height:26px;
+  font-size:12px;
+}
+.search-input-group ::ng-deep .ant-input-number-input{
+   height:26px;
+}
+.search-input-group .first-inputNumber ::ng-deep .ant-input-number-input,.number-input ::ng-deep .ant-input{
+  padding-left:55px;
+}

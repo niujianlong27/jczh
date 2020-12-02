@@ -1,0 +1,31 @@
+.grid-pad {
+  padding-top: 30px;
+}
+.inp-width{
+  width: 100px;
+}
+.width-100-margin-left-10 {
+  width: 100px;
+  margin-left: 10px;
+}
+.modal-table ::ng-deep .ant-table-wrapper div.ant-table-body{
+  height:auto;
+  min-height:0;
+  margin-bottom:2px;
+}
+.f-string{
+  width:260px
+}
+
+.ant-form-inline .ant-form-item {
+  width: 100%;
+}
+
+.modal-collapse ::ng-deep .ant-collapse-content > .ant-collapse-content-box {
+  padding: 0px;
+}
+
+.modal-collapse ::ng-deep .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+  padding: 0px;
+}
+

@@ -1,0 +1,374 @@
+<div>
+  <app-searchform (search)="listMainSearch($event)"></app-searchform>
+  <tpl-buttons [btnDisable]="btnDisable" (btnClick)="btnClick($event)"></tpl-buttons>
+  <app-table-form [gridId]="'grid1'" [dataSet]="dataSet" [totalPage]="totalPage" [trSelectedShow]="true"
+                  [listLoading]="listLoading" (updateDataResult)="updateDataResult($event)"
+                  (listClick)="listMainClick($event)"></app-table-form>
+</div>
+
+<div class="grid-pad">
+  <nz-tabset>
+    <nz-tab nzTitle="货盘明细">
+      <app-table-form [dataSet]="dataSetPallet" [totalPage]="totalPagePallet" [gridId]="'grid2'" [isCheckBox]="false"
+                      [nzShowPagination]="false" [showCount]="false"></app-table-form>
+    </nz-tab>
+    <nz-tab nzTitle="捆包明细">
+      <app-table-form [dataSet]="dataSetBale" [totalPage]="totalPageBale" [gridId]="'grid3'" [isCheckBox]="false"
+                      [nzShowPagination]="false" [showCount]="false"></app-table-form>
+    </nz-tab>
+  </nz-tabset>
+</div>
+
+
+<ng-template #modalContent>
+
+  <ng-container [ngSwitch]="buttonId">
+
+    <ng-container *ngSwitchCase="'Results'" [ngTemplateOutlet]="results"></ng-container>
+    <ng-container *ngSwitchCase="'Select'" [ngTemplateOutlet]="select"></ng-container>
+    <ng-container *ngSwitchCase="'Again'" [ngTemplateOutlet]="again"></ng-container>
+
+  </ng-container>
+
+
+</ng-template>
+
+<ng-template #modalFooter>
+
+  <ng-container [ngSwitch]="buttonId">
+
+    <div nz-row nzType="flex" nzJustify="center" *ngSwitchCase="'Results'">
+      <!--<button nz-button>确认</button>-->
+      <button nz-button (click)="close()">关闭</button>
+    </div>
+
+    <div nz-row nzType="flex" nzJustify="center" *ngSwitchCase="'Select'">
+      <button nz-button (click)="close()">关闭</button>
+    </div>
+    <div nz-row nzType="flex" nzJustify="center" *ngSwitchCase="'Again'">
+      <button nz-button (click)="publishBid()">发布竞价</button>
+    </div>
+  </ng-container>
+
+</ng-template>
+
+<ng-template #select>
+
+  <p><i nz-icon type="form" theme="outline"></i><span> 竞价信息</span></p>
+
+  <div nz-row nzType="flex" nzAlign="middle" nzGutter="40">
+
+    <div nz-col [nzSpan]="7">竞价单号:{{selectedData.tenderNo}}</div>
+
+    <div nz-col [nzSpan]="4" [nzOffset]="13">
+      <ng-container>
+        <button nz-button>放弃</button>
+      </ng-container>
+    </div>
+
+  </div>
+
+  <div class="margin-top">
+
+
+    <div nz-row nzGutter="8">
+
+      <div nz-col [nzSpan]="showChildList&&(type !== 'CJLX10')?13:24">
+        <app-table-form [columns]="header" [gridOperate]="{show:true,title:'操作',template:selectOpera}"
+                        [dataSet]="bidDataSet" [colSet]="false" [isCheckBox]="false" [showCount]="false"
+                        [trSelectedShow]="trSelectedShow" [nzShowPagination]="false" [listLoading]="modalListLoading"
+                        (listClick)="listClick($event)"></app-table-form>
+      </div>
+
+      <ng-container *ngIf="type !== 'CJLX10'">
+
+        <div nz-col [nzSpan]="showChildList&&(type !== 'CJLX10')?11:0">
+          <app-table-form [columns]="childHeader" [dataSet]="childDataSet" [colSet]="false" [nzShowPagination]="false"
+                          [showCount]="false" [listLoading]="modalChildListLoading"
+                          [isCheckBox]="false"></app-table-form>
+        </div>
+
+      </ng-container>
+    </div>
+
+
+  </div>
+
+</ng-template>
+
+<ng-template #results>
+
+  <p><i nz-icon type="form" theme="outline"></i><span> 竞价信息</span></p>
+
+  <div nz-row nzType="flex" nzAlign="middle" nzGutter="40">
+
+    <div nz-col [nzSpan]="7">竞价单号:{{selectedData.tenderNo}}</div>
+
+    <div nz-col [nzSpan]="4" [nzOffset]="13">
+      <ng-container *ngIf="buttonId === 'Results'">
+        <p>{{selectedData.palletStatusName}}</p>
+      </ng-container>
+    </div>
+
+  </div>
+
+  <div class="margin-top">
+
+    <nz-tabset [(nzSelectedIndex)]="nzSelectedIndex" (nzSelectedIndexChange)="tabClick()">
+      <nz-tab nzTitle="竞价详情">
+      </nz-tab>
+      <nz-tab nzTitle="竞价历史">
+      </nz-tab>
+    </nz-tabset>
+    <ng-container [ngTemplateOutlet]="detail"></ng-container>
+
+    <ng-template #detail>
+
+      <div nz-row nzGutter="8">
+
+        <div nz-col [nzSpan]="showChildList&&(type !== 'CJLX10')?13:24">
+          <app-table-form [columns]="header"
+                          [gridOperate]="{show:true,title:'已选择',template:resultsOpera}" [dataSet]="bidDataSet"
+                          [colSet]="false"
+                          [isCheckBox]="false" [showCount]="false" [trSelectedShow]="trSelectedShow"
+                          [nzShowPagination]="false" (listClick)="listClick($event)"></app-table-form>
+        </div>
+
+        <ng-container *ngIf="type !== 'CJLX10'">
+
+          <div nz-col [nzSpan]="showChildList&&(type !== 'CJLX10')?11:0">
+            <app-table-form [columns]="childHeader" [dataSet]="childDataSet"
+                            [colSet]="false" [nzShowPagination]="false" [showCount]="false"
+                            [isCheckBox]="false"></app-table-form>
+          </div>
+
+        </ng-container>
+      </div>
+
+    </ng-template>
+
+  </div>
+
+</ng-template>
+
+<ng-template #again>
+
+  <p><i nz-icon type="form" theme="outline"></i><span> 竞价定价</span></p>
+  <nz-radio-group [(ngModel)]="radioValue" (ngModelChange)="radioChange()">
+    <label nz-radio nzValue="10">按均价</label>
+    <label nz-radio nzValue="20">分别报价</label>
+  </nz-radio-group>
+
+  <ng-container [ngSwitch]="radioValue">
+
+    <ng-container *ngSwitchCase="'10'">
+
+      <form nz-form>
+        <nz-form-item [nzFlex]="true">
+          <nz-form-label nzFor="markedPriceTaxNo">最高限价</nz-form-label>
+          <nz-form-control>
+            <input nz-input name="markedPriceTaxNo" type="text" id="markedPriceTaxNo"
+                   [(ngModel)]="modalForm.markedPriceTaxNo">
+          </nz-form-control>
+          <nz-form-control>
+            <!--价格-->
+            <nz-select class="width-100-margin-left-10" name="calculation"
+                       [(ngModel)]="modalForm.calculation">
+              <nz-option *ngFor="let i of unitArray" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+            </nz-select>
+          </nz-form-control>
+          <nz-form-label nzFor="settleType" [nzOffset]="1">是否含税</nz-form-label>
+          <nz-form-control [nzSpan]="4">
+            <nz-select class="width-100" nzAllowClear nzSize="small" name="settleType"
+                       [(ngModel)]="modalForm.settleType">
+              <nz-option *ngFor="let i of taxArray" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'20'">
+      <nz-tabset>
+        <nz-tab nzTitle="按流向" (nzSelect)="tab('flow')">
+          <ng-container [ngTemplateOutlet]="flowTemplate"></ng-container>
+        </nz-tab>
+        <nz-tab nzTitle="按品名" (nzSelect)="tab('product')">
+          <ng-container [ngTemplateOutlet]="productTemplate"></ng-container>
+        </nz-tab>
+      </nz-tabset>
+
+      <ng-template #flowTemplate>
+        <nz-table #flowTable nzSize="small" [nzScroll]="{x:'100%',y:'150px'}" [nzData]="templateDataSet"
+                  [nzShowPagination]="false" [nzFrontPagination]="false">
+          <thead>
+          <tr>
+            <ng-container *ngFor="let h of flowTemplateHeader">
+              <th [attr.colspan]="h.colStatus?2:1" title="{{h.cName}}">
+                <span>{{h.cName}}</span>
+              </th>
+            </ng-container>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let data of flowTable.data">
+            <ng-container *ngFor="let n of flowTemplateHeader">
+              <ng-container [ngSwitch]="n.switch">
+                <ng-template [ngSwitchCase]="'string'">
+                  <td [ngClass]="n.type">
+                    <span [title]="data[n.eName]">{{data[n.eName]}}</span>
+                  </td>
+                </ng-template>
+                <ng-template [ngSwitchCase]="'taxSelect'"><!--税选择-->
+                  <td>
+                    <nz-select class="width-100" nzAllowClear nzSize="small" name="settleType"
+                               [(ngModel)]="data.settleType">
+                      <nz-option *ngFor="let i of taxArray" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+                    </nz-select>
+                  </td>
+                </ng-template>
+
+                <ng-template [ngSwitchCase]="'unitSelect'"><!--重量单位选择-->
+                  <td>
+                    <input nz-input class="input-width" nzSize="small" name="markedPriceTaxNo"
+                           [(ngModel)]="data.markedPriceTaxNo">
+                  </td>
+                  <!--重量选择-->
+                  <td>
+                    <nz-select class="width-100" name="calculation" [(ngModel)]="data.calculation" [nzSize]="'small'">
+                      <nz-option *ngFor="let i of unitArray" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+                    </nz-select>
+                  </td>
+                </ng-template>
+
+              </ng-container>
+
+            </ng-container>
+          </tr>
+          </tbody>
+        </nz-table>
+      </ng-template>
+
+      <ng-template #productTemplate>
+        <nz-table #productTable nzSize="small" [nzScroll]="{x:'140%',y:'150px'}" [nzData]="templateDataSet"
+                  [nzShowPagination]="false" [nzFrontPagination]="false">
+          <thead>
+          <tr>
+            <ng-container *ngFor="let h of productTemplateHeader">
+              <th [attr.colspan]="h.colStatus?2:1" title="{{h.cName}}">
+                <span>{{h.cName}}</span>
+              </th>
+            </ng-container>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let data of productTable.data">
+            <ng-container *ngFor="let n of productTemplateHeader">
+              <ng-container [ngSwitch]="n.switch">
+                <ng-template [ngSwitchCase]="'string'">
+                  <td [ngClass]="n.type">
+                    <span [title]="data[n.eName]">{{data[n.eName]}}</span>
+                  </td>
+                </ng-template>
+
+                <ng-template [ngSwitchCase]="'taxSelect'"><!--税选择-->
+                  <td>
+                    <nz-select class="width-100" nzAllowClear nzSize="small" name="settleType"
+                               [(ngModel)]="data.settleType">
+                      <nz-option *ngFor="let i of taxArray" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+                    </nz-select>
+                  </td>
+                </ng-template>
+
+                <ng-template [ngSwitchCase]="'unitSelect'"><!--重量单位选择-->
+                  <td>
+                    <input nz-input class="input-width" nzSize="small" name="markedPriceTaxNo"
+                           [(ngModel)]="data.markedPriceTaxNo">
+                  </td>
+                  <!--重量选择-->
+                  <td>
+                    <nz-select class="width-100" name="calculation" [(ngModel)]="data.calculation" [nzSize]="'small'">
+                      <nz-option *ngFor="let i of unitArray" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+                    </nz-select>
+                  </td>
+                </ng-template>
+
+              </ng-container>
+
+            </ng-container>
+          </tr>
+          </tbody>
+        </nz-table>
+      </ng-template>
+    </ng-container>
+
+
+  </ng-container>
+
+  <p class="margin-top"><i nz-icon type="form" theme="outline"></i><span> 承运人选择</span></p>
+  <nz-transfer
+    nzShowSearch
+    [nzDataSource]="companyLists"
+    [nzTitles]="['承运人查询','已选择承运人']"
+    [nzListStyle]="{'width': '45%', 'height.px': 300}"
+    [nzFilterOption]="dataFilter"
+    [nzOperations]="['添加', '删除']"
+    [nzRender]="render"
+    (nzChange)="selectedBider($event)"
+  >
+    <ng-template #render let-item>
+      {{ item.name }}
+    </ng-template>
+  </nz-transfer>
+
+  <p class="margin-top"><i nz-icon type="form" theme="outline"></i><span> 业务时效</span></p>
+  <form nz-form>
+    <nz-form-item [nzFlex]="true" nzAlign="middle">
+      <nz-form-label nzRequired>开始时间</nz-form-label>
+      <nz-form-control>
+
+        <nz-date-picker
+          nzShowTime
+          nzFormat="yyyy-MM-dd"
+          nzPlaceHolder="开始"
+          name="bidTimeStart"
+          [(ngModel)]="modalForm.bidTimeStart"
+        >
+        </nz-date-picker>
+
+      </nz-form-control>
+
+      <nz-form-label nzRequired>第一阶段</nz-form-label>
+      <nz-form-control>
+        <input nz-input name="oneTime" [(ngModel)]="modalForm.oneTime">
+      </nz-form-control>
+
+      <nz-form-label nzRequired>第二阶段</nz-form-label>
+      <nz-form-control>
+        <input nz-input name="twoTime" [(ngModel)]="modalForm.twoTime">
+      </nz-form-control>
+
+      <nz-form-label nzRequired>延时时间</nz-form-label>
+      <nz-form-control>
+        <nz-select class="width-100" name="delay" [(ngModel)]="modalForm.delay">
+          <nz-option [nzValue]="i.value" [nzLabel]="i.name" *ngFor="let i of timeTypeArr"></nz-option>
+        </nz-select>
+      </nz-form-control>
+
+    </nz-form-item>
+  </form>
+
+  <p><i nz-icon type="form" theme="outline"></i><span> 备注</span></p>
+  <textarea rows="4" nz-input name="remark" [(ngModel)]="modalForm.remark"></textarea>
+
+</ng-template>
+
+<ng-template #selectOpera let-data let-index="index">
+  <a (click)="selectClick(data)">选择</a>
+</ng-template>
+<ng-template #resultsOpera let-data let-index="index">
+  <ng-container *ngIf="data.status === 'YTZT40'">
+    <i nz-icon type="check" theme="outline"></i>
+  </ng-container>
+</ng-template>

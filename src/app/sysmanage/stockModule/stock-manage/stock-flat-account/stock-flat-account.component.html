@@ -1,0 +1,14 @@
+<app-searchform (search)="listSearch($event)" [formId]="'form_stock_flat_acc_component'" [gridId]="'flatRecord'" ></app-searchform>
+<tpl-buttons  [formId]="'form_stock_flat_acc_component'" [gridId]="'flatRecord'"></tpl-buttons>
+<!--非散货平账记录-->
+<div>
+  <app-table-form [pageFun]='true' (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)'
+                  [formId]="'form_stock_flat_acc_component'" 
+                  [gridId]="'flatRecord'" [dataSet]="dataSet1"
+                  [pageSize]="pageSize1" [totalPage]="totalPages1"
+                  [isMutli]="true" [listLoading]="listLoading1"
+                  [isCheckBox]="true" [showCount]="false">
+
+  </app-table-form>
+</div>
+

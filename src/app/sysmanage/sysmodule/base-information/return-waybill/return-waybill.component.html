@@ -1,0 +1,42 @@
+<nz-spin [nzSpinning]="spinning">
+
+  <tpl-buttons
+    [btnDisable]="{Update:updateDiasabled}"
+    (btnClick)="btnClick($event)"
+  >
+  </tpl-buttons>
+
+  <app-table-form
+    [dataSet]="dataSet"
+    [isCheckBox]="false"
+    [isMutli]="false"
+    [nzShowPagination]="false"
+    [showCount]="false"
+    [gridId]="'grid1'"
+    [formId]="'form_return_waybill'"
+  >
+    <ng-template
+      [grid-row]="'tpl-grid1-kmRemind'"
+      let-index="index" let-key="key" let-obj
+    >
+      <nz-switch [(ngModel)]="obj.kmRemind">
+      </nz-switch>
+    </ng-template>
+    <ng-template
+      [grid-row]="'tpl-grid1-wayTimeData'"
+      let-index="index" let-key="key" let-obj
+    >
+      <nz-input-number
+        [(ngModel)]="obj.wayTimeData"
+        [nzMin]="0"
+        [nzSize]="'small'"
+        [nzPrecision]="0"
+      >
+
+      </nz-input-number>
+      小时
+    </ng-template>
+  </app-table-form>
+
+</nz-spin>
+

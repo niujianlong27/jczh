@@ -1,0 +1,20 @@
+.selectShow{
+  width: 100%;
+}
+.selectClose{
+  visibility: hidden;
+  position:absolute
+}
+.divShow {
+  text-align: left;
+
+}
+.divClose{
+  visibility: hidden;
+  position:absolute
+}
+
+nz-select{
+  width: 100%;
+}
+

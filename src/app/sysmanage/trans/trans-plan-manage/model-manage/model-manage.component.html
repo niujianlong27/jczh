@@ -1,0 +1,69 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+
+<div class="clearfix" style="overflow: hidden;position: relative;">
+
+  <div class="fl trans" [ngStyle]="{width:leftWidth}">
+    <p>模型管理</p>
+    <app-table-form [pageFun]='true' (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)'
+                    [gridId]="'grid1'" [dataSet]="dataSet1"
+                    [pageSize]="pageSize1" (updateDataResult)="selectData($event)" [totalPage]="totalPages1"
+                    [listLoading]="listLoading1"
+                    [trSelectedShow]="true" ></app-table-form>
+  </div>
+
+  <div class="tableLine trans" gridLine [ngStyle]="{left:lineWidth}" (gridLineResult)="gridLineFun($event)">
+    <div class="tableLine-in">
+        <span class="grid-line-btn" (click)="rightShowFun()">
+            <i nz-icon type="caret-right" theme="outline" [hidden]="rightShow"></i>
+            <i nz-icon type="caret-left" theme="outline" [hidden]="!rightShow"></i>
+        </span>
+    </div>
+  </div>
+  <div class="fr trans" [ngStyle]="{width:rightWidth,display:display}">
+    <p input-blur>子服务</p>
+    <app-table-form [pageFun]='true' (pageIndexEmit)='getPageIndex2($event)' (pageSizeEmit)='getPageSize2($event)'
+                    [gridId]="'grid2'" [dataSet]="dataSet2" [pageSize]="pageSize2"
+                    [totalPage]="totalPages2" [listLoading]="listLoading2" [isMutli]="true" [isCheckBox]="false"
+                    [showCount]="false"></app-table-form>
+  </div>
+
+
+
+
+</div>
+
+
+
+
+
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="模型参数" [nzFooter]="modalFooter"  [nzContent]="modalOrder" (nzOnCancel)="nzOnCancel()"
+          nzWidth="70%" >
+  <ng-template #modalOrder>
+    <app-searchform [formId]="'model_manage_modal'" (search)="modalListSearch($event)"></app-searchform>
+    <tpl-buttons appClickDisabled [formId]="'model_manage_modal'" (btnClick)="modalBtnClick($event)"  ></tpl-buttons>
+    <app-table-form [formId]="'model_manage_modal'" [dataSet]="modalDataSet" [listLoading]="modalListLoading" [isMutli]="true"
+                    [pageSize]="modalPageSize" [totalPage]="modalTotalPages" selfTableHeight="245px" (updateDataResult)="modalUpdateDatafun($event)"></app-table-form>
+  </ng-template>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="nzOnCancel()">取消</button>
+  </ng-template>
+</nz-modal>
+
+<ng-template #tplTitle>
+  <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent>
+  <nz-form-label [nzSpan]="6">库存快照日期</nz-form-label>
+  <nz-form-control >
+    <nz-date-picker [(ngModel)]="this.currentTime" nzShowTime
+                    nzFormat="yyyy-MM-dd HH:mm:ss" (ngModelChange) = "getSetTime($event)"
+                    nzPlaceHolder="默认当前时间" >
+    </nz-date-picker>
+  </nz-form-control>
+</ng-template>
+<ng-template #tplFooter>
+  <button nz-button nzType="default" (click)="handleCancel()" [disabled]="implistLoading">取消</button>
+  <button nz-button nzType="primary" (click)="setParam()" [nzLoading]="implistLoading" [disabled]="implistLoading">确定</button>
+</ng-template>

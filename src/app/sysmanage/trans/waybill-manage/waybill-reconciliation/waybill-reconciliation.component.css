@@ -1,0 +1,8 @@
+.label-inline {
+  display: inline-block !important;
+  margin-left: 15px;
+}
+.return-pic ::ng-deep .ant-upload.ant-upload-select-picture-card,.return-pic ::ng-deep .ant-upload-list-picture-card .ant-upload-list-item{
+  width: 70px;
+  height: 70px;
+}

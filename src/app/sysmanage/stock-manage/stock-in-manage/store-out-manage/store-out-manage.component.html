@@ -1,0 +1,30 @@
+<app-searchform gridId="grid1" formId="form_storage_StoreOutManage" (search)="search($event)"></app-searchform>
+<tpl-buttons gridId="grid1" formId="form_storage_StoreOutManage" (btnClick)="btnClick($event)"></tpl-buttons>
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="heightResult($event)">
+  <ng-template #one>
+    <app-table-form
+      gridId="grid1" formId="form_storage_StoreOutManage"
+      [listLoading]="loading"
+      [totalPage]="total"
+      [dataSet]="data"
+      [pageFun]="true"
+      [isMutli]="true"
+      [selfTableHeight]="upHeight"
+      (updateDataResult)="selectFun($event)"
+      (pageIndexEmit)="pageIndexGrid($event)"
+      (pageSizeEmit)="pageSizeGrid($event)"></app-table-form>
+  </ng-template>
+  <ng-template #two>
+    <app-table-form
+      gridId="grid2" formId="form_storage_StoreOutManage"
+      [pageFun]="true"
+      [isCheckBox]="false"
+      [showCount]="false"
+      [listLoading]="downLoading"
+      [dataSet]="downData"
+      [totalPage]="downTotal"
+      [selfTableHeight]="downHeight"
+      (pageIndexEmit)="pageIndex($event)"
+      (pageSizeEmit)="pageSize($event)"></app-table-form>
+  </ng-template>
+</app-grid-resize>

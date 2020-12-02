@@ -1,0 +1,59 @@
+<app-searchform [formId]="'form_rgDisp_codeset'" (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [formId]="'form_rgDisp_codeset'" [btnHiden]="{'Find':false,'Add':false,'Update':!saveFlag,'Del':false,'Save':saveFlag}"></tpl-buttons>
+<app-table-form
+                  [formId]="'form_rgDisp_codeset'" [gridId]="'grid1'"
+                  [isMutli]="false"
+                  [dataSet]="dataSet"   [showCount]='true'
+                  [isCheckBox]="true"
+                  (updateDataResult)="updateDataResult($event)"
+                  [listLoading]="listLoading"
+                  [pageSize]="pageSize" [totalPage]="totalPage"
+                  (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)'
+                 >
+                 <!-- <ng-template #g1 let-data let-index="index">
+                  <a (click)="update(data,index)" *ngIf="data.editstate==0">修改</a>
+                  <ng-container *ngIf="data.editstate==1">
+                      <a (click)='saveData(data,index)'>保存</a>
+                      <a>&nbsp;&nbsp;</a>
+                      <a (click)='cancle(data,index)'>取消</a>
+                  </ng-container>
+                </ng-template> -->
+  </app-table-form>
+
+  <nz-modal [(nzVisible)]="InsertFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzOkLoading]="isOkLoading"
+(nzAfterClose)="closeResult()">
+<form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData" >
+        <nz-form-label [nzSpan]="6" [nzRequired]="m.require" >
+            {{m.name}}
+        </nz-form-label>
+        <nz-form-control [nzSpan]="12">
+            <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+                <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+            </nz-radio-group>
+              <nz-select #select  style="width: 236px;" *ngIf="m.eName === 'codesetCode' && m.type == 'select' "
+              nzShowSearch nzAllowClear nzPlaceHolder="代码集名称" [formControlName]="m.eName" (ngModelChange)='codeChange($event)'>
+                <nz-option *ngFor="let i of codeArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+              </nz-select>
+                <input type="{{m.type}}" *ngIf="m.eName == 'codesetCode' && m.type == 'input'" nz-input formControlName="{{m.eName}}" [id]="m.eName">
+                <input type="{{m.type}}" *ngIf="m.eName == 'codesetDesc'" nz-input formControlName="{{m.eName}}" [id]="m.eName">
+                <input type="{{m.type}}" *ngIf="m.eName == 'itemCode'" nz-input formControlName="{{m.eName}}" [id]="m.eName">
+                <input type="{{m.type}}" *ngIf="m.eName == 'itemCname'" nz-input formControlName="{{m.eName}}" [id]="m.eName">
+                <input type="{{m.type}}" *ngIf="m.eName == 'sortId'" nz-input formControlName="{{m.eName}}" [id]="m.eName">
+                <input type="{{m.type}}" *ngIf="m.eName == 'bk1'" nz-input formControlName="{{m.eName}}" [id]="m.eName">
+                <input type="{{m.type}}" *ngIf="m.eName == 'remark'" nz-input formControlName="{{m.eName}}" [id]="m.eName">
+            <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+                <div *ngIf="modalValidateForm.get(m.eName).errors['pattern'];else erroInf">
+                    {{ m.validators.patternErr}}
+                </div>
+                <ng-template #erroInf>
+                    {{ m.validateCon}}
+                </ng-template>
+            </nz-form-explain>
+
+        </nz-form-control>
+
+    </nz-form-item>
+    <p  *ngIf="modalFormData == modalFormData1"   style="margin-left: 15%;color:red">如果是辅助分类，请在备注里面输入FZ</p>
+</form>
+  </nz-modal>

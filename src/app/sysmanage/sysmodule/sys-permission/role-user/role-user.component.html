@@ -1,0 +1,100 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+<tpl-buttons (btnClick)="btnClick($event)" [btnDisable]="btnDisable"></tpl-buttons>
+
+<div nz-row nzType="flex" nzJustify="space-around" style="padding-top: 20px">
+
+  <div nz-col nzSpan="12">
+    <nz-table [nzTitle]="roleTitle" class="user-table" #roleTable [extraTableHeight]="permissions ? 110 : 58" reNzTable [nzData]="roleData" nzSize="small" [nzBordered]="false" (heightEmit)="heightFun($event,0)"
+              [nzShowPagination]=false [nzFrontPagination]=false [nzHideOnSinglePage]="true" [nzScroll]="{x: '100%',y: roleHeight}">
+      <thead>
+      <tr>
+        <ng-container *ngFor="let role of roleHeaderData">
+          <th [title]="role.cName" nzWidth="100px">{{role.cName}}</th>
+        </ng-container>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let data of roleTable.data" [class.tr-selected]="data.isClick">
+        <ng-container *ngFor="let role of roleHeaderData">
+          <td [title]="data[role.eName]" (click)="roleClick(data)">
+            <span>{{ data[role.eName]}}</span>
+          </td>
+        </ng-container>
+      </tr>
+      </tbody>
+    </nz-table>
+
+    <ng-template #roleTitle>
+      <div>角色管理</div>
+    </ng-template>
+  </div>
+
+  <div nz-col nzSpan="12">
+
+    <nz-table  class="user-table" #userTable nzSize="small" [nzTitle]="tableHead" [nzData]="userData" reNzTable  (heightEmit)="heightFun($event,1)" [extraTableHeight]="permissions ? 202 : 150"
+              [nzBordered]="false" [nzShowPagination]=false [nzFrontPagination]=false [nzHideOnSinglePage]="true"
+              [nzScroll]="{x: '100%',y: userHeight}">
+      <thead>
+      <tr>
+        <th nzShowCheckbox [(nzChecked)]="allChecked" [nzIndeterminate]="indeterminate"
+            (nzCheckedChange)="checkAll($event)" nzWidth="30px"></th>
+        <ng-container *ngFor="let user of userHeaderData">
+          <th [title]="user.cName" nzWidth="150px">{{user.cName}}</th>
+        </ng-container>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of userTable.data">
+        <td nzShowCheckbox [(nzChecked)]="data.checked" (nzCheckedChange)="refreshStatus(data)"></td>
+        <ng-container *ngFor="let user of userHeaderData">
+          <td [title]="data[user.eName]">
+            <span>{{ data[user.eName]}}</span>
+          </td>
+
+        </ng-container>
+      </tr>
+      </tbody>
+    </nz-table>
+
+    <ng-template #tableHead>
+      <div>用户管理</div>
+      <nz-tabset [(nzSelectedIndex)]="nzSelectedIndex" (nzSelectChange)="onNzSelectChange([$event])">
+        <nz-tab nzTitle="已选用户" (nzSelect)="tabClick('select')">
+            <nz-input-group [nzSuffix]="suffixTemplate1">
+                <input #searchBox id="search-box" (input)="search(searchBox.value)" type="text" nz-input [(ngModel)]="searchValue" placeholder="已选用户搜索"/>
+              </nz-input-group>
+              <ng-template #suffixTemplate1
+                ><i
+                  nz-icon
+                  nz-tooltip
+                  class="ant-input-clear-icon"
+                  nzTheme="fill"
+                  nzType="close-circle"
+                  *ngIf="searchValue"
+                  (click)="searchValue = null;getUserByUserIdAndroleId()"
+                ></i
+              ></ng-template>
+        </nz-tab>
+        <nz-tab nzTitle="未选用户" (nzSelect)="tabClick('notToChoose')">
+            <nz-input-group [nzSuffix]="suffixTemplate2">
+                <input #searchBox1 id="search-box1" (input)="search(searchBox1.value)" type="text" nz-input [(ngModel)]="searchValue" placeholder="未选用户搜索"/>
+              </nz-input-group>
+              <ng-template #suffixTemplate2
+                ><i
+                  nz-icon
+                  nz-tooltip
+                  class="ant-input-clear-icon"
+                  nzTheme="fill"
+                  nzType="close-circle"
+                  *ngIf="searchValue"
+                  (click)="searchValue = null;getUserByCompanyID()"
+                ></i
+              ></ng-template>
+        </nz-tab>
+      </nz-tabset>
+    </ng-template>
+
+  </div>
+
+</div>

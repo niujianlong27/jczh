@@ -1,0 +1,46 @@
+<a class="setting-col" (click)="createmodal()"><i nz-icon type="setting" theme="outline"></i></a>
+<ng-template #content>
+  <nz-table modalContentHeight (currentHeight)="heightValue($event)"
+    [selfConHeight]="350"
+    #table
+    [nzSize]="'small'"
+    [nzData]="dataSet"
+    [nzFrontPagination]="false"
+    [nzShowPagination]="false"
+    [nzScroll]="{x:'320px',y:tableHeight}"
+    [nzLoading]="loading"
+  >
+    <thead>
+    <tr>
+      <ng-container *ngFor="let h of header">
+        <th title="{{h.name}}" [nzWidth]="h.width" *ngIf="h.checked === 0">{{h.name}}</th>
+        <th title="{{h.name}}" [nzWidth]="h.width" [nzShowCheckbox]="true" [nzIndeterminate]="indeterminate" [(nzChecked)]="allChecked"  (nzCheckedChange)="checkAll($event)" *ngIf="h.checked === 1">{{h.name}}</th>
+      </ng-container>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of table.data">
+      <ng-container *ngFor="let h of header">
+        <td [ngClass]="h.type">
+          <ng-container *ngIf="h.edit===0 && h.checked===0">
+            <span title="{{data[h.cName]}}">{{data[h.cName]}}</span>
+          </ng-container>
+          <ng-container *ngIf="h.edit===1 && h.checked===0">
+            <input #input type="text" nz-input [(ngModel)]="data[h.cName]" [disabled]="!data.checked" *ngIf="h.cName === 'sortId'">
+            <nz-input-number type="number" nz-input [(ngModel)]="data[h.cName]" [nzMin]="0" [nzDisabled]="!data.checked" *ngIf="h.cName === 'width'"></nz-input-number>
+          </ng-container>
+          <ng-container *ngIf="h.checked===1">
+            <label nz-checkbox [(ngModel)]="data[h.cName]" (nzCheckedChange)="refreshStatus()"></label>
+          </ng-container>
+        </td>
+      </ng-container>
+    </tr>
+    </tbody>
+  </nz-table>
+</ng-template>
+<ng-template #footer>
+  <div>
+    <button nz-button nzType="default" (click)="modalCancel()">取消</button>
+    <button nz-button nzType="primary" (click)="modalConfirm()" [nzLoading]="btnloading">确认</button>
+  </div>
+</ng-template>

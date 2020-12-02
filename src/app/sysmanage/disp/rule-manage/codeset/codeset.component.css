@@ -1,0 +1,14 @@
+.label{
+    margin:0 75px;
+}
+.select{
+    width:236px;
+    margin:0 -65.5px;
+}
+.lab1 .ant-input{
+    position: absolute;
+    top:5px;
+    left: 118px;
+    width: 236px;
+    height: 32px;
+}

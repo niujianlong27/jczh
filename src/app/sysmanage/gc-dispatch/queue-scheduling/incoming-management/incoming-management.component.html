@@ -1,0 +1,51 @@
+<!--<common-page-->
+<!--  (btnClick)="btnClick($event)"-->
+<!--  (search)="listSearch($event)"-->
+<!--  (updateDataResult)="updateDataResult($event)"-->
+<!--  (searchDataReturn)="searchDataReturn($event)"-->
+<!--  [dataSet]="dataSet"-->
+<!--  [isMutli]="false"-->
+<!--  [listLoading]="listLoading"-->
+<!--  [pageSize]="pageSize"-->
+<!--  [totalPage]="totalPage"-->
+<!--  [btnDisable]="{Enter:selectData.length!==1,Detail:selectData.length!==1}"-->
+<!--  [triggerSearch]="true"-->
+<!--  gridId="grid1"-->
+<!--&gt;-->
+<!--</common-page>-->
+<app-searchform (search)="listSearch($event)" [triggerSearch]="true" gridId="grid1"></app-searchform>
+<div class="clearfix" style="padding: 15px 0 0 0; border: 1px #ededed solid;margin-bottom: 10px;">
+<tpl-buttons (btnClick)="btnClick($event)" [btnDisable]="{Enter:selectData.length!==1,Detail:selectData.length!==1}" class="btn-box-1">
+</tpl-buttons>
+<div style="width: 60%;margin:0 auto;float: left">
+  <input type="password"  id="smq" autofocus style="opacity: 0" [(ngModel)]="scanCodeData"  (keyup.enter)="scanCodeSuccess()"/>
+  <input nz-input nzSize="small"  style="width: 130px;float:right" [(ngModel)]="scanCodeData" (focus)="focus()" ></div>
+</div>
+<app-table-form (updateDataResult)="updateDataResult($event)"
+                (searchDataReturn)="searchDataReturn($event)"
+                [dataSet]="dataSet"
+                [isMutli]="false"
+                [listLoading]="listLoading"
+                [pageSize]="pageSize"
+                [totalPage]="totalPage" gridId="grid1"></app-table-form>
+<nz-modal
+  [(nzVisible)]="modalIsVisible"
+  [nzTitle]="modalTitle"
+  (nzOnCancel)="modalCancel()"
+  (nzOnOk)="modalOk()"
+>
+ <nz-spin
+   [nzSpinning]="modalSpin"
+ >
+   <app-table-form
+     [gridId]="'grid2'"
+     [isCheckBox]="false"
+     [nzShowPagination]="false"
+     [showCount]="false"
+     [colSet]="false"
+     [pageFun]="true"
+     [dataSet]="modalDataSet"
+   >
+   </app-table-form>
+ </nz-spin>
+</nz-modal>

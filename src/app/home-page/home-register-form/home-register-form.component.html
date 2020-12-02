@@ -1,0 +1,137 @@
+<nz-layout class="app-layout">
+  <app-home-page-header></app-home-page-header>
+
+  <nz-content>
+    <div class="content-box">
+
+      <div class="login-box">
+        <div class="result" *ngIf="current == 4">
+          <img style="width: 60px;height: 60px" src="/assets/static/2484.png" alt="">
+          <p>
+            <span>注册信息已提交</span>
+            <span>我们将在审核资料后为您开通账号</span>
+          </p>
+          <button nz-button class="login-form-button" style="width: 120px" (click)="ending()"
+                  nzType="primary">完成
+          </button>
+        </div>
+        <div *ngIf="current !== 4">
+          <div class="steps">
+            <div>
+              <span [ngClass]="{'bgc':current >= 1 }">1</span>
+              <span>账户信息</span>
+            </div>
+            <div  [ngClass]="{'lineColor':current > 1 }" class="stepLine">
+            </div>
+            <div>
+              <span [ngClass]="{'bgc':current >= 2}">2</span>
+              <span>身份证号</span>
+            </div>
+            <div [ngClass]="{'lineColor':current> 2}" class="stepLine"></div>
+            <div>
+              <span [ngClass]="{'bgc':current == '3'}">3</span>
+              <span>企业资质认证</span>
+            </div>
+          </div>
+          <div class="form">
+
+            <form nz-form [formGroup]="validateForm">
+              <nz-form-item *ngFor="let m of modalFormData">
+                <nz-form-control [nzSpan]="24">
+                  <nz-form-label [nzSpan]="current == 1 ? 5 : 7" [nzRequired]="m.require">
+                    {{m.name}}
+                  </nz-form-label>
+
+                  <nz-form-control [nzSpan]="current == 1 ? 13 : 15">
+                    <input *ngIf="m.type == 'text'" type="{{m.type}}" nz-input autocomplete="off"
+                           formControlName="{{m.eName}}"
+                           [attr.id]="m.eName">
+                    <input *ngIf="m.type == 'password' && m.eName !== 'password'" type="{{m.type}}"
+                           nz-input formControlName="{{m.eName}}" autocomplete="off"
+                           [attr.id]="m.eName">
+
+                    <input *ngIf="m.type == 'password' && m.eName == 'password'" type="{{m.type}}"
+                           (ngModelChange)="updateConfirmValidator()" nz-input formControlName="{{m.eName}}" autocomplete="off"
+                           [attr.id]="m.eName">
+
+                    <input *ngIf="m.type == 'code'" type="{{m.type}}" nz-input formControlName="{{m.eName}}"
+                           [attr.id]="m.eName" autocomplete="off">
+
+                    <div *ngIf="m.type == 'upload'">
+                      <nz-upload
+                        [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="m.dataArr"
+                        nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData"
+                        (nzChange)="handleChange($event,m.eName)"
+                        [nzShowButton]="m.dataArr.length < 1">
+                        <i nz-icon type="plus"></i>
+                        <div class="ant-upload-text">Upload</div>
+                      </nz-upload>
+                      <input type="hidden" formControlName={{m.eName}} readonly="readonly">
+                      <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+                                (nzOnCancel)="previewVisible=false">
+                        <ng-template #modalContent>
+                          <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }"/>
+                        </ng-template>
+                      </nz-modal>
+                    </div>
+
+                    <nz-form-explain *ngIf="validateForm.get(m.eName).dirty && validateForm.get(m.eName).errors">
+                      <ng-container *ngIf="validateForm.get(m.eName).hasError('required')">
+                        {{m.validateCon}}
+                      </ng-container>
+                      <ng-container *ngIf="validateForm.get(m.eName).hasError('pattern')">
+                        {{m.validators.patternErr}}
+                      </ng-container>
+                      <ng-container *ngIf="validateForm.get(m.eName).hasError('confirm')">
+                        两次输入密码不一致!
+                      </ng-container>
+
+                    </nz-form-explain>
+
+                  </nz-form-control>
+
+                  <nz-form-control *ngIf="m.type == 'code'" [nzSpan]="6">
+                    <div style="position: relative">
+                      <button style="margin-left:5px" nz-button [disabled]="codeClick"
+                              (click)="getCode()"> {{!codeClick ? '获取验证码' : count + '秒'}}
+                      </button>
+                      <p style="margin:0 0 0 5px;position: absolute;width:130px;line-height: 20px ;font-size: 14px" *ngIf="codeClick">
+                        验证码已发送至您的手机 {{mobile}}</p>
+                    </div>
+                  </nz-form-control>
+
+                </nz-form-control>
+              </nz-form-item>
+
+              <nz-form-item>
+                <nz-form-control [nzSpan]="20" [nzOffset]="current == 1 ? 5 : 7">
+                  <button nz-button *ngIf="current == 1" class="login-form-button" (click)="accountSubmit()"
+                          nzType="primary">下一步
+                  </button>
+                  <button nz-button *ngIf="current == 2" class="login-form-button" (click)="iDcardSubmit()"
+                          nzType="primary">下一步
+                  </button>
+                  <div *ngIf="current == 3">
+                    <p>
+                      <label nz-checkbox formControlName="agree"> <span>我已阅读并同意</span>
+                        <a (click)="userAgreement()">《用户协议》</a></label>
+                    </p>
+                    <button nz-button [disabled]="!this.validateForm.value.agree" class="login-form-button"
+                            (click)="businessSubmit()" nzType="primary">提交
+                    </button>
+
+                  </div>
+                </nz-form-control>
+              </nz-form-item>
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <app-home-page-footer></app-home-page-footer>
+
+  </nz-content>
+</nz-layout>
+

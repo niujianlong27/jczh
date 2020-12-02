@@ -1,0 +1,13 @@
+:host ::ng-deep .ant-upload-text {
+    margin-top: 8px;
+    color: #666;
+}
+.btn{
+    width: 100px;
+}
+.btn-stroke{
+   background-color: transparent;
+   color: #1890ff ;
+   margin-left: 20px;
+   width: 100px;
+}

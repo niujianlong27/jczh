@@ -1,0 +1,9 @@
+<app-searchform (search)="search($event)" [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+<app-table-form [dataSet]="list" gridId="grid1" [isMutli]="true" [totalPage]="total" (updateDataResult)="selectData($event)" [listLoading]="loading" [paginationRef]="totalStats">
+</app-table-form>
+<ng-template #totalStats>
+    &nbsp;<span> 总重量 {{allTotalWeight | number:'1.3-3'}}吨</span> &nbsp;
+    <span> 总金额: {{allTotalPrice | number:'1.2-2' }}元</span>
+
+</ng-template>

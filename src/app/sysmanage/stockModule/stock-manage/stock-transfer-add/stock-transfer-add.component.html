@@ -1,0 +1,75 @@
+<form nz-form [formGroup]="validateForm" style="padding:15px 20px 0px 0px">
+  <nz-form-item>
+    <nz-form-label [nzXs]="2" nzFor="transferNo">调港单号</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input type="text" nz-input name="transferNo" formControlName="transferNo" placeholder="系统生成" disabled="true">
+    </nz-form-control>
+    <nz-form-label [nzXs]="2" nzRequired nzFor="customerName">原收货单位</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input-modal [isMutli]="false"
+                   [findset]="{ formId: 'company_pop', name: '原收货单位', parameter: 'companyName',parameterSend:'companyId' }"
+                   [inputModalModel]="customerName" [inputModalHiddenValue]="customerId" (inpEmit)="inpEmit($event)"
+                   [showExplainFlag]="showExplainFlag1"
+                   [validate]="{validateOpt:'inpValue',validateCon:'请选择原收货单位'}"></input-modal>
+    </nz-form-control>
+    <nz-form-label [nzXs]="2" nzRequired nzFor="transferTime">调港时间</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <nz-date-picker nzShowTime name="transferTime" formControlName="transferTime"
+                      nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>
+      <nz-form-explain *ngIf="validateForm.get('transferTime').dirty && validateForm.get('transferTime').errors">
+        请选择调港时间
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+
+    <nz-form-label [nzXs]="2" nzFor="newDestination">目的港</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="newDestination" id="newDestination" (blur)="onBlur(1)">
+      <nz-form-explain *ngIf="validateForm.get('newDestination').dirty && validateForm.get('newDestination').errors">
+        请填写目的港
+      </nz-form-explain>
+    </nz-form-control>
+
+    <nz-form-label [nzXs]="2" nzFor="customerName1">收货单位</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input-modal [isMutli]="false"
+                   [findset]="{ formId: 'company_pop', name: '收货单位', parameter: 'companyName',parameterSend:'companyId' }"
+                   [inputModalModel]="customerName1" [inputModalHiddenValue]="customerId1" (inpEmit)="inpEmit1($event)"
+      ></input-modal>
+    </nz-form-control>
+    <nz-form-label [nzXs]="2" nzFor="newConsigneeAddress2">收货单位地址</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="newConsigneeAddress2" id="newConsigneeAddress2" (blur)="onBlur(2)">
+      <nz-form-explain
+        *ngIf="validateForm.get('newConsigneeAddress2').dirty && validateForm.get('newConsigneeAddress2').errors">
+        请输入收货单位地址
+      </nz-form-explain>
+    </nz-form-control>
+
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzXs]="2" nzFor="remark">备注</nz-form-label>
+    <nz-form-control [nzXs]="10">
+      <input nz-input formControlName="remark" id="remark">
+    </nz-form-control>
+  </nz-form-item>
+
+  <tpl-buttons [formId]="'form_stock_transfer_add'" [btnDisable]="btnDisable"
+               (btnClick)='btnClick($event)'></tpl-buttons>
+  <app-table-form [formId]="'form_stock_transfer_add'"
+                  [gridId]="'grid1'"
+                  (userColumnsEmit)='getUserHeader($event)'
+                  [dataSet]="dataSet1"
+                  [gridOperate]="{show:true,title:'操作',template:g1}"
+                  [nzShowPagination]="false"
+                  [isCheckBox]="false"
+                  [listLoading]="listLoading1"
+                  (inpEmit)="inpEmitDetail($event)">
+    <ng-template #g1 let-data let-index="index">
+      <a (click)="delete(data,index)" a>删除</a>
+    </ng-template>
+  </app-table-form>
+</form>

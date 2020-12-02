@@ -1,0 +1,63 @@
+.grid-pad {
+  padding-top: 30px;
+}
+
+.input-width {
+  width: 90px;
+}
+
+.select-common {
+  width: 90px;
+}
+
+.inp-width {
+  width: 100px;
+}
+
+.modal-table ::ng-deep .ant-table-wrapper div.ant-table-body {
+  height: auto;
+  min-height: 0;
+  margin-bottom: 2px;
+}
+
+::ng-deep .ant-table-tbody > tr > td.string,
+::ng-deep .ant-table-tbody > tr > td.number {
+  text-align: center;
+}
+
+.center p:first-child {
+  margin-top: 90px;
+}
+
+.center p {
+  width: 90%;
+  line-height: 28px;
+  text-align: center;
+  margin:10px 0 0 5%;
+  border-radius: 5px;
+  background: #094f7b;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+.company {
+  height: 40%;
+  overflow: hidden;
+}
+.company > div{
+  float: left;
+}
+div.side{
+  width: 46%;
+  border: solid 1px #d9d9d9;
+  border-radius: 5px;
+}
+.right, .left {
+  overflow: scroll;
+}
+
+.right ::ng-deep .ant-table-thead > tr > th, .ant-table-tbody > tr > td {
+  padding: 10px 0;
+}
+
+
+

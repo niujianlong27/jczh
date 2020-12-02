@@ -1,0 +1,33 @@
+<common-page (search)="listSearch($event)" (btnAdd)="btnAdd($event)" [pageSize]="pageSize" [totalPage]="totalPage"
+  [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)"  (btnClick)='btnClick($event)' [dataSet]="dataSet"
+  [isMutli]="true" (modelChange)='modalChange($event)' [caculateEnameArr]="caculateEnameArr"></common-page>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="{{modalTitle}}" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <nz-radio-group [(ngModel)]="radioValue">
+    <label nz-radio [ngStyle]="style" nzValue="10">
+      自定义单价
+    </label>
+    <div  *ngIf="radioValue=='10'" style="padding-left: 30px;margin-top: 5px;">
+      <label  nz-checkbox [(ngModel)]="agentFlag" name="">应收单价</label>
+      <input [disabled]="!agentFlag" nz-input type="number" min="1" nzSize="small" style="margin-left: 15px;width: 80px;" [(ngModel)]="unitPrice">
+      <!-- <input type="number" nzMin="1" nz-input *ngIf="radioValue=='10'" [(ngModel)]='ownPrice' style="width: 100px; margin-left: 10px;"> -->
+    </div>
+    <div  *ngIf="radioValue=='10'" style="padding-left: 30px;margin-top: 10px;margin-bottom: 5px;">
+      <label nz-checkbox [(ngModel)]="payableFlag" name="">应付单价</label>
+      <input [disabled]="!payableFlag" nz-input type="number" min="1" nzSize="small" style="margin-left: 15px;width: 80px;" [(ngModel)]="payPrice">
+    </div>
+    <label nz-radio [ngStyle]="style" nzValue="20">委托单价</label>
+    <label nz-radio [ngStyle]="style" nzValue="30">线路单价</label>
+    <label nz-radio [ngStyle]="style" nzValue="40">委托或线路单价</label>
+
+  </nz-radio-group>
+</nz-modal>
+
+<ng-template #confirmTitle>提示信息</ng-template>
+<ng-template #confirmContent>
+  <p class="text-center f-b" style="margin:0;"> {{confirmCon}} </p>
+</ng-template>
+<ng-template #confirmFooter>
+  <button nz-button nzType="primary" (click)="confirm()">确定</button>
+  <button nz-button nzType="default" (click)="cancel()" >取消</button>
+</ng-template>

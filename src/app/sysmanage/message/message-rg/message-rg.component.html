@@ -1,0 +1,181 @@
+<div nz-row>
+  <div nz-col class="transition" nzSpan="24" style="padding-left:14px;">
+    <div nz-row>
+      <div nz-col nzSpan="24">
+        <form nz-form nzLayout="inline" [formGroup]="modalValidateForm">
+          <nz-form-item>
+            <nz-form-label [nzXs]="3" nzRequired>消息主题</nz-form-label>
+            <nz-form-control [nzXs]="5">
+              <nz-select
+                nzShowSearch
+                id="topicCode"
+                formControlName="topicCode"
+                appInputThrottle
+                (throttleSearch)="SearchChange($event)"
+                (nzScrollToBottom)="scrollToBottom()"
+                (ngModelChange)="optionsChange($event)"
+              >
+                <nz-option
+                  *ngFor="let i of topicCodeList"
+                  [nzLabel]="i.topicName"
+                  [nzValue]="i.topicCode"
+                ></nz-option>
+                <nz-option *ngIf="isLoadingTopic" nzDisabled nzCustomContent>
+                  <i nz-icon nzType="loading" class="loading-icon"></i>
+                  数据加载中...
+                </nz-option>
+              </nz-select>
+              <nz-form-explain
+                *ngIf="
+                  modalValidateForm.get('topicCode')?.dirty &&
+                  modalValidateForm.get('topicCode')?.errors
+                "
+              >
+                消息主题不能为空
+              </nz-form-explain>
+            </nz-form-control>
+            <nz-form-label [nzXs]="3">接收人</nz-form-label>
+            <nz-form-control [nzXs]="5">
+              <button
+                nz-button
+                (click)="receiversModalVisible = true"
+                [disabled]="receiveDisabled"
+                nzBlock
+              >
+                {{ btnText }}
+              </button>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzXs]="4" style="max-width: 11.11%" nzRequired
+            >消息内容</nz-form-label
+            >
+            <nz-form-control [nzXs]="20">
+              <textarea
+                rows="3"
+                nz-input
+                formControlName="messageBody"
+                trim
+              ></textarea>
+              <nz-form-explain
+                *ngIf="
+                  modalValidateForm.get('messageBody')?.dirty &&
+                  modalValidateForm.get('messageBody')?.errors
+                "
+              >
+                消息内容不能为空
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label
+              [nzXs]="4"
+              style="max-width: 11.11%"
+              [nzRequired]="paramRequired"
+            >消息参数</nz-form-label
+            >
+            <nz-form-control [nzXs]="20">
+              <textarea
+                rows="5"
+                nz-input
+                formControlName="messageParam"
+              ></textarea>
+              <nz-form-explain
+                *ngIf="
+                  modalValidateForm.get('messageParam')?.dirty &&
+                  modalValidateForm.get('messageParam')?.errors
+                "
+              >
+                <ng-container
+                  *ngIf="
+                    modalValidateForm.get('messageParam')?.hasError('required')
+                  "
+                >
+                  消息参数不能为空
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    modalValidateForm.get('messageParam')?.hasError('complete')
+                  "
+                >
+                  消息参数填写不完整或格式不正确，请参照"参数名：参数值"进行填写;
+                </ng-container>
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzXs]="3">备注</nz-form-label>
+            <nz-form-control [nzXs]="5">
+              <input type="text" nz-input formControlName="remark" />
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      </div>
+      <div nz-col nzSpan="24" class="btns-line">
+        <tpl-buttons
+          formId="form_rg_purchase"
+          (btnClick)="btnClick($event)"
+        ></tpl-buttons>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 接收人筛选弹框 -->
+<nz-modal
+  [(nzVisible)]="receiversModalVisible"
+  [nzTitle]="titleModal"
+  (nzOnCancel)="receiversModalVisible = false"
+  (nzOnOk)="handleOk()"
+  (nzAfterClose)="closeResult()"
+  nzWidth="800px"
+  class="recerive"
+>
+  <ng-template #titleModal>{{receiversModalTitle}}</ng-template>
+  <p class="contTitle"><i nz-icon type="form" theme="outline" ></i><span class="marl10">选择接收用户</span></p>
+  <div nz-row>
+    <div nz-col nzSpan="8">
+      <div nz-row>
+        <div nz-col nzSpan="4"><span>姓名:</span></div>
+        <div nz-col nzSpan="16"><input nz-input  nzSize="default" [(ngModel)]="inqu.userName" /></div>
+      </div>
+    </div>
+    <div nz-col nzSpan="8">
+      <div nz-row>
+        <div nz-col nzSpan="4"><span>车型:</span></div>
+        <div nz-col nzSpan="20">
+          <nz-select style="width: 100%;" [(ngModel)]="inqu.truckKindName" >
+            <nz-option *ngFor="let option of truckKindArr" [nzValue]="option.name" [nzLabel]="option.name"></nz-option>
+          </nz-select>
+        </div>
+      </div>
+    </div>
+    <div nz-col nzSpan="8" >
+      <div nz-row >
+        <div nz-col nzSpan="4" [nzOffset]="4"><span>车队:</span></div>
+        <div nz-col nzSpan="16" style="text-align: right"><input nz-input  nzSize="default" [(ngModel)]="inqu.truckTeam" /></div>
+      </div>
+    </div>
+  </div>
+  <div class="recbutt"><button nz-button nzType="primary" (click)="getReceivers()" >查询</button></div>
+  <div class="marl10"><span>待选用户</span></div>
+  <app-table-form (updateDataResult)="selectData1($event)" [dataSet]="usersSelectData" [isMutli]="true" [listLoading]="loading"
+                  [selfTableHeight]="'120px'"  formId="form_rg_purchase_users" [colSet]="false" [pageSize]="pageSize"
+                  [totalPage]="totalPage"  [refresh]="refresh"
+                  [pageFun]="true" (pageIndexEmit)="pageIndexEmit1($event)" (pageSizeEmit)="pageSizeEmit1($event)"
+                  [trSelectedShow]="true" gridId="grid1">
+  </app-table-form>
+  <div class="addbtn"><button nz-button nzType="primary" (click)="pushData()">添加</button></div>
+  <app-table-form [dataSet]="usersSelectedData" [isMutli]="false" [colSet]="false"
+                  [selfTableHeight]="'120px'" [nzShowPagination]="false" formId="form_rg_purchase_user_dis"
+                  [gridOperate]="{show: true, template: operate} " [isCheckBox]="false"
+                  [trSelectedShow]="true" gridId="grid1">
+    <ng-template #operate let-data>
+      <button nzType="danger" nz-button nzSize="small"
+              (click)="delUser(data)">删除</button>
+    </ng-template>
+  </app-table-form>
+
+
+</nz-modal>

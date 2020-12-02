@@ -1,0 +1,119 @@
+<button nz-button nzType="primary" [nzSize]="size" (click)="showModal()">
+  <a class="btn-icon">
+    <img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/高级搜索-白.svg">
+  </a>
+  高级搜索
+</button>
+
+<nz-modal [(nzVisible)]="planVisible" [nzFooter]="planFooter" nzTitle="高级查询设置" [nzMaskClosable]="false"
+          [nzContent]="plandataModal" (nzOnCancel)="planCancel()" (nzOnOk)="planOk()" (nzAfterClose)="nzAfterClose()">
+  <ng-template #plandataModal>
+    <nz-table #planDataTable nzSize="small" modalContentHeight [selfConHeight]="350" (currentHeight)="outHeight($event)"
+              [nzBordered]="true" [nzData]="planData" [nzShowPagination]="false" [nzLoading]="loading"
+              [nzFrontPagination]="false" [nzScroll]="{x:'100%',y:outHeightValue }">
+      <thead>
+      <tr>
+        <th>选择</th>
+        <th *ngFor="let h of planHeaderData">{{h.name}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of planDataTable.data">
+        <td nzShowCheckbox [(nzChecked)]="data.checked" (nzCheckedChange)="refreshStatus(data)"></td>
+        <td>{{data.findName}}</td>
+        <td><i nz-icon type="check" theme="outline" *ngIf="data.findName === isDefault"></i></td>
+
+      </tr>
+      </tbody>
+    </nz-table>
+  </ng-template>
+</nz-modal>
+
+<ng-template #planFooter>
+  <div class="fl">
+    <button nz-button (click)="planEditor()">编辑</button>
+    <button nz-button (click)="planAdd()">添加</button>
+    <button nz-button (click)="planDelete()">删除</button>
+  </div>
+
+  <div>
+    <button nz-button (click)="planSetDef()">设为默认</button>
+    <button nz-button nzType="primary" [nzLoading]="isOkLoading" (click)="planOk()">确认</button>
+  </div>
+</ng-template>
+
+<nz-modal nzWidth="750" [(nzVisible)]="setPlanVisible" nzTitle="设置查询方案" [nzOkLoading]="isOkLoading"
+          [nzContent]="setDataModal" [nzMaskClosable]="false" (nzOnCancel)="setPlanCancel()" (nzOnOk)="setPlanOk()"
+          (nzAfterClose)="setPlanAfterClose()">
+  <ng-template #setDataModal>
+    <form nz-form>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="planName" required>方案名称</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <input trim nz-input name="planName" type="text" id="planName" [(ngModel)]="planName" [disabled]="nzDisabled">
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+    <nz-table #setPlanTable nzSize="small" modalContentHeight [nzFrontPagination]="false"
+              [nzScroll]="{x:'100%',y:innerHeightValue }" [selfConHeight]="420" [nzBordered]="true"
+              [nzData]="setPlanData" [nzShowPagination]="false" (currentHeight)="innerHeight($event)"
+    >
+      <thead>
+      <tr>
+        <th nzShowCheckbox [(nzChecked)]="allChecked" [nzIndeterminate]="indeterminate" [nzDisabled]="nzDisabled"
+            (nzCheckedChange)="checkAll($event)"></th>
+        <th style="width: 180px"><a class="redText">* </a>列名</th>
+        <th style="width: 150px"><a class="redText">* </a>关系</th>
+        <th style="width: 150px"><a class="redText">* </a>逻辑</th>
+        <th style="width: 150px">默认值1</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of setPlanTable.data">
+        <td nzShowCheckbox [(nzChecked)]="data.checked" [nzDisabled]="nzDisabled || data.disabled"
+            (nzCheckedChange)="setPlanRefreshStatus()"></td>
+        <td style="width: 180px">
+                <span>
+                  <nz-select style="width: 160px" nzAllowClear nzShowSearch nzPlaceHolder="请选择列名"
+                             [(ngModel)]="data.eName" [nzDisabled]="nzDisabled || data.eName_disabled"
+                             (ngModelChange)="isNotSelected()">
+                   <ng-container *ngFor="let o of colNameArray">
+                    <nz-option [nzValue]="o.colEname" [nzLabel]="o.colCname"
+                               [nzDisabled]="selectedHidden[o.colEname]"></nz-option>
+                   </ng-container>
+                  </nz-select>
+                </span>
+        </td>
+        <td style="width: 150px">
+                <span>
+                  <nz-select style="width: 130px" nzAllowClear nzShowSearch nzPlaceHolder="请选择关系"
+                             [(ngModel)]="data.relation" [nzDisabled]="nzDisabled || data.relation_disabled">
+                    <nz-option nzValue="等于" nzLabel="等于"></nz-option>
+                    <nz-option nzValue="包含" nzLabel="包含"></nz-option>
+                    <nz-option nzValue="介于" nzLabel="介于"></nz-option>
+                    <nz-option nzValue="不等于" nzLabel="不等于"></nz-option>
+                  </nz-select>
+                </span>
+        </td>
+        <td style="width: 150px">
+                <span>
+                  <nz-select style="width: 130px" nzAllowClear nzShowSearch nzPlaceHolder="请选择逻辑"
+                             [(ngModel)]="data.logic" [nzDisabled]="nzDisabled || data.logic_disabled">
+                    <nz-option nzValue="且" nzLabel="且"></nz-option>
+                    <nz-option nzValue="或" nzLabel="或"></nz-option>
+                  </nz-select>
+                </span>
+        </td>
+        <td style="width: 150px">
+          <input nz-input trim type="text" [(ngModel)]="data.value1" [disabled]="nzDisabled || data.value1_disabled"/>
+        </td>
+      </tr>
+      </tbody>
+    </nz-table>
+
+    <div class="btn-bx">
+      <button nz-button (click)="add()" [disabled]="nzDisabled">添加</button>
+      <button nz-button (click)="remove()" [disabled]="nzDisabled">移除</button>
+    </div>
+  </ng-template>
+</nz-modal>

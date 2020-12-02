@@ -1,0 +1,138 @@
+<tpl-buttons *ngIf="state !== 'Record'" [formId]="formId" (btnClick)='btnClick($event)'></tpl-buttons>
+
+<div style="border-bottom: 1px solid #ddd">
+  <p style="margin: 0 10px">录入信息</p>
+  <form nz-form [formGroup]="validateForm" style="padding:5px 20px 0px 0px">
+    <nz-form-item>
+      <nz-form-label [nzXs]="lab" nzFor="inWsNo">入库单号</nz-form-label>
+      <nz-form-control [nzXs]="inp">
+        <input type="text" nz-input name="inWsNo" formControlName="inWsNo" placeholder="系统生成" disabled="true">
+      </nz-form-control>
+      <nz-form-label [nzXs]="lab" nzRequired nzFor="inWsTime">入库时间</nz-form-label>
+      <nz-form-control [nzXs]="inp">
+        <nz-date-picker style="width: 100%" nzShowTime name="inWsTime" formControlName="inWsTime"
+                        nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>
+        <nz-form-explain *ngIf="validateForm.get('inWsTime').dirty && validateForm.get('inWsTime').errors">请选择入库时间
+        </nz-form-explain>
+      </nz-form-control>
+
+      <nz-form-label [nzXs]="lab" nzRequired nzFor="customerName">客户名称</nz-form-label>
+      <nz-form-control [nzXs]="inp">
+        <input-modal [isMutli]="false"
+                     [findset]="{ formId: 'company_pop', name: '客户名称', parameter: 'companyName',parameterSend:'companyId' }"
+                     [showExplainFlag]="showExplainFlag" [validate]="{validateOpt:'inpValue',validateCon:'请选择客户名称'}"
+                     [inputModalModel]="customerName" [inputModalHiddenValue]="customerCode"
+                     (inpEmit)="inpEmit($event)"></input-modal>
+      </nz-form-control>
+
+      <nz-form-label [nzXs]="lab" nzRequired nzFor="operUser">操作人</nz-form-label>
+      <nz-form-control [nzXs]="inp">
+        <input nz-input formControlName="operUser" id="operUser">
+        <nz-form-explain *ngIf="validateForm.get('operUser').dirty && validateForm.get('operUser').errors">请输入操作人
+        </nz-form-explain>
+      </nz-form-control>
+
+      <nz-form-label [nzXs]="lab" nzRequired nzFor="operTime">操作时间</nz-form-label>
+      <nz-form-control [nzXs]="inp">
+        <nz-date-picker style="width: 100%" nzShowTime name="operTime" formControlName="operTime"
+                        nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>
+        <nz-form-explain *ngIf="validateForm.get('operTime').dirty && validateForm.get('operTime').errors">请选择操作时间
+        </nz-form-explain>
+      </nz-form-control>
+
+      <nz-form-label [nzXs]="lab" nzRequired nzFor="boatBatchNum">船批号</nz-form-label>
+      <nz-form-control [nzXs]="inp">
+        <input-modal [isMutli]="false"
+                     [findset]="{ formId: 'form_select_boat', name: '船批号', parameter: 'boatBatchNum',parameterSend:'boatName',url:'boatGetList' }"
+                     [showExplainFlag]="boatShowExplainFlag" [validate]="{validateOpt:'inpValue',validateCon:'请选择船批号'}"
+                     [inputModalModel]="boatBatchNum" [inputModalHiddenValue]="shipNo"
+                     (inpEmit)="boatinpEmit($event)"></input-modal>
+      </nz-form-control>
+
+      <nz-form-label [nzXs]="lab" nzFor="shipNo">船名</nz-form-label>
+      <nz-form-control [nzXs]="inp">
+        <input nz-input formControlName="shipNo" id="shipNo" disabled="true">
+        <nz-form-explain *ngIf="validateForm.get('shipNo').dirty && validateForm.get('shipNo').errors">请输入船名
+        </nz-form-explain>
+      </nz-form-control>
+      <nz-form-label [nzXs]="lab" nzFor="tallyman">理货员</nz-form-label>
+      <nz-form-control [nzXs]="inp">
+        <input nz-input formControlName="tallyman" id="tallyman">
+        <nz-form-explain *ngIf="validateForm.get('tallyman').dirty && validateForm.get('tallyman').errors">请输入理货员
+        </nz-form-explain>
+      </nz-form-control>
+
+      <nz-form-label [nzXs]="lab" nzFor="orderNo">合同号</nz-form-label>
+      <nz-form-control [nzXs]="inp">
+        <input nz-input formControlName="orderNo" id="orderNo">
+        <nz-form-explain *ngIf="validateForm.get('orderNo').dirty && validateForm.get('orderNo').errors">请输入合同号
+        </nz-form-explain>
+      </nz-form-control>
+      <nz-form-label [nzXs]="lab" nzRequired nzFor="wsName">仓库</nz-form-label>
+      <nz-form-control [nzXs]="inp">
+        <input-modal [isMutli]="false"
+                     [findset]="{ formId: 'form_wsName', name: '仓库', parameter: 'stockName',parameterSend:'areaName',url:'selectStockAreaSet'}"
+                     [showExplainFlag]="wsShowExplainFlag" [validate]="{validateOpt:'inpValue',validateCon:'请选择仓库'}"
+                     [inputModalModel]="wsName" [inputModalHiddenValue]="wsArea"
+                     (inpEmit)="wsinpEmit($event)"></input-modal>
+      </nz-form-control>
+      <nz-form-label [nzXs]="lab" nzFor="wsArea">库区</nz-form-label>
+      <nz-form-control [nzXs]="inp">
+        <input nz-input formControlName="wsArea" id="wsArea" disabled="true">
+        <nz-form-explain *ngIf="validateForm.get('wsArea').dirty && validateForm.get('wsArea').errors">请输入库区
+        </nz-form-explain>
+      </nz-form-control>
+
+      <div *ngIf="state !== 'Record'" class="in">
+        <nz-form-label [nzXs]="lab" nzFor="vehicleNo">车牌号</nz-form-label>
+        <nz-form-control [nzXs]="inp">
+          <input nz-input formControlName="vehicleNo" id="vehicleNo">
+          <nz-form-explain *ngIf="validateForm.get('vehicleNo').dirty && validateForm.get('vehicleNo').errors">请输入船号
+          </nz-form-explain>
+        </nz-form-control>
+        <nz-form-label [nzXs]="lab" nzRequired nzFor="productName">品种</nz-form-label>
+        <nz-form-control [nzXs]="inp">
+          <input nz-input formControlName="productName" id="productName">
+          <nz-form-explain *ngIf="validateForm.get('productName').dirty && validateForm.get('productName').errors">请输入品种
+          </nz-form-explain>
+        </nz-form-control>
+        <nz-form-label [nzXs]="lab" nzRequired nzFor="spec">规格</nz-form-label>
+        <nz-form-control [nzXs]="inp">
+          <input nz-input formControlName="spec" id="spec">
+          <nz-form-explain *ngIf="validateForm.get('spec').dirty && validateForm.get('spec').errors">请输入规格
+          </nz-form-explain>
+        </nz-form-control>
+        <nz-form-label [nzXs]="lab" nzRequired nzFor="weight">重量</nz-form-label>
+        <nz-form-control [nzXs]="inp">
+          <nz-input-group nzAddOnAfter="吨">
+            <nz-input-number nz-input [nzMin]="0" formControlName="weight" id="weight" style="width:100%"></nz-input-number>
+          </nz-input-group>
+          <nz-form-explain *ngIf="validateForm.get('weight').dirty && validateForm.get('weight').errors">请输入重量
+          </nz-form-explain>
+        </nz-form-control>
+      </div>
+      <nz-form-label [nzXs]="lab" nzFor="remark">备注</nz-form-label>
+      <nz-form-control [nzXs]="inp">
+        <input nz-input formControlName="remark" id="remark">
+      </nz-form-control>
+    </nz-form-item>
+
+
+  </form>
+</div>
+<div *ngIf="state == 'Record'">
+  <p style="margin: 0 10px">明细信息</p>
+  <app-searchform [formId]="formId" (searchDataReturn)="searchData($event)" (search)="listSearch($event)"></app-searchform>
+  <tpl-buttons [formId]="formId" (btnClick)='btnClick($event)' [btnDisable]="btnDisable"></tpl-buttons>
+  <app-table-form
+                  [formId]="formId" [gridId]="'grid1'"
+                  [isMutli]="true"
+                  (updateDataResult)="select($event)"
+                  [extraTableHeight]="200"
+                  (userColumnsEmit)='getUserHeader($event)'
+                  [dataSet]="dataSet1"
+                  [popTableData]="popTableData" [nzShowPagination]="false"
+                  [listLoading]="listLoading1" (inpEmit)="inpEmitDetail($event)"
+                  (modelChange)='inpEmitDetail($event)'>
+  </app-table-form>
+</div>

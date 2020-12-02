@@ -1,0 +1,12 @@
+<nz-tabset class="tip-nav" [nzSelectedIndex]="selectIndex">
+    <nz-tab *ngFor="let k of tipNavArr;let i = index" [nzTitle]="titleTpl">
+      <ng-template #titleTpl>
+        <a [class.tipNav-active]="k.formUrl==selectMenuUrl || k.formId === formId">
+            <i class="tipMenuIcon"><img src="{{k.icon}}"></i>
+            <span class="span-title" (click)="selectTipNavFun(k)">{{k.resourceName}}</span>
+            <i nz-icon nzType="minus-circle" nzTheme="fill" class="deleteNavIcon" [hidden]="(tipNavArr.length == 1) && (selectMenuUrl == '/system/dashboard')"
+            (click)="deleteTipNavFun(i, k.formUrl==selectMenuUrl || k.formId === formId)"></i>
+        </a>
+      </ng-template>
+    </nz-tab>
+  </nz-tabset>

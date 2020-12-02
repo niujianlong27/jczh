@@ -1,0 +1,126 @@
+<app-searchform [formId]="'form_queue_product_matkind'" (search)="listSearch($event)" [staticData]="staticData"
+  [btnHiden]="{'mutiSearch': true}"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [formId]="'form_queue_product_matkind'"
+  [btnHiden]="{'Find':false,'Update':true,'Save':true,'Add':false,'Set':false,'Cancel': !Update}"></tpl-buttons>
+<app-table-form formId="form_queue_product_matkind" (updateDataResult)="updateDataResult($event)" [dataSet]="dataSet"
+  [isMutli]="false" [listLoading]="listLoading" [showCount]="false" [totalPage]="totalPage" [trSelectedShow]="true"
+  gridId='grid1' (userColumnsEmit)="columns($event)" [staticCode]="staticData"
+  [gridOperate]="saveflag ? {show: true, template: operate}: '' ">
+
+
+  <ng-template #operate let-data>
+    <button nzType="primary" nz-button nzSize="small" [hidden]="data.saveflag" (click)="update(data,1)">修改</button>
+    <div [hidden]="!data.saveflag">
+      <button nzType="danger" [nzLoading]="data.btnloading" nz-button nzSize="small" (click)="save(data)"
+        style="margin-right: 5px;">保存</button>
+      <button nzType="default" [disabled]="data.btnloading" nz-button nzSize="small"
+        (click)="update(data,0)">取消</button>
+    </div>
+  </ng-template>
+
+
+  <ng-template #kind let-data let-header>
+    <nz-select [ngClass]="{'selectShow':data.selectShow,'selectClose':!data.selectShow}" [(ngModel)]="data.kindName"
+      [nzAllowClear]="false">
+      <nz-option *ngFor="let p of kindNameArr1" [nzLabel]="p.name" [nzValue]="p.value">
+      </nz-option>
+    </nz-select>
+    <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.kindCode}}</div>
+  </ng-template>
+  <ng-template #statuss let-data let-header>
+    <nz-select [ngClass]="{'selectShow':data.selectShow,'selectClose':!data.selectShow}" [(ngModel)]="data.status"
+      [nzAllowClear]="false">
+      <nz-option *ngFor="let p of statusArr1" [nzLabel]="p.name" [nzValue]="p.value">
+        {{p.name}}
+      </nz-option>
+    </nz-select>
+    <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.statusName}}</div>
+  </ng-template>
+</app-table-form>
+
+
+<nz-modal [nzWidth]="'800px'" [nzVisible]="InsertFormVisible" [nzTitle]="modalTitle1" [nzContent]="modalContent1"
+  [nzFooter]="modalFooter1" (nzOnCancel)="InsertFormVisible=false">
+  <ng-template #modalTitle1>
+    新增->基本信息
+  </ng-template>
+  <ng-template #modalContent1>
+
+    <div class="div5" *ngIf="this.modalType == 2">
+      <span class="span8 required">成品分类名称:</span>
+      <input class="input8" [(ngModel)]="matKindName" [ngModelOptions]="{standalone: true}">
+    </div>
+    <div class="div6" *ngIf="this.modalType == 2">
+      <span class="span9 required">成品分类编码：</span>
+      <input class="input9" [(ngModel)]="matKindCode" [ngModelOptions]="{standalone: true}">
+    </div>
+    <div class="div5" *ngIf="this.modalType == 1">
+      <span class="span8 required">成品名称:</span>
+      <input class="input8" [(ngModel)]="matKindName" [ngModelOptions]="{standalone: true}">
+    </div>
+
+    <div class="div6" *ngIf="this.modalType == 1">
+      <span class="span9 required">成品编码：</span>
+      <!-- <input class="input9" [(ngModel)]="matKindCode" [ngModelOptions]="{standalone: true}"> -->
+      <!-- <input nz-input  class="input9" [(ngModel)]="matKindCode" [ngModelOptions]="{standalone: true}"> -->
+      <input value='{$ITEM->inoutnum}' min="0" [(ngModel)]="matKindCode" class="input9" />
+    </div>
+
+    <div class="div6 ">
+      <label class="span15 ">排队大类名称:</label>
+      <nz-select class="select15" nzShowSearch nzAllowClear [(ngModel)]="kindCode"
+        [ngModelOptions]="{standalone: true}">
+        <nz-option *ngFor="let i of kindNameArr1" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+      </nz-select>
+    </div>
+    <div style="width:100%; height: 40px;">
+      <span class="span8" style="margin-left: 95px">备注:</span>
+      <input [(ngModel)]="remark" class="input9" style="margin-left: -5px" />
+    </div>
+  </ng-template>
+  <ng-template #modalFooter1>
+    <button nz-button nzType="primary" (click)="saveData()" [nzLoading]="isLoading">保存
+    </button>
+    <button nz-button nzType="default" (click)="quitData()">取消</button>
+  </ng-template>
+</nz-modal>
+
+
+<nz-modal [(nzVisible)]="InsertFormVisibleFZ" [nzTitle]="modalTitleFZ" (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()" [nzOkLoading]="isOkLoading" (nzAfterClose)="closeResult()">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+          <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+        </nz-radio-group>
+
+        <input type="{{m.type}}" *ngIf="m.type == 'input'" nz-input formControlName="{{m.eName}}" [id]="m.eName"
+          disabled=true>
+
+        <nz-select #select style="width: 236px;" *ngIf="m.eName === 'auxiliary'" nzShowSearch nzAllowClear
+          [formControlName]="m.eName" (ngModelChange)='fzChange($event)'>
+          <nz-option *ngFor="let i of auxiliaryNameArr" [nzLabel]="i.codesetDesc" [nzValue]="i.codesetCode"></nz-option>
+        </nz-select>
+
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+          <div *ngIf="modalValidateForm.get(m.eName).errors['pattern'];else erroInf">
+            {{ m.validators.patternErr}}
+          </div>
+          <ng-template #erroInf>
+            {{ m.validateCon}}
+          </ng-template>
+
+        </nz-form-explain>
+
+
+      </nz-form-control>
+
+    </nz-form-item>
+
+
+  </form>
+</nz-modal>

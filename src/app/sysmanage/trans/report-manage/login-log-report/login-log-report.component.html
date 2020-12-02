@@ -1,0 +1,25 @@
+<!--<div class="clearfix" style="padding-top: 10px">-->
+<!--<form nz-form [formGroup]="validateForm"  >-->
+<!--<nz-form-item>-->
+
+<!--<nz-form-label class="fl"  nzSpan="2" nzRequired>时间范围</nz-form-label>-->
+<!--<nz-form-control class="fl m-r" style="width: 215px;">-->
+<!--<nz-range-picker formControlName="chooseTime"></nz-range-picker>-->
+<!--<nz-form-explain-->
+<!--*ngIf="validateForm.get('chooseTime').dirty && validateForm.get('chooseTime').errors">-->
+<!--请输入日期范围 , 进行查询-->
+<!--</nz-form-explain>-->
+<!--</nz-form-control>-->
+<!--</nz-form-item>-->
+<!--</form>-->
+<!--</div>-->
+<app-searchform (search)="listSearch($event)">
+</app-searchform>
+<!--[btnHiden]="{mutiSearch:true}"-->
+<tpl-buttons (btnClick)="btnClick($event)" (btnSearch)="btnSearch($event)"></tpl-buttons>
+<app-table-form [dataSet]="dataSet" [pageSize]="pageSize" tabIndex="1" isMutli="true"
+                (updateDataResult)="selectlist($event)" [colSet]="true" [totalPage]="totalPage" [showCount]="false"
+                [listLoading]="listLoading">
+
+</app-table-form>
+

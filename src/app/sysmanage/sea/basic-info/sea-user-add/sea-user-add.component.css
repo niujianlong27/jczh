@@ -1,0 +1,7 @@
+::ng-deep .ant-table-footer {
+  background-color: white
+}
+
+::ng-deep .ant-table-body {
+  height: 540px;
+}

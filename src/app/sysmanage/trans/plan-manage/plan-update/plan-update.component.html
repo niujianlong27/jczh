@@ -1,0 +1,115 @@
+<div nz-row>
+  <tpl-buttons formId="plan_update" [btnHiden]="{'Add':true,'Delete':true}" (btnClick)="btnClick($event)"></tpl-buttons>
+  <!--<div nz-col nzOffset="1" nzSpan="20">-->
+  <!--<p>-->
+  <!--<button nz-button nzType="primary" nzGhost class="m-r" (click)="update()" [nzLoading]="loading">保存</button>-->
+  <!--<button nz-button nzType="primary" nzGhost class="m-r" (click)="cancel()">取消</button>-->
+  <!--</p>-->
+  <!--</div>-->
+</div>
+<nz-card style="width:100%;">
+  <div nz-row class="box">
+    <div nz-col nzSpan="24">
+      <form nz-form nzLayout="inline">
+        <!--<div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" nzType="flex" nzAlign="bottom">-->
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="8">车船号</nz-form-label>
+            <nz-form-control [nzSpan]="15">
+              <input type="text" nz-input [(ngModel)]="driver.vehicleNo" name="vehicleNo">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzSpan]="8">驾驶员</nz-form-label>
+            <nz-form-control [nzSpan]="15">
+              <nz-select style="min-width:100px" [(ngModel)]="driver.driverId"
+                         (ngModelChange)="setDriverInfo($event)"
+                         nzAllowClear
+                         name="driverId">
+                <nz-option *ngFor="let elem of driverDataSource" nzValue="{{elem.userId}}"
+                           nzLabel="{{elem.name}}"></nz-option>
+              </nz-select>
+              <!--<app-select style="min-width:100px;width: 100px" [apiParam]="businessTypeApi" [(ngModel)]="waybill.businessType"-->
+                          <!--name="businessType"></app-select>-->
+            </nz-form-control>
+
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="8">联系电话</nz-form-label>
+            <nz-form-control [nzSpan]="15">
+              <input type="text" nz-input [(ngModel)]="driver.mobile" name="mobile">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="8">流向</nz-form-label>
+            <nz-form-control [nzSpan]="15">
+              <input type="text" nz-input [(ngModel)]="plan.flowDesc" name="flowDesc" disabled>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="8">重量</nz-form-label>
+            <nz-form-control [nzSpan]="15">
+              <input type="text" nz-input [(ngModel)]="plan.planWeight" name="planWeight" disabled>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="8">件数</nz-form-label>
+            <nz-form-control nzSpan="15">
+              <input type="text" nz-input [(ngModel)]="plan.planQuantity" name="planQuantity" disabled>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <!--</div>-->
+      </form>
+    </div>
+  </div>
+</nz-card>
+
+<nz-card style="width:100%;">
+  <div nz-row>
+    <!--<div nz-col nzOffset="1" nzSpan="20">-->
+    <!--&lt;!&ndash;<tpl-buttons formId="plan_update" (btnClick)="btnClick($event)">&ndash;&gt;-->
+    <!--<p>-->
+    <!--<button nz-button nzType="primary" nzGhost class="m-r" (click)="deleteItem()">删除</button>-->
+    <!--&lt;!&ndash; <button nz-button nzType="primary" nzGhost class="m-r" (click)="itemAdd.createModal()">新增</button> &ndash;&gt;-->
+    <!--<button nz-button nzType="primary" nzGhost class="m-r" (click)="isVisible=true">新增</button>-->
+    <!--</p>-->
+    <!--</div>-->
+    <div nz-col nzSpan="24">
+      <tpl-buttons formId="plan_update" [btnHiden]="{'Save':true,'return':true}"
+                   (btnClick)="btnClick($event)"></tpl-buttons>
+      <app-table-form formId="plan_update" gridId="item" [dataSet]="itemData" isMutli="true"
+                      [nzShowPagination]="false"></app-table-form>
+    </div>
+  </div>
+</nz-card>
+
+<nz-modal [(nzVisible)]="isVisible" nzWidth="85%" nzTitle="选择调度明细" [nzContent]="modalContent" [nzFooter]="modalFooter"
+          (nzOnCancel)="isVisible=false" (nzOnOk)="checkOk()">
+  <ng-template #modalContent>
+    <div nz-row>
+      <div nz-col nzOffset="1" nzSpan="20">
+        <p>
+          <button nz-button nzType="default" (click)="isVisible=false">取消</button>
+          <button nz-button nzType="primary" (click)="checkOk()">确定</button>
+        </p>
+      </div>
+      <div nz-col nzSpan="24">
+        <app-plan-item-add operateType="update"></app-plan-item-add>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #modalFooter>
+  </ng-template>
+</nz-modal>
+

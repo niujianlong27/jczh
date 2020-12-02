@@ -1,0 +1,19 @@
+<!-- <app-simple-page [queryUrl]="queryUrl" (buttonClick)="buttonClick($event)"></app-simple-page> -->
+<app-inqu-block formId="form_waybill" (queryClick)="query()"></app-inqu-block>
+<app-button-block (buttonClick)="buttonClick($event)"></app-button-block>
+<div nz-row>
+    <div nz-col nzSpan="12">
+        <app-grid-block #grid_waybill gridId="grid1" [data]="waybillData" [total]="total" mode="single" [loading]="loading"
+            (paginationChange)="query()" (rowClick)="rowClick($event)" (checkboxClick)="checkboxClick($event)"></app-grid-block>
+    </div>
+    <div nz-col nzSpan="12">
+        <nz-tabset>
+            <nz-tab nzTitle="捆包信息">
+                <app-grid-block #grid_pack gridId="waybillPack" [data]="packData" mode="none" showPagination="false"></app-grid-block>
+            </nz-tab>
+            <nz-tab nzTitle="司机信息">
+                <app-grid-block #grid_driver gridId="driver" [data]="driverData" mode="none" showPagination="false"></app-grid-block>
+            </nz-tab>
+        </nz-tabset>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+<nz-tabset>
+    <nz-tab *ngFor="let tab of tabs;let i = index;" [nzTitle]='tab.itemCname' (nzSelect)="selectChange(tab)">
+        <ng-container>
+            <div>
+                <div style="margin-top: 20px;margin-left:20px;margin-bottom: 20px">
+                    <div style="display: inline" *ngIf="tab.formId == 'form_rgDisp_rulecars2' || tab.formId =='form_rgDisp_rulecars3'">
+                        <a style="margin-right: 10px">进厂大门</a>
+                        <nz-select style="width: 150px;" nzAllowClear [(ngModel)]="inqu.gateCode"
+                            nzPlaceHolder="请选择进厂大门">
+                            <nz-option *ngFor="let i of gateArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                    <div style="display: inline;margin-left: 30px" *ngIf="tab.formId == 'form_rgDisp_rulecars1' || tab.formId == 'form_rgDisp_rulecars3' ">
+                        <a style="margin-right: 10px">品种名称</a>
+                        <nz-tree-select style="width: 200px" [nzNodes]="nodes" nzShowSearch nzPlaceHolder="请选择品种"
+                            [(ngModel)]="inqu.kindCode" [nzDropdownStyle]="{ 'max-height': '300px' }">
+                        </nz-tree-select>
+                    </div>
+                    <div style="display: inline;margin-left: 30px" *ngIf="tab.formId == 'form_rgDisp_rulecars4'">
+                        <a style="margin-right: 10px">仓库名称</a>
+                        <nz-select style="width: 120px;" [(ngModel)]="inqu.warehouseCode" nzAllowClear
+                            nzPlaceHolder="请选择仓库">
+                            <nz-option *ngFor="let i of warehouseArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode">
+                            </nz-option>
+                        </nz-select>
+
+                    </div>
+                    <div style="display: inline;margin-left: 30px">
+                        <a style="margin-right: 10px">状态</a>
+                        <nz-select style="width: 120px;" nzAllowClear nzPlaceHolder="请选择状态" [(ngModel)]="inqu.status">
+                            <nz-option nzLabel="启用" nzValue="RCWH10"></nz-option>
+                            <nz-option nzLabel="作废" nzValue="RCWH20"></nz-option>
+                        </nz-select>
+                    </div>
+                    <div style="display: inline;margin-left:30px">
+
+
+                    </div>
+                    <div style="float: right">
+                        <button nz-button nzType="primary" (click)="query()">查询</button>
+                        <!-- <a>&nbsp;&nbsp;</a>
+                        <button nz-button nzType="primary" (click)="addData()" *ngIf="carNum >0">新增</button> -->
+                    </div>
+                </div>
+            </div>
+            <tpl-buttons (btnClick)="btnClick($event)" formId="form_rgDisp_rulecars0" [btnHiden]="{'Find':true,'Add':(tab.formId=='form_rgDisp_rulecars0'),'Update':!saveFlag,'Delete':(tab.formId=='form_rgDisp_rulecars0'),'Save':saveFlag}"></tpl-buttons>
+            <app-table-form [formId]="tab.formId" [gridId]="'grid1'" [pageFun]="true"
+                (pageIndexEmit)="pageIndexEmit($event)" [isMutli]="false" (pageSizeEmit)="pageSizeEmit($event)"
+                [dataSet]="dataSet"     [isCheckBox]="true"
+                (updateDataResult)="updateDataResult($event)"
+                 [showCount]='true' [listLoading]="listLoading" [pageSize]="pageSize"
+                [totalPage]="totalPage">
+                <!-- <ng-template #g1 let-data let-index="index">
+                    <a (click)="update(data,index)" *ngIf="data.editstate==0 ">修改</a>
+                    <ng-container *ngIf="data.editstate==1">
+                        <a (click)='saveData(data,index)'>保存</a>
+                        <a>&nbsp;&nbsp;</a>
+                        <a (click)='cancle(data,index)'>取消</a>
+                    </ng-container>
+                    <ng-container *ngIf="data.status == '作废'">
+                        <a>&nbsp;&nbsp;</a>
+                        <a (click)='deleteBtn(data)'>删除</a>
+                    </ng-container>
+
+                </ng-template> -->
+            </app-table-form>
+        </ng-container>
+    </nz-tab>
+</nz-tabset>
+
+
+<nz-modal [(nzVisible)]="InsertFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+    [nzOkLoading]="isOkLoading" (nzAfterClose)="closeResult()">
+    <form nz-form [formGroup]="modalValidateForm">
+        <nz-form-item *ngFor="let m of modalFormData">
+            <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+                {{m.name}}
+            </nz-form-label>
+            <nz-form-control [nzSpan]="12">
+                <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+                    <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+                </nz-radio-group>
+                <nz-tree-select style="width: 236px;" *ngIf="m.eName === 'kindCode'" [nzDropdownStyle]="{ 'max-height': '300px' }"
+                    [nzNodes]="nodes" nzShowSearch nzPlaceHolder="品种名称"
+                    (ngModelChange)="onChange($event)" [formControl]="modalValidateForm.controls['kindCode']">
+                </nz-tree-select>
+                <nz-select #select style="width: 236px;" *ngIf="m.eName === 'gateCode'"
+                    (ngModelChange)="gateChange($event)" nzShowSearch nzAllowClear nzPlaceHolder="进厂大门"
+                    [formControlName]="m.eName">
+                    <nz-option *ngFor="let i of gateArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+                </nz-select>
+                <nz-select #select style="width: 236px;" *ngIf="m.eName === 'warehouseCode'"
+                    (ngModelChange)="warehouseChange($event)" nzShowSearch nzAllowClear nzPlaceHolder="仓库名称"
+                    [formControlName]="m.eName">
+                    <nz-option *ngFor="let i of warehouseArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode">
+                    </nz-option>
+                </nz-select>
+
+                <nz-input-number [formControlName]="m.eName" [nzMin]="0" [nzStep]="1" *ngIf="m.eName === 'maxCount'"
+                    (ngModelChange)="countChange($event)"></nz-input-number>
+
+                <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+                    <div *ngIf="modalValidateForm.get(m.eName).errors['pattern'];else erroInf">
+                        {{ m.validators.patternErr}}
+                    </div>
+                    <ng-template #erroInf>
+                        {{ m.validateCon}}
+                    </ng-template>
+                </nz-form-explain>
+
+            </nz-form-control>
+
+        </nz-form-item>
+    </form>
+
+
+    <app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="deletemodaltitle" [modalCon]="finishCon"
+        (modalConfirmResult)="deleteData($event)">
+    </app-modal-confirm>

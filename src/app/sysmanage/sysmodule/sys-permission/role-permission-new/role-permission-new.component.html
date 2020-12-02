@@ -1,0 +1,82 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+
+<tpl-buttons (btnClick)="btnClick($event)" [btnDisable]="btnDisable"></tpl-buttons>
+
+<div nz-row nzType="flex" nzJustify="space-around" style="padding-top: 20px">
+  <div nz-col nzSpan="12">
+    <nz-table [nzTitle]="roleTitle" nzSize="small" #roleTable reNzTable (heightEmit)="heightFun($event,0)"
+              [nzData]="roleData" [nzBordered]="false"
+              [nzShowPagination]=false [nzFrontPagination]=false [nzHideOnSinglePage]="true"
+              [nzScroll]="{x:'250px',y: roleHeight}"
+              [extraTableHeight]="permissions ? 85 : 30">
+      <thead>
+      <tr>
+        <ng-container *ngFor="let role of roleHeaderData">
+          <th [title]="role.cName">{{role.cName}}</th>
+        </ng-container>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of roleTable.data" [class.tr-selected]="data.isClick">
+        <ng-container *ngFor="let role of roleHeaderData">
+          <td [title]="data[role.eName]" (click)="roleClick(data)">
+            <span>{{ data[role.eName]}}</span>
+          </td>
+        </ng-container>
+      </tr>
+      </tbody>
+    </nz-table>
+    <ng-template #roleTitle>
+      <div>
+        角色管理
+      </div>
+    </ng-template>
+  </div>
+  <div nz-col nzSpan="12">
+    <nz-table nzSize="small" [nzTitle]="header" reNzTable (heightEmit)="heightFun($event,1)"
+              [nzNoResult]="' '" [nzScroll]="{x:'250px',y: rightHeight}"
+              [extraTableHeight]="permissions ? 130 : 75">
+      <nz-collapse [nzBordered]="false">
+        <nz-collapse-panel *ngFor="let panel of panels" [nzHeader]="panel.resourceName">
+
+          <nz-collapse [nzBordered]="false">
+            <nz-collapse-panel *ngFor="let menuModels of panel.menuModels" [nzHeader]="menuModels.resourceName">
+              <nz-collapse [nzBordered]="false">
+                <nz-collapse-panel *ngFor="let menuModel of menuModels.menuModels" [nzHeader]="collapsePanelHeader">
+                  <ng-template #collapsePanelHeader>
+                    <label nz-checkbox [(nzChecked)]="menuModel.checked" [nzIndeterminate]="menuModel.indeterminate"
+                           (nzCheckedChange)="panelAllChecked(menuModel)">
+                      {{menuModel.resourceName}}
+                    </label>
+                  </ng-template>
+                  <div>
+                    <ng-container *ngFor="let button of menuModel.buttonModels">
+                      <label nz-checkbox [(nzChecked)]="button.checked"
+                             (nzCheckedChange)="refreshStatus(menuModel,button)">{{ button.buttonName }}</label>
+                    </ng-container>
+                  </div>
+                </nz-collapse-panel>
+              </nz-collapse>
+            </nz-collapse-panel>
+          </nz-collapse>
+        </nz-collapse-panel>
+      </nz-collapse>
+    </nz-table>
+    <ng-template #header>
+      <div>权限管理</div>
+      <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+        <input nz-input placeholder="搜索，回车触发" nzSize="small" [(ngModel)]="searchData" (keyup.enter)="search()">
+      </nz-input-group>
+      <ng-template #suffixIconButton>
+        <button nz-button nzType="primary" nzSearch (click)="search()"><i nz-icon type="search"></i></button>
+      </ng-template>
+      <nz-tabset nzSize="small" [(nzSelectedIndex)]="nzSelectedIndex">
+        <nz-tab nzTitle="已选权限" (nzSelect)="tabClick('haveJurisdiction')">
+        </nz-tab>
+        <nz-tab nzTitle="未选权限" (nzSelect)="tabClick('noJurisdiction')">
+        </nz-tab>
+      </nz-tabset>
+    </ng-template>
+  </div>
+</div>
+

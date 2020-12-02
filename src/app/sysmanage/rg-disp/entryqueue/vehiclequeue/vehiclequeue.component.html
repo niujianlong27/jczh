@@ -1,0 +1,121 @@
+<nz-tabset  >
+  <nz-tab *ngFor="let tab of tabs;let i = index;" [nzTitle]='tab.itemCname+tab.itemCount'
+          (nzSelect)="selectChange(tab.itemCode)">
+  </nz-tab>
+</nz-tabset>
+
+    <app-searchform [formId]="'form_rgDisp_vehiclequeue'" (search)="listSearch($event)"></app-searchform>
+    <tpl-buttons [formId]="'form_rgDisp_vehiclequeue'"
+                 [btnHiden]="{'Find':false,'directEntry':true,'greenChannel':true,'return':true,'Update':Update,'Make':false,'Save':!Update,'UpdateAll':false,'Open':intervalFlag,'Close':!intervalFlag}"
+                 (btnClick)="btnClick($event)" ></tpl-buttons>
+    <app-table-form
+      [formId]="'form_rgDisp_vehiclequeue'" [gridId]="'grid1'"
+      [isMutli]="true"
+      [dataSet]="dataSet"
+      [isCheckBox]="true"
+      [listLoading]="listLoading" (updateDataResult)="updateDataResult($event)"
+      [pageSize]="pageSize" [totalPage]="totalPage" (userColumnsEmit)="colName($event)"
+    >
+      <ng-template #warehouse let-data let-header>
+        <nz-select [nzAllowClear]="true" [nzShowSearch]="true" nzSize="small" [(ngModel)]="data.warehouseCode"
+                   [ngClass]="{'selectShow':data.selectShow,'selectClose':!data.selectShow}"
+                   (ngModelChange)="modelChange($event,data)">
+          <nz-option *ngFor="let p of warehouseArr" [nzLabel]="p.itemCname" [nzValue]="p.itemCode"></nz-option>
+        </nz-select>
+        <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.warehouseName}}</div>
+      </ng-template>
+
+</app-table-form>
+<ng-container>
+  <div style="display:block;float:left;">
+    <nz-tag [nzColor]="'#f86c6b'">排队超过48小时</nz-tag>
+    <nz-tag [nzColor]="'#ffbf00'">排队24-48小时</nz-tag>
+    <button nz-button [nzType]="'default'" [nzSize]="'small'"><span>排队24小时内</span></button>
+    <nz-tag [nzColor]="'#63c2de'">绿色通道</nz-tag>
+  </div>
+</ng-container>
+
+
+<nz-modal [(nzVisible)]="InsertFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+          [nzOkLoading]="isOkLoading"
+          (nzAfterClose)="closeResult()" [nzFooter]="null">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+          <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+        </nz-radio-group>
+        <nz-select #select style="width: 236px;" *ngIf="m.eName === 'gateCode'"
+                   nzShowSearch nzAllowClear nzPlaceHolder="大门" [formControlName]="m.eName"
+                   (ngModelChange)='gateChange($event)'>
+          <nz-option *ngFor="let i of gateArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+        </nz-select>
+
+        <nz-select #select style="width: 236px;" *ngIf="m.eName === 'warehouseCode'"
+                   nzShowSearch nzAllowClear nzPlaceHolder="仓库" [formControlName]="m.eName"
+                   (ngModelChange)='wareChange($event)'>
+          <nz-option *ngFor="let i of warehouseArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+        </nz-select>
+        <input type="{{m.type}}" *ngIf="m.type == 'input'" nz-input formControlName="{{m.eName}}" [id]="m.eName"
+               disabled=true>
+        <nz-input-number style="width: 200px;" *ngIf="m.type === 'num'" [nzMin]="1" [nzMax]="20" [nzStep]="1"
+                         formControlName="{{m.eName}}" disabled=true></nz-input-number>
+        <textarea rows="4" nz-input *ngIf="m.type === 'textarea'" formControlName="{{m.eName}}"></textarea>
+
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+          <div *ngIf="modalValidateForm.get(m.eName).errors['pattern'];else erroInf">
+            {{ m.validators.patternErr}}
+          </div>
+          <ng-template #erroInf>
+            {{ m.validateCon}}
+          </ng-template>
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+
+
+  </form>
+  <ng-container>
+    <div>
+      <tpl-buttons (btnClick)="btnClick($event)" formId="form_rgDisp_vehiclequeue"
+                   [btnHiden]="{'Find':true,'directEntry':false,'greenChannel':false,'return':false,'Update':true,'Make':true,'Save':true,'UpdateAll':true,'ALL':true,'EA':true,'WE':true,'NOR':true,'SGL':true,'LZDM':true,'XNM':true}"></tpl-buttons>
+      <!--<button style="background:#1890ff; border-color:#1890ff;margin-left: 10%" nz-button nzType="primary" (click)="directEntry()" [nzLoading]="isOkLoading">直接入厂</button>-->
+
+      <!--<button style="background:green; border-color:green;margin-left: 10%" nz-button nzType="primary" (click)="greenChannel()" [nzLoading]="isLoading">加入绿色通道</button>-->
+
+      <!--<button style="margin-left: 10%" nz-button nzType="default" (click)="handleCancel()">返回</button>-->
+    </div>
+  </ng-container>
+</nz-modal>
+
+
+<ng-template #tplTitle>
+  <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent>
+  <form nz-form [formGroup]="validateForm">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" [nzRequired]="true">
+        新的大门
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-select formControlName="gateCode" nzRequired>
+          <nz-option *ngFor="let g of gateArr" [nzValue]="g.itemCode" [nzLabel]="g.itemCname">
+          </nz-option>
+        </nz-select>
+        <nz-form-explain *ngIf="validateForm.get('gateCode').dirty && validateForm.get('gateCode').errors">
+          <ng-container *ngIf="validateForm.get('gateCode').hasError('required')">
+            请选择大门
+          </ng-container>
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</ng-template>
+<ng-template #tplFooter>
+  <button nz-button nzType="default" (click)="handleCance()">取消</button>
+  <button nz-button nzType="primary" (click)="importConfirm()">确定</button>
+</ng-template>

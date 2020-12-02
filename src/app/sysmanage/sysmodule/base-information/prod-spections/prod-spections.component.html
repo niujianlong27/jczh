@@ -1,0 +1,62 @@
+<!--<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>-->
+
+<common-page (search)="listSearch($event)" (btnAdd)="btnAdd()" [pageSize]="pageSize" [totalPage]="totalPage"
+             [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" (btnDelete)="btnDelete($event)"
+             [dataSet]="dataSet" [isMutli]="true">
+
+</common-page>
+
+<!--弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+          (nzAfterClose)="closeResult()" [nzMaskClosable]="false"  >
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="12">
+
+        <input type="{{m.type}}" *ngIf="m.type == 'text'" nz-input formControlName="{{m.eName}}"
+               [id]="m.eName">
+        <nz-input-number *ngIf="m.type == 'number'" [formControlName]="m.eName" [nzMin]="0"
+                         (ngModelChange)="ngModelChange(m.eName,$event)"></nz-input-number>
+
+        <nz-select [attr.id]="m.eName" *ngIf="m.type == 'select'" [formControlName]="m.eName">
+          <nz-option *ngFor="let i of selectArr" [nzLabel]="i.name" [nzValue]="i.name"></nz-option>
+        </nz-select>
+        <nz-select [attr.id]="m.eName" *ngIf="m.type == 'weight'" [formControlName]="m.eName">
+          <nz-option *ngFor="let x of weightArr" [nzLabel]="x.name" [nzValue]="x.value"></nz-option>
+        </nz-select>
+        <nz-select [attr.id]="m.eName" *ngIf="m.type == 'isUse'" [formControlName]="m.eName">
+          <nz-option *ngFor="let x of isUseArr" [nzLabel]="x.name" [nzValue]="x.value"></nz-option>
+        </nz-select>
+
+        <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+          <label nz-radio nzValue="{{r.value}}" *ngFor="let r of radioArr">{{r.name}}</label>
+        </nz-radio-group>
+
+
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+            {{m.validators.patternErr}}
+          </ng-container>
+
+        </nz-form-explain>
+
+      </nz-form-control>
+
+    </nz-form-item>
+
+  </form>
+</nz-modal>
+
+
+<!--确认弹窗-->
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>

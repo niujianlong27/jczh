@@ -1,0 +1,93 @@
+<common-page
+        gridId="grid1"
+        (btnClick)="btnClick($event)"
+        (search)="listSearch($event)"
+        (updateDataResult)="updateDataResult($event)"
+        [dataSet]="dataSet"
+        [isCheckBox]="true"
+        [isMutli]="true"
+        [listLoading]="listLoading"
+        [showCount]="false"
+        [pageSize]="pageSize"
+        [totalPage]="totalPage"
+        [triggerSearch]="true"
+        [btnDisable]="{Update:selectData.length!==1,Delete:selectData.length===0}"
+>
+</common-page>
+<nz-modal [nzTitle]="modalTitle"
+          [(nzVisible)]="modalVisible"
+          [nzOkLoading]="modalOkLoading"
+          [nzWidth]="800"
+          (nzOnOk)="handleOk()"
+          (nzOnCancel)="handleCancel()"
+          (nzAfterClose)="closeResult()"
+>
+    <form nz-form [formGroup]="modalValidateForm">
+        <div nz-row [nzGutter]="0">
+            <div nz-col [nzSpan]="24" *ngFor="let m of modalFormData">
+                <nz-form-item nzFlex>
+                    <nz-form-label [nzSpan]="5" [nzRequired]="m.require">{{m.name}}</nz-form-label>
+
+                    <nz-form-control [nzSpan]="19">
+
+
+                        <input nz-input type="text" *ngIf="m.type == 'text'" [formControlName]="m.eName"
+                               [id]="m.eName"/>
+
+
+                        <nz-input-number *ngIf="m.type == 'number'"
+                                         [formControlName]="m.eName"
+                                         [nzMin]="0"
+                                         [nzMax]="999999999999"
+                                         [nzStep]="1"
+                                         [nzPrecision]="6">
+                        </nz-input-number>
+
+                        <nz-date-picker *ngIf="m.type == 'date'" [nzStyle]="{width:'166.78px'}" [nzShowTime]="true"
+                                        [nzFormat]="'yyyy-MM-dd HH:mm:ss'" [formControlName]="m.eName">
+                        </nz-date-picker>
+
+                        <div *ngIf="m.type == 'startLocationName'">
+                            {{startLocationName}}
+                            <input-modal
+                                    [findset]="findSetStartLocationName"
+                                    [display]="'link'"
+                                    [linkContent]="linkContent"
+                                    [(inputModalModel)]="startLocationId"
+                                    (inpEmit)="inpEmit($event,'startLocationName')"
+                            >
+                            </input-modal>
+                        </div>
+                        <div *ngIf="m.type == 'endLocationName'">
+                            {{endLocationName}}
+                            <input-modal
+                                    [findset]="findSetEndLocationName"
+                                    [display]="'link'"
+                                    [linkContent]="linkContent"
+                                    [(inputModalModel)]="endLocationId"
+                                    (inpEmit)="inpEmit($event,'endLocationName')"
+                            >
+                            </input-modal>
+                        </div>
+
+                        <nz-select *ngIf="m.type === 'select'" style="width: 120px;" [formControlName]="m.eName">
+                            <nz-option *ngFor="let i of m.selectList" [nzLabel]="i" [nzValue]="i"></nz-option>
+                        </nz-select>
+
+                        <nz-form-explain
+                                *ngIf="modalValidateForm.get(m.eName).invalid && (modalValidateForm.get(m.eName).dirty || modalValidateForm.get(m.eName).touched)">
+                            <ng-container *ngIf="modalValidateForm.get(m.eName).errors.required">
+                                {{m.validateCon}}
+                            </ng-container>
+                        </nz-form-explain>
+
+                    </nz-form-control>
+
+                </nz-form-item>
+            </div>
+        </div>
+
+    </form>
+
+
+</nz-modal>

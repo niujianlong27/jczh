@@ -1,0 +1,20 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+<common-page (search)="listSearch($event)" (btnAdd)="btnAdd()"
+             [pageSize]="pageSize"
+             [totalPage]="totalPage"
+             [listLoading]="listLoading" (userColumnsEmit)="columns($event)"
+             (btnUpdate)="btnUpdate($event)" (btnDelete)="delete($event)"
+             [extraTableHeight]="permissions ? 52 : 0"
+             (btnClick)="btnClick($event)" [dataSet]="dataSet" [isMutli]="true" (updateDataResult)="updateDataResult($event)"></common-page>
+
+<ng-template #urlImg1 let-data>
+  <div *ngIf="data.busiLicense" (click)="getView($event,data.busiLicense)">
+    <nz-avatar *ngFor="let img of data.busiLicense.split(';')" [nzSrc]="img" nzSize="small"
+               style="width:17px;height:17px;line-height:17px;"></nz-avatar>
+  </div>
+</ng-template>
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+
+</app-modal-confirm>

@@ -1,0 +1,12 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+
+<common-page  (btnAdd)="btnAdd()" [pageSize]="pageSize" [totalPage]="totalPage"
+             [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" (btnDelete)="btnDelete($event)"
+             [dataSet]="dataSet" [isMutli]="true" [extraTableHeight]="permissions ? 52 : 0">
+
+</common-page>
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+
+</app-modal-confirm>

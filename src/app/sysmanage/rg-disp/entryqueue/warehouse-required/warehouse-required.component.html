@@ -1,0 +1,66 @@
+<!-- <common-page></common-page> -->
+<!-- <app-searchform [formId]="'form_rgDisp_warehouseRequired'" (search)="listSearch($event)"></app-searchform> -->
+
+<div>
+  <div style="margin-top: 20px;margin-left:20px;margin-bottom: 20px">
+    <div style="display: inline">
+        <a style="margin-right: 10px">计划日期</a>
+        <nz-date-picker [(ngModel)]="inqu.planDate"></nz-date-picker>
+    </div>
+    <div style="display: inline;margin-left: 30px">
+        <a style="margin-right: 10px">品种</a>
+        <nz-tree-select
+        style="width: 200px"
+        [nzNodes]="nodes"
+        [nzDropdownStyle]="{ 'max-height': '300px' }"
+        nzShowSearch
+        nzPlaceHolder="请选择品种"
+        [(ngModel)]="inqu.kindCode"
+        (ngModelChange)="onChange($event)"
+      >
+      </nz-tree-select>
+      <nz-select style="width: 120px;" nzAllowClear  [(ngModel)]="inqu.subKindName" nzPlaceHolder="请选择辅助分类" *ngIf="map[inqu.kindCode]">
+        <nz-option *ngFor="let i of subkindArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCname"></nz-option>
+    </nz-select>
+    </div>
+    <div style="display: inline;margin-left: 130px">
+        <a style="margin-right: 10px">仓库</a>
+        <nz-select style="width: 120px;" [(ngModel)]="inqu.warehouseCode" nzAllowClear nzPlaceHolder="请选择仓库" >
+            <nz-option *ngFor="let i of warehouseArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+        </nz-select>
+
+    </div>
+    <div style="display: inline;margin-left: 30px">
+        <a style="margin-right: 10px">车型</a>
+        <nz-select style="width: 120px;" nzAllowClear nzPlaceHolder="请选择车型" [(ngModel)]="inqu.truckKind">
+            <nz-option *ngFor="let i of truckArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+        </nz-select>
+    </div>
+    <div style="display: inline;margin-left:30px">
+
+        <label nz-checkbox [(ngModel)]="inqu.diffFlag">可叫车计划</label>
+    </div>
+    <div style="float: right">
+        <button nz-button nzType="primary" (click)="query()">查询</button>
+    </div>
+  </div>
+</div>
+
+<tpl-buttons [formId]="'form_rgDisp_warehouseRequired'" [btnHiden]="{'Find':true,'Update':Update,'Save':!Update}" (btnClick)="btnClick($event)"></tpl-buttons>
+
+
+<app-table-form
+                  [formId]="'form_rgDisp_warehouseRequired'" [gridId]="'grid1'" [pageFun]="true" (pageIndexEmit)="pageIndexEmit($event)"
+                  [isMutli]="false" (pageSizeEmit)="pageSizeEmit($event)"
+                  [dataSet]="dataSet"
+
+                  [isCheckBox]="true"  [showCount]='true'
+                  [listLoading]="listLoading"  (updateDataResult)="updateDataResult($event)"
+                  [pageSize]="pageSize" [totalPage]="totalPage" (userColumnsEmit)="colName($event)"
+                 >
+  <ng-template #addWeight let-data let-header>
+    <nz-input-number [(ngModel)]="data.addWeight"  [nzStep]="1" [nzMin]="-data.planWeight" [ngClass]="{'selectShow':data.selectShow,'selectClose':!data.selectShow}"></nz-input-number>
+    <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.addWeight}}</div>
+  </ng-template>
+
+  </app-table-form>

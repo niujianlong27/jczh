@@ -1,0 +1,47 @@
+<!--
+ * @Title: price-line.component
+ * @Description: 线路运价页面
+ * @Created: zhaozeping 2019/1/31
+ * @Modified: 
+ -->
+
+ <app-searchform  (search)="listSearch($event)"></app-searchform>
+
+ <tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+
+ 
+ <app-table-form  [gridId]="'grid1'"  [pageFun]='true' (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)'
+                 [dataSet]="dataSet1" [pageSize]="pageSize1" [totalPage]="totalPages1" [trSelectedShow]="true" (userColumnsEmit)="userColumnsEmit($event)"
+                 [isMutli]="true" [listLoading]="listLoading1" (updateDataResult)="updateDataResult($event)"></app-table-form>
+
+<ng-template #tplTitle>
+  <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent>
+  <form nz-form [formGroup]="validateForm">
+    <nz-form-item *ngFor="let m of modalFormData"  [hidden]="m.hidden">
+      <nz-form-label [nzSpan]="6" [nzRequired]="true">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="16">
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'" (click)="selectFile()" [readOnly]="m.readOnly">
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'file'" #fileInput  (change)="fileChange($event)">
+        <!--<input #fileInput type="file" formControlName="file" (change)="writeFileName($event)" multiple="false" style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;" />-->
+        <nz-form-explain *ngIf="validateForm.get(m.eName).dirty && validateForm.get(m.eName).errors">
+          <ng-container *ngIf="validateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+          <ng-container *ngIf="validateForm.get(m.eName).hasError('pattern')">
+            {{m.validators.patternErr}}
+          </ng-container>
+        </nz-form-explain>
+      </nz-form-control>
+
+    </nz-form-item>
+  </form>
+</ng-template>
+<ng-template #tplFooter>
+  <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  <button nz-button nzType="primary" (click)="importConfirm()" [nzLoading]="implistLoading">确定</button>
+</ng-template>

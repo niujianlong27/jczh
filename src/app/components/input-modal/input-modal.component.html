@@ -1,0 +1,123 @@
+<ng-container [ngSwitch]="display">
+    <div *ngSwitchCase="'default'">
+        <nz-input-group [nzSuffix]="suffixIconSearch" [nzSize]="inputSize">
+
+            <input type="text" [disabled]='DISABLED' [ngClass]="{'borderRed':borderRed == undefined ? showExplainFlag : borderRed}" [nzSize]="inputSize"
+                   (ngModelChange)="modelChange($event)" (blur)="blurFocus(true)" (focus)="blurFocus(false)"
+                   [title]="inputModalModel" [(ngModel)]="inputModalModel" nz-input (keyup)="keyUp($event,inputModalModel)">
+            <input type="text" *ngIf='false' [(ngModel)]="inputModalHiddenValue">
+        </nz-input-group>
+        <ng-template #suffixIconSearch>
+            <i nz-icon type="search" class="pointer-cursor" (click)="keyUp(null,inputModalModel)"></i>
+        </ng-template>
+        <nz-form-item style="margin-bottom: 0;">
+            <nz-form-control>
+                <nz-form-explain [class.explain]="isExplain"  *ngIf="showExplainFlag">
+                    {{validate.validateCon}}
+                </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+    </div>
+    <span *ngSwitchCase="'link'" (click)="keyUp(null,inputModalModel)" [innerHTML]="linkContent" ></span>
+</ng-container>
+<nz-modal zmMovableModal [nzWidth]="width" [nzMask]="true" [(nzVisible)]="visible" *ngIf="modalshow" nzTitle="{{findset.name + ' > 选择'}}"
+            (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzFooter]="null">
+    <form class="modalSearch">
+    <p class="m-re" style="padding-bottom:10px;" [hidden]="!visible">
+        <button nz-button nzType="default" type = "button" (click)="handleCancel()">取消</button>
+        <button nz-button class="m-l" nzType="primary" type = "button" (click)="handleOk()">确定</button>
+        <i nz-icon nzType="sync" nzTheme="outline" style="float:right" [nzSpin]="refreshs" (click)="refreshData()" *ngIf="refresh"></i>
+    </p>
+    <nz-form-item>
+        <nz-input-group [ngStyle]="{'width': insertType ? '80%' : '100% '}" [nzSuffix]="suffixIconSearch" [nzSize]="inputSize">
+
+        <input type="text" [nzSize]="inputSize" [(ngModel)]="inputModalSearchValue" name="findset.parameter" [placeholder]="placeholder"
+                nz-input (keyup)="keyUp($event,inputModalSearchValue,'inner')">
+        <ng-template #suffixIconSearch>
+            <i nz-icon type="search" class="pointer-cursor" (click)="keyUp(null,inputModalSearchValue,'inner')"></i>
+        </ng-template>
+        </nz-input-group>
+        <button [ngStyle]="insertType ? {'width': '15%','margin-left':'5%'} : {}" type="button" nz-button nzType="default" *ngIf="insertType" (click)="add()">
+        <span *ngIf="!showAddInfo">新增</span>
+        <span *ngIf="showAddInfo">隐藏</span>
+        </button>
+
+    </nz-form-item>
+    <nz-form-item *ngIf='showAddInfo'>
+        <!--公司-->
+        <ng-container *ngIf="insertType == 'company'">
+        <nz-form-label [nzSpan]="4">
+            <span >新增公司</span>
+        </nz-form-label>
+        <nz-form-control [nzSpan]="15">
+            <input nz-input>
+        </nz-form-control>
+
+        <nz-form-control [nzSpan]="3">
+            <button style="margin-left: 10px;" nz-button nzType="default" (click)="sureAdd()">确定添加</button>
+        </nz-form-control>
+        </ng-container>
+        <!--地点-->
+        <ng-container *ngIf="insertType == 'address'">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="4">
+            <span>省市区乡</span>
+            </nz-form-label>
+            <nz-form-control  [nzSpan]="15">
+            <app-area-select (areaEmit)="areaEmit($event)"></app-area-select>
+            </nz-form-control>
+
+        </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="4">
+                    <span >详细地址</span>
+                </nz-form-label>
+                <nz-form-control  [nzSpan]="15">
+                    <input nz-input [(ngModel)]="addressNameDetail" [ngModelOptions]="{standalone: true}">
+                </nz-form-control>
+                <nz-form-control [nzSpan]="3">
+                    <button style="margin-left: 10px;" nz-button nzType="default" type="button" (click)="sureAdd()">确定添加</button>
+                </nz-form-control>
+            </nz-form-item>
+
+        </ng-container>
+    </nz-form-item>
+    </form>
+    <nz-table #table [nzData]="listData" class="inputmodal" [nzFrontPagination]="false" [(nzPageIndex)]="currentpage" modalContentHeight (currentHeight)="heightTable($event)"
+            (nzPageIndexChange)='pageChange($event)' [nzTotal]="total" [(nzPageSize)]="pageSize" [nzScroll]="{x:'100%',y: tableHeight}"  [nzShowPagination]="showPagination">
+    <thead>
+    <tr>
+        <th nzWidth='50px' nzLeft="0px" nzShowCheckbox [nzDisabled]=!isMutli [(nzChecked)]="allChecked" [nzIndeterminate]="indeterminate"
+            (nzCheckedChange)="checkAll($event)"></th>
+        <th [nzWidth]='data.width + "px"' *ngFor="let data of listHeader">{{data.colCname}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of table.data"  >
+        <td nzWidth='50px' nzLeft="0px" nzShowCheckbox [(nzChecked)]="data.checked" [nzDisabled]="data.disabled"
+            (nzCheckedChange)="refreshStatus(data)" ></td>
+      <ng-container *ngFor="let h of listHeader">
+        <td  title="{{data[h.colEname]}}" (click)="tdClick(data)" nzPlacement="top" *ngIf="h.colEname=='holdJ'||h.colEname=='holdG'||h.colEname=='holdzg00'"
+            nz-popover nzTitle="信息" [nzContent]="contentTemplate" nzTrigger="hover" [nzMouseEnterDelay]="MouseEnterDelay"  (nzVisibleChange)="tooltipVisibleChange($event,data,h.colEname)">{{data[h.colEname]}}</td>
+        <td title="{{data[h.colEname]}}" (click)="tdClick(data)" *ngIf="h.colEname!='holdJ'&&h.colEname!='holdG'&&h.colEname!='holdzg00'">{{data[h.colEname]}}</td>
+      </ng-container>
+    </tr>
+    </tbody>
+    </nz-table>
+</nz-modal>
+
+<ng-template #contentTemplate>
+    <nz-table #table1 [nzData]="tableData"  [nzFrontPagination]="false" [nzShowPagination]="false"  [nzScroll]="{x:'500px',y:'250px'}"
+              (currentHeight)="heightTable($event)" [nzLoading]="popTableLoading" style="text-align: center">
+      <thead>
+      <tr>
+        <th [nzWidth]="data.width+'px'" *ngFor="let data of tableHeader">{{data.colCname}}</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of table1.data">
+          <td *ngFor="let h of tableHeader" title="{{i[h.colEname]}}" >{{i[h.colEname]}}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+</ng-template>

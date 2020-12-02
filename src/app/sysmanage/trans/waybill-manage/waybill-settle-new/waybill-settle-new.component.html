@@ -1,0 +1,20 @@
+<common-page
+        gridId="grid1"
+        (btnClick)="btnClick($event)"
+        (search)="listSearch($event)"
+        (userColumnsEmit)="columns($event)"
+        [dataSet]="dataSet"
+        [isCheckBox]="true"
+        [isMutli]="true"
+        [listLoading]="listLoading"
+        [showCount]="false"
+        [pageSize]="pageSize"
+        [totalPage]="totalPage"
+        [triggerSearch]="true"
+>
+</common-page>
+<ng-template #urlImg let-data>
+    <div *ngIf="data.returnPic" (click)="getView($event,data.returnPic, data)">
+        <nz-avatar *ngFor="let img of data.returnPic.split(';')" [nzSrc]="img" nzSize="small" style="width:17px;height:17px;line-height:17px;"></nz-avatar>
+    </div>
+</ng-template>

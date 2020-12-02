@@ -1,0 +1,23 @@
+.form-btn{
+    display: inline-block;
+}
+.b-t{
+    padding-top:15px;
+    border-bottom: 1px #ddd solid;
+    margin-bottom:30px;
+}
+.b-light{
+    border:1px solid #eee;
+}
+
+.modal-table ::ng-deep .ant-table-wrapper div.ant-table-body {
+  height: auto;
+  min-height: 0;
+  margin-bottom: 2px;
+}
+.ant-table-empty ::ng-deep div.ant-table-placeholder{
+  display:none
+}
+::ng-deep .report-modal .ant-modal-body{
+  padding: 5px 24px;
+}

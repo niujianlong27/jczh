@@ -1,0 +1,211 @@
+<!-- <app-searchform [formId]="'form_rgDisp_timeout'" (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [formId]="'form_rgDisp_timeout'"></tpl-buttons> -->
+
+<div>
+    <div style="margin-top: 20px;margin-left:20px;margin-bottom: 20px">
+      <!-- <div style="display: inline">
+          <a style="margin-right: 10px">计划日期</a>
+          <nz-date-picker [(ngModel)]="planDate"></nz-date-picker>
+      </div> -->
+      <div style="display: inline;margin-left: 30px">
+          <a style="margin-right: 10px">分类名称</a>
+          <nz-tree-select
+          style="width: 200px"
+          [nzNodes]="nodes"
+          nzShowSearch
+          nzPlaceHolder="请选择排队大类"
+          [(ngModel)]="inqu.kindCode"
+          [nzDropdownStyle]="{ 'max-height': '300px' }"
+        >
+        </nz-tree-select>
+
+      </div>
+      <div style="display: inline;margin-left: 30px">
+          <a style="margin-right: 10px">进厂大门</a>
+          <nz-select style="width: 150px;" [(ngModel)]="inqu.gateCode" nzAllowClear nzPlaceHolder="请选择进厂大门" >
+              <nz-option *ngFor="let i of GateArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+          </nz-select>
+      </div>
+      <div style="display: inline;margin-left: 30px">
+          <a style="margin-right: 10px">处理方式</a>
+          <nz-select style="width: 150px;" nzAllowClear nzPlaceHolder="请选择处理方式" [(ngModel)]="inqu.dealType">
+              <!-- <nz-option *ngFor="let i of dealArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option> -->
+              <nz-option nzLabel="顺延时长" nzValue="disp_dealType_addMinutes"></nz-option>
+              <nz-option nzLabel="取消排队" nzValue="disp_dealType_cancel"></nz-option>
+          </nz-select>
+      </div>
+      <div style="display: inline;margin-left:30px">
+        <a style="margin-right: 10px">状态</a>
+        <nz-select style="width: 120px;" nzAllowClear nzPlaceHolder="请选择状态" [(ngModel)]="inqu.status">
+            <nz-option nzLabel="启用" nzValue="CSCL10"></nz-option>
+            <nz-option nzLabel="作废" nzValue="CSCL20"></nz-option>
+        </nz-select>
+      </div>
+      <div style="float: right">
+        <button nz-button nzType="primary" (click)="query()">查询</button>
+            <!-- <a>&nbsp;&nbsp;</a>
+            <button nz-button nzType="primary" (click)="addData()">新增</button> -->
+      </div>
+    </div>
+  </div>
+
+
+  <tpl-buttons (btnClick)="btnClick($event)" [formId]="'form_rgdisp_timeout'" [btnHiden]="{'Find':true,'Add':false,'Update':!saveFlag,'Delete':false,'Save':saveFlag}"></tpl-buttons>
+<app-table-form
+                  [formId]="'form_rgDisp_timeout'" [gridId]="'grid1'" [pageFun]="true" (pageIndexEmit)="pageIndexEmit($event)"
+                  [isMutli]="false"
+                  [dataSet]="dataSet"  (pageSizeEmit)="pageSizeEmit($event)"
+                  [isCheckBox]="true"
+                  (updateDataResult)="updateDataResult($event)"
+                  [showCount]='true'
+                  [isCheckBox]="false"
+                  [listLoading]="listLoading"
+                  (userColumnsEmit)="columns($event)"
+                  [pageSize]="pageSize" [totalPage]="totalPage"
+                 >
+                 <ng-template #timeout1 let-data let-header>
+                    <app-input-number [(ngModel)]="data.timeout" [intType]="true" [format]="'number'" [ngClass]="{'selectShow':data.selectShow,'selectClose':!data.selectShow}"></app-input-number>
+                    <!-- <nz-input-number [(ngModel)]="data.timeout"  [nzStep]="1" [nzMin]="0" [ngClass]="{'selectShow':data.selectShow,'selectClose':!data.selectShow}"></nz-input-number> -->
+                    <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.timeout}}</div>
+                  </ng-template>
+                  <ng-template #dealValue1 let-data let-header>
+                    <app-input-number [(ngModel)]="data.dealValue" [intType]="true" [format]="'number'" [ngClass]="{'selectShow':data.selectShow,'selectClose':!data.selectShow}"></app-input-number>
+                    <!-- <nz-input-number [(ngModel)]="data.dealValue"  [nzStep]="1" [nzMin]="0" [ngClass]="{'selectShow':data.selectShow,'selectClose':!data.selectShow}"></nz-input-number> -->
+                    <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.dealValue}}</div>
+                  </ng-template>
+                  <ng-template #dealCount1 let-data let-header>
+                    <nz-input-number [(ngModel)]="data.dealCount"  [nzStep]="1" [nzMin]="0" [ngClass]="{'selectShow':data.selectShow,'selectClose':!data.selectShow}"></nz-input-number>
+                    <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.dealCount}}</div>
+                  </ng-template>
+    <!-- <ng-template #g1 let-data let-index="index">
+      <a (click)="update(data,index)" *ngIf="data.editstate==0 ">修改</a>
+      <ng-container *ngIf="data.editstate==1">
+          <a (click)='saveData(data,index)'>保存</a>
+          <a>&nbsp;&nbsp;</a>
+          <a (click)='cancle(data,index)'>取消</a>
+      </ng-container>
+      <ng-container *ngIf="data.status == '作废'">
+            <a>&nbsp;&nbsp;</a>
+            <a (click)='deleteBtn(data)'>删除</a>
+            </ng-container>
+    </ng-template> -->
+  </app-table-form>
+
+
+  <!-- <nz-modal [nzWidth]="'800px'" [nzVisible]="InsertFormVisible" [nzTitle]="modalTitle1" [nzContent]="modalContent1" [nzFooter]="modalFooter1" (nzOnCancel)="InsertFormVisible=false">
+    <ng-template #modalTitle1>
+        新增->基本信息
+    </ng-template>
+    <ng-template #modalContent1>
+
+        <div class="div6 ">
+           <label class="span15 required">分类名称:</label>
+            <nz-tree-select style="width: 236px;"  [nzDisabled]=isTrue  [nzDefaultExpandedKeys]="expandKeys" [nzNodes]="nodes" nzShowSearch nzPlaceHolder="分类名称"
+                    (ngModelChange)="onChange($event)"
+                    [(ngModel)]="matKindCode" [ngModelOptions]="{standalone: true}"
+                     >
+                </nz-tree-select>
+          </div>
+        <div class="div6"  >
+          <span class="span9 required">进厂大门:</span>
+          <input class="input9" [(ngModel)]="gateName" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="div5" >
+            <span class="span8 required">超时时长:</span>
+            <input class="input8" [(ngModel)]="timeout" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="div6" >
+            <span class="span9 required">超时处理方式：</span>
+            <input class="input9" [(ngModel)]="dealType" [ngModelOptions]="{standalone: true}">
+          </div>
+
+
+ </ng-template>
+ <ng-template #modalFooter1>
+  <button nz-button nzType="primary" (click)="saveData1()"  [nzLoading]="isLoading"
+  >保存</button>
+  <button nz-button nzType="default" (click)="quitData()">取消</button>
+</ng-template>
+</nz-modal> -->
+
+
+<nz-modal [(nzVisible)]="InsertFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzOkLoading]="isOkLoading"
+(nzAfterClose)="closeResult()">
+<form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData" >
+        <!-- <nz-form-label [nzSpan]="6" [nzRequired]="m.require" *ngIf="m.eName !== 'status1' || btnUpdateShow"> -->
+        <nz-form-label [nzSpan]="6" [nzRequired]="m.require" >
+            {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="12">
+
+            <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+                <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+            </nz-radio-group>
+
+            <!-- <ng-template #other> -->
+
+                <!-- <nz-select [nzDisabled]=isTrue  #select  style="width: 236px;" *ngIf="m.eName === 'kindCode'"
+                nzShowSearch nzAllowClear nzPlaceHolder="分类名称" [(ngModel)]="matKindName" [formControlName]="m.eName">
+                    <nz-option *ngFor="let i of themeArrF" [nzLabel]="i.matKindName" [nzValue]="i.matKindCode"></nz-option>
+                </nz-select> -->
+
+                <nz-tree-select style="width: 236px;" *ngIf="m.eName === 'kindCode'"  [nzDefaultExpandedKeys]="expandKeys" [nzNodes]="nodes" nzShowSearch nzPlaceHolder="品种名称"
+                    (ngModelChange)="onChange($event)" [formControlName]="m.eName" [nzDropdownStyle]="{ 'max-height': '300px' }">
+                </nz-tree-select>
+
+                <nz-select #select  style="width: 236px;" *ngIf="m.eName === 'gateName'"
+                nzShowSearch nzAllowClear nzPlaceHolder="进厂大门" [formControlName]="m.eName" (ngModelChange)='gateChange($event)'>
+                    <nz-option *ngFor="let i of GateArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+                </nz-select>
+
+                <nz-select #select  style="width: 236px;" *ngIf="m.eName === 'dealType'"
+                nzShowSearch nzAllowClear nzPlaceHolder="超时处理方式" [formControlName]="m.eName" (ngModelChange)="modelChange($event)">
+                    <!-- <nz-option *ngFor="let i of themeArrC" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option> -->
+                            <nz-option nzLabel="顺延时长" nzValue="disp_dealType_addMinutes"></nz-option>
+                            <nz-option nzLabel="取消排队" nzValue="disp_dealType_cancel"></nz-option>
+                </nz-select>
+                <app-input-number *ngIf="m.eName === 'dealValue'" formControlName="dealValue" [intType]="true" [format]="'number'"></app-input-number>
+                <app-input-number *ngIf="m.eName === 'timeout'" formControlName="timeout" [intType]="true" [format]="'number'"></app-input-number>
+                <!-- <nz-input-number *ngIf="m.eName === 'timeout'" [nzMin]="1"  [nzStep]="1" [(ngModel)]="timeout" [ngModelOptions]="{standalone: true}" ></nz-input-number> -->
+                <!-- <nz-input-number *ngIf="m.eName === 'dealValue'" [nzMin]="10"  [nzStep]="10" [(ngModel)]="dealValue" [ngModelOptions]="{standalone: true}" ></nz-input-number>                 -->
+                <nz-input-number *ngIf="m.eName === 'dealCount'" [nzMin]="1"  [nzStep]="1" formControlName="dealCount"  ></nz-input-number>
+
+                <!-- <nz-select #select  style="width: 236px;" *ngIf="m.eName === 'status1' && btnUpdateShow"
+                    nzShowSearch nzAllowClear nzPlaceHolder="状态" [formControlName]="m.eName">
+                    <nz-option *ngFor="let i of themeArrZ" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+                </nz-select> -->
+
+           <!-- </ng-template> -->
+
+            <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+                <div *ngIf="modalValidateForm.get(m.eName).errors['pattern'];else erroInf">
+                    {{ m.validators.patternErr}}
+                </div>
+                <ng-template #erroInf>
+                    {{ m.validateCon}}
+                </ng-template>
+            </nz-form-explain>
+
+        </nz-form-control>
+
+    </nz-form-item>
+</form>
+
+
+<!-- <div *ngIf=isShow>
+    <label class="label">状态 :</label>
+    <nz-select class="select"  [(ngModel)]="status1"
+           nzShowSearch nzAllowClear nzPlaceHolder="状态"  >
+           <nz-option *ngFor="let i of themeArrZ" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+    </nz-select>
+</div> -->
+
+
+
+</nz-modal>
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="deletemodaltitle" [modalCon]="finishCon"
+                   (modalConfirmResult)="deleteData($event)">
+</app-modal-confirm>

@@ -1,0 +1,58 @@
+<common-page [pageSize]="pageSize" [totalPage]="total" [listLoading]="listLoading" [dataSet]="dataSet" [isMutli]="true"
+             (search)="listSearch($event)" (btnClick)="btnClick($event)"
+             (updateDataResult)="updateDataResult($event)">
+</common-page>
+
+<nz-modal nzWidth="80%" [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" [nzMaskClosable]="false" [nzOkLoading]="modalOkLoading"
+          (nzOnOk)="handleOk()" (nzOnCancel)="handleCancel()" (nzAfterClose)="closeResult()">
+  <form nz-form class="ant-advanced-search-form" [formGroup]="modalValidateForm">
+    <div nz-row [nzGutter]="8">
+      <div nz-col [nzSpan]="6" *ngFor="let m of modalFormData">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzSpan]="9" [nzRequired]="m.require">{{m.name}}</nz-form-label>
+
+          <nz-form-control [nzSpan]="15">
+
+            <ng-container *ngIf="m.eName==='boatBatchNum' else templateRef">
+              <input nz-input placeholder="系统自动生成" type="text" *ngIf="m.type == 'text'" [formControlName]="m.eName"
+                     [id]="m.eName">
+            </ng-container>
+
+            <ng-template #templateRef>
+              <input nz-input type="text" *ngIf="m.type == 'text'" [formControlName]="m.eName" [id]="m.eName">
+            </ng-template>
+
+
+            <nz-input-number *ngIf="m.type == 'number'" [formControlName]="m.eName" [nzMin]="0"
+                             [nzStep]="1">
+            </nz-input-number>
+
+            <nz-date-picker *ngIf="m.type == 'date'" [nzStyle]="{width:'166.78px'}" [nzShowTime]="true"
+                            [nzFormat]="'yyyy-MM-dd HH:mm:ss'" [formControlName]="m.eName">
+            </nz-date-picker>
+
+            <input-modal *ngIf="m.type == 'pop'" [(inputModalModel)]="boatName" [findset]="findSet"
+                         [DISABLED]="status ==='update'" (inpEmit)="inpEmit($event)"
+                         (inputModalModelChange)="inputModalModelChange($event)"
+            >
+            </input-modal>
+
+            <nz-select *ngIf="m.type === 'select'" style="width: 120px;" [formControlName]="m.eName">
+              <nz-option *ngFor="let i of m.selectList" [nzLabel]="i" [nzValue]="i"></nz-option>
+            </nz-select>
+
+            <nz-form-explain
+              *ngIf="modalValidateForm.get(m.eName).invalid && (modalValidateForm.get(m.eName).dirty || modalValidateForm.get(m.eName).touched)">
+              <ng-container *ngIf="modalValidateForm.get(m.eName).errors.required">
+                {{m.validateCon}}
+              </ng-container>
+            </nz-form-explain>
+
+          </nz-form-control>
+
+        </nz-form-item>
+      </div>
+    </div>
+
+  </form>
+</nz-modal>

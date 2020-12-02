@@ -1,0 +1,12 @@
+<!--<app-searchform (search)="listSearch($event)"></app-searchform>-->
+<!--<tpl-buttons (btnClick)="btnclick($event)"></tpl-buttons>-->
+<!--<app-table-form [pageFun]='true' (pageIndexEmit)='getPageIndex($event)' (pageSizeEmit)='getPageSize($event)' gridId='grid1'  [dataSet]="dataSet"-->
+<!--                [pageSize]="pageSize" (updateDataResult)="updateDataResult($event)" [totalPage]="totalPage" [isMutli]="true" [listLoading]="loading"-->
+<!--                [trSelectedShow]="true" [showCount]="false"></app-table-form>-->
+<common-page (search)="listSearch($event)" (btnClick)="btnclick($event)" [pageFun]='true' (pageIndexEmit)='getPageIndex($event)' (pageSizeEmit)='getPageSize($event)' gridId='grid1'  [dataSet]="dataSet"
+  [pageSize]="pageSize" (updateDataResult)="updateDataResult($event)" [totalPage]="totalPage" [isMutli]="false" [listLoading]="loading"
+  [trSelectedShow]="true" [showCount]="false"
+  ></common-page>
+<app-modal-confirm [deleteVisible]="unbindVisible" [modalTitle]="unbindmodalTitle" [modalCon]="unbindCon"
+                   (modalConfirmResult)="driverUnbind($event)">
+</app-modal-confirm>

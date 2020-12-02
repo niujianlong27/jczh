@@ -1,0 +1,84 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+
+<common-page (search)="listSearch($event)" (btnAdd)="btnAdd()" [totalPage]="totalPage"
+             [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" (btnDelete)="btnDelete($event)"
+             (btnClick)="btnClick($event)" (updateDataResult)="selected($event)"
+             (userColumnsEmit)="columns($event)" [dataSet]="dataSet" [isMutli]="true"
+             [extraTableHeight]="permissions ? 52 : 0" [triggerSearch]="true">
+ <ng-template #auditStatus let-data>
+    <span>{{statusName(data.auditStatus)}}</span>
+  </ng-template>
+  <ng-template #urlImg1 let-data>
+    <div *ngIf="data.drivingPhotos" (click)="getView($event,data.drivingPhotos)">
+      <nz-avatar *ngFor="let img of data.drivingPhotos.split(';')" [nzSrc]="img" nzSize="small"
+                 style="width:17px;height:17px;line-height:17px;"></nz-avatar>
+    </div>
+  </ng-template>
+  <ng-template #urlImg2 let-data>
+    <div *ngIf="data.drivingPhotos2" (click)="getView($event,data.drivingPhotos2)">
+      <nz-avatar *ngFor="let img of data.drivingPhotos2.split(';')" [nzSrc]="img" nzSize="small"
+                 style="width:17px;height:17px;line-height:17px;"></nz-avatar>
+    </div>
+  </ng-template>
+
+  <ng-template #urlImg3 let-data>
+    <div *ngIf="data.vehicleImgUrl2" (click)="getView($event,data.vehicleImgUrl2)">
+      <nz-avatar *ngFor="let img of data.vehicleImgUrl2.split(';')" [nzSrc]="img" nzSize="small"
+                 style="width:17px;height:17px;line-height:17px;"></nz-avatar>
+    </div>
+  </ng-template>
+  <ng-template #urlImg4 let-data>
+    <div *ngIf="data.vehicleImgUrl" (click)="getView($event,data.vehicleImgUrl)">
+      <nz-avatar *ngFor="let img of data.vehicleImgUrl.split(';')" [nzSrc]="img" nzSize="small"
+                 style="width:17px;height:17px;line-height:17px;"></nz-avatar>
+    </div>
+  </ng-template>
+  <ng-template #urlImg5 let-data>
+    <div *ngIf="data.drivelicenseImg" (click)="getView($event,data.drivelicenseImg)">
+      <nz-avatar *ngFor="let img of data.drivelicenseImg.split(';')" [nzSrc]="img" nzSize="small"
+                 style="width:17px;height:17px;line-height:17px;"></nz-avatar>
+    </div>
+  </ng-template>
+  <ng-template #urlImg6 let-data>
+    <div *ngIf="data.drivelicenseImg2" (click)="getView($event,data.drivelicenseImg2)">
+      <nz-avatar *ngFor="let img of data.drivelicenseImg2.split(';')" [nzSrc]="img" nzSize="small"
+                 style="width:17px;height:17px;line-height:17px;"></nz-avatar>
+    </div>
+  </ng-template>
+</common-page>
+
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+
+</app-modal-confirm>
+<nz-modal 
+[(nzVisible)]="visible"
+nzTitle="批量审核"
+[nzContent]="content"
+[nzFooter]="footer"
+(nzOnCancel)="visible = false">
+  <ng-template #content>
+    <form [formGroup]="modalForm">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7">审核备注</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <textarea formControlName="remark" nz-input rows="2" ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7">驳回理由</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <textarea formControlName="backReason" nz-input rows="2" ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-template>
+  <ng-template #footer>
+    <div>
+      <button nz-button nzType="primary" [nzLoading]="checkLoading" [disabled]="rejectLoading" (click)="check()">通过</button>
+      <button nz-button nzType="danger" [nzLoading]="rejectLoading"  [disabled]="checkLoading" (click)="reject()">驳回</button>
+      <button nz-button nzType="default" (click)="visible = false">返回</button>
+    </div>
+  </ng-template>
+</nz-modal>

@@ -1,0 +1,21 @@
+.ant-row {
+  width: 100%;
+  word-wrap: break-word;
+}
+
+:host ::ng-deep .ant-form-inline .ant-form-item {
+  margin-right: 0px !important;
+}
+.tableIcon-btn i{
+  margin-left:-3px;
+}
+.transition{
+  transition: all 50ms cubic-bezier(0, 0, 0.2, 1);
+}
+.transition ::ng-deep .ant-calendar-picker{
+  width:100%;
+}
+.order-registration ::ng-deep .ant-tabs-bar{
+  margin:0;
+}
+

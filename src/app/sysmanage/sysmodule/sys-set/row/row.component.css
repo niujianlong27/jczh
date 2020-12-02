@@ -1,0 +1,23 @@
+.button-reset {
+  background-color: transparent;
+  color: #1890ff;
+  margin-left: 20px;
+}
+.search-input-group nz-select {
+  min-width:60px;
+  float:left;
+}
+.search-input-group input{
+  max-width: 150px;
+  margin-left:-2px;
+  float:left;
+}
+
+.form-btn {
+  display: inline-block;
+}
+.b-t{
+  padding-top:15px;
+  border-bottom: 1px #ddd solid;
+  margin-bottom:30px;
+}

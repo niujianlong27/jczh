@@ -1,0 +1,54 @@
+
+<app-searchform (search)="listSearch($event)" (searchDataReturn)="searchDataReturn($event)"></app-searchform>
+<tpl-buttons [btnDisable]="btnDis" (btnClick)="btnClick($event)" (btnSearch)="btnSearch($event)"></tpl-buttons>
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+  <ng-template #one>
+    <app-table-form [pageFun]='true' tableTitle="分货信息" [columns]="headerArr"
+    (pageIndexEmit)='getPageIndex1($event)'
+    [showCount]="false"
+    (pageSizeEmit)='getPageSize1($event)'
+    [gridId]="'grid1'"
+    [dataSet]="dataSet1"
+    (updateDataResult)="updateDataResult($event)"
+    (userColumnsEmit)="userColumnsEmit($event)"
+    [pageSize]="pageSize1"
+    [totalPage]="totalPages1"
+    [isCheckBox]="false"
+    [listLoading]="listLoading1"
+    [selfTableHeight]="gridOneHeight"
+    [colSet]="false">
+    </app-table-form>
+  </ng-template>
+  <ng-template #two>
+    <app-table-form [pageFun]='true' [columns]="headerArr2"
+                    tableTitle="跟踪信息" [selfTableHeight]="gridTwoHeight"
+                    (pageIndexEmit)='getPageIndex2($event)'
+                    (pageSizeEmit)='getPageSize2($event)'
+                    [dataSet]="dataSet2" [gridId]="'grid2'"
+                    (updateDataResult)="updateDataResult2($event)"
+                    (userColumnsEmit)="userColumnsEmit2($event)"
+                    [pageSize]="pageSize2" [totalPage]="totalPages2"
+                    [isMutli]="true" [listLoading]="listLoading2"
+                    [isCheckBox]="false" [nzShowPagination]="false"
+                    [gridOperate]="{}">
+      <!--[gridOperate]="gridOperateStatus?{show:true,title:'省内分货',width:'120px',template:operate}:{}">-->
+      <ng-template #operate let-data let-index="index">
+        <a style="color: #55f" (click)="showDetail(data,index)">详情</a>
+      </ng-template>
+    </app-table-form>
+  </ng-template>
+</app-grid-resize>
+<!--<ng-template #tplTitle>-->
+<!--<span>{{modalTitle}}</span>-->
+<!--</ng-template>-->
+<!--<ng-template #tplContent>-->
+<!--<app-table-form  [pageFun]='true'  (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize3($event)' [gridId]="'grid3'"-->
+<!--[dataSet]="dataSet3"  (updateDataResult)="updateDataResult3($event)"-->
+<!--[pageSize]="pageSize3" [totalPage]="totalPages3" [isCheckBox]="false" [listLoading]="listLoading3"></app-table-form>-->
+<!--</ng-template>-->
+<!--<ng-template #tplFooter>-->
+<!--<button nz-button nzType="default" (click)="handleCancel()">取消</button>-->
+<!--<button nz-button nzType="primary" (click)="importConfirm()">确定</button>-->
+<!--</ng-template>-->
+
+

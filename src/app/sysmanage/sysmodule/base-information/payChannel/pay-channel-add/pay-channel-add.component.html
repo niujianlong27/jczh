@@ -1,0 +1,85 @@
+<form nz-form nzLayout="inline" [formGroup]="payChannelForm">
+  <div class="channel-layout">
+    <nz-form-item [nzFlex]="true">
+      <nz-form-label nzFor="channelId" nzRequired>通道ID</nz-form-label>
+      <nz-form-control>
+        <input nz-input name="channelId" type="text" formControlName="channelId">
+
+        <nz-form-explain *ngIf="payChannelForm.get('channelId').dirty && payChannelForm.get('channelId').errors">
+          <ng-container *ngIf="payChannelForm.get('channelId').hasError('required')">
+            请输入通道ID
+          </ng-container>
+        </nz-form-explain>
+
+      </nz-form-control>
+
+      <nz-form-label nzFor="channelName" [nzOffset]="1" nzRequired>通道名称</nz-form-label>
+      <nz-form-control>
+        <input nz-input name="channelName" type="text" formControlName="channelName">
+
+        <nz-form-explain *ngIf="payChannelForm.get('channelName').dirty && payChannelForm.get('channelName').errors">
+          <ng-container *ngIf="payChannelForm.get('channelName').hasError('required')">
+            请输入通道名称
+          </ng-container>
+        </nz-form-explain>
+
+      </nz-form-control>
+
+    </nz-form-item>
+
+  </div>
+  <div class="channel-layout m-t-10">
+    <nz-form-item>
+      <nz-form-label nzFor="remark" nzRequired>通道说明</nz-form-label>
+      <nz-form-control>
+        <textarea rows="9" cols="100" style="font-family: '宋体',sans-serif " nz-input formControlName="remark"></textarea>
+
+        <nz-form-explain *ngIf="payChannelForm.get('remark').dirty && payChannelForm.get('remark').errors">
+          <ng-container *ngIf="payChannelForm.get('remark').hasError('required')">
+            请输入通道说明
+          </ng-container>
+        </nz-form-explain>
+
+      </nz-form-control>
+
+
+
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzFor="logo" nzRequired>公司logo</nz-form-label>
+      <nz-form-control>
+        <!--<input nz-input name="logo" type="text" formControlName="logo">-->
+          <nz-upload nzListType="picture-card" [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest'
+                     [(nzFileList)]="logoList" [nzPreview]="handlePreview" [nzData]="upload.handleData"
+                     [nzShowButton]="logoList.length < 2" (nzChange)="handleChange($event,'logo')">
+            <i nz-icon nzType="plus" nzTheme="outline"></i>
+            <div class="ant-upload-text">Upload</div>
+          </nz-upload>
+          <input type="hidden" formControlName="logo" readonly="readonly">
+          <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+                    (nzOnCancel)="previewVisible=false">
+            <ng-template #modalContent>
+              <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }"/>
+            </ng-template>
+          </nz-modal>
+
+        <nz-form-explain *ngIf="payChannelForm.get('logo').dirty && payChannelForm.get('logo').errors">
+          <ng-container *ngIf="payChannelForm.get('logo').hasError('required')">
+            请选择LOGO
+          </ng-container>
+        </nz-form-explain>
+
+      </nz-form-control>
+
+    </nz-form-item>
+  </div>
+  <div class="m-t b-t border-top channel-layout">
+    <nz-form-item>
+      <nz-form-control>
+        <button nz-button nzType="default" class="m-r" (click)="add()">新增</button>
+        <button nz-button nzType="default" (click)="save()">保存</button>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+</form>

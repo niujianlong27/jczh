@@ -1,0 +1,33 @@
+.userAreement{
+  width: 70%;
+  margin: 0 auto;
+  border: 1px solid #e1e1e1;
+  padding: 30px;
+}
+h2 {
+  text-align: center;
+}
+.fontWeight{
+  font-weight: 700;
+}
+section{
+  margin-bottom: 30px;
+}
+p{
+  text-indent: 2em;
+  margin-bottom: 10px;
+  font-size: 15px;
+  color: black;
+}
+.button{
+  width: 120px;
+  height: 32px;
+  margin: 40px auto 20px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #e1e1e1;
+  background-color: #5e5e5e;
+  color: white;
+  line-height: 32px;
+  border-radius: 3px;
+}

@@ -1,0 +1,40 @@
+<div class="btn-box">
+    <ng-container *ngFor="let btn of buttonArr">
+        <ng-container *ngIf="!btnHiden[btn.buttonId]">
+            <button [appCilckOnce]="btnDisable[btn.buttonId]" [duration]="2000" nz-button type="button" [innerDisable]="innerDisable" [disabled]='btnDisable[btn.buttonId]' [nzLoading]="btnLoading[btn.buttonId]" *ngIf="btn.buttonId !== 'Find'" nzType="primary" (click)="buttonClick(btn)" nzGhost>
+              <ng-container *ngIf="btn.bgImg">
+                <a class="btn-icon">
+                  <img [src]="btn.bgImg">
+                </a>
+              </ng-container>
+              {{btn.buttonName}}</button>
+        </ng-container>
+        <ng-container *ngIf="!btnHiden[btn.buttonId]">
+            <button nz-button type="button" [disabled]='btnDisable[btn.buttonId]' [nzLoading]="btnLoading[btn.buttonId]" *ngIf="btn.buttonId === 'Find'" nzType="primary" (click)="collaspedSearch()" nzGhost>
+              <ng-container *ngIf="searchFormHidden">
+                <i nz-icon type="arrow-down" theme="outline"></i>
+                <span>查询</span>
+              </ng-container>
+              <ng-container *ngIf="!searchFormHidden">
+                <i nz-icon type="arrow-up" theme="outline"></i>
+                <span>隐藏</span>
+              </ng-container>
+            </button>
+        </ng-container>
+
+        <!--<div class="fr search-btn" *ngIf="btn.buttonId === 'Find'">
+          <ng-container *ngIf="!searchFormHidden">
+            <button nz-button type="button" [disabled]='btnDisable[btn.buttonId]' class="m-r"
+            nzType="primary" (click)="buttonClick(btn)" nzGhost>{{btn.buttonName}}</button>
+            <button *ngIf="!btnHiden['reset']" nz-button type="button" [nzType]="'primary'" (click)="resetForm()" class="button-reset m-r" nzGhost>重置</button>
+            <app-muti-search *ngIf="!btnHiden['mutiSearch']" [formId]="formId" style="font-size:12px;"></app-muti-search>
+          </ng-container>
+        </div>
+        <div *ngIf="btn.buttonId === 'Find'" class="fr search-btn collsaped-btn" >
+          <button nz-button type="button" [nzType]="'primary'" (click)="collaspedSearch()">
+            <span *ngIf="!searchFormHidden"><i nz-icon type="arrow-up" theme="outline"></i> 收缩查询区域</span>
+            <span *ngIf="searchFormHidden"><i nz-icon type="arrow-down" theme="outline"></i> 展开查询区域</span>
+          </button>
+        </div>-->
+    </ng-container>
+</div>

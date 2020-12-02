@@ -1,0 +1,358 @@
+<app-searchform (search)="listSearch($event)" [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)="btnclick($event)"></tpl-buttons>
+<app-grid-resize [gridOne]="gridOne" [gridTwo]="gridTwo" (selfHeightResult)="gridHeight($event)">
+  <ng-template #gridOne>
+    <app-table-form  [pageFun]='true' (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)' gridId='grid1'  [dataSet]="dataSet"
+                     [pageSize]="pageSize1" (updateDataResult)="updateDataResult($event)" [totalPage]="totalPage" [isMutli]="true" [listLoading]="loading"
+                     [trSelectedShow]="true" [selfTableHeight]="gridOneHeight" (userColumnsEmit)="userColumnsEmit($event)"></app-table-form>
+
+  </ng-template>
+
+  <ng-template #gridTwo>
+    <app-table-form [pageFun]='true'   [gridId]="'grid2'" [dataSet]="dataSet2" [pageSize]="pageSize2" (pageIndexEmit)='getPageIndex2($event)' (pageSizeEmit)='getPageSize2($event)'
+                    [totalPage]="totalPages2" [listLoading]="listLoading2" [isMutli]="true" [isCheckBox]="false" [showCount]="false" [selfTableHeight]="gridTwoHeight" (userColumnsEmit)="userColumnsEmit1($event)"></app-table-form>
+  </ng-template>
+</app-grid-resize>
+
+
+<ng-template #tplTitle>
+  <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent>
+  <form nz-form [formGroup]="validateForm1" style="padding-top: 2%">
+    <div nz-row [nzGutter]="1" [nzType]="'flex'">
+      <div nz-col [nzSpan]="24">
+        <div nz-row [nzGutter]="1" [nzType]="'flex'">
+          <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzRequired><i nz-icon type="form" theme="outline"></i>托运人</nz-form-label>
+          <nz-form-control [nzSpan]="13" style="width: 200px">
+            <nz-select formControlName="consignorCompanyId" nzShowSearch (ngModelChange)="TYRChange($event)">
+              <nz-option *ngFor="let i of consignorCompanyArr" [nzValue]="i.value" [nzLabel]="i.name"></nz-option>
+            </nz-select>
+          </nz-form-control>
+          <nz-form-explain *ngIf="validateForm1.get('consignorCompanyId').dirty && validateForm1.get('consignorCompanyId').errors">
+            <ng-container *ngIf="validateForm1.get('consignorCompanyId').hasError('required')">
+              请选择托运人
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="7" nzRequired>业务板块</nz-form-label>
+              <nz-form-control [nzSpan]="15">
+                <nz-select formControlName="businessModuleId" nzShowSearch nzRequired style="width:60%" >
+                  <nz-option *ngFor="let i of businessModuleIdArr" [nzValue]="i.value" [nzLabel]="i.name"></nz-option>
+                </nz-select>
+              </nz-form-control>
+              <nz-form-explain
+                *ngIf="validateForm1.get('businessModuleId').dirty && validateForm1.get('businessModuleId').errors">
+                <ng-container *ngIf="validateForm1.get('businessModuleId').hasError('required')">
+                  请选择业务板块
+                </ng-container>
+              </nz-form-explain>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">车队</nz-form-label>
+              <nz-form-control [nzSpan]="15" style="width: 200px">
+                <nz-select  formControlName="carrierCompanyName" (ngModelChange)="vehicleChange($event)">
+                  <nz-option *ngFor="let i of carrieCompanyNameArr1" [nzLabel]="i.name" [nzValue]="i">
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+              <nz-form-explain
+                *ngIf="validateForm1.get('carrierCompanyName').dirty && validateForm1.get('carrierCompanyName').errors">
+                <ng-container *ngIf="validateForm1.get('carrierCompanyName').hasError('required')">
+                  请选择车队
+                </ng-container>
+              </nz-form-explain>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:15px;margin-left: 13px;width:140px"><i nz-icon type="form" theme="outline"></i>选择业务范围</div>
+      <div style="color:red;font-size:14px;margin-left: 50px;width:60px" *ngIf="newDrivder">新人新车</div>
+      <div nz-col [nzSpan]="24" *ngIf="info.APPINFO.USER.companyId==='C000062070'">
+        <div nz-col [nzSpan]="4">
+          <label>搜索并添加其他司机:</label>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <input-modal [findset]="findSet" (inpEmit)="otherDriverInpEmit($event)" ></input-modal>
+        </div>
+      </div>
+      <div nz-col [nzSpan]="24">
+<!--        <form (ngSubmit)="selectDriver2()">-->
+<!--          <nz-form-item>-->
+<!--            <nz-form-control >-->
+<!--              查询司机：-->
+<!--              <input [(ngModel)]="driver" nz-input name="drive" style="width:120px;">-->
+<!--              <button nz-button nzType="primary" style="margin-left: 20px" >查询</button>-->
+<!--            </nz-form-control>-->
+<!--          </nz-form-item>-->
+<!--        </form>-->
+        <app-table-form [dataSet]="dataSet3" gridId="grid5" formId="form_schedule_info" (updateDataResult)="updataDataResult4($event)" [nzShowPagination] = 'false'
+                        [listLoading]="loading1" [isMutli] = 'false' selfTableHeight="150px" (userColumnsEmit)="colName1($event)">
+          <ng-template #vehicleNo let-data let-header>
+            <!--<nz-radio-group [(ngModel)]="dataSetAdd[header.colEname]" [name]="header.colEname"  [ngModelOptions]="{standalone: true}">-->
+            <!--<label *ngFor="let p of productArr" nz-radio nzValue="{{p.value}}">{{p.name}}</label>-->
+            <!--</nz-radio-group>-->
+            <nz-select [nzAllowClear]="true" [nzShowSearch]="true" nzSize="small" [(ngModel)]="data.vehicleNo" (ngModelChange)="modelChange($event,data)" [ngModelOptions]="{standalone: true}"
+                       style="width: 100%;"   >
+              <nz-option *ngFor="let p of data.vehicleNoList" [nzLabel]="p.vehicleNo" [nzValue]="p.vehicleNo"></nz-option>
+            </nz-select>
+          </ng-template>
+        </app-table-form>
+      </div>
+      <p style="font-size:15px;margin-left: 13px"><i nz-icon type="form" theme="outline"></i>流向</p>
+      <div nz-col [nzSpan]="24">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="3" nzRequired>装点</nz-form-label>
+          <nz-form-control [nzSpan]="18">
+            <nz-select formControlName="startPoint" nzShowSearch nzRequired>
+              <nz-option *ngFor="let i of startPointArr1" [nzValue]="i.value" [nzLabel]="i.name"></nz-option>
+            </nz-select>
+          </nz-form-control>
+          <nz-form-explain *ngIf="validateForm1.get('startPoint').dirty && validateForm1.get('startPoint').errors">
+            <ng-container *ngIf="validateForm1.get('startPoint').hasError('required')">
+              请选择装点
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="24">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="3" nzRequired>卸点</nz-form-label>
+          <nz-form-control [nzSpan]="18">
+            <div nz-row [nzGutter]="2" [nzType]="'flex'">
+              <div nz-col [nzSpan]="8">
+                <nz-select class="locationStyle" nzShowSearch nzRequired formControlName="provinceId"
+                           (ngModelChange)="addressChange($event,'DZDJ10')">
+                  <nz-option *ngFor="let i of provinceArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+                </nz-select>
+                <nz-form-explain
+                  *ngIf="validateForm1.get('provinceId').dirty && validateForm1.get('provinceId').errors">
+                  <ng-container *ngIf="validateForm1.get('provinceId').hasError('required')">
+                    请选择省份
+                  </ng-container>
+                </nz-form-explain>
+              </div>
+              <div nz-col [nzSpan]="8">
+                <nz-select class="locationStyle" nzShowSearch nzRequired formControlName="cityId"
+                           (ngModelChange)="addressChange($event,'DZDJ20')">
+                  <nz-option *ngFor="let i of cityArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="validateForm1.get('cityId').dirty && validateForm1.get('cityId').errors">
+                  <ng-container *ngIf="validateForm1.get('cityId').hasError('required')">
+                    请选择市区
+                  </ng-container>
+                </nz-form-explain>
+              </div>
+              <div nz-col [nzSpan]="8">
+                <nz-select class="locationStyle" nzShowSearch formControlName="districtId" [nzAllowClear]="true"
+                           (ngModelChange)="addressChange($event,'DZDJ30')">
+                  <nz-option *ngFor="let i of areaArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+                </nz-select>
+              </div>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <p style="font-size:15px;margin-left: 13px"><i nz-icon type="form" theme="outline"></i>运输条件</p>
+      <div nz-col [nzSpan]="24">
+        <div nz-col [nzSpan]="24">
+          <div nz-row [nzGutter]="1" [nzType]="'flex'">
+            <div nz-col [nzSpan]="12">
+              <nz-form-item>
+                <nz-form-label [nzSpan]="9" nzRequired>业务执行时间</nz-form-label>
+                <nz-form-control [nzSpan]="10">
+                  <nz-date-picker formControlName="businessTime" [nzDisabledDate]="disabledDate" nzformat="yyyy-MM-dd"></nz-date-picker>
+                </nz-form-control>
+                <nz-form-explain *ngIf="validateForm1.get('businessTime').dirty && validateForm1.get('businessTime').errors">
+                  <ng-container *ngIf="validateForm1.get('businessTime').hasError('required')">
+                    请选择业务执行时间
+                  </ng-container>
+                </nz-form-explain>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="12">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div>
+    <tpl-buttons (btnClick)="btnCLick1($event)" formId="form_entrust_add"></tpl-buttons>
+    <app-table-form formId="form_entrust_add" [gridId]="addGridId"  [isCheckBox]="true" (updateDataResult)="updateData($event)"
+                    [dataSet]="dataSetAdd" [nzShowPagination]="false" [isMutli]="true" (modelChange)="addModelChange($event)"
+                    [selfTableHeight]="'200px'"  (userColumnsEmit)="colName($event)">
+      <ng-template #productName let-data let-header>
+        <!--<nz-radio-group [(ngModel)]="dataSetAdd[header.colEname]" [name]="header.colEname"  [ngModelOptions]="{standalone: true}">-->
+        <!--<label *ngFor="let p of productArr" nz-radio nzValue="{{p.value}}">{{p.name}}</label>-->
+        <!--</nz-radio-group>-->
+        <nz-select [nzAllowClear]="true" [nzShowSearch]="true" nzSize="small" [(ngModel)]="data.productName"
+                   style="width: 100%;" >
+          <nz-option *ngFor="let p of productArr" [nzLabel]="p.name" [nzValue]="p.value"></nz-option>
+        </nz-select>
+      </ng-template>
+    </app-table-form>
+    <p style="font-size:15px"><i nz-icon type="form" theme="outline"></i>
+      备注</p>
+    <nz-select nzMode="tags" [nzMaxTagCount]="10" [(ngModel)]="remark">
+        <nz-option *ngFor="let i of remarkArr" [nzLabel]="i.label" [nzValue]="i.value"></nz-option>
+    </nz-select>
+  </div>
+
+</ng-template>
+<ng-template #tplFooter>
+  <button nz-button nzType="default" (click)="handleCancel()" [disabled]="implistLoading">取消</button>
+  <button nz-button nzType="primary" (click)="importConfirm3()" [nzLoading]="implistLoading">确定
+  </button>
+  <button nz-button nzType="primary" (click)="importConfirm4()" [nzLoading]="implistLoading" *ngIf="buttonId!=='AgainPlan'">确定并打印
+  </button>
+</ng-template>
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle2" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+
+</app-modal-confirm>
+
+
+<ng-template #tplTitle1>
+  <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent1>
+  <form nz-form [formGroup]="validateForm">
+    <nz-form-item *ngFor="let m of modalFormData"  [hidden]="m.hidden">
+      <nz-form-label [nzSpan]="6" [nzRequired]="true">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="12">
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'" (click)="selectFile()" [readOnly]="m.readOnly">
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'file'" #fileInput  (change)="fileChange($event)">
+        <nz-form-explain *ngIf="validateForm.get(m.eName).dirty && validateForm.get(m.eName).errors">
+          <ng-container *ngIf="validateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+          <ng-container *ngIf="validateForm.get(m.eName).hasError('pattern')">
+            {{m.validators.patternErr}}
+          </ng-container>
+        </nz-form-explain>
+      </nz-form-control>
+      <nz-form-control [nzSpan]="4" style="margin-left: 20px">
+        <a (click)="aClick()">模板下载</a>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</ng-template>
+<ng-template #tplFooter1>
+  <button nz-button nzType="default" (click)="handleCancel1()" [disabled]="  implistLoading1">取消</button>
+  <button nz-button nzType="primary" (click)="importConfirm()" [nzLoading]="implistLoading1" [disabled]="implistLoading1">确定</button>
+</ng-template>
+
+<e-ngx-print (printComplete)="printComplete()" [showBtn]="false" #print1 [printCSS]="printCSS"></e-ngx-print>
+
+
+
+
+  <ng-template #modalTitle3>
+    批量派单
+  </ng-template>
+  <ng-template #modalContent>
+    <tpl-buttons formId="form_batch_car" (btnClick)="btnClick2($event)"></tpl-buttons>
+    <app-table-form gridId="grid3" [isMutli]="true" [nzShowPagination]="false" [dataSet]="dataSetBatch" (userColumnsEmit)="colName2($event)"
+         (updateDataResult)="updateDataBatch($event)">
+      <ng-template #prodName1 let-data let-header>
+        <nz-select  [nzShowSearch]="true" nzSize="small" [(ngModel)]="data.prodName"
+                 style="width:100%">
+          <nz-option  *ngFor="let p of productArr" [nzLabel]="p.name" [nzValue]="p.value"></nz-option>
+        </nz-select>
+<!--        <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.productName}}</div>-->
+      </ng-template>
+      <ng-template #driverName let-data let-header>
+        <nz-select  [nzShowSearch]="true" nzSize="small" [(ngModel)]="data.driverName" (ngModelChange)="driverChange(data)"
+                   style="width:100%">
+          <nz-option  *ngFor="let n of nameArr" [nzValue]="n.userId" [nzLabel]="n.name"></nz-option>
+        </nz-select>
+<!--        <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.name}}</div>-->
+      </ng-template>
+      <ng-template #startPoint let-data let-header>
+        <nz-select [nzShowSearch]="true" nzSize="small" [(ngModel)]="data.startPoint"
+                   style="width:100%">
+          <nz-option  *ngFor="let p of startPointArr1" [nzValue]="p.value" [nzLabel]="p.name"></nz-option>
+        </nz-select>
+<!--        <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.startPoint}}</div>-->
+      </ng-template>
+      <ng-template #endLocationName let-data let-header>
+        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton"  nzSize="small">
+          <input type="text" nz-input [(ngModel)]="data.endLocationName" nzSize="small"/>
+        </nz-input-group>
+        <ng-template #suffixIconButton>
+          <button nz-button nzType="default" nzSearch nzSize="small" (click)="endPointChoice(data)"><i nz-icon nzType="search"  ></i></button>
+        </ng-template>
+<!--        <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.endPoint}}</div>-->
+      </ng-template>
+    </app-table-form>
+  </ng-template>
+
+
+
+
+
+<ng-template #tplTitle2>
+  <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplContent2>
+  <form nz-form [formGroup]="validateForm2">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>省</nz-form-label>
+      <nz-form-control [nzSpan]="16">
+            <nz-select class="locationStyle" nzShowSearch nzRequired formControlName="endProvinceCode"
+                       (ngModelChange)="addressChange2($event,'DZDJ10')" >
+              <nz-option *ngFor="let i of provinceArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+            </nz-select>
+            <nz-form-explain
+              *ngIf="validateForm2.get('endProvinceCode').dirty && validateForm2.get('endProvinceCode').errors">
+              <ng-container *ngIf="validateForm2.get('endProvinceCode').hasError('required')">
+                请选择省份
+              </ng-container>
+            </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>市</nz-form-label>
+      <nz-form-control [nzSpan]="16">
+
+            <nz-select class="locationStyle" nzShowSearch nzRequired formControlName="endCityCode"
+                       (ngModelChange)="addressChange2($event,'DZDJ20')">
+              <nz-option *ngFor="let i of cityArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+            </nz-select>
+            <nz-form-explain *ngIf="validateForm2.get('endCityCode').dirty && validateForm2.get('endCityCode').errors">
+              <ng-container *ngIf="validateForm2.get('endCityCode').hasError('required')">
+                请选择市区
+              </ng-container>
+            </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>区</nz-form-label>
+      <nz-form-control [nzSpan]="16">
+            <nz-select class="locationStyle" nzShowSearch formControlName="endDistrictCode" [nzAllowClear]="true"
+                       (ngModelChange)="addressChange2($event,'DZDJ30')">
+              <nz-option *ngFor="let i of areaArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+            </nz-select>
+
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</ng-template>
+<ng-template #tplFooter2>
+  <button nz-button nzType="default" (click)="handleCancel2()" [disabled]="  implistLoading1">取消</button>
+  <button nz-button nzType="primary" (click)="importConfirm1()" [nzLoading]="implistLoading1" [disabled]="implistLoading1">确定</button>
+</ng-template>

@@ -1,0 +1,17 @@
+<div>
+  <app-searchform (search)="listSearch($event)"></app-searchform>
+  <tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+  <app-table-form [dataSet]="dataSet" [isMutli]="true"
+                  [listLoading]="listLoading1"
+                  (pageIndexEmit)='getPageIndex1($event)'
+                  (pageSizeEmit)='getPageSize1($event)' (updateDataResult)="selectData($event)"
+                  [totalPage]="totalPage" [paginationRef]="totalTpl">
+     <ng-template #totalTpl>
+       <span>总重量：<em>{{totalWeight | number:'1.3-3'}}</em>吨</span>&nbsp;&nbsp;
+       <span>总件数：<em>{{totalNumber}}</em></span>&nbsp;&nbsp;
+       <span>应收总金额：<em>{{totalRcvTransFee | number:'1.2-2'}}</em>元</span>&nbsp;&nbsp;
+       <span>应付总金额：<em>{{totalTransFee | number:'1.2-2'}}</em>元</span>&nbsp;&nbsp;
+       <span>差额：<em>{{totalRcvUnitPrice | number:'1.2-2'}}</em>元</span>
+     </ng-template>
+  </app-table-form>
+</div>

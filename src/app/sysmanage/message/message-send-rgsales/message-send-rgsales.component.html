@@ -1,0 +1,295 @@
+<nz-spin [nzSpinning]="spinning">
+    <div nz-row>
+        <div nz-col class="transition" nzSpan="24" style="padding-left:14px;">
+            <div nz-row>
+                <div nz-col nzSpan="24">
+                    <form nz-form [formGroup]="modalValidateForm" class="form">
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="3" nzRequired>消息主题</nz-form-label>
+                            <nz-form-control [nzSpan]="8">
+                                <nz-select
+                                        nzShowSearch
+                                        id="topicCode"
+                                        formControlName="topicCode"
+                                        appInputThrottle
+                                        (throttleSearch)="SearchChange($event)"
+                                        (nzScrollToBottom)="scrollToBottom()"
+                                        (ngModelChange)="optionsChange($event)"
+                                >
+                                    <nz-option
+                                            *ngFor="let i of topicCodeList"
+                                            [nzLabel]="i.topicName"
+                                            [nzValue]="i.topicCode"
+                                    ></nz-option>
+                                    <nz-option *ngIf="isLoadingTopic" nzDisabled nzCustomContent>
+                                        <i nz-icon nzType="loading" class="loading-icon"></i>
+                                        数据加载中...
+                                    </nz-option>
+                                </nz-select>
+                                <nz-form-explain
+                                        *ngIf="
+                  modalValidateForm.get('topicCode')?.dirty &&
+                  modalValidateForm.get('topicCode')?.errors
+                "
+                                >
+                                    消息主题不能为空
+                                </nz-form-explain>
+                            </nz-form-control>
+                            <nz-form-label [nzSpan]="3">接收人</nz-form-label>
+                            <nz-form-control [nzSpan]="8">
+                                <button
+                                        nz-button
+                                        (click)="receiverClick()"
+                                        [disabled]="receiveDisabled"
+                                        nzBlock
+                                >
+                                    {{ btnText }}
+                                </button>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="3" nzRequired
+                            >消息内容
+                            </nz-form-label
+                            >
+                            <nz-form-control [nzSpan]="20">
+              <textarea
+                      rows="2"
+                      nz-input
+                      formControlName="messageBody"
+                      trim
+              ></textarea>
+                                <nz-form-explain
+                                        *ngIf="
+                  modalValidateForm.get('messageBody')?.dirty &&
+                  modalValidateForm.get('messageBody')?.errors
+                "
+                                >
+                                    消息内容不能为空
+                                </nz-form-explain>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label
+                                    [nzSpan]="3"
+                                    [nzRequired]="paramRequired"
+                            >
+                                消息参数
+                            </nz-form-label>
+                            <nz-form-control [nzSpan]="20">
+              <textarea
+                      rows="12"
+                      nz-input
+                      formControlName="messageParam"
+              ></textarea>
+                                <nz-form-explain
+                                        *ngIf="
+                  modalValidateForm.get('messageParam')?.dirty &&
+                  modalValidateForm.get('messageParam')?.errors
+                "
+                                >
+                                    <ng-container
+                                            *ngIf="
+                    modalValidateForm.get('messageParam')?.hasError('required')
+                  "
+                                    >
+                                        消息参数不能为空
+                                    </ng-container>
+                                    <ng-container
+                                            *ngIf="
+                    modalValidateForm.get('messageParam')?.hasError('complete')
+                  "
+                                    >
+                                        消息参数填写不完整或格式不正确，请参照"参数名：参数值"进行填写;
+                                    </ng-container>
+                                </nz-form-explain>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [nzSpan]="3">备注</nz-form-label>
+                            <nz-form-control [nzSpan]="5">
+                                <input type="text" nz-input formControlName="remark"/>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </form>
+                </div>
+                <div nz-col nzSpan="24" class="btns-line">
+                    <tpl-buttons
+                            (btnClick)="btnClick($event)"
+                            [btnDisable]="{Attention:usersSelectedData.length===0}"
+                    >
+                    </tpl-buttons>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div nz-row nzType="flex" nzJustify="center" [nzGutter]="1">
+        <div nz-col [nzSpan]="8">
+            <div  nz-row nzType="flex" nzJustify="center">
+                <div nz-col>
+                    <nz-checkbox-group [(ngModel)]="attationCarTeam">
+                    </nz-checkbox-group>
+                </div>
+            </div>
+
+        </div>
+        <div nz-col [nzSpan]="8">
+            <ng-container *ngTemplateOutlet="selectedUsers; context: {$implicit:'main'}">
+            </ng-container>
+        </div>
+        <div nz-col [nzSpan]="8">
+
+        </div>
+    </div>
+</nz-spin>
+
+<!-- 接收人筛选弹框 -->
+<nz-modal
+        [nzStyle]="{top:'10px'}"
+        [(nzVisible)]="receiversModalVisible"
+        [nzTitle]="titleModal"
+        (nzOnCancel)="handleCancel()"
+        (nzOnOk)="handleOk()"
+        (nzAfterClose)="closeResult()"
+        nzWidth="1200px"
+        class="recerive"
+>
+    <ng-template #titleModal>{{receiversModalTitle}}</ng-template>
+    <nz-spin [nzSpinning]="modalSpinning">
+        <p class="contTitle">
+            <i nz-icon type="form" theme="outline"></i>
+            <span class="marl10">选择接收用户</span>
+        </p>
+        <form nz-form class="modal-form">
+            <div nz-row>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item nzFlex>
+                        <nz-form-label [nzSpan]="3" nzFor="address">目的地</nz-form-label>
+                        <nz-form-control [nzSpan]="20">
+                            <input nz-input name="address" id="address" [(ngModel)]="inqu.address">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item nzFlex>
+                        <nz-form-label [nzSpan]="3" nzFor="loadDateStart">运输时间</nz-form-label>
+                        <nz-form-control [nzSpan]="20">
+                            <nz-date-picker [nzShowTime]="true" name="loadDateStart" [nzPlaceHolder]="'开始时间'"
+                                            [(ngModel)]="inqu.loadDateStart"></nz-date-picker>
+                            <nz-date-picker [nzShowTime]="true" name="loadDateEnd" [nzPlaceHolder]="'结束时间'"
+                                            [(ngModel)]="inqu.loadDateEnd"></nz-date-picker>
+                            <!--        <nz-select style="width: 100%;" [(ngModel)]="inqu.truckKindName">-->
+                            <!--          <nz-option *ngFor="let option of truckKindArr" [nzValue]="option.name" [nzLabel]="option.name"></nz-option>-->
+                            <!--        </nz-select>-->
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item nzFlex>
+                        <nz-form-label [nzSpan]="3" nzFor="countStart">运输次数</nz-form-label>
+                        <nz-form-control [nzSpan]="20">
+                            <nz-input-number
+                                    style="width: 50%"
+                                    name="countStart"
+                                    [nzPlaceHolder]="'最小值'"
+                                    [(ngModel)]="inqu.countStart"
+                                    [nzMin]="0"
+                                    [nzStep]="1"
+                            >
+                            </nz-input-number>
+                            <nz-input-number
+                                    style="width: 50%"
+                                    name="countEnd"
+                                    [nzPlaceHolder]="'最大值'"
+                                    [(ngModel)]="inqu.countEnd"
+                                    [nzMin]="0"
+                                    [nzStep]="1"
+                            >
+                            </nz-input-number>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="12" class="search-button">
+                    <button nz-button nzType="primary" (click)="getReceivers('waybill','button')">查询</button>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <nz-form-item nzFlex>
+                        <nz-form-label [nzSpan]="3" nzFor="companyId">车队</nz-form-label>
+                        <nz-form-control [nzSpan]="20">
+                            <nz-select style="width: 100%" name="companyId" [(ngModel)]="inqu.companyId">
+                                <nz-option
+                                        *ngFor="let option of driverArr"
+                                        [nzValue]="option.companyId"
+                                        [nzLabel]="option.companyName">
+                                </nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col class="search-button">
+                    <button nz-button nzType="primary" (click)="getReceivers('companyId','button')">查询</button>
+                </div>
+            </div>
+        </form>
+        <div nz-row nzAlign="middle" nzJustify="center" nzType="flex">
+            <div nz-col [nzSpan]="11">
+                <div class="marl10"><span>待选用户</span></div>
+                <app-table-form
+                        (pageIndexEmit)="pageIndexEmit1($event)"
+                        (pageSizeEmit)="pageSizeEmit1($event)"
+                        (updateDataResult)="selectData1($event)"
+                        [colSet]="false"
+                        [dataSet]="usersSelectData"
+                        [isMutli]="true"
+                        [listLoading]="loading"
+                        [pageFun]="true"
+                        [pageSize]="pageSize"
+                        [refresh]="refresh"
+                        [selfTableHeight]="'110px'"
+                        [totalPage]="totalPage"
+                        [trSelectedShow]="true"
+                        gridId="grid1"
+                >
+                </app-table-form>
+            </div>
+            <div nz-col [nzSpan]="2">
+                <div nz-row nzAlign="middle" nzJustify="center" nzType="flex">
+                    <div nz-col [nzSpan]="14">
+                        <button nz-button nzType="primary" (click)="pushData()">添加</button>
+                    </div>
+                    <div nz-col [nzSpan]="14" style="margin-top: 3px">
+                        <button nz-button nzType="default" (click)="deleteData()">删除</button>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="11">
+                <div>已选用户</div>
+                <input nz-input placeholder="输入手机号，回车查询并插入" (keyup.enter)="mobileFind($event)" [(ngModel)]="mobile"/>
+                <ng-container *ngTemplateOutlet="selectedUsers; context: {$implicit:'modal'}">
+                </ng-container>
+            </div>
+        </div>
+    </nz-spin>
+
+</nz-modal>
+
+
+<ng-template #selectedUsers let-source>
+    <app-table-form
+            [colSet]="false"
+            [dataSet]="usersSelectedData"
+            [gridOperate]="{show: true, template: operate} "
+            [isCheckBox]="false"
+            [isMutli]="false"
+            [nzShowPagination]="false"
+            [selfTableHeight]="'110px'"
+            [trSelectedShow]="true"
+            gridId="grid1"
+    >
+        <ng-template #operate let-data>
+            <button nzType="danger" nz-button nzSize="small"
+                    (click)="delUser(data,source)">删除
+            </button>
+        </ng-template>
+    </app-table-form>
+</ng-template>

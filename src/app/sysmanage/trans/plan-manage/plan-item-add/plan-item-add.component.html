@@ -1,0 +1,86 @@
+<app-searchform [formId]="formId" (search)="query($event)"></app-searchform>
+
+<tpl-buttons formId="plan_manage" (btnClick)="btnClick($event)"
+  [btnHiden]="{'createPlan': operateType !== 'add', 'forceFinish': operateType !== 'add', 'cancelPlan': operateType !== 'add'}"></tpl-buttons>
+
+<div nz-row *ngIf="operateType === 'add'">
+  <div nz-col nzSpan="24">
+    <form nz-form nzLayout="inline">
+      <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" nzType="flex" nzAlign="bottom">
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">车船号</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <input type="text" nz-input [(ngModel)]="driver.vehicleNo" name="vehicleNo">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label nzSpan="8" nzRequired>驾驶员</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <app-select [dataSource]="driverDataSource" [fieldKey]="dirverFieldKey" [(ngModel)]="driver.driverId"
+                name="driverId" (ngModelChange)="setDriverInfo($event)"></app-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">联系电话</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <input type="tel" nz-input [(ngModel)]="driver.mobile" name="mobile">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">流向</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <input type="text" nz-input [(ngModel)]="plan.flowDesc" name="flowDesc" disabled>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">重量</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <input type="text" nz-input [(ngModel)]="plan.planWeight" name="planWeight" disabled>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">件数</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <input type="text" nz-input [(ngModel)]="plan.planQuantity" name="planQuantity" disabled>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div nz-row>
+  <div nz-col nzSpan="24">
+    <app-table-form [formId]="formId" gridId="order" [dataSet]="orderData" [pageSize]="pageSize" tabIndex="1" [totalPage]="total" isMutli="true"
+      (updateDataResult)="selectedOrder($event)" (listClick)="rowCilcked($event)" [colSet]="true" [paginationRef]="totalStats" [listLoading]="loading"></app-table-form>
+
+    <ng-template #totalStats>
+      已选总重量:{{totalWeight | number}}吨 已选总件数:{{totalSheet | number}}件
+    </ng-template>
+
+  </div>
+  <div nz-col nzSpan="24">
+    <nz-tabset [nzSelectedIndex]="1">
+      <nz-tab nzTitle="委托明细">
+        <app-table-form [formId]="formId" gridId="item" [dataSet]="itemData" isMutli="true" (updateDataResult)="selectedItem($event)"
+          (listClick)="itemRowClicked($event)" [nzShowPagination]="false"></app-table-form>
+      </nz-tab>
+      <nz-tab nzTitle="捆包明细">
+        <app-table-form [formId]="formId" gridId="pack" [dataSet]="packData" isMutli="true" (updateDataResult)="selectedPack($event)"
+          (listClick)="packRowClicked($event)" (modelChange)="modelChange($event)" [nzShowPagination]="false"></app-table-form>
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</div>

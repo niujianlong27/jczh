@@ -1,0 +1,47 @@
+<form nz-form [formGroup]="validateForm" style="padding-top: 2%">
+  <div nz-row [nzGutter]="8" [nzType]="'flex'">
+    <div nz-col [nzSpan]="8" *ngFor="let control of controlArray">
+      <nz-form-item>
+        <nz-form-label [nzRequired]="control.require" [nzSpan]="6"
+                       [nzFor]="control.eName">{{ control.cName}}</nz-form-label>
+        <nz-form-control [nzSpan]="18" >
+          <input *ngIf="control.type == 'text'" nz-input [type]="control.type" [formControlName]="control.eName" placeholder="由系统生成"
+                 [attr.id]="control.eName">
+          <input-modal *ngIf="control.type == 'input'" [isMutli]="false" [findset]="formIdFindset"
+                       [inputModalModel]="inputModalModel" (inpEmit)="inpEmit($event)" [borderRed]="borderRed"
+                       [DISABLED]="true"></input-modal>
+          <input-modal *ngIf="control.type == 'input1'" [isMutli]="false" [findset]="formIdFindset1"
+                       [inputModalModel]="inputModalModel1" (inpEmit)="inpEmit($event)" [borderRed]="borderRed"
+                       [DISABLED]="true"></input-modal>
+          <input-modal *ngIf="control.type == 'input2'" [isMutli]="false" [findset]="formIdFindset2"
+                       [inputModalModel]="inputModalModel2" (inpEmit)="inpEmit($event)" [borderRed]="borderRed"
+                       [DISABLED]="true"></input-modal>
+          <nz-cascader *ngIf="control.type=='select2'" [formControlName]="control.eName" nzChangeOnSelect [nzOptions]="endLocationArr">
+          </nz-cascader>
+          <nz-date-picker *ngIf="control.type == 'date'" [formControlName]="control.eName"></nz-date-picker>
+          <nz-form-explain *ngIf="validateForm.get(control.eName).dirty && validateForm.get(control.eName).errors">
+            <ng-container *ngIf="validateForm.get(control.eName).hasError('required')">
+              {{control.validateCon}}
+            </ng-container>
+            <ng-container *ngIf="validateForm.get(control.eName).hasError('pattern')">
+              {{control.validators.patternErr}}
+            </ng-container>
+
+          </nz-form-explain>
+
+        </nz-form-control>
+      </nz-form-item>
+
+    </div>
+  </div>
+  <div>
+    <tpl-buttons (btnClick)="btnCLick($event)" formId="form_entrust_add"></tpl-buttons>
+    <app-table-form formId="form_entrust_add" [isCheckBox]="true" (updateDataResult)="updateData()" [dataSet]="dataSet" [nzShowPagination]="false" [isMutli]="true"></app-table-form>
+  </div>
+  <div nz-row>
+    <div nz-col [nzSpan]="24" style="text-align: right;" >
+      <button nz-button [nzType]="'primary'" (click)="submitForm()">确定</button>
+      <button nz-button (click)="cancel()">取消</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,16 @@
+<app-searchform (search)="listSearch($event)" [triggerSearch]="true">
+</app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+<nz-tabset [nzSelectedIndex]="tabIndex">
+    <nz-tab nzTitle="结算单" (nzClick)="tabResultFun('grid1')">
+        <app-table-form [gridId]="'grid1'" [extraTableHeight]="60" [listLoading]='listLoading' [dataSet]="dataSet1" [totalPage]="totalPage1" (updateDataResult)="selectData($event)"></app-table-form>
+    </nz-tab>
+    <nz-tab nzTitle="费用信息（可操作）" (nzClick)="tabResultFun('grid2')">
+        <app-table-form [gridId]="'grid2'" [extraTableHeight]="60" [caculateEnameArr]='caculateEnameArr' [listLoading]='listLoading' [dataSet]="dataSet2" [totalPage]="totalPage2" (updateDataResult)="selectData($event)" [isMutli]="true"></app-table-form>
+    </nz-tab>
+    <nz-tab nzTitle="费用明细" (nzClick)="tabResultFun('grid3')">
+        <app-table-form [gridId]="'grid3'" [extraTableHeight]="60" [listLoading]='listLoading' [dataSet]="dataSet3" [totalPage]="totalPage3"></app-table-form>
+    </nz-tab>
+</nz-tabset>
+<app-modal-confirm [deleteVisible]="modalVisible" [modalTitle]="modalTitle" [modalCon]="modalCon" (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>

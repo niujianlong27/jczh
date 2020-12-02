@@ -1,0 +1,2 @@
+<common-page [dataSet]="dataSet" [totalPage]="totalNum" (search)="listSearch($event)" [listLoading]="isLoading" (btnClick)="btnClick($event)" [triggerSearch]="true"></common-page>
+<app-modal-confirm [deleteVisible]="visible" [modalTitle]="title" [modalCon]="modalCon" (modalConfirmResult)="modalResult($event)"></app-modal-confirm>

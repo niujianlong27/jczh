@@ -1,0 +1,119 @@
+<common-page (search)="listSearch($event)" (btnAdd)="btnAdd()" [pageSize]="pageSize" [totalPage]="totalPage"
+             [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" (btnDelete)="btnDelete($event)"
+             [dataSet]="dataSet" [isMutli]="true"
+             [triggerSearch]="true">
+
+</common-page>
+
+<!-- 数据弹出 -->
+<nz-modal [(nzVisible)]="modalFormVisible" nzTitle="{{ modalTitle }}" (nzOnCancel)="handleCancel()"
+          (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()">
+    <form nz-form [formGroup]="modalValidateForm">
+        <nz-form-item *ngFor="let m of modalFormData">
+            <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+                {{m.name}}
+            </nz-form-label>
+
+            <nz-form-control [nzSpan]="12">
+                <input type="{{m.type}}" *ngIf="!m.disabled && !m.modal" nz-input formControlName="{{m.eName}}">
+
+                <input-modal *ngIf="m.modal" [findset]="formIdFindset" [(inputModalModel)]="formNameData"
+                             [isMutli]=false
+                             (inpEmit)="inpEmit($event)" [showExplainFlag]="showExplainFlag"
+                             [validate]="{validateOpt:'inpValue',validateCon:'请输入界面名称'}"
+                ></input-modal>
+
+                <nz-input-group *ngIf="m.disabled" nzSearch [nzAddOnAfter]="suffixButton">
+                    <input type="text" nz-input formControlName="{{m.eName}}" readonly #queryProperty>
+                    <ng-template #suffixButton>
+                        <button nz-button nzType="primary" nzSearch type='button'
+                                (click)="queryPropertySettings(queryProperty.value)">设置
+                        </button>
+                    </ng-template>
+                </nz-input-group>
+
+                <nz-form-explain
+                        *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">{{m.validateCon}}</nz-form-explain>
+            </nz-form-control>
+
+        </nz-form-item>
+
+    </form>
+</nz-modal>
+
+<!--确认弹窗-->
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>
+
+<!--查询属性-->
+<nz-modal nzWidth="900" [(nzVisible)]="nzVisible" nzTitle="设置查询属性" (nzOnOk)="nzOnOk()" (nzOnCancel)="nzOnCancel()"
+          (nzAfterClose)="nzAfterClose()">
+
+    <nz-table [nzShowPagination]="false" #modalQueryData [nzData]="queryPropertyData"
+              [nzScroll]="{x:'100%',y:'350px' }">
+        <thead>
+        <tr>
+            <th style="width: 60px" nzShowCheckbox [(nzChecked)]="allChecked" [nzIndeterminate]="indeterminate"
+                (nzCheckedChange)="checkAll($event)"></th>
+            <th *ngFor="let h of headData;let i = index"
+                [ngStyle]="i===0?{width:'180px'}:{width:'120px'}">{{h.cName}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of modalQueryData.data; let i = index">
+            <td style="width: 60px" nzShowCheckbox [(nzChecked)]="data.checked"
+                (nzCheckedChange)="refreshStatus(data)"></td>
+            <td style="width: 180px">
+        <span>
+          <nz-select style="width: 160px" nzAllowClear nzPlaceHolder="Choose" [(ngModel)]="data.eName"
+                     (ngModelChange)="colNameChange($event,data)">
+            <nz-option *ngFor="let o of colNameArray" [nzValue]="o.colEname" [nzLabel]="o.colCname" [nzDisabled]="isNotSelected(o.colEname)"></nz-option>
+          </nz-select>
+        </span>
+            </td>
+            <td style="width: 120px">
+        <span>
+          <nz-select style="width: 100px" nzAllowClear nzPlaceHolder="Choose" [(ngModel)]="data.relation">
+            <nz-option nzValue="等于" nzLabel="等于"></nz-option>
+            <nz-option nzValue="包含" nzLabel="包含"></nz-option>
+            <nz-option nzValue="介于" nzLabel="介于"></nz-option>
+          </nz-select>
+        </span>
+            </td>
+            <td style="width: 120px">
+        <span>
+          <nz-select style="width: 100px" nzAllowClear nzPlaceHolder="Choose" [(ngModel)]="data.logic">
+            <nz-option nzValue="且" nzLabel="且"></nz-option>
+            <nz-option nzValue="或" nzLabel="或"></nz-option>
+          </nz-select>
+        </span>
+
+            </td>
+            <td style="width: 120px">
+                <input nz-input type="text" [(ngModel)]="data.value1"/>
+            </td>
+            <td style="width: 120px">
+                <input nz-input type="text" [(ngModel)]="data.compute1" (blur)="computeChange(data)"
+                       [disabled]="data.type!=='date'"/>
+            </td>
+            <td style="width: 120px">
+                <input nz-input type="text" [(ngModel)]="data.compute2" (blur)="computeChange(data)"
+                       [disabled]="data.type!=='date'"/>
+            </td>
+            <td style="width: 120px">
+        <span>
+          <nz-select style="width: 100px" nzAllowClear nzPlaceHolder="Choose" [(ngModel)]="data.checkBox">
+            <nz-option [nzValue]="true" nzLabel="是"></nz-option>
+            <nz-option [nzValue]="false" nzLabel="否"></nz-option>
+          </nz-select>
+        </span>
+            </td>
+        </tr>
+        </tbody>
+    </nz-table>
+    <div class="btn-bx">
+        <button nz-button (click)="addField()">添加</button>
+        <button nz-button (click)="removeField()">移除</button>
+    </div>
+</nz-modal>

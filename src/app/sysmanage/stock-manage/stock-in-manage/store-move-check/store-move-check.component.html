@@ -1,0 +1,116 @@
+
+<form nz-form class="store-move-check-form" [formGroup]="storeForm">
+  <div nz-row nzType="flex">
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24">移库单号</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input nz-input disabled formControlName="moveWsNo" placeholder="系统生成"/>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>移库时间</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-date-picker
+            nzShowTime
+            style="width: 100%"
+            formControlName="moveWsTime"
+            [nzStyle]="{width: '100%'}"
+            nzFormat="yyyy-MM-dd HH:mm:ss">
+        </nz-date-picker>
+        <nz-form-explain *ngIf="storeForm.get('moveWsTime')?.dirty && storeForm.get('moveWsTime')?.errors"
+        >请填写移库时间</nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>移库人</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+           <nz-select 
+           nzShowSearch
+           nzAllowClear
+           formControlName="moveUserId"
+           (nzOnSearch)="selectSearch($event)"
+           (nzOpenChange)="selectOpen($event)"
+           (nzScrollToBottom)="loadMore()">
+              <ng-container *ngFor="let item of userData">
+                <nz-option [nzLabel]="item.name" [nzValue]="item.userId"></nz-option>
+              </ng-container>
+           </nz-select>
+           <nz-form-explain *ngIf="storeForm.get('moveUserId')?.dirty && storeForm.get('moveUserId')?.errors"
+           >请选择移库人</nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row nzType="flex">
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24">备注</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input nz-input formControlName="remark"/>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+<tpl-buttons (btnClick)="btnClick($event)" [btnLoading]="{save: saveLoading}"></tpl-buttons>
+<app-table-form 
+  gridId="grid1"
+  (userColumnsEmit)="columns($event)"
+  [dataSet]="data"
+  [isMutli]="true"
+  [extraTableHeight]="114"
+  [nzShowPagination]="false"
+  [colSet]="false">
+  <ng-template #newLocation let-data let-index="index">
+    <nz-select style="width: 100%;"
+     [(ngModel)]="data.newWsLocation"
+     (ngModelChange)="newLocationChange($event, data.newWsLocationArr, index)"
+     nzSize="small"
+     nzShowSearch
+     nzAllowClear>
+      <ng-container *ngFor="let item of data.newWsLocationArr">
+        <nz-option [nzLabel]="item.locationName" [nzValue]="item.locationCdoe"></nz-option>
+      </ng-container>
+    </nz-select>
+  </ng-template>
+  <!-- <ng-template #newWsArea let-data let-index="index">
+    <nz-select style="width: 100%;"
+     [(ngModel)]="data.newWsArea"
+     (ngModelChange)="newWsAreaChange($event, data.newWsAreaArr, index)"
+     nzSize="small"
+     nzShowSearch
+     nzAllowClear>
+      <ng-container *ngFor="let item of data.newWsAreaArr">
+        <nz-option [nzLabel]="item.areaName" [nzValue]="item.areaName"></nz-option>
+      </ng-container>
+    </nz-select>
+  </ng-template> -->
+</app-table-form>
+
+<nz-modal
+  [(nzVisible)]="visible"
+  nzTitle="在库库存"
+  nzWidth="70%"
+  [nzContent]="modalContent"
+  (nzOnCancel)="visible = false"
+  (nzOnOk)="ok()">
+  <ng-template #modalContent>
+    <app-searchform 
+    [searchFormShow]="true"
+    (search)="getStocInPulk($event)"
+    gridId="grid2"></app-searchform>
+    <app-table-form
+      selfTableHeight="300px"
+      [isMutli]="true"
+      [colSet]="false"
+      [listLoading]="loading"
+      [dataSet]="modalData"
+      [nzShowPagination]="false"
+      gridId="grid2"></app-table-form>
+  </ng-template>
+</nz-modal>

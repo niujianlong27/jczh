@@ -1,0 +1,24 @@
+<app-searchform (search)="listSearch($event)" [staticData]="staticData" [btnHiden]="{'mutiSearch': true}">
+</app-searchform>
+<tpl-buttons [btnHiden]="{'Find': false,'Save': true, 'Update': true  }" [formId]="'form_queue_product_synerr'"
+  (btnDataReturn)="btnData($event)"></tpl-buttons>
+<app-table-form (updateDataResult)="updateDataResult($event)" [dataSet]="dataSet" [isMutli]="true"
+  [listLoading]="loading" [showCount]="false" [totalPage]="totalPage" [trSelectedShow]="true" gridId='grid1'
+  (userColumnsEmit)="colName($event)" [staticCode]="staticData">
+
+  <ng-template #gate let-data let-header>
+    <nz-select [ngClass]="{'selectShow':data.selectShow,'selectClose':!data.selectShow}" [(ngModel)]="data.toGate">
+      <nz-option *ngFor="let p of gateNameArr" [nzLabel]="p.name" [nzValue]="p.value">
+      </nz-option>
+    </nz-select>
+    <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.toGateName}}</div>
+  </ng-template>
+  <ng-template #warehouse let-data let-header>
+    <nz-select [ngClass]="{'selectShow':data.selectShow,'selectClose':!data.selectShow}"
+      [(ngModel)]="data.warehouseCode">
+      <nz-option *ngFor="let p of warehouseArr" [nzLabel]="p.name" [nzValue]="p.value">
+      </nz-option>
+    </nz-select>
+    <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.warehouseName}}</div>
+  </ng-template>
+</app-table-form>

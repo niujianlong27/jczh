@@ -1,0 +1,73 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons formId="form_portal_crane_collect" (btnClick)="btnClick($event)"></tpl-buttons>
+<app-table-form
+                [formId]="'form_portal_crane_collect'"
+                gridId="grid"
+                [dataSet]="dataSet1"
+                [isMutli]="true"
+                [colSet]="true"
+                [pageSize]="pageSize1"
+                [totalPage]="totalPages1"
+                [listLoading]="listLoading1"
+                (updateDataResult)="updateDataResult($event)">
+
+</app-table-form>
+
+<nz-modal class="portalCraneModal" [(nzVisible)]="isVisible" [nzTitle]="tplTitle" [nzFooter]="modalFooter"
+          (nzOnCancel)="nzOnCancel()" nzWidth="70%" (nzAfterClose)="closeResult()">
+
+  <app-searchform [formId]="'form_portal_crane_model'" (search)="modalListSearch($event)"></app-searchform>
+  <form nz-form [formGroup]="modalValidateForm">
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="7" *ngFor="let m of modalFormData" style="margin-left:10px ">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+            {{m.name}}
+          </nz-form-label>
+          <nz-form-control style="margin-left: -10px" [nzSpan]="16">
+            <nz-date-picker class="rangePicker" *ngIf="m.type == 'time'" [formControlName]="m.eName"
+                            [nzShowTime]="'true'"></nz-date-picker>
+            <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'"
+                   [readOnly]="m.readOnly || (buttonId == 'Update' && m.eName == 'portalCraneId') "
+                   placeholder="{{m.placeholder}}">
+            <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+              <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+                {{m.validateCon}}
+              </ng-container>
+              <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+                {{m.validators.patternErr}}
+              </ng-container>
+
+            </nz-form-explain>
+          </nz-form-control>
+
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+  <tpl-buttons [formId]="'form_portal_crane_model'"></tpl-buttons>
+  <app-table-form [isMutli]='true'
+                  [formId]="'form_portal_crane_model'"
+                  gridId="grid1"
+                  [dataSet]="modalDataSet"
+                  [listLoading]="modalListLoading"
+                  [pageSize]="modalPageSize"
+                  [totalPage]="modalTotalPages"
+                  (updateDataResult)="modalUpdateDatafun($event)">
+
+  </app-table-form>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="nzOnCancel()">取消</button>
+    <button nz-button nzType="primary" (click)="handleOk()">确定</button>
+  </ng-template>
+</nz-modal>
+
+
+<ng-container>
+  <ng-template #confirmTitle>提示信息</ng-template>
+  <ng-template #confirmContent>{{confimCon}}</ng-template>
+  <ng-template #confirmFooter>
+    <button nz-button nzType="primary" (click)="DhandleOk()">确定</button>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  </ng-template>
+</ng-container>

@@ -1,0 +1,39 @@
+<div style="width: 100%; margin: 0px 0px; overflow: hidden;margin-top: 0px;">
+  <div class="fl"><img src="/assets/static/logo2.png" style="width:185px;height:50px;margin-top: 6px;margin-left: 141px;">
+  </div>
+  <div class="fl">
+    <div class="wenhua"><img src="/assets/static/72.png" style="width:185px;height:20px;"></div>
+  </div>
+  <ul class="fr" style="margin-right: 100px;">
+    <li class="fl header-li c-li">
+        <a [ngClass]="{'li-active': router.url === '/'}" (click)="homePage()">首页</a>
+
+    </li>
+    <li class="fl header-li c-li"><a [ngClass]="{'li-active': router.url === '/home-page-goods'}"
+                                     (click)="goods()">货源信息</a></li>
+    <li class="fl header-li c-li"><a [ngClass]="{'li-active': router.url === '/home-page-cars'}"
+                                     (click)="cars()">车源信息</a></li>
+    <li class="fl header-li c-li"><a [ngClass]="{'li-active': router.url === '/home-page-culture'}"
+                                     (click)="culture()">企业文化</a></li>
+    <li class="fl header-li c-li"><a [ngClass]="{'li-active': router.url === '/home-page-app'}"
+                                     (click)="downLoad()">产品介绍</a></li>
+    <li class="fl header-li c-li"><a [ngClass]="{'li-active': router.url == '/home-page-about'}"
+                                     (click)="about()">关于我们</a></li>
+    <li class="fl header-li c-li">
+      <a *ngIf="!userInfo.loginName" [ngClass]="{'li-active': router.url === '/login'}"  (click)="login()" style="font-size:13px; font-family:&#39;微软雅黑&#39;">
+        {{userInfo.loginName?userInfo.loginName:'登录'}}
+      </a>
+
+      <a *ngIf="userInfo.loginName"  (click)="login()" style="font-size:13px; color:#B66F09;font-family:&#39;微软雅黑&#39;">
+        您好,{{userInfo.loginName?userInfo.loginName:'请登录'}}
+      </a>
+
+      <a *ngIf="userInfo.loginName" (click)="loginOut()"
+         style="margin-left:5px;font-size:13px; color:#363636;font-family:&#39;微软雅黑&#39;">
+        退出
+      </a>
+    </li>
+
+
+  </ul>
+</div>

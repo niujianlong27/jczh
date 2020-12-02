@@ -1,0 +1,77 @@
+<app-searchform  (search)="listSearch($event)"></app-searchform>
+
+<tpl-buttons  (btnClick)='btnClick($event)'></tpl-buttons>
+
+<form nz-form  [hidden]="validateFormHidden" *ngIf="buttonId === 'Berth' || buttonId === 'navigation' || buttonId === 'Port' || buttonId === 'toport'" [formGroup]="validateForm" (ngSubmit)="submit()">
+  <nz-form-item>
+    <nz-form-label class="fl" [nzRequired]="true">
+      <span *ngIf="buttonId === 'Berth'">靠泊时间</span>
+      <span *ngIf="buttonId === 'navigation'">离泊时间</span>
+      <span *ngIf="buttonId === 'Port'">到港时间</span>
+      <span *ngIf="buttonId === 'toport'">离港时间</span>
+    </nz-form-label>
+
+    <nz-form-control class="fl m-r">
+      <nz-date-picker  formControlName="chooseTime" [nzShowTime]="'true'"></nz-date-picker>
+      <nz-form-explain *ngIf="validateForm.get('chooseTime').dirty && validateForm.get('chooseTime').errors">
+        <span *ngIf="buttonId === 'Berth'">请选择靠泊时间</span>
+        <span *ngIf="buttonId === 'navigation'">请选择离泊时间</span>
+        <span *ngIf="buttonId === 'Port'">请选择到港时间</span>
+        <span *ngIf="buttonId === 'toport'">请选择离港时间</span>
+      </nz-form-explain>
+    </nz-form-control>
+
+    <button nz-button  [nzType]="'default'" type="submit" style="margin-top: 4px;">确定</button>
+  </nz-form-item>
+</form>
+
+<app-table-form  [pageFun]='true' (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)'
+                 [gridId]="'grid1'"  [dataSet]="dataSet1" [pageSize]="pageSize1" [totalPage]="totalPages1"
+                 [isMutli]="true" [listLoading]="listLoading1" (updateDataResult)="updateDataResult($event)"></app-table-form>
+
+
+<nz-modal nzWidth="70%" [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <form nz-form [formGroup]="modalValidateForm">
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="6" *ngFor="let m of modalFormData">
+        <nz-form-item>
+          <nz-form-label  [nzSpan]="8" [nzRequired]="m.require" >
+            {{m.name}}
+          </nz-form-label>
+
+          <nz-form-control style="margin-left: -10px" [nzSpan]="16">
+            <nz-date-picker class="rangePicker" *ngIf="m.type == 'time'" [formControlName]="m.eName" [nzShowTime]="'true'"></nz-date-picker>
+            <!--<nz-select style="width: 100px" nzAllowClear nzPlaceHolder="请选择" formControlName="{{m.eName}}" *ngIf="m.type == 'select'">-->
+            <!--<nz-option *ngFor="let o of typeDataArr" [nzValue]="o.value" [nzLabel]="o.name"></nz-option>-->
+            <!--</nz-select>-->
+            <!--
+                            <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+                                <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+                            </nz-radio-group> -->
+            <!--<input-modal *ngIf="m.type == 'inputModal'"  [(inputModalModel)]="popData[m.bindName].name" [(inputModalHiddenValue)]='popData[m.bindName].id' [findset]="m.findSet"-->
+            <!--(inpEmit)='inpEmit($event,m.bindName)'></input-modal>-->
+
+            <!--<input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'number'" (blur)="blur()">-->
+            <app-input-number *ngIf="m.type == 'number'" formControlName="{{m.eName}}" [attr.id]="m.eName"></app-input-number>
+            <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'" [readOnly]="m.readOnly">
+            <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+
+              <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+                {{m.validateCon}}
+              </ng-container>
+              <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+                {{m.validators.patternErr}}
+              </ng-container>
+
+            </nz-form-explain>
+          </nz-form-control>
+
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+
+  <app-table-form [pageFun]='true' (pageIndexEmit)='getPageIndex2($event)' (pageSizeEmit)='getPageSize2($event)'
+                  *ngIf="buttonId === 'Update'" [gridId]="'grid2'"  [dataSet]="dataSet2" [pageSize]="pageSize2" [totalPage]="totalPages2"
+                   [isMutli]="true" [listLoading]="listLoading2" [isCheckBox]="false"></app-table-form>
+</nz-modal>

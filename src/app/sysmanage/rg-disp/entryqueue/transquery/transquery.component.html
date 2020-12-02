@@ -1,0 +1,21 @@
+<app-searchform (search)="listSearch($event)" (modelChange)="modelChange($event)" [isClick]="true" [searchDataHiden]="{'truckNo':false,'taskId':false,'kindName':false,'subKindName':isShow}"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+<ng-container>
+  <div >
+    <label nz-checkbox [(ngModel)]="variable">只看操作记录</label>
+  </div>
+</ng-container>
+
+<app-table-form
+   [gridId]="'grid1'"
+  [isMutli]="false"
+  [dataSet]="dataSet"
+  [isCheckBox]="false"
+  [listLoading]="loading"
+  (updateDataResult)="updateDataResult($event)"
+  (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)'
+   [totalPage]="totalPage"
+   [showCount]="false"
+  [pageSize]="pageSize1">
+
+</app-table-form>

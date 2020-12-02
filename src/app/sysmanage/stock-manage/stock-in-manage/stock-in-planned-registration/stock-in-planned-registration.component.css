@@ -1,0 +1,15 @@
+.selectShow{
+  width: 100%;
+}
+.selectClose{
+  display:none;
+  position:absolute
+}
+.divShow {
+  text-align: left;
+
+}
+.divClose{
+  display:none;
+  position:absolute
+}

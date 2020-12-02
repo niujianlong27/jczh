@@ -1,0 +1,82 @@
+<common-page
+        (btnClick)="btnClick($event)"
+        (search)="listSearch($event)"
+        (updateDataResult)="updateDataResult($event)"
+        [dataSet]="dataSet"
+        [isMutli]="false"
+        [listLoading]="listLoading"
+        [pageSize]="pageSize"
+        [totalPage]="totalPage"
+        [triggerSearch]="true"
+        [gridId]="'grid1'"
+        [btnDisable]="{regiter:selectedData.length!==1}"
+>
+</common-page>
+
+<nz-modal
+        (nzOnOk)="modalOnOk()"
+        (nzOnCancel)="modalOnCancel()"
+        (nzAfterClose)="modalAfterClose()"
+        [(nzVisible)]="modalVisible"
+        [nzStyle]="{top:'5px'}"
+        [nzTitle]="modalTitle"
+        [nzWidth]="1000"
+>
+    <nz-spin [nzSpinning]="modalSpinning">
+        <div nz-row [nzGutter]="8">
+            <div nz-col [nzSpan]="6">
+                <form nz-form [formGroup]="modalValidateForm">
+                    <div nz-row [nzType]="'flex'">
+                        <div nz-col [nzSpan]="24" *ngFor="let m of modalFormData">
+                            <nz-form-item>
+                                <nz-form-label [nzSpan]="7" [nzRequired]="!!m.require">
+                                    {{m.name}}
+                                </nz-form-label>
+                                <nz-form-control [nzSpan]="17">
+                                    <input [type]="m.type" *ngIf="m.type == 'text'" nz-input [formControlName]="m.eName"
+                                           [id]="m.eName">
+                                    <nz-form-explain
+                                            *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+                                        <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+                                            {{m.validateCon}}
+                                        </ng-container>
+                                    </nz-form-explain>
+                                </nz-form-control>
+
+                            </nz-form-item>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div nz-col [nzSpan]="18">
+                <app-table-form
+                        [dataSet]="modalDataSet"
+                        [isCheckBox]="false"
+                        [gridId]="'grid2'"
+                        [showCount]="false"
+                        [pageFun]="true"
+                        [nzShowPagination]="false"
+                        [selfTableHeight]="'400px'"
+                        (modelChange)="modalModelChange($event)"
+                >
+                    <ng-template
+                            [grid-row]="'tpl-grid2-agentFlag'"
+                            let-index="index" let-key="key" let-obj>
+                        <label nz-checkbox [(ngModel)]="obj.agentFlag"
+                               (ngModelChange)="modalCheckboxChange('agentFlag',obj,$event)"
+                        >
+                        </label>
+                    </ng-template>
+                    <ng-template
+                            [grid-row]="'tpl-grid2-payableFlag'"
+                            let-index="index" let-key="key" let-obj>
+                        <label nz-checkbox [(ngModel)]="obj.payableFlag"
+                               (ngModelChange)="modalCheckboxChange('payableFlag',obj,$event)"
+                        >
+                        </label>
+                    </ng-template>
+                </app-table-form>
+            </div>
+        </div>
+    </nz-spin>
+</nz-modal>

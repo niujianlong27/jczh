@@ -1,0 +1,262 @@
+<app-searchform (searchComponent)="_initalSearch($event)" (search)="query($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [btnDisable]="btnDisable" [btnHiden]="btnHiden"></tpl-buttons>
+
+<div class="clearfix" style="overflow: hidden;position: relative;">
+  <div class="fl trans" [ngStyle]="{width:leftWidth}">
+    <app-table-form gridId="tender" [dataSet]="resultShow" [totalPage]="total" [trSelectedShow]="true" [listLoading]="queryLoading"
+      (updateDataResult)="checkboxClick($event)" (listClick)="rowClick($event)"></app-table-form>
+  </div>
+
+  <div class="tableLine trans" gridLine [ngStyle]="{left:lineWidth}" (gridLineResult)="gridLineFun($event)">
+    <div class="tableLine-in">
+      <span class="grid-line-btn" (click)="rightShowFun()">
+        <i nz-icon type="caret-right" theme="outline" [hidden]="rightShow"></i>
+        <i nz-icon type="caret-left" theme="outline" [hidden]="!rightShow"></i>
+      </span>
+    </div>
+  </div>
+
+  <div class="fr trans" [ngStyle]="{width:rightWidth,display:display}">
+    <app-table-form gridId="palletItem" [dataSet]="palletItem" [updateHeader]="true" [colSet]="true"
+      [isMutli]="false" [nzShowPagination]="false"></app-table-form>
+  </div>
+</div>
+
+
+<nz-modal [nzWidth]="'75%'" [nzVisible]="modalIsVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+  (nzOnCancel)="cancel()">
+  <ng-template #modalTitle>
+    出价
+  </ng-template>
+  <ng-template #modalContent>
+    <form nz-form [formGroup]="form" [nzLayout]="'inline'">
+
+      <p style="margin-top: 15px;"><i nz-icon type="form" theme="outline"></i><span>标单信息</span></p>
+      <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" style="padding-right: 16px;">
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">委托单位</nz-form-label>
+            <nz-form-control nzSpan="16">
+              {{ tenderInfo?.consignorCompanyName }}
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">品名</nz-form-label>
+            <nz-form-control nzSpan="16">
+              {{ tenderInfo?.productName }}
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">重量</nz-form-label>
+            <nz-form-control nzSpan="16">
+              {{ tenderInfo?.totWeight | number }}
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div *ngFor="let item of palletList" nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" style="padding-right: 16px;">
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">货盘号</nz-form-label>
+            <nz-form-control nzSpan="16">
+              {{ item.palletNo }}
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">流向</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <span class="ellipsis" [title]="item.flowDesc">
+                {{ item.flowDesc }}
+              </span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">重量</nz-form-label>
+            <nz-form-control nzSpan="16">
+              {{ item.totWeight | number }}
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzSpan="6">附件</nz-form-label>
+            <nz-form-control nzSpan="18">
+              <nz-upload [(nzFileList)]="item.docUrlsList" nzListType="text" nzShowButton="false"></nz-upload>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <p style="margin-top: 15px;"><i nz-icon type="form" theme="outline"></i><span>船舶信息</span></p>
+      <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" style="padding-right: 16px;">
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">船舶名称</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <input nz-input formControlName="boatName">
+              <nz-form-explain *ngIf="form.get('boatName').dirty && form.get('boatName').errors">请输入船舶名称!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label nzSpan="4">船期</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <nz-date-picker formControlName="loadDateStart" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd" style="width: 140px;"
+                nzPlaceHolder="开始">
+              </nz-date-picker>
+              -
+              <nz-date-picker formControlName="loadDateEnd" [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd" style="width: 140px;"
+                nzPlaceHolder="结束">
+              </nz-date-picker>
+              <nz-form-explain *ngIf="(form.get('loadDateStart').dirty && form.get('loadDateStart').errors) || (form.get('loadDateEnd').dirty && form.get('loadDateEnd').errors)">请输入船期!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzSpan="6">载重</nz-form-label>
+            <nz-form-control nzSpan="18">
+              <nz-input-group nzAddOnAfter="MT">
+                <nz-input-number [nzMin]="0" formControlName="capacity" [nzStep]="100"></nz-input-number>
+              </nz-input-group>
+              <nz-form-explain *ngIf="form.get('capacity').dirty && form.get('capacity').errors">请输入载重!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <p><i nz-icon type="form" theme="outline"></i><span>出价信息</span></p>
+      <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" style="padding-right: 16px;">
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">是否含税</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <nz-select formControlName="settleType" nzDisabled>
+                <nz-option *ngFor="let option of settleType" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+              </nz-select>
+              <nz-form-explain *ngIf="form.get('settleType').dirty && form.get('settleType').errors">请选择是否含税!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="5">
+          <nz-form-item>
+            <nz-form-label nzSpan="11">最高限价</nz-form-label>
+            <nz-form-control nzSpan="13">
+              <nz-input-number [nzMin]="0" formControlName="markedPrice" [nzStep]="1" nzDisabled></nz-input-number>
+              <nz-form-explain *ngIf="form.get('markedPrice').dirty && form.get('markedPrice').errors">请输入最高限价!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="5">
+          <nz-form-item>
+            <nz-form-label nzSpan="11">当前最低价</nz-form-label>
+            <nz-form-control nzSpan="13">
+              <nz-input-number [nzMin]="0" formControlName="minPrice" [nzStep]="1" nzDisabled></nz-input-number>
+              <nz-form-explain *ngIf="form.get('minPrice').dirty && form.get('minPrice').errors">请输入当前最低价!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="8">
+          <nz-form-item>
+            <nz-form-label nzSpan="6" nzRequired>出价</nz-form-label>
+            <nz-form-control nzSpan="18">
+              <nz-input-group nzCompact>
+                <nz-input-number style="width:50%" [nzMin]="0" formControlName="offerPriceTax" [nzStep]="1"></nz-input-number>
+                <nz-select style="width:50%" formControlName="calculation" nzDisabled>
+                  <nz-option *ngFor="let option of calculation" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+                </nz-select>
+              </nz-input-group>
+              <nz-form-explain *ngIf="form.get('offerPriceTax').dirty && form.get('offerPriceTax').errors">请输入出价!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6" *ngIf="isBoxPrice">
+          <nz-form-item>
+            <nz-form-label nzSpan="8" nzRequired>箱数</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <nz-input-group nzAddOnAfter="个">
+                <nz-input-number [nzMin]="0" formControlName="containerNo" [nzStep]="1"></nz-input-number>
+              </nz-input-group>
+              <nz-form-explain *ngIf="form.get('containerNo').dirty && form.get('containerNo').errors">请输入箱数!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+    </form>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <p class="b-t p-sm-tb">
+      <button nz-button nzType="default" class="m-r" (click)="cancel()">取消</button>
+      <button nz-button nzType="primary" class="m-r" [nzLoading]="bidLoading" (click)="bid()">确认</button>
+    </p>
+  </ng-template>
+</nz-modal>
+
+
+<nz-modal [nzWidth]="'75%'" [nzVisible]="historyIsVisible" [nzTitle]="historyTitle" [nzContent]="historyContent"
+  [nzFooter]="historyFooter" (nzOnCancel)="historyIsVisible=false">
+  <ng-template #historyTitle>
+    出价历史
+  </ng-template>
+  <ng-template #historyContent>
+    <nz-table class="modal-table" #historyTable [nzData]="bidHistory" [nzFrontPagination]="false" [nzBordered]="false"
+      nzShowPagination="false" [nzLoading]="queryHistoryLoading">
+      <thead>
+        <tr>
+          <th width="10%">竞价单号</th>
+          <th width="15%">出价人</th>
+          <th width="12%">出价时间</th>
+          <th width="8%">价格</th>
+          <th width="10%">船名</th>
+          <th width="15%">船期</th>
+          <th width="10%">载重</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-template ngFor let-item [ngForOf]="historyTable.data">
+          <tr ngForm #rowForm="ngForm" [ngClass]="item.rowClass">
+            <td>
+              <span>{{item.tenderNo}}</span>
+            </td>
+            <td>
+              <span>{{item.bidderCompanyName}}-{{item.bidderName}}</span>
+            </td>
+            <td>
+              <span>{{item.bidderTime}}</span>
+            </td>
+            <td>
+              <span>{{(item.offerPriceTax ? item.offerPriceTax : offerPriceTaxNo) | number}}</span>
+            </td>
+            <td>
+              <span>{{item.boatName}}</span>
+            </td>
+            <td>
+              <span>{{item.loadDateStart | date: 'yyyy-MM-dd'}}-{{item.loadDateEnd | date: 'yyyy-MM-dd'}}</span>
+            </td>
+            <td>
+              <span>{{item.capacity | number}}</span>
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </nz-table>
+  </ng-template>
+
+  <ng-template #historyFooter>
+    <p class="b-t p-sm-tb">
+      <button nz-button nzType="primary" class="m-r" (click)="historyIsVisible=false">关闭</button>
+    </p>
+  </ng-template>
+</nz-modal>

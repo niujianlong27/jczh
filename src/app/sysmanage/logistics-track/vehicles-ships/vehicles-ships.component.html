@@ -1,0 +1,87 @@
+<!-- 车辆船舶列表 -->
+<div nz-row nzType="flex" nzJustify="space-around" style="padding-top: 20px">
+
+  <div nz-col nzSpan="12"> 
+    <nz-tabset [nzSelectedIndex]="tabIndex">
+        <nz-tab nzTitle="车辆管理" (nzClick)="tabResultFun('grid1')">
+           <app-table-form [gridId]="'grid1'"  [listLoading]='listLoading' [dataSet]="dataSet1" [totalPage]="totalPage1" (listClick)="vehicleChoiceClick($event)"></app-table-form>
+        </nz-tab>
+        <nz-tab nzTitle="船舶管理" (nzClick)="tabResultFun('grid2')">
+            <app-table-form [gridId]="'grid2'"  [listLoading]='listLoading' [dataSet]="dataSet2" [totalPage]="totalPage2" (listClick)="boatChoiceClick($event)"></app-table-form>
+        </nz-tab>
+      </nz-tabset>
+  </div>
+
+  <!-- 高德地图 -->
+  <div nz-col nzSpan="12" style="padding-top:47px;">
+    <ngx-amap style="height:500px" #map >
+      <amap-marker *ngFor="let position of positionList; let i = index" [position]='position' [icon]="(i==positionList.length-1 || i==0)?wayPositionIcon:''" [zIndex]="(i==positionList.length-1 || i==0)?110:100"></amap-marker>
+      <amap-polyline [path]="pathPosition" [strokeColor]="'#3366FF'" [strokeOpacity]="1" [strokeWeight]="5" [strokeStyle]="'solid'" [strokeDasharray]="[10, 5]"></amap-polyline>
+    </ngx-amap>
+  </div>
+
+  <!-- 车辆信息弹框 -->
+  <nz-modal [(nzVisible)]="vehicleModalIsVisible" [nzTitle]="vehicleModalTitle" [nzContent]="vehicleModalContent" [nzFooter]="vehicleModalFooter" (nzOnCancel)="handleCancel()">
+
+    <ng-template #vehicleModalTitle>
+      <p>{{choiceVehicle.vehicleNo}}</p>
+    </ng-template>
+
+    <ng-template #vehicleModalContent>
+      <h1>业务信息:</h1>
+      <p style="font-size: 14px">装车单号:</p>
+      <p>提货单位:</p>
+      <p>装车日期:</p>
+      <p>实际数量:</p>
+      <p>实际重量:</p>
+      <p>送货地址:</p>
+      <p>车队:</p>
+      <p>司机:</p>
+      <p>司机电话:</p>
+      <h1>车辆信息</h1>
+      <p>经纬度:{{choiceVehiclePosition.lon}},{{choiceVehiclePosition.lat}}</p>
+      <p>服务器时间:</p>
+      <p>GPS时间:</p>
+      <p>速度:</p>
+      <p>方向:</p>
+      <p>海拔:</p>
+      <p>位置:</p>
+    </ng-template>
+
+    <ng-template #vehicleModalFooter>
+      <button nz-button nzType="default" (click)="getVehiclePathPosition()" [nzLoading]="isConfirmLoading">轨迹</button>
+      <button nz-button nzType="primary" (click)="handleCancel()">关闭</button>
+    </ng-template>
+  </nz-modal>
+
+  <!-- 船舶信息弹框 -->
+  <nz-modal [(nzVisible)]="boatModalIsVisible" [nzTitle]="boatModalTitle" [nzContent]="boatModalContent" [nzFooter]="boatModalFooter" (nzOnCancel)="handleCancel()">
+
+    <ng-template #boatModalTitle>
+      <p>{{choiceBoat.boatName}}</p>
+    </ng-template>
+
+    <ng-template #boatModalContent>
+      <h1>业务信息:</h1>
+      <p>船批:</p>
+      <p>已装货量:</p>
+      <p>配载流向:</p>
+      <p>配载品种:</p>
+      <p>实际到港时间:</p>
+      <p>实际离港时间:</p>
+      <p>目的港1:</p>
+      <p>抵港时间1:</p>
+      <p>目的港2:</p>
+      <p>抵港时间2:</p>
+      <br>
+      <p>mmsi:{{choiceBoat.mmsi}}</p>
+    </ng-template>
+
+    <ng-template #boatModalFooter>
+      <button nz-button nzType="default" (click)="getBoatPathPosition()" [nzLoading]="isConfirmLoading">轨迹</button>
+      <button nz-button nzType="primary" (click)="handleCancel()">关闭</button>
+    </ng-template>
+  </nz-modal>
+
+</div>
+

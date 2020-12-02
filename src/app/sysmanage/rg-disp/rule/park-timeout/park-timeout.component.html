@@ -1,0 +1,81 @@
+
+<app-searchform [formId]="'form_rgdisp_parking_timeout'" (search)="listSearch($event)" [nodes]="nodes"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [formId]="'form_rgdisp_parking_timeout'" [btnHiden]="{'Find':false,'Add':false,'Update':!saveFlag,'Delete':false,'Save':saveFlag}"></tpl-buttons>
+<app-table-form class="parktimeout"
+                  [formId]="'form_rgdisp_parking_timeout'" [gridId]="'grid1'"
+                  [isMutli]="false"
+                  [dataSet]="dataSet"
+                  [isCheckBox]="true"
+                  (updateDataResult)="updateDataResult($event)"
+                  [listLoading]="listLoading"
+                  [pageSize]="pageSize" [totalPage]="totalPage"
+                  [showCount]='true'
+                  [isMutli]="false"
+                 >
+                 <!-- <ng-template #g1 let-data let-index="index">
+                  <a (click)="update(data,index)" *ngIf="data.editstate==0">修改</a>
+                  <ng-container *ngIf="data.editstate==1">
+                      <a (click)='saveData(data,index)'>保存</a>
+                      <a>&nbsp;&nbsp;</a>
+                      <a (click)='cancle(data,index)'>取消</a>
+                  </ng-container>
+                  <ng-container *ngIf="data.status == '作废'">
+                  <a>&nbsp;&nbsp;</a>
+                  <a (click)='deleteBtn(data)'>删除</a>
+                  </ng-container>
+                </ng-template> -->
+  </app-table-form>
+
+
+  <nz-modal [(nzVisible)]="InsertFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzOkLoading]="isOkLoading"
+  (nzAfterClose)="closeResult()">
+  <form nz-form [formGroup]="modalValidateForm">
+      <nz-form-item *ngFor="let m of modalFormData" >
+          <nz-form-label [nzSpan]="6" [nzRequired]="m.require" >
+              {{m.name}}
+          </nz-form-label>
+          <nz-form-control [nzSpan]="12">
+              <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+                  <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+              </nz-radio-group>
+                  <nz-tree-select style="width: 236px;" *ngIf="m.eName === 'kindCode'" [nzDefaultExpandedKeys]="expandKeys" [nzNodes]="nodes" nzShowSearch nzPlaceHolder="品种名称"
+                      (ngModelChange)="onChange($event)" [formControlName]="m.eName" [nzDropdownStyle]="{ 'max-height': '300px' }">
+                  </nz-tree-select>
+                  <!-- <nz-select #select  style="width: 236px;" *ngIf="m.eName === 'subKindCode'"  [nzDisabled]="kindCode != '11002000010000'"
+                  nzShowSearch nzAllowClear nzPlaceHolder="辅助分类名称" [formControlName]="m.eName" (ngModelChange)='subChange($event)'>
+                      <nz-option *ngFor="let i of subKindArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+                  </nz-select> -->
+                  <input type="{{m.type}}" *ngIf="m.eName == 'parkName'" nz-input formControlName="{{m.eName}}" [id]="m.eName">
+                  <nz-select #select  style="width: 236px;" *ngIf="m.eName === 'parkCode'"
+                  nzShowSearch nzAllowClear nzPlaceHolder="可用停车场" [formControlName]="m.eName" (ngModelChange)='parkChange($event)'>
+                      <nz-option *ngFor="let i of parkArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+                  </nz-select>
+                  <nz-select #select  style="width: 236px;" *ngIf="m.eName === 'unconfirmedRequeue'"
+                  nzShowSearch nzAllowClear nzPlaceHolder="是否取消排队" [formControlName]="m.eName" >
+                        <nz-option nzValue="true" nzLabel="是"></nz-option>
+                        <nz-option nzValue="false" nzLabel="否"></nz-option>
+                  </nz-select>
+                  <!-- <nz-select #select  style="width: 236px;" *ngIf="m.eName === 'truckKind'"
+                  nzShowSearch nzAllowClear nzPlaceHolder="车型" [formControlName]="m.eName" (ngModelChange)='truckChange($event)'>
+                      <nz-option *ngFor="let i of truckArr" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+                  </nz-select> -->
+                  <nz-input-number [formControlName]="m.eName"  [nzMin]="0"  [nzStep]="1" *ngIf="m.eName === 'timeout'"></nz-input-number>
+              <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+                  <div *ngIf="modalValidateForm.get(m.eName).errors['pattern'];else erroInf">
+                      {{ m.validators.patternErr}}
+                  </div>
+                  <ng-template #erroInf>
+                      {{ m.validateCon}}
+                  </ng-template>
+              </nz-form-explain>
+
+          </nz-form-control>
+
+      </nz-form-item>
+  </form>
+
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="deletemodaltitle" [modalCon]="finishCon"
+                   (modalConfirmResult)="deleteData($event)">
+</app-modal-confirm>
+  </nz-modal>

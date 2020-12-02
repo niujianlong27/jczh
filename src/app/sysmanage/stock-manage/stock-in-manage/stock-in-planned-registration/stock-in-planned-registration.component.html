@@ -1,0 +1,30 @@
+<app-searchform (search)="searchList($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+<app-table-form [dataSet]="dataSet" (updateDataResult)="updateDataResult($event)" [isCheckBox]="true" [isMutli]="true"
+                [pageSize]="pageSize1" [totalPage]="totalPage"   (userColumnsEmit)="colName1($event)" (modelChange)="modelChange($event)"
+                [listLoading]="listLoading1"     (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)'>
+  <ng-template #wsId let-data let-header>
+    <nz-select [nzAllowClear]="true" [nzShowSearch]="false" nzSize="small" [(ngModel)]="data.wsId"  [ngModelOptions]="{standalone: true}"
+               style="width: 100%;" (ngModelChange)="fWhsChange($event,data)"  [ngClass]="{'selectShow':!data.canUpdate,'selectClose':data.canUpdate}" (nzOpenChange)="WSOpenChange($event)" [nzLoading]="WSLoading">
+      <nz-option *ngFor="let p of warehouseArr" [nzLabel]="p.name" [nzValue]="p.value"></nz-option>
+    </nz-select>
+    <div [ngClass]="{'divShow':data.canUpdate,'divClose':!data.canUpdate}">{{data.wsName}}</div>
+  </ng-template>
+  <ng-template #wsLocation let-data let-header>
+    <nz-select [nzAllowClear]="true" [nzShowSearch]="false" nzSize="small" [(ngModel)]="data.wsLocationId"  [ngModelOptions]="{standalone: true}"
+               style="width: 100%;"   [ngClass]="{'selectShow':!data.canUpdate,'selectClose':data.canUpdate}" (ngModelChange)="wsLocationChange($event,data)" (nzOpenChange)="wsLocationOpenChange($event,data)">
+      <nz-option *ngFor="let p of data.wsLocationArr" [nzLabel]="p.name" [nzValue]="p.value"></nz-option>
+    </nz-select>
+    <div [ngClass]="{'divShow':data.canUpdate,'divClose':!data.canUpdate}">{{data.wsLocation}}</div>
+  </ng-template>
+  <ng-template #itemid let-data let-header>
+    <nz-select [nzAllowClear]="true" [nzShowSearch]="false" nzSize="small" [(ngModel)]="data.prodId"  [ngModelOptions]="{standalone: true}"
+               style="width: 100%;"  (ngModelChange)="itemidModelChange($event,data)"  [ngClass]="{'selectShow':!data.canUpdate,'selectClose':data.canUpdate}">
+      <nz-option *ngFor="let p of itemidArr" [nzLabel]="p.itemid" [nzValue]="p.itemid"></nz-option>
+    </nz-select>
+    <div [ngClass]="{'divShow':data.canUpdate,'divClose':!data.canUpdate}">{{data.prodId}}</div>
+  </ng-template>
+
+</app-table-form>
+
+

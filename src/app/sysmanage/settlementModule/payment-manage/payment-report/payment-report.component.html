@@ -1,0 +1,200 @@
+<app-searchform (search)='listSearch($event)' [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)' [btnDisable]="{test:!selectedData[0],batchPrint:!selectedData[0]}"
+             [btnLoading]="{'instead':insteadLoading}"></tpl-buttons>
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+  <ng-template #one>
+    <app-table-form [isMutli]="true" [listLoading]='listLoading' [gridId]='"grid1"' [dataSet]='dataSet' [selfTableHeight]="gridOneHeight"
+                    [caculateEnameArr]="caculateEnameArr" [totalPage]='totalPages' (btnClick)='btnClick($event)'
+                    (listClick)='listClick($event)' (updateDataResult)='updateData($event)'></app-table-form>
+  </ng-template>
+  <ng-template #two>
+    <app-table-form [isMutli]="isMutli" [listLoading]='childlistLoading' [gridId]='gridId' [selfTableHeight]="gridTwoHeight"
+                    [tabArr]='tabArr' [(tabIndex)]='tabIndex' [updateHeader]=true (tabResultFun)='tabChange($event)'
+                    [dataSet]='childrenDataSet' [nzShowPagination]=false [totalPage]='children_totalPages'
+                    (btnClick)='btnClick($event)'  (updateDataResult)='selectItem($event)'></app-table-form>
+  </ng-template>
+</app-grid-resize>
+
+<nz-modal [(nzVisible)]="printModalVisible" nzTitle="分组打印" (nzOnCancel)="handleCancel()" nzWidth="70%"
+          [nzFooter]="printModalFooter" [nzContent]="printModalContent"  [nzMaskClosable]="false" >
+  <ng-template #printModalContent>
+    <nz-tabset (nzSelectChange)="printModalTab($event)" [(nzSelectedIndex)]="printModalTabIndex">
+      <nz-tab nzTitle="按车队展示">
+        <app-table-form [columns]="printModalHeader" [dataSet]="printModalData1" [isCheckBox]="false"
+                        [listLoading]="printModalLoading" [nzShowPagination]='false' [showCount]="false"
+                        [paginationRef]="pagination1"></app-table-form>
+        <ng-template #pagination1>
+          重量 {{printModalData1|dataAggregation:'weight'|gridData:{type: 'number', format: '3'} }}
+          吨，总价 {{printModalData1|dataAggregation:'totalPrice'|gridData:{type: 'number', format: '2'} }}
+          元
+        </ng-template>
+      </nz-tab>
+      <nz-tab nzTitle="按运单展示">
+        <app-table-form [columns]="printModalHeader" [dataSet]="printModalData2" [isCheckBox]="false"
+                        [listLoading]="printModalLoading" [nzShowPagination]='false' [showCount]="false"
+                        [paginationRef]="pagination2"></app-table-form>
+        <ng-template #pagination2>
+          重量 {{printModalData2|dataAggregation:'weight'|gridData:{type: 'number', format: '3'} }}
+          吨，总价 {{printModalData2|dataAggregation:'totalPrice'|gridData:{type: 'number', format: '2'} }}
+          元
+        </ng-template>
+      </nz-tab>
+      <nz-tab nzTitle="按合同展示">
+        <app-table-form [columns]="printModalHeader" [dataSet]="printModalData3" [isCheckBox]="false"
+                        [listLoading]="printModalLoading" [nzShowPagination]='false' [showCount]="false"
+                        [paginationRef]="pagination3"></app-table-form>
+        <ng-template #pagination3>
+          重量 {{printModalData3|dataAggregation:'weight'|gridData:{type: 'number', format: '3'} }}
+          吨，总价 {{printModalData3|dataAggregation:'payAmount'|gridData:{type: 'number', format: '2'} }}
+          元
+        </ng-template>
+      </nz-tab>
+      <nz-tab nzTitle="按装车清单号展示">
+        <app-table-form [columns]="printModalHeader" [dataSet]="printModalData4" [isCheckBox]="false"
+                        [listLoading]="printModalLoading" [nzShowPagination]='false' [showCount]="false"
+                        [paginationRef]="pagination4"></app-table-form>
+        <ng-template #pagination4>
+          重量 {{printModalData4|dataAggregation:'weight'|gridData:{type: 'number', format: '3'} }}
+          吨，总价 {{printModalData4|dataAggregation:'totalPrice'|gridData:{type: 'number', format: '2'} }}
+          元
+        </ng-template>
+      </nz-tab>
+      <nz-tab nzTitle="按车队详情展示">
+        <app-table-form [columns]="printModalHeader" [dataSet]="printModalData5" [isCheckBox]="false"
+                        [listLoading]="printModalLoading" [nzShowPagination]='false' [showCount]="false"
+                        [paginationRef]="pagination5"></app-table-form>
+        <ng-template #pagination5>
+          总价 {{printModalData5|dataAggregation:'totAmount'|gridData:{type: 'number', format: '2'} }}
+          元
+        </ng-template>
+      </nz-tab>
+
+    </nz-tabset>
+  </ng-template>
+  <ng-template #printModalFooter>
+    <button nz-button nzType="primary" (click)="handleOk(10)">导出</button>
+    <button nz-button nzType="primary" (click)="handleOk(20)">打印</button>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  </ng-template>
+</nz-modal>
+<ng-template #reconciliation>
+  <div style="padding-left:70px;">
+    <nz-form-item *ngIf="btnId === 'instead' || btnId === 'confirm'">
+      <nz-form-control>
+        <span class="modal-span" [hidden]="btnId === 'confirm'">代收代付虚公司:</span>
+        <span class="modal-span" [hidden]="btnId === 'instead'">对账虚公司:</span>
+        <div class="modal-right-div">
+          <input-modal [isMutli]=false [inputSize]="'small'" (inpEmit)='inpEmitCarrier($event)'
+                       [findset]="{formId: 'form_rec_test', name: '收款单位', parameter: 'companyName', parameterSend: 'settleCompanyId',url:'getRecCompany'}"
+                       [(inputModalModel)]="carrierCompany"
+                       [inputModalHiddenValue]="carrierCompanyId"></input-modal>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item *ngIf="btnId !== 'confirm'">
+      <nz-form-control >
+        <span class="modal-span">{{companyModalObj.title}}:</span>
+        <div class="modal-right-div">
+          <nz-select nzShowSearch [(ngModel)]="transCompanyId">
+            <nz-option *ngFor="let i of companyType" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+          </nz-select>
+        </div>
+        <div style="padding-left:80px;">
+          <nz-form-explain *ngIf="!transCompanyId">{{companyModalObj.error}}</nz-form-explain>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+    <ng-container *ngIf="btnId === 'instead'">
+      <nz-form-item>
+        <nz-form-control>
+          <span class="modal-span">收款单位:</span>
+          <div class="modal-right-div">
+            <input-modal [inputSize]="'small'" [showExplainFlag]="!companyId" [(inputModalModel)]="recName"
+                         (inpEmit)='inpEmit2($event)'
+                         [findset]="{url: 'getRec', formId: 'form_company_bank_rec', name: '收款单位', parameter: 'recCompanyName', parameterSend: 'recCompanyId'}"></input-modal>
+          </div>
+          <div style="padding-left:100px;">
+            <nz-form-explain *ngIf="!companyId">收款单位</nz-form-explain>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control>
+          <span class="modal-span">开户银行:</span>
+          <div class="modal-right-div">
+            <input style="width:187px" nz-input nzSize="small" [(ngModel)]="bankName" disabled>
+          </div>
+
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control>
+          <span class="modal-span">银行账户:</span>
+          <div class="modal-right-div">
+            <input style="width:187px" nz-input nzSize="small" [(ngModel)]="account" disabled>
+          </div>
+
+        </nz-form-control>
+      </nz-form-item>
+    </ng-container>
+  </div>
+</ng-template>
+<nz-modal [(nzVisible)]="modalObj.visible" [nzTitle]="modalObj.title" (nzOnCancel)="modalObj.visible = false" class="modal-payment-report"
+[nzContent]="modalObjContent" (nzOnOk)="handleModalOk()" [nzOkLoading]="modalObj.loading" [nzMaskClosable]="false">
+  <ng-template #modalObjContent>
+      <form nz-form [formGroup]="validateForm" *ngFor="let item of modalObj.data">
+          <nz-form-item *ngIf="item.type === 'inputModal'">
+              <nz-form-label [nzSpan]="6" [nzFor]="item.parameter" [nzRequired]="item.required">{{item.name}}</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                  <input-modal (inpEmit)='modalInpEmit($event,item)'
+                  [findset]="{formId: item.formId, name: item.name, parameter: item.nameStr,url:item.url,parameterSend: item.parameterSend}"
+                  [(inputModalModel)]="item.value"></input-modal>
+                  <nz-form-explain *ngIf="validateForm.get(item.parameter)?.dirty && validateForm.get(item.parameter)?.errors">
+                    请选择{{item.name}}！
+                 </nz-form-explain>
+              </nz-form-control>
+          </nz-form-item >
+          <nz-form-item *ngIf="item.type === 'text'">
+              <nz-form-label [nzSpan]="6" [nzFor]="item.parameter"  [nzRequired]="item.required">{{item.name}}</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                  <input nz-input type="text" [formControlName]="item.parameter" />
+                  <nz-form-explain *ngIf="validateForm.get(item.parameter)?.dirty && validateForm.get(item.parameter)?.errors">
+                     请输入{{item.name}}！
+                  </nz-form-explain>
+              </nz-form-control>
+          </nz-form-item >
+          <nz-form-item *ngIf="item.type === 'number'">
+              <nz-form-label [nzSpan]="6" [nzFor]="item.parameter" [nzRequired]="item.required">{{item.name}}</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                  <nz-input-number  [nzStep]="1" [nzMin]="0" [formControlName]="item.parameter" style="width:100%"></nz-input-number>
+                  <nz-form-explain *ngIf="validateForm.get(item.parameter)?.dirty && validateForm.get(item.parameter)?.errors">
+                    请输入{{item.name}}！
+                 </nz-form-explain>
+              </nz-form-control>
+          </nz-form-item >
+          <nz-form-item *ngIf="item.type === 'select'">
+              <nz-form-label [nzSpan]="6" [nzFor]="item.parameter" [nzRequired]="item.required">{{item.name}}</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                  <nz-select [formControlName]="item.parameter"
+                  nzShowSearch
+                  nzAllowClear>
+                  <nz-option *ngFor="let i of item.data" nzCustomContent [nzValue]="i?.value" [nzLabel]="i?.name">
+                    <span [title]="i?.name">{{i?.name}}</span>
+                  </nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="validateForm.get(item.parameter)?.dirty && validateForm.get(item.parameter)?.errors">
+                  请选择{{item.name}}！
+               </nz-form-explain>
+              </nz-form-control>
+          </nz-form-item >
+          <nz-form-item *ngIf="item.type === 'bigText'">
+              <nz-form-label [nzSpan]="6" [nzFor]="item.parameter"  [nzRequired]="item.required">{{item.name}}</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                  <textarea [formControlName]="item.parameter" nz-input rows="2"></textarea>
+              </nz-form-control>
+          </nz-form-item >
+      </form>
+  </ng-template>
+</nz-modal>

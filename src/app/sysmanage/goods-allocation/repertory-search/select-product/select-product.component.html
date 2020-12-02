@@ -1,0 +1,23 @@
+<app-searchform (search)="listSearch($event)" (searchDataReturn)="searchData($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnclick($event)"></tpl-buttons>
+<app-table-form  (pageIndexEmit)='getPageIndex1($event)' class="bill-of-manage"
+                (pageSizeEmit)='getPageSize1($event)' gridId='grid1'  [dataSet]="dataSet"
+                [pageSize]="pageSize" (updateDataResult)="updateDataResult($event)" [totalPage]="totalPage" [isMutli]="true" [listLoading]="loading"
+                [trSelectedShow]="true" [showCount]="false"  [paginationRef]="buttom">
+  <ng-template #buttom>已选{{updatedata.length}}条，已选重量{{totalWeight}}吨</ng-template>
+</app-table-form>
+
+
+<!-- <app-table-form  [pageFun]='true' (pageIndexEmit)='getPageIndex($event)'-->
+<!--              (pageSizeEmit)='getPageSize1($event)' gridId='grid1' [dataSet]="dataSet"-->
+<!--              [pageSize]="pageSize" (updateDataResult)="updateDataResult($event)" [totalPage]="totalPage"-->
+<!--              [isMutli]="true" [listLoading]="loading"-->
+<!--              [trSelectedShow]="true" [showCount]="false" [paginationRef]="buttom">-->
+<!--</app-table-form>-->
+
+<app-modal-confirm [deleteVisible]="handleVisible" [modalTitle]="'提示信息'" [modalCon]="handleCon"
+                   (modalConfirmResult)="modalConfirmResult($event)" [nzOkLoading]="handleLoading">
+</app-modal-confirm>
+<app-modal-confirm [deleteVisible]="handleVisible1" [modalTitle]="'提示信息'" [modalCon]="handleCon1"
+                   (modalConfirmResult)="modalConfirmResult1($event)" [nzOkLoading]="handleLoading1">
+</app-modal-confirm>

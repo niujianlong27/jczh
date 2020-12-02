@@ -1,0 +1,162 @@
+<app-searchform 
+ formId="form_inv_print"
+ [triggerSearch]="true"
+ (search)="search($event)"
+ gridId="grid1"></app-searchform>
+<tpl-buttons 
+ formId="form_inv_print"
+ gridId="grid1" 
+ [btnHiden]="{Preview: true, Detail: true, StatusConfirm: true}"
+ (btnDataReturn)="getBtnData($event)"
+ (btnClick)="btnClick($event)"></tpl-buttons>
+ <nz-tabset (nzSelectChange)="tabSelect($event)" 
+  [nzSelectedIndex]="tabIndex"
+  (nzSelectedIndexChange)="tabIndexChange($event)">
+     <nz-tab nzTitle="待开票"></nz-tab>
+     <nz-tab nzTitle="开票中"></nz-tab>
+     <nz-tab nzTitle="开票失败"></nz-tab>
+ </nz-tabset>
+<app-table-form 
+ [extraTableHeight]="60"
+ formId="form_inv_print"
+ gridId="grid1"
+ [dataSet]="data"
+ [listLoading]="loading"
+ [totalPage]="total"
+ [isMutli]="true"
+ [gridOperate]="{template: operate, show: btnData.Preview || btnData.Detail || btnData.StatusConfirm}">
+  <ng-template #operate let-data>
+      <a title="预览" *ngIf="btnData.Preview" (click)="detail(data, 'preview')"><i nz-icon nzType="eye" nzTheme="outline"></i></a>
+      <a title="详情" class="m-l-xs" (click)="detail(data, 'detail')" *ngIf="btnData.Detail"><i nz-icon nzType="file-text" nzTheme="outline"></i></a>
+      <!-- <a title="开票状态确认" class="m-l-xs" *ngIf="btnData.StatusConfirm"><i nz-icon nzType="file" nzTheme="outline"></i></a> -->
+  </ng-template>
+</app-table-form>
+
+ <nz-modal
+  [(nzVisible)]="visvible"
+  [nzStyle]="{top: '20px'}"
+  nzWidth="90%"
+  (nzOnOk)="visvible = false"
+  (nzOnCancel)="visvible = false">
+   <app-added-value-tax-template [data]="taxData"></app-added-value-tax-template>
+</nz-modal>
+<nz-modal
+ [(nzVisible)]="detailVisible"
+ [nzStyle]="{top: '20px'}"
+ nzTitle="预制发票详情"
+ [nzFooter]="detailFooter"
+ nzWrapClassName="invoice-detial-modal"
+ (nzOnCancel)="detailVisible = false"
+ nzWidth="95%">
+ <div>
+     <nz-card nzTitle="预制发票信息" [nzBordered]="false">
+         <div nz-row class="m-b-sm">
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">购方名称：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.buyerName">{{taxData.buyerName}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">购方纳税人识别号：</div>
+                <div nz-col nzSpan="13" class="text-ellisped"  [title]="taxData.buyerTaxCode">{{taxData.buyerTaxCode}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">购方电话：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.buyerTel">{{taxData.buyerTel}}</div>
+            </div>
+         </div>
+         <div nz-row class="m-b-sm">
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">购方银行账号：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.buyerBankAccount">{{taxData.buyerBankAccount}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">购方银行名称：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.buyerBankName">{{taxData.buyerBankName}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">购方地址：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.buyerAddress">{{taxData.buyerAddress}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">收款人：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.payee">{{taxData.payee}}</div>
+            </div>
+         </div>
+         <div nz-row class="m-b-sm">
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">销方名称：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.sellerName">{{taxData.sellerName}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">销方纳税人识别号：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.sellerTaxCode">{{taxData.sellerTaxCode}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">销方电话：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.sellerTel">{{taxData.sellerTel}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">复核人：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.reviewer">{{taxData.reviewer}}</div>
+            </div>
+         </div>
+         <div nz-row class="m-b-sm">
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">销方银行账号：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.sellerBankAccount">{{taxData.sellerBankAccount}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">销方银行名称：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.sellerBankName">{{taxData.sellerBankName}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">销方地址：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.sellerAddress">{{taxData.sellerAddress}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">开票人：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.creator">{{taxData.creator}}</div>
+            </div>
+         </div>
+         <div nz-row class="m-b-sm">
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">流水号：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.invoiceId">{{taxData.invoiceId}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">价税合计（含税）：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.totalMoney">¥ {{taxData.totalMoney}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">发票备注：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.remark">{{taxData.remark}}</div>
+            </div>
+            <div nz-col nzSpan="6">
+                <div nz-col nzSpan="11" class="t-r">发票类型：</div>
+                <div nz-col nzSpan="13" class="text-ellisped" [title]="taxData.invoiceTypeChina">{{taxData.invoiceTypeChina}}</div>
+            </div>
+         </div>
+     </nz-card>
+     <!-- <ng-template #more>
+         <a>查看所属单据</a>
+     </ng-template> -->
+     <nz-card nzTitle="发票明细" [nzBordered]="false">
+         <app-table-form 
+          formId="form_inv_print"
+          gridId="grid2"
+          [isCheckBox]="false"
+          [dataSet]="taxData.details"
+          [colSet]="false"
+          [nzShowPagination]="false"
+          selfTableHeight="100px"
+          [showCount]="false"
+          ></app-table-form>
+     </nz-card>
+ </div>
+ <ng-template #detailFooter>
+     <!-- <button nz-button nzType="primary">开具并打印</button> -->
+     <button nz-button nzType="primary" *ngIf="taxData.invoiceStatus === '未开票' || taxData.invoiceStatus === '开票失败'" 
+      (click)="billing('modal')"
+      [nzLoading]="billLoading">开票</button>
+ </ng-template>
+</nz-modal>

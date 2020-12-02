@@ -1,0 +1,38 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+<app-grid-resize [gridOne]="gridOne" [gridTwo]="gridTwo" (selfHeightResult)="gridHeight($event)">
+  <ng-template #gridOne>
+    <app-table-form
+                    [gridId]="'grid1'" [dataSet]="dataSet1"
+                    [pageSize]="pageSize1"
+                    [selfTableHeight]="gridOneHeight"
+                    [totalPage]="totalPages1" [isMutli]="true"
+                    (updateDataResult)="updateDataResult($event)"
+                    [trSelectedShow]="true"
+                    [listLoading]="listLoading1"
+                    (listClick)="listClick($event)"
+                    [paginationRef]="totalStats"></app-table-form>
+    <ng-template #totalStats>
+      <!--&nbsp;<span> 已选重量 {{totalWeight| number:'1.3-3'  }} 吨</span>-->
+      <!--&nbsp;<span> 已选件数 {{totalPackageNum | number:'1.2-2'}} 件</span>-->
+      <!--&nbsp;<span> 已选支数 {{ totalBranchNum| number:'1.2-2' }} 支</span>-->
+    </ng-template>
+  </ng-template>
+  <ng-template #gridTwo>
+    <app-table-form [pageFun]='true' (pageIndexEmit)='getPageIndex2($event)'
+                    (pageSizeEmit)='getPageSize2($event)'
+                    [gridId]="'grid2'" [dataSet]="dataSet2"
+                    [selfTableHeight]="gridTwoHeight"
+                    [pageSize]="pageSize2"
+                    [totalPage]="totalPages2"
+                    [listLoading]="listLoading2"
+                    [isMutli]="true" [isCheckBox]="false"
+                    [showCount]="false"></app-table-form>
+  </ng-template>
+</app-grid-resize>
+
+  <app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                     (modalConfirmResult)="modalConfirmResult($event)">
+
+  </app-modal-confirm>
+

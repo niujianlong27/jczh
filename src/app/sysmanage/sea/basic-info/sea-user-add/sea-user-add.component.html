@@ -1,0 +1,182 @@
+<form nz-form [nzLayout]="'inline'">
+  <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" style="padding-right: 16px;">
+    <div nz-col nzSpan="6">
+      <nz-form-item>
+        <nz-form-label nzSpan="8">用户名称</nz-form-label>
+        <nz-form-control nzSpan="16">
+          <input type="text" nz-input [(ngModel)]="inqu.userName" name="userName" nzPlaceHolder="用户名称">
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzSpan="6">
+      <nz-form-item>
+        <nz-form-label nzSpan="8">业务范围</nz-form-label>
+        <nz-form-control nzSpan="16">
+          <nz-select style="width: 120px;" [(ngModel)]="inqu.bizScope" name="bizScope" nzPlaceHolder="业务范围" nzAllowClear>
+            <nz-option *ngFor="let option of bizScope" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col nzSpan="24" style="text-align: right;">
+      <p class="b-t p-sm-tb">
+        <button nz-button nzType="primary" nzGhost class="m-r" (click)="query()" [nzLoading]="queryLoading">
+          <a class="btn-icon">
+            <img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/查询.svg">
+          </a>查询</button>
+        <button nz-button nzType="primary" nzGhost class="m-r" (click)="openModal()">
+          <a class="btn-icon">
+            <img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/新增.svg">
+          </a>新增</button>
+      </p>
+    </div>
+  </div>
+</form>
+
+<nz-table #basicTable [nzData]="result" [nzFrontPagination]="false" [nzBordered]="false" nzShowPagination="false"
+  [nzFooter]="tableFooter">
+  <ng-template #tableTotal>
+    总计 {{page.total}} 条
+  </ng-template>
+  <ng-template #tableFooter>
+    <div nz-row nzType="flex" nzAlign="middle" class="fr">
+      <div nz-col nzSpan="24">
+        <nz-pagination [nzShowTotal]="tableTotal" [(nzPageIndex)]="page.pageIndex" [nzPageSize]="page.pageSize"
+          (nzPageSizeChange)="pageSizeChange($event)" (nzPageIndexChange)="pageIndexChange($event)" [(nzTotal)]="page.total"
+          nzShowSizeChanger [nzPageSizeOptions]="page.sizeOptions" nzShowQuickJumper></nz-pagination>
+      </div>
+    </div>
+  </ng-template>
+  <thead>
+    <tr>
+      <th nzWidth="30px" nzLeft="0px" nzShowCheckbox [(nzChecked)]="allChecked" [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="checkAll($event)"></th>
+      <th nzWidth="60px">公司ID</th>
+      <th nzWidth="100px">公司名称</th>
+      <th nzWidth="60px">用户ID</th>
+      <th nzWidth="100px">用户名称</th>
+      <th nzWidth="80px">业务范围</th>
+      <th nzWidth="120px" nzRight="0px">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-template ngFor let-item [ngForOf]="basicTable.data">
+      <tr ngForm #rowForm="ngForm" [ngClass]="item.rowClass">
+        <td nzLeft="0px" nzShowCheckbox [(nzChecked)]="item.checked" name="checked" (nzCheckedChange)="refreshStatus()"></td>
+        <td> {{item.companyId}} </td>
+        <td>{{item.companyName}}</td>
+        <td> {{item.userId}} </td>
+        <td>{{item.userName}}</td>
+        <td>
+          <ng-container *ngIf="item.isEditing">
+            <nz-select style="width: 100%;" [(ngModel)]="item.bizScope" name="bizScope" nzMode="multiple"
+              (ngModelChange)="setDisplayName($event, item, bizScope, 'bizScopeName')" nzPlaceHolder="请选择业务范围">
+              <nz-option *ngFor="let option of bizScope" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+            </nz-select>
+          </ng-container>
+          <ng-container *ngIf="!item.isEditing">
+            {{item.bizScopeName}}
+          </ng-container>
+        </td>
+        <td nzRight="0px">
+          <ng-container *ngIf="!item.isEditing">
+            <button nz-button nzType="default" class="m-r" (click)="item.isEditing = true">修改</button>
+            <button nz-popconfirm nzTitle="是否确认删除该承人员信息?" (nzOnConfirm)="delete(item)" (nzOnCancel)="cancel()"
+                nz-button nzType="nzGhost" nzGhost class="m-r">删除</button>
+          </ng-container>
+          <ng-container *ngIf="item.isEditing">
+            <p class="b-t p-sm-tb">
+              <button nz-button nzType="default" class="m-r" (click)="item.isEditing=false">取消</button>
+              <button nz-button nzType="default" class="m-r" [nzLoading]="loading" [disabled]="rowForm.pristine || rowForm.invalid"
+                (click)="save(item)">保存</button>
+            </p>
+          </ng-container>
+        </td>
+      </tr>
+    </ng-template>
+  </tbody>
+</nz-table>
+
+
+<nz-modal [nzWidth]="'75%'" [nzVisible]="userIsVisible" [nzTitle]="userTitle" [nzContent]="userContent" [nzFooter]="userFooter"
+  (nzOnCancel)="userIsVisible=false">
+  <ng-template #userTitle>
+    海运业务人员新增
+  </ng-template>
+  <ng-template #userContent>
+    <form nz-form [nzLayout]="'inline'">
+      <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" style="padding-right: 16px;">
+        <div nz-col nzSpan="8">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">用户名称</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <nz-input-group nzSearch [nzSuffix]="suffixButton">
+                <input type="text" nz-input [(ngModel)]="inquUser.userName" name="userName" placeholder="请输入用户名称">
+              </nz-input-group>
+              <ng-template #suffixButton>
+                <button nz-button nzType="primary" nzSearch [nzLoading]="userLoading" (click)="queryUser()">查询</button>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+
+    <nz-table #userTable [nzData]="userData" [nzFrontPagination]="false" [nzScroll]="{ x: '100%', y: '650px' }" class="modal-table"
+      [nzBordered]="false" nzShowPagination="false" [nzFooter]="tableFooter">
+      <ng-template #tableTotal>
+        总计 {{userPage.total}} 条
+      </ng-template>
+      <ng-template #tableFooter>
+        <div nz-row nzType="flex" nzAlign="middle" class="fr">
+          <div nz-col nzSpan="24">
+            <nz-pagination [nzShowTotal]="tableTotal" [(nzPageIndex)]="userPage.pageIndex" [nzPageSize]="userPage.pageSize"
+              (nzPageSizeChange)="pageSizeChange($event, 'user')" (nzPageIndexChange)="pageIndexChange($event, 'user')"
+              [(nzTotal)]="userPage.total" nzShowSizeChanger [nzPageSizeOptions]="page.sizeOptions" nzShowQuickJumper></nz-pagination>
+          </div>
+        </div>
+      </ng-template>
+      <thead>
+        <tr>
+          <th nzWidth="30px" nzLeft="0px" nzShowCheckbox [(nzChecked)]="platAllChecked" [nzIndeterminate]="platIndeterminate"
+            (nzCheckedChange)="checkAll($event, 'user')"></th>
+          <th nzWidth="60px">公司ID</th>
+          <th nzWidth="100px">公司名称</th>
+          <th nzWidth="60px">用户ID</th>
+          <th nzWidth="80px">用户名称</th>
+          <th nzWidth="120px">业务范围</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-template ngFor let-item [ngForOf]="userTable.data">
+          <tr ngForm #rowForm="ngForm" [ngClass]="item.rowClass">
+            <td nzLeft="0px" nzShowCheckbox [(nzChecked)]="item.checked" name="checked" (nzCheckedChange)="refreshStatus('user')"></td>
+            <td> {{item.companyId}} </td>
+            <td>{{item.companyName}}</td>
+            <td> {{item.userId}} </td>
+            <td>{{item.name}}</td>
+            <td>
+              <ng-container *ngIf="item.checked">
+                <nz-select style="width: 250px;" [(ngModel)]="item.bizScope" name="bizScope" nzMode="multiple"
+                  (ngModelChange)="setDisplayName($event, item, bizScope, 'bizScopeName')" nzPlaceHolder="请选择用户业务范围">
+                  <nz-option *ngFor="let option of bizScope" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+                </nz-select>
+              </ng-container>
+              <ng-container *ngIf="!item.checked">
+                {{item.bizScopeName}}
+              </ng-container>
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </nz-table>
+  </ng-template>
+
+  <ng-template #userFooter>
+    <p class="b-t p-sm-tb">
+      <button nz-button nzType="default" class="m-r" (click)="userIsVisible=false">取消</button>
+      <button nz-button nzType="primary" class="m-r" [nzLoading]="insertLoading" (click)="insertList()">确认</button>
+    </p>
+  </ng-template>
+</nz-modal>

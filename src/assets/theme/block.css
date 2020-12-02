@@ -1,0 +1,117 @@
+div.top-nav{
+    background-color: #333 !important;
+}
+ul.top-right li.line{
+    border-right-color: #8b8a8a !important;
+}
+ul.left-nav-box{
+    background-color: #333 !important;
+}
+li.left-icon:hover{
+  background-color:#000 !important;
+}
+.ant-btn:hover,.ant-btn:active,.ant-btn.active,.ant-btn:focus{
+    border-color:#333;
+    color:#333;
+}
+
+.ant-btn-primary{
+    background-color:#333;
+    border-color:#333;
+}
+.ant-btn-background-ghost.ant-btn-primary{
+    border-color:#333;
+    color:#333;
+}
+
+.ant-btn-primary:hover,.ant-btn-primary.active,.ant-btn-primary:focus,.ant-btn-primary:active{
+    background-color:#000;
+    border-color:#000;
+    color:#fff;
+}
+.ant-btn-background-ghost.ant-btn-primary:hover,.ant-btn-background-ghost.ant-btn-primary.active,.ant-btn-background-ghost.ant-btn-primary:focus,.ant-btn-background-ghost.ant-btn-primary:active,.ant-btn-default:hover{
+    border-color:#000;
+    color:#000;
+}
+.ant-checkbox-checked .ant-checkbox-inner{
+    color:#333;
+    background-color:#333;
+}
+.ant-checkbox-checked .ant-checkbox-inner,.ant-checkbox-wrapper:hover .ant-checkbox-inner, .ant-checkbox:hover .ant-checkbox-inner, .ant-checkbox-input:focus + .ant-checkbox-inner{
+    border-color:#333;
+}
+.ant-checkbox-indeterminate .ant-checkbox-inner:after,.ant-radio-inner:after{
+    background-color:#333;
+}
+.ant-input:focus,.ant-input:hover{
+    border-color:#333;
+    box-shadow: 0 0 0 2px rgba(3, 3, 3, 0.2);
+}
+.ant-pagination-item-active:focus a, .ant-pagination-item-active:hover a,.ant-pagination-item:hover a,.ant-pagination-item-active.ant-pagination-item-active a{
+    color:#333 !important;
+}
+.ant-pagination-item:focus, .ant-pagination-item:hover,.ant-pagination-item-active{
+    border-color:#333;
+}
+.ant-pagination-prev:focus .ant-pagination-item-link, .ant-pagination-next:focus .ant-pagination-item-link, .ant-pagination-prev:hover .ant-pagination-item-link, .ant-pagination-next:hover .ant-pagination-item-link{
+    border-color:#333;
+    color:#333;
+}
+.ant-select > .ant-select-selection:hover,.ant-select > .ant-select-selection:focus,.ant-radio-checked:after,.ant-radio-checked .ant-radio-inner{
+    border-color:#333;
+}
+.ant-select > .ant-select-selection:focus,.ant-pagination-options-quick-jumper input:hover,.ant-pagination-options-quick-jumper input:focus{
+    box-shadow: 0 0 0 2px rgba(3, 3, 3, 0.2);
+}
+.ant-pagination-options-quick-jumper input:hover,.ant-pagination-options-quick-jumper input:focus{
+    color:#333;
+    border-color:#333;
+}
+.ant-radio-wrapper:hover .ant-radio .ant-radio-inner, .ant-radio:hover .ant-radio-inner, .ant-radio-focused .ant-radio-inner,.ant-upload.ant-upload-select-picture-card:hover{
+    border-color:#333;
+}
+[ant-click-animating-without-extra-node]:after,
+.ant-click-animating-node {
+    border-color:#333;
+}
+.ant-tabs-nav .ant-tabs-tab:active,.ant-tabs-nav .ant-tabs-tab:hover,.ant-tabs-nav .ant-tabs-tab-active{
+    color:#000;
+}
+.ant-tabs-ink-bar{
+    background-color:#000;
+}
+.ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled){
+    border-color:#333;
+}
+.ant-calendar-picker:hover .ant-calendar-picker-input:not(.ant-input-disabled),.ant-calendar-picker:focus .ant-calendar-picker-input:not(.ant-input-disabled){
+   border-color:#333;
+}
+.ant-calendar-today .ant-calendar-date{
+    border-color:#000;
+    color:#000;
+}
+.ant-calendar-selected-day .ant-calendar-date{
+    background:#e6e2e2;
+}
+.ant-calendar-date:active{
+    background:#8b8a8a;
+}
+.ant-calendar-date:hover{
+    background:#d4d4d4;
+}
+.ant-calendar-selected-date .ant-calendar-date:hover, .ant-calendar-selected-start-date .ant-calendar-date:hover, .ant-calendar-selected-end-date .ant-calendar-date:hover{
+    background-color:#d4d4d4;
+}
+.ant-calendar-range .ant-calendar-in-range-cell:before{
+    background:#e6e2e2;
+}
+a,a:active{
+    color:#333;
+}
+a:hover{
+    color:#000;
+}
+.ant-select-open .ant-select-selection{
+    border-color:#000;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+}

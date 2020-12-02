@@ -1,0 +1,30 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnclick($event)"></tpl-buttons>
+
+
+<app-grid-resize [gridOne]="gridOne" [gridTwo]="gridTwo" (selfHeightResult)="gridHeight($event)">
+  <ng-template #gridOne>
+    <app-table-form  [pageFun]='true' (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)' gridId='grid1'  [dataSet]="dataSet"
+                     [pageSize]="pageSize1" (updateDataResult)="updateDataResult($event)" [totalPage]="totalPage" [isMutli]="true" [listLoading]="loading"
+                     [trSelectedShow]="true" [selfTableHeight]="gridOneHeight"  [caculateEnameArr]="caculateEnameArr"></app-table-form>
+  </ng-template>
+  <ng-template #gridTwo>
+    <nz-tabset>
+      <nz-tab nzTitle="委托明细">
+    <app-table-form [pageFun]='true'   [gridId]="'grid2'" [dataSet]="dataSet2"  [nzShowPagination]="false" [totalPage]="totalPages2"
+                    [listLoading]="listLoading2" [isMutli]="true" [isCheckBox]="false" [showCount]="true" [selfTableHeight]="gridTwoHeight"></app-table-form>
+      </nz-tab>
+      <nz-tab nzTitle="运输明细">
+        <app-table-form [pageFun]='true'   [gridId]="'grid3'" [dataSet]="dataSet3"  [nzShowPagination]="false"  [paginationRef]="totalStats" (updateDataResult)="updateDataResult3($event)"
+                        [listLoading]="listLoading2" [isMutli]="true" [isCheckBox]="true" [showCount]="false" [selfTableHeight]="gridTwoHeight"></app-table-form>
+        <ng-template #totalStats>
+          <!--&nbsp;<span> 已选 {{selectedOrderData.length}} 条</span>-->
+          <span> 已选重量 {{totalWeight| number:'1.3-3'  }} 吨</span>
+          <span> 已选行数 {{totalPageAll }} 行</span>
+          <span> 已选未完成重量 {{ noCompleteWeight| number:'1.2-2' }} 吨</span>
+          <span> 已选已完成重量 {{completeWeight | number:'1.2-2' }} 吨</span>
+        </ng-template>
+      </nz-tab>
+    </nz-tabset>
+  </ng-template>
+</app-grid-resize>

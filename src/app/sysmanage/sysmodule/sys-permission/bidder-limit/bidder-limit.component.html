@@ -1,0 +1,29 @@
+
+<!--竞价人招标权限设置-->
+<tpl-buttons (btnClick)="btnClick($event)"  [btnLoading]="{Save: btnSaveLoading}">
+</tpl-buttons>
+
+<div nz-row style="padding-top: 20px">
+  <div nz-col nzSpan="12">
+    <div style="margin-bottom: 20px">
+      <nz-input-group nzSearch nzSize="small" [nzAddOnAfter]="selectedPermissionIconButton" class="margin-top-10">
+        <input  nz-input placeholder="搜索，回车触发"  [(ngModel)]="searchData"
+                (keyup.enter)="PermissionSearch()">
+      </nz-input-group>
+      <ng-template #selectedPermissionIconButton>
+        <button nz-button nzSearch nzType="primary" nzSize="small"
+                (click)="PermissionSearch()">
+          <i nz-icon type="search"></i>
+        </button>
+      </ng-template>
+    </div>
+  </div>
+</div>
+<app-table-form gridId="grid1" [isMutli]="true" [pageSize]="sizeNumber" [totalPage]="totalPage" [dataSet]="dataTmp" [extraTableHeight]="59"
+                (pageSizeEmit)="pageSize($event)" (pageIndexEmit)="pageIndex($event)" (userColumnsEmit)="colName($event)"
+                (updateDataResult)="selectData($event)">
+  <ng-template #isBiddingName let-data>
+    <nz-switch [(ngModel)]="data.isBidding"  nzCheckedChildren="是" nzUnCheckedChildren="否" [nzDisabled]="!data.checked"></nz-switch>
+  </ng-template>
+</app-table-form>
+

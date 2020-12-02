@@ -1,0 +1,91 @@
+<nz-tabset (nzSelectChange)="selectChange($event)" [(nzSelectedIndex)]="carNum" change>
+
+  <nz-tab *ngFor="let tab of tabs" [nzTitle]='tab.itemCname + tab.itemCount'>
+    
+  </nz-tab>
+</nz-tabset>
+
+<common-page [pageSize]="pageSize" [totalPage]="totalPage" [listLoading]="listLoading" [dataSet]="dataSet"
+             [gridId]="'grid1'" (btnUpdate)="btnUpdate($event)"
+             (searchDataReturn)="searchDataFun($event)" (search)="listSearch($event)" (btnClick)="btnClick($event)"
+             [isMutli]="true" (updateDataResult)='updateDataResult($event)'
+             [btnHiden]="{'Find':false,'process':false,'Add':false,'Update':false,'finish':carNum!==5, 'CloseTask': carNum !== 2 && carNum !== 3 && carNum !== 4}"
+             (updateDataResult)="updateDataResult1($event)"
+></common-page>
+
+<app-modal-confirm [deleteVisible]="finishVisible" [modalTitle]="modalTitle" [modalCon]="finishCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>
+
+<!-- <nz-modal [nzWidth]="'55%'" [(nzVisible)]="isVisible" nzTitle="{{ modalTitle }}" [nzContent]="modalContent" [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()">
+  <ng-template #modalContent>
+    <nz-table #basicTable [nzData]="dataSet1" [nzPageSize]="'8'"> 
+      <thead>
+        <tr>
+          <th [nzAlign]="'left'">任务ID</th>
+          <th [nzAlign]="'left'">车牌号</th>
+          <th [nzAlign]="'left'">司机</th>
+          <th [nzAlign]="'left'">处理时间</th>
+          <th [nzAlign]="'left'">处理过程</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data">
+          <td [nzAlign]="'left'">{{data.taskId}}</td>
+          <td [nzAlign]="'left'">{{data.truckNo}}</td>
+          <td [nzAlign]="'left'">{{data.driverName}}</td>
+          <td [nzAlign]="'left'">{{data.recCreateTime}}</td>
+          <td [nzAlign]="'left'">{{data.updateDesc}}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </ng-template>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  </ng-template>
+</nz-modal> -->
+
+<nz-modal [nzWidth]="'55%'" [(nzVisible)]="isVisible" nzTitle="{{ modalTitle }}" [nzContent]="modalContent"
+          [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()">
+  <ng-template #modalContent>
+    <nz-table #basicTable [nzData]="dataSet1" [nzPageSize]="'8'">
+      <thead>
+        <tr>
+          <th [nzAlign]="'left'" style="width: 4%">任务ID</th>
+          <th [nzAlign]="'left'" style="width: 4%">车牌号</th>
+          <th [nzAlign]="'left'"style="width: 4%">司机</th>
+          <th [nzAlign]="'left'"style="width: 7%">处理时间</th>
+          <th [nzAlign]="'left'" style="width: 10%">处理过程</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data">
+          <td [nzAlign]="'left'">{{data.taskId}}</td>
+          <td [nzAlign]="'left'">{{data.truckNo}}</td>
+          <td [nzAlign]="'left'">{{data.driverName}}</td>
+          <td [nzAlign]="'left'">{{data.recCreateTime}}</td>
+          <td [nzAlign]="'left'" title={{data.updateDesc}}>{{data.updateDesc}}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </ng-template>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  </ng-template>
+</nz-modal>
+
+
+<app-modal-map-line [vehicleIsVisible]='vehicleIsVisible' [httpInfo]='httpInfo'
+                    (modalShow)='modalShow($event)'></app-modal-map-line>
+<nz-modal [(nzVisible)]="isCloseVisible" (nzOnCancel)="CloseCancel()" (nzOnOk)="CloseConfirm()" nzTitle="请填写任务关闭的原因">
+  <form nz-form [formGroup]="validateForm">
+    <nz-form-item>
+      <nz-form-control [nzSpan]="24">
+        <textarea rows="4" nz-input formControlName="reason"  placeholder="请填写任务关闭的原因"
+                  nzSize="large"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>

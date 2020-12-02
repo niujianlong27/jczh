@@ -1,0 +1,163 @@
+<div class="body-content">
+  <app-home-page-header></app-home-page-header>
+  <div class="img_style">
+    <img src="../../../assets/static/web1.png" *ngIf="showIndex == 'web'">
+    <img src="../../../assets/static/app1.png" *ngIf="showIndex == 'app'">
+    <img src="../../../assets/static/own1.png" *ngIf="showIndex == 'own'">
+    <img src="../../../assets/static/int.png" *ngIf="showIndex == 'int'">
+  </div>
+
+  <div class="tab">
+    <div (click)="changeIndex('web')"  style="display: inline-block;">
+      <img src="../../../assets/static/webLogoed.png" id="preWebLogo" style="width:82px;height:82px;margin-top:51px;margin-left:10px">
+    </div>
+    <div (click)="changeIndex('app')" style="display: inline-block;">
+      <img src="../../../assets/static/preAppLogo.png" id="preAppLogo" style="width:82px;height:82px;margin-top:51px;margin-left:274px;">
+    </div>
+    <div (click)="changeIndex('own')"  style="display: inline-block;">
+      <img src="../../../assets/static/preOwnLogo.png" id="preOwnLogo" style="width:82px;height:82px;margin-top:51px;margin-left:267px;">
+    </div>
+    <div (click)="changeIndex('int')"  style="display: inline-block;">
+      <img src="../../../assets/static/preIntLogo.png" id="preIntLogo" style="width:82px;height:82px;margin-top:51px;margin-left:267px;">
+    </div>
+  </div>
+  <div class="sub_tab">
+    <div style="margin-left: 15px;display: inline-block;color: #333333;">
+      WEB端产品
+    </div>
+    <div style="margin-left: 305px; display: inline-block;color: #333333;">
+      APP
+    </div>
+    <div style="margin-left: 318px; display: inline-block;color: #333333;">
+      货主端
+    </div>
+    <div style="margin-left: 297px; display: inline-block;color: #333333;">
+      物联网产品
+    </div>
+  </div>
+
+  <div style="background-color: #f6f6f6; width:100%;height: 800px;">
+    <div *ngIf="showIndex == 'web'">
+      <div  style="padding-left: 313px; padding-top:149px;font-size:12px;color:#999999;" >
+        将散乱的物流运输资源和需求有效整合起来，让货主企业、发货人、收货人、物流承包人、车主、司机、财务结算等人员在一个平台上工作，减少中间环节、优化合作、一站式<br>
+        协同， 帮助企业实现社会资源和企业资源的统一调配管理。帮助货主降低物流供应链的总成本、提升管理效率，帮助承运人实现连续运输、降低空载率、提升收益能力。
+        <div class="big_word">
+          运输预招标
+        </div>
+        <div class="small_word">
+          针对未来的运输业务，根据线路、货量、品类、规格等进行承运商招标，提前确认运输价格
+        </div>
+        <div class="big_word">
+          专线推送
+        </div>
+        <div class="small_word">
+          根据线下合同或线上招标来指定承运商完成运输业务
+        </div>
+        <div class="big_word">
+          竞价抢单
+        </div>
+        <div class="small_word">
+          承运商根据运输需求进行竞价，以最低价格获得业务
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="showIndex == 'app'">
+      <div  style="padding-left: 313px; padding-top:97px;" >
+        <div class="big_word">
+          汽运APP
+        </div>
+        <div class="small_word">
+          主要使用人，物流公司、车队、物流代理，司机为其提供获得运输业务，跟踪车辆，管控业务过程，结算运输费用，生成业务报表实时操作工具
+        </div>
+        <div class="big_word">
+          承接业务
+        </div>
+        <div class="small_word">
+          智能分配业务系统按照承运力推送合理业务并以多种承接业务方式（招标、竞价、指定、抢单）获取业务
+        </div>
+        <div class="big_word">
+          安排运输
+        </div>
+        <div class="small_word">
+          建立车队体系，根据车辆司机实际情况合理安排运输任务
+        </div>
+        <div class="big_word">
+          跟踪货物
+        </div>
+        <div class="small_word">
+          跟踪货物
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="showIndex == 'own'">
+      <div  style="padding-left: 313px; padding-top:149px;font-size:12px;color:#999999;" >
+        将散乱的物流运输资源和需求有效整合起来，让货主方便查看企业业务，减少中间环节、优化合作、一站式协同， 帮助企业实现社会资源和企业资源的统一调配管理。帮助货主<br>
+        降低物流供应链的总成本、提升管理效率。
+        <div class="big_word">
+          合同管理
+        </div>
+        <div class="small_word">
+          方便货主查看合同信息
+        </div>
+        <div class="big_word">
+          运单管理
+        </div>
+        <div class="small_word">
+          货主查看运单，物流跟踪等
+        </div>
+        <div class="big_word">
+          余额管理
+        </div>
+        <div class="small_word">
+          查看核对运输余额
+        </div>
+        <div class="big_word">
+          发票管理
+        </div>
+        <div class="small_word">
+          查看发票信息
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="showIndex == 'int'">
+      <div  style="padding-left: 313px; padding-top:149px;font-size:12px;color:#999999;" >
+        基于物联网技术，提供工业级运算平台解决方案，实现物流管理全链路数字化和智能化。互联互通，数据智能，
+        实现物流管理全链路数字化和智能化，消除信息孤岛。
+        <div class="big_word">
+          车辆出入库
+        </div>
+        <div class="small_word">
+          监控和管理运输车辆出入库进程，跟踪车辆状态
+        </div>
+        <div class="big_word">
+          货物管理
+        </div>
+        <div class="small_word">
+          结合条码、RFID、GPS等技术对货物存储、出入库、运输过程等信息自动识别、采集、记录及管理，大大降低管理运营成本
+        </div>
+        <div class="big_word">
+          智能一体机
+        </div>
+        <div class="small_word">
+          利用物联网技术、计算机控制技术及人机交换技术，实现车辆信息识别、司机自助签到，以及自助打印提货单和出库单功能，将传统的柜台服务转移到自助设备上完成
+        </div>
+        <div class="big_word">
+          互联互通消除数据孤岛
+        </div>
+        <div class="small_word">
+          借助物联网状态感知，实现物流要素数据化，物流环节有序互通，调度运营数据驱动
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <app-home-page-footer></app-home-page-footer>
+
+</div>
+
+
+
+

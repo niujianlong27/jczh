@@ -1,0 +1,115 @@
+
+.ant-layout {
+  background: white;
+  height: 100%;
+  min-width: 1300px;
+  min-height: 600px;
+}
+
+.w {
+  width: 1300px;
+  margin: 0 auto;
+  background: white;
+}
+
+.content-box {
+  height: 100%;
+  margin: 0 auto;
+  min-width: 1300px;
+  min-height: 630px;
+  width: 100%;
+  padding-top: 1px;
+  background: url("src/assets/static/background-login.png") 0 0 / 100% 100% no-repeat;
+}
+
+.login-box {
+  margin: 25px auto;
+  width: 485px;
+}
+
+.login-form-button {
+  width: 60%;
+  color: white;
+  margin: 0 auto;
+  background-color: #00A8FF;
+  border-color: #00A8FF;
+  font-family: PingFangSC-Semibold;
+}
+
+.ant-form-item {
+  margin-bottom: 0;
+}
+
+.form {
+  width: 100%;
+  background: white;
+  padding: 15px 20px;
+  border: 3px solid #1989C9;
+
+}
+
+.steps {
+  width: 100%;
+  margin-bottom: 25px;
+  overflow: hidden;
+  text-align: center;
+}
+.result {
+  text-align: center;
+  width: 100%;
+  background-color: white;
+  height: 300px;
+  padding-top: 30px;
+  margin-top: 60px;
+}
+
+.result p {
+  margin: 25px 0 70px;
+}
+
+.result p span {
+  display: block;
+  color: #686868;
+  font-size: 16px;
+}
+
+.steps > div {
+  display: inline-block;
+  width: 20%;
+  color: #ffffff;
+  font-size: 13px;
+}
+
+.steps > div span {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.steps > div span:first-child {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  color: #11365E;
+  background: #ECECEC;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+
+}
+
+.stepLine {
+  border: 1px #ECECEC solid;
+  margin-bottom: 26px;
+
+}
+
+.bgc {
+  background: #1EA5EB !important;
+  color: #FFFFFF !important;
+}
+
+.lineColor {
+  border: 1px #1EA5EB solid;
+}
+
+

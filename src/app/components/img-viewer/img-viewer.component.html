@@ -1,0 +1,32 @@
+<div class="viewer-container" [ngClass]="{'view-showdow-hiden': shadow}">
+  <div class="viewer-canvas" (click)="close($event)">
+    <img imgViewerDrag class="viewer-move viewer-transition img-big" (click)="stopEvent($event)" [ngStyle]="{'width':imgWidth,'height':imgHeight,'opacity':opacity,
+    'transform':'rotate('+rotate+'deg) scaleX('+scaleX+') scaleY('+scaleY+')  scale('+scale+')'}" [src]="imgUrl" #bigImg/>
+  </div>
+  <div class="viewer-footer">
+    <div class="viewer-title">{{imgSize}}</div>
+    <ul class="viewer-toolbar">
+      <li class="viewer-zoom-in" (click)="imgZoom(1)"></li>
+      <li class="viewer-zoom-out" (click)="imgZoom(-1)"></li>
+      <li class="viewer-one-to-one" (click)="oneOne()"></li>
+      <li class="viewer-reset" (click)="reset()"></li>
+      <li class="viewer-prev" (click)="prevNext(-1)"></li>
+      <li class="viewer-play" fullScreen (isFullScreen)="fullScreen($event)" [fullScreenElem]="bigImg"></li>
+      <li class="viewer-next" (click)="prevNext(1)"></li>
+      <li class="viewer-rotate-left" (click)="rotateFun(-90)"></li>
+      <li class="viewer-rotate-right" (click)="rotateFun(90)"></li>
+      <li class="viewer-flip-horizontal" (click)="flipFun(0)"></li>
+      <li class="viewer-flip-vertical" (click)="flipFun(1)"></li>
+    </ul>
+    <div class="viewer-navbar" *ngIf="navbarShow">
+      <ul class="viewer-list">
+        <li [ngClass]="{'viewer-active':this.index === dex}" *ngFor="let i of imgsArr;let dex = index" (click)="switchImg(i,dex)">
+            <img [src]="i"/>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="viewer-tooltip viewer-transition" [hidden]="!imgPercent">{{imgPercent}}</div>
+  <div class="viewer-button viewer-close" (click)="close($event)"></div>
+  <div class="viewer-player"></div>
+</div>

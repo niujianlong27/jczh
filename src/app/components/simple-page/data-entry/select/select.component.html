@@ -1,0 +1,5 @@
+<nz-select #select style="width:100%;" [disabled]="disabled" [compareWith]="compareFn" [(ngModel)]="selectedOption" [nzMode]="mode" nzShowSearch nzAllowClear [nzSize]="size"
+  [nzPlaceHolder]="placeHolder" [nzShowSearch]="true" [nzNotFoundContent]="'无匹配'">
+  <nz-option *ngFor="let option of options" [nzLabel]="option.label" [nzValue]="option" [nzDisabled]="option.disabled">
+  </nz-option>
+</nz-select>

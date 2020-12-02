@@ -1,0 +1,50 @@
+<!--<button nz-button nzType="primary" (click)="update()">保存</button>-->
+<!--<button nz-button nzType="default" (click)="cancel()">取消</button>-->
+
+<tpl-buttons formId="form_deposit_order_manage_add" [btnDisable]="{'save':isSave}" (btnClick)="btnClick($event)"></tpl-buttons>
+
+<form nz-form [formGroup]="validateForm" style="padding:15px 20px 0px 0px">
+  <nz-form-item>
+    <nz-form-label [nzXs]="3" nzFor="carmark">车牌号</nz-form-label>
+    <nz-form-control [nzXs]="5">
+      <input nz-input formControlName="carmark" id="carmark">
+      <!--<nz-form-explain *ngIf="validateForm.get('carmark').dirty && validateForm.get('carmark').errors">车牌号-->
+      <!--</nz-form-explain>-->
+    </nz-form-control>
+
+    <nz-form-label [nzXs]="3" nzFor="mainProductListNo">主清单号</nz-form-label>
+    <nz-form-control [nzXs]="5">
+      <input nz-input formControlName="mainProductListNo" id="mainProductListNo">
+      <!--<nz-form-explain *ngIf="validateForm.get('mainProductListNo').dirty && validateForm.get('mainProductListNo').errors">主清单号-->
+      <!--</nz-form-explain>-->
+    </nz-form-control>
+
+    <nz-form-label [nzXs]="3" nzFor="status">状态</nz-form-label>
+    <nz-form-control [nzXs]="5">
+      <nz-select style="width: 200px;margin-top: 5px" formControlName="status" nzAllowClear
+                 nzPlaceHolder="--请选择--">
+        <nz-option *ngFor="let elem of statusArr" nzValue="{{elem.value}}" nzLabel="{{elem.name}}"></nz-option>
+      </nz-select>
+    </nz-form-control>
+
+    <nz-form-label [nzXs]="3" nzFor="isUse">是否使用</nz-form-label>
+    <nz-form-control [nzXs]="5">
+      <nz-select style="width: 200px;margin-top: 5px" formControlName="isUse" nzAllowClear
+                 nzPlaceHolder="--请选择--">
+        <nz-option *ngFor="let elem of useArr" nzValue="{{elem.value}}" nzLabel="{{elem.name}}"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+<app-table-form tabIndex="1"
+                [formId]="fromId"
+                isMutli="true"
+                [colSet]="true"
+                [showCount]="true"
+                [dataSet]="dataSet"
+                [pageSize]="pageSize"
+                [totalPage]="totalPage"
+                [listLoading]="listLoading"
+                (updateDataResult)="selectData($event)">
+</app-table-form>

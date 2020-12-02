@@ -1,0 +1,76 @@
+<!--<p>-->
+  <!--business-permission works!-->
+<!--</p>-->
+
+<common-page (btnClick)='btnClick($event)' (search)="listSearch($event)" (btnAdd)="btnAdd()" [pageSize]="pageSize"
+               [totalPage]="totalPage" [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" (btnDelete)="btnDelete($event)"
+               [dataSet]="dataSet"
+               [isMutli]="true" [triggerSearch]="true">
+
+</common-page>
+<!--弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()"
+           (nzOnOk)="handleOk()" [nzContent]="modalFormContent"  [nzMaskClosable]="false" >
+  <ng-template #modalFormContent>
+   <form  nz-form  [formGroup]="modalValidateForm">
+       <nz-form-item *ngFor="let m of modalFormData">
+           <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+               {{m.name}}
+           </nz-form-label>
+           <nz-form-control [nzSpan]="12">
+               <!--<nz-select [attr.id]="m.eName" *ngIf="m.type == 'inputModal'" [formControlName]="m.eName" >
+                    <nz-option *ngFor="let i of m.selectArr" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+               </nz-select>-->
+               <input-modal   *ngIf="m.type == 'inputModal'" [isMutli]="false" [findset]="findset"
+                               [(inputModalModel)]="inputModalModel" (inpEmit)="inpEmit($event)" [DISABLED]="false">
+               </input-modal>
+               <input type="{{m.type}}" *ngIf="m.type == 'text'" nz-input formControlName="{{m.eName}}" [id]="m.eName">
+               <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+                   <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+                       {{m.validateCon}}
+                   </ng-container>
+                   <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+                       {{m.validators.patternErr}}
+                   </ng-container>
+               </nz-form-explain>
+           </nz-form-control>
+       </nz-form-item>
+   </form>
+  </ng-template>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="modalFormVisible2" [nzTitle]="modalTitle2" (nzOnCancel)="handleCancel2()"
+          (nzOnOk)="handleOk2()" [nzContent]="modalFormContent2"  [nzMaskClosable]="false" >
+  <ng-template #modalFormContent2>
+    <form  nz-form  [formGroup]="modalValidateForm2">
+      <nz-form-item *ngFor="let m of modalFormData2">
+        <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input-modal   *ngIf="m.type == 'inputModal'" [isMutli]="false" [findset]="findset"
+                        [(inputModalModel)]="inputModalModel" (inpEmit)="inpEmit2($event)" [DISABLED]="false">
+          </input-modal>
+          <input-modal   *ngIf="m.type == 'select'" [isMutli]="false" [findset]="findset2"
+                         [(inputModalModel)]="inputModalModel2" (inpEmit)="inpEmit3($event)"  [DISABLED]="false">
+          </input-modal>
+          <!--<input type="{{m.type}}" *ngIf="m.type == 'text'" nz-input formControlName="{{m.eName}}" [id]="m.eName">-->
+          <nz-form-explain *ngIf="modalValidateForm2.get(m.eName).dirty && modalValidateForm2.get(m.eName).errors">
+            <ng-container *ngIf="modalValidateForm2.get(m.eName).hasError('required')">
+              {{m.validateCon}}
+            </ng-container>
+            <ng-container *ngIf="modalValidateForm2.get(m.eName).hasError('pattern')">
+              {{m.validators.patternErr}}
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-template>
+</nz-modal>
+
+<!--确认弹窗-->
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>
+

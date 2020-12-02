@@ -1,0 +1,14 @@
+
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+<nz-tabset [nzSelectedIndex]="tabIndex">
+    <nz-tab nzTitle="计划" (nzClick)="tabResultFun('grid1')">
+       <app-table-form [gridId]="'grid1'"  [listLoading]='listLoading' [dataSet]="dataSet1" [totalPage]="totalPage1" ></app-table-form>
+    </nz-tab>
+    <nz-tab nzTitle="订单/合同" (nzClick)="tabResultFun('grid2')">
+        <app-table-form [gridId]="'grid2'"  [listLoading]='listLoading' [dataSet]="dataSet2" [totalPage]="totalPage2" ></app-table-form>
+    </nz-tab>
+    <nz-tab nzTitle="捆包" (nzClick)="tabResultFun('grid3')">
+        <app-table-form [gridId]="'grid3'"  [listLoading]='listLoading' [dataSet]="dataSet3" [totalPage]="totalPage3" ></app-table-form>
+    </nz-tab>
+  </nz-tabset>

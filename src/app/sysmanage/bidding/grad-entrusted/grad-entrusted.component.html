@@ -1,0 +1,26 @@
+<!--<p>-->
+  <!--抢单委托-->
+<!--</p>-->
+<app-searchform (search)="searchList($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnCLick($event)" [btnDisable]="{'Select':btnDis.Select,'Detail':btnDis.Detail,
+                   'Binding':btnDis.Binding,'WithDraw':btnDis.WithDraw}">
+</tpl-buttons>
+<div class="clearfix" style="overflow: hidden;position: relative;">
+  <div class="fl trans" [ngStyle]="{width:leftWidth}">
+    <app-table-form [dataSet]="dataSet" gridId="grid1" (updateDataResult)="updataDataResult($event)" (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)'
+                    [pageSize]="pageSize1" (userColumnsEmit)="userColumnsEmit($event)" [totalPage]="totalPage" [listLoading]="listLoading1" [isMutli] = 'true'></app-table-form>
+  </div>
+  <div class="tableLine trans" gridLine [ngStyle]="{left:lineWidth}" (gridLineResult)="gridLineFun($event)">
+    <div class="tableLine-in">
+        <span class="grid-line-btn" (click)="rightShowFun()">
+            <i nz-icon type="caret-right" theme="outline" [hidden]="rightShow"></i>
+            <i nz-icon type="caret-left" theme="outline" [hidden]="!rightShow"></i>
+        </span>
+    </div>
+  </div>
+
+  <div class="fr trans" [ngStyle]="{width:rightWidth,display:display}">
+    <app-table-form gridId="grid4" [dataSet]="itemData" isMutli="true" [extraTableHeight]="30" [nzShowPagination]="false" [isMutli] = 'true'
+                    (updateDataResult)="itemUpdateData($event)"></app-table-form>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<div>
+  <app-searchform (search)="listSearch($event)"></app-searchform>
+  <tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+  <app-table-form
+    [isMutli]="true"
+    [colSet]="true"
+    [showCount]="true"
+    [dataSet]="dataSet"
+    [pageSize]="pageSize"
+    [totalPage]="totalPage"
+    [listLoading]="listLoading"
+    (updateDataResult)="selectData($event)">
+  </app-table-form>
+</div>
+<!--弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="addhandleCancel()" (nzOnOk)="handleOk()"
+          (nzAfterClose)="closeResult()">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of addModalFormData">
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <input type="{{m.type}}" *ngIf="m.type == 'text' || m.type == 'number'" nz-input formControlName="{{m.eName}}"
+               [id]="m.eName">
+
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+            {{m.validators.patternErr}}
+          </ng-container>
+
+        </nz-form-explain>
+
+      </nz-form-control>
+    </nz-form-item>
+
+  </form>
+</nz-modal>
+
+<ng-container>
+  <ng-template #confirmTitle>提示信息</ng-template>
+  <ng-template #confirmContent>{{confimCon}}</ng-template>
+  <ng-template #confirmFooter>
+    <button nz-button nzType="primary" (click)="handleOk()">确定</button>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  </ng-template>
+</ng-container>

@@ -1,0 +1,41 @@
+<div>
+  <app-searchform (search)="listSearch($event)"></app-searchform>
+  <tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+  <div class="clearfix" style="overflow: hidden;position: relative;">
+
+    <div class="fl trans" [ngStyle]="{width:leftWidth}">
+      <app-table-form
+        gridId="grid1"
+        [isMutli]="true"
+        [colSet]="true"
+        [showCount]="true"
+        [dataSet]="dataSet"
+        [pageSize]="pageSize"
+        [totalPage]="totalPage"
+        [listLoading]="listLoading"
+        (updateDataResult)="selectData($event)">
+
+      </app-table-form>
+    </div>
+    <div class="tableLine trans" gridLine [ngStyle]="{left:lineWidth}" (gridLineResult)="gridLineFun($event)">
+      <div class="tableLine-in">
+        <span class="grid-line-btn" (click)="rightShowFun()">
+            <i nz-icon type="caret-right" theme="outline" [hidden]="rightShow"></i>
+            <i nz-icon type="caret-left" theme="outline" [hidden]="!rightShow"></i>
+        </span>
+      </div>
+    </div>
+    <div class="fr trans" [ngStyle]="{width:rightWidth,display:display}">
+      <p input-blur>派车明细</p>
+      <app-table-form [pageFun]='true' (pageIndexEmit)='getPageIndex2($event)' (pageSizeEmit)='getPageSize2($event)'
+                      [gridId]="'grid2'" [dataSet]="dataSet2" [pageSize]="pageSize2"
+                      [totalPage]="totalPages2" [listLoading]="listLoading2" [isMutli]="true" [isCheckBox]="false"
+                      [showCount]="false" [extraTableHeight]="25"></app-table-form>
+    </div>
+  </div>
+
+  <app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                     (modalConfirmResult)="modalConfirmResult($event)">
+
+  </app-modal-confirm>
+</div>

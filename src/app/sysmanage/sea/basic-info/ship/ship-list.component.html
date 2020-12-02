@@ -1,0 +1,149 @@
+
+<nz-card [nzTitle]="title" [nzBordered]="false">
+    <ng-template #title>
+        <form nz-form [nzLayout]="'inline'">
+            <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" style="padding-right: 16px;">
+                <div nz-col nzSpan="6">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">船只代码</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input type="text" nz-input [(ngModel)]="inqu.carrierCode" name="carrierCode">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">船只名称</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input type="text" nz-input [(ngModel)]="inqu.carrierName" name="carrierName">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">联系电话</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input type="text" nz-input [(ngModel)]="inqu.contactPhone" name="contactPhone">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="6">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">类型</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <nz-select [(ngModel)]="inqu.type" style="width: 120px;" nzAllowClear name="type" nzPlaceHolder="--请选择--">
+                                <nz-option nzValue="1" nzLabel="近洋"></nz-option>
+                                <nz-option nzValue="2" nzLabel="远洋"></nz-option>
+                                <nz-option nzValue="0" nzLabel="全部"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="24" style="text-align: right;">
+                    <p class="b-t p-sm-tb">
+                        <button nz-button nzType="primary" nzGhost class="m-r" (click)="query()" [nzLoading]="queryLoading">查询</button>
+                        <button nz-button nzType="primary" nzGhost class="m-r" (click)="addShip()">新增船只</button>
+                    </p>
+                </div>
+            </div>
+        </form>
+
+    </ng-template>
+
+    <nz-table #basicTable [nzData]="result" [nzScroll]="{ x: '1900px', y: '500px'}" [nzFrontPagination]="false" [nzBordered]="false"
+        nzShowPagination="false" [nzFooter]="tableFooter">
+
+
+        <ng-template #tableTotal>
+                总计 {{page.total}} 条
+              </ng-template>
+                <ng-template #tableFooter>
+                  <div nz-row nzType="flex" nzAlign="middle" class="fr">
+                    <div nz-col nzSpan="24">
+                      <nz-pagination [nzShowTotal]="tableTotal" [(nzPageIndex)]="page.pageIndex" [nzPageSize]="page.pageSize"
+                        (nzPageSizeChange)="pageSizeChange($event)" (nzPageIndexChange)="pageIndexChange($event)" [(nzTotal)]="page.total"
+                        nzShowSizeChanger [nzPageSizeOptions]="page.sizeOptions" nzShowQuickJumper></nz-pagination>
+                    </div>
+                  </div>
+                </ng-template>
+
+
+
+        <thead class='line-clamp1'>
+            <tr>
+                <th nzWidth="60px" nzLeft="0px" nzShowCheckbox ></th>
+                <th nzWidth="100px" nzLeft="60px">船只名称</th>
+                <th nzWidth="100px">船只代码</th>
+                <th nzWidth="100px">船旗</th>
+                <th nzWidth="100px">联系人</th>
+                <th nzWidth="100px">联系电话</th>
+                <th nzWidth="100px">类型</th>
+                <!-- <th nzWidth="100px">角色</th>
+                <th nzWidth="100px">评分</th>
+                <th nzWidth="100px">状态</th> -->
+                <th nzWidth="100px">船长</th>
+                <th nzWidth="100px">船宽</th>
+                <th nzWidth="100px">船高</th>
+                <th nzWidth="100px">满载吃水</th>
+                <th nzWidth="100px">总重</th>
+                <th nzWidth="100px">净重</th>
+                <th nzWidth="100px">载重</th>
+                <th nzWidth="100px">净载重</th>
+                <th nzWidth="100px">散装仓容</th>
+                <th nzWidth="100px">包装仓容</th>
+                <th nzWidth="100px">舱口</th>
+                <th nzWidth="100px">航速</th>
+                <th nzWidth="100px">船级社</th>
+                <th nzWidth="100px">imo</th>
+                <th nzWidth="100px">crane</th>
+                <th nzWidth="100px">mmsi号</th>
+                <th nzWidth="100px">出场年月</th>
+                <th nzWidth="100px">船上电话</th>
+                <th nzWidth="100px">船东公司名称</th>
+                <th nzWidth="180px" nzRight="0px">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-template ngFor let-item [ngForOf]="basicTable.data">
+                <tr ngForm #rowForm="ngForm" [ngClass]="item.rowClass">
+                    <td nzLeft="0px" style="width: 120px;" nzShowCheckbox [(nzChecked)]="item.checked" name="checked" (nzCheckedChange)="refreshStatus($event)"></td>
+                    <td nzLeft="60px"> {{item.carrierName}} </td>
+                    <td>
+                        {{item.carrierCode}}
+                    </td>
+                    <td  style="display:none;">{{item.id}}</td>
+                    <td style="display:none;">{{item.shipId}}</td>
+                    <td style="display:none;">{{item.status}}</td>
+                    <td> {{item.flagCountry}} </td>
+                    <td>{{item.contact}}</td>
+                    <td>{{item.contactPhone}}</td>
+                    <td>{{item.type}}</td>
+                    <td>{{item.shipLength}}</td>
+                    <td>{{item.shipWidth}}</td>
+                    <td>{{item.shipHeight}}</td>
+                    <td>{{item.draft}}</td>
+                    <td>{{item.deadWeight}}</td>
+                    <td>{{item.netDeadWeight}}</td>
+                    <td>{{item.capacity}}</td>
+                    <td>{{item.netCapacit}}</td>
+                    <td>{{item.bulkCapacity}}</td>
+                    <td>{{item.baleCapacity}}</td>
+                    <td>{{item.hatchSize}}</td>
+                    <td>{{item.speed}}</td>
+                    <td>{{item.shipClass}}</td>
+                    <td>{{item.imo}}</td>
+                    <td>{{item.crane}}</td>
+                    <td>{{item.mmsi}}</td>
+                    <td>{{item.buildDate}}</td>
+                    <td>{{item.shipPhone}}</td>
+                    <td>{{item.shipOwner}}</td>
+
+                    <td nzRight="0px">
+                        <a (click)="editShip(item.shipId)">编辑</a>
+                    </td>
+                </tr>
+            </ng-template>
+        </tbody>
+    </nz-table>
+
+</nz-card>

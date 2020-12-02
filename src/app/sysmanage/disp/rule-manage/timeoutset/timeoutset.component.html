@@ -1,0 +1,93 @@
+<common-page (search)="listSearch($event)" (btnAdd)="btnAdd()"  (btnDelete)="delete($event)" (btnUpdate)="btnUpdate($event)" [totalPage]="totalPage" [pageSize]="pageSize"
+    [listLoading]="listLoading" [dataSet]="dataSet" [isMutli]="false"(updateDataResult)="updateDataResult($event)"></common-page>
+
+<!--弹出框-->
+ <nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzOkLoading]="isOkLoading"
+(nzAfterClose)="closeResult()">
+<form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData" >
+        <!-- <nz-form-label [nzSpan]="6" [nzRequired]="m.require" *ngIf="m.eName !== 'status1' || btnUpdateShow"> -->
+        <nz-form-label [nzSpan]="6" [nzRequired]="m.require" >
+            {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="12">
+
+            <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+                <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+            </nz-radio-group>
+
+            <!-- <ng-template #other> -->
+
+                <!-- <nz-select [nzDisabled]=isTrue  #select  style="width: 236px;" *ngIf="m.eName === 'kindCode'"
+                nzShowSearch nzAllowClear nzPlaceHolder="分类名称" [(ngModel)]="matKindName" [formControlName]="m.eName">
+                    <nz-option *ngFor="let i of themeArrF" [nzLabel]="i.matKindName" [nzValue]="i.matKindCode"></nz-option>
+                </nz-select> -->
+
+                <nz-tree-select style="width: 236px;" *ngIf="m.eName === 'kindCode'" [nzDisabled]=isTrue [nzDefaultExpandedKeys]="expandKeys" [nzNodes]="nodes" nzShowSearch nzPlaceHolder="品种名称"
+                    (ngModelChange)="onChange($event)" [formControlName]="m.eName" [nzDropdownStyle]="{ 'max-height': '300px' }">
+                </nz-tree-select>
+
+                <nz-select #select  style="width: 236px;" *ngIf="m.eName === 'gateName1'"
+                nzShowSearch nzAllowClear nzPlaceHolder="进厂大门" [formControlName]="m.eName" >
+                    <nz-option *ngFor="let i of themeArrJ" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+                </nz-select>
+
+                <nz-select #select  style="width: 236px;" *ngIf="m.eName === 'dealType1'"
+                nzShowSearch nzAllowClear nzPlaceHolder="超时处理方式" [formControlName]="m.eName" (ngModelChange)="modelChange($event)">
+                    <nz-option *ngFor="let i of themeArrC" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+                </nz-select>
+
+                <nz-input-number *ngIf="m.eName === 'timeout'" [nzMin]="1"  [nzStep]="1" formControlName="{{m.eName}}"></nz-input-number>
+                <nz-input-number *ngIf="m.eName === 'extraTime'" [nzMin]="10"  [nzStep]="10" formControlName="{{m.eName}}"></nz-input-number>
+                <nz-input-number *ngIf="m.eName === 'dealCount'" [nzMin]="1"  [nzStep]="1" formControlName="{{m.eName}}"></nz-input-number>
+
+                <!-- <nz-select #select  style="width: 236px;" *ngIf="m.eName === 'status1' && btnUpdateShow"
+                    nzShowSearch nzAllowClear nzPlaceHolder="状态" [formControlName]="m.eName">
+                    <nz-option *ngFor="let i of themeArrZ" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+                </nz-select> -->
+
+           <!-- </ng-template> -->
+
+            <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+                <div *ngIf="modalValidateForm.get(m.eName).errors['pattern'];else erroInf">
+                    {{ m.validators.patternErr}}
+                </div>
+                <ng-template #erroInf>
+                    {{ m.validateCon}}
+                </ng-template>
+            </nz-form-explain>
+
+        </nz-form-control>
+
+    </nz-form-item>
+</form>
+
+
+<div *ngIf=isShow>
+    <label class="label">状态 :</label>
+    <nz-select class="select"  [(ngModel)]="status1"
+           nzShowSearch nzAllowClear nzPlaceHolder="状态"  >
+           <nz-option *ngFor="let i of themeArrZ" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+    </nz-select>
+</div>
+
+
+
+</nz-modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,121 @@
+<common-page [caculateEnameArr]='caculateEnameArr' (search)='listSearch($event)' [listLoading]='listLoading' [businessModuleNamecheck]="false"
+             [pageSize]='pageSize' [isMutli]=true [dataSet]='tableData' [totalPage]='totalPages' [triggerSearch]="true"
+             (updateDataResult)='selectData($event)' (btnAdd)="btnAdd()" (btnClick)="btnClick($event)"></common-page>
+
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" (nzAfterClose)="handleCancel()" [nzMaskClosable]="false">
+  <form nz-form [formGroup]="modalValidateForm" class="payment-registration" >
+    <nz-form-item *ngFor="let m of modalFormData">
+      <ng-container *ngIf="!m.hidden">
+        <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="12">
+          <nz-date-picker *ngIf="m.type == 'time'" [formControlName]="m.eName" [nzStyle]="{width:'100%'}"></nz-date-picker>
+          <nz-select nzAllowClear nzPlaceHolder="请选择" formControlName="{{m.eName}}" (ngModelChange)="modelChange($event,m)"
+                     *ngIf="m.type == 'select'">
+            <nz-option *ngFor="let o of typeDataArr" [nzValue]="o.value" [nzLabel]="o.name"></nz-option>
+          </nz-select>
+          <!--
+                          <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+                              <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+                          </nz-radio-group> -->
+          <input-modal *ngIf="m.type == 'recCompanyName'" [(inputModalModel)]="popData[m.bindName].name"
+                       [(inputModalHiddenValue)]='popData[m.bindName].id' [findset]="m.findSet"
+                       [showExplainFlag]="showExplainFlag1" [validate]="m.validate" [isExplain]="false"
+                       (inpEmit)='inpEmit($event,m.bindName)'></input-modal>
+          <input-modal *ngIf="m.type == 'commissionClientName'" [(inputModalModel)]="popData[m.bindName].name"
+                       [(inputModalHiddenValue)]='popData[m.bindName].id' [findset]="m.findSet" [isExplain]="false"
+                       [showExplainFlag]="showExplainFlag2" [validate]="m.validate"
+                       (inpEmit)='inpEmit($event,m.bindName)'></input-modal>
+<!--          <input-modal *ngIf="m.type == 'commissionBank'" searchParamFiled="companyId"-->
+<!--                       [searchValue]="popData[m.searchValue].id" [(inputModalModel)]="popData[m.bindName].name"-->
+<!--                       [(inputModalHiddenValue)]='popData[m.bindName].id' [findset]="m.findSet" [isExplain]="false"-->
+<!--                       [showExplainFlag]="showExplainFlag3" [validate]="m.validate"-->
+<!--                       (inpEmit)='inpEmit($event,m.bindName)'></input-modal>-->
+<!--          <input-modal *ngIf="m.type == 'bankName'" searchParamFiled="receivefeeClientName"-->
+<!--                       [searchValue]="popData[m.searchValue].id" [(inputModalModel)]="popData[m.bindName].name"-->
+<!--                       [(inputModalHiddenValue)]='popData[m.bindName].id' [findset]="m.findSet" [isExplain]="false"-->
+<!--                       [showExplainFlag]="showExplainFlag4" [validate]="m.validate"-->
+<!--                       (inpEmit)='inpEmit($event,m.bindName)'></input-modal>-->
+
+          <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'number'" [hidden]="m.hidden"
+                 (blur)="blur()">
+          <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'" [hidden]="m.hidden"
+                 [readOnly]="m.readOnly">
+          <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+            {{ m.validateCon}}
+          </nz-form-explain>
+          <!--<nz-form-explain *ngIf="m.eName==='recCompanyName'&&showExplainFlag1">-->
+          <!--{{ m.validateCon}}-->
+          <!--</nz-form-explain>-->
+          <!--<nz-form-explain *ngIf="m.eName==='commissionClientName'&&showExplainFlag2">-->
+          <!--{{ m.validateCon}}-->
+          <!--</nz-form-explain>-->
+          <!--<nz-form-explain *ngIf="m.eName==='commissionBank'&&showExplainFlag3">-->
+          <!--{{ m.validateCon}}-->
+          <!--</nz-form-explain>-->
+          <!--<nz-form-explain *ngIf="m.eName==='bankName'&&showExplainFlag4">-->
+          <!--{{ m.validateCon}}-->
+          <!--</nz-form-explain>-->
+        </nz-form-control>
+      </ng-container>
+
+    </nz-form-item>
+  </form>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="导入Excel" [nzContent]="modalContent" [nzFooter]="modalFooter"
+          (nzOnCancel)="isVisible=false"
+          (nzOnOk)="importExcel()" [nzMaskClosable]="false" >
+  <ng-template #modalContent>
+    <form nz-form [formGroup]="importValidate">
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" nzRequired>文件</nz-form-label>
+        <nz-form-control [nzSm]="18">
+          <input #fileInput type="file" formControlName="file" (change)="writeFileName($event)" multiple="false"
+                 style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;">
+          <nz-input-group [nzAddOnAfter]="down">
+            <input nz-input readonly (click)="selectFile()" formControlName="fileName" placeholder="请选择需要导入的文件">
+          </nz-input-group>
+          <ng-template #down>
+            <a [href]="templateUrl">模板下载</a>
+          </ng-template>
+          <nz-form-explain *ngIf="importValidate.get('fileName').dirty && importValidate.get('fileName').errors">
+            需要导入的文件不能为空!
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <!-- <nz-form-item>
+        <nz-form-label [nzSm]="6" nzRequired>委托单位</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <app-select #consignor_select [apiParam]="companyApi" formControlName="consignorCompanyId"></app-select>
+          <nz-form-explain *ngIf="importValidate.get('consignorCompanyId').dirty && importValidate.get('consignorCompanyId').errors">委托单位不能为空!</nz-form-explain>
+        </nz-form-control>
+      </nz-form-item> -->
+    </form>
+  </ng-template>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="isVisible=false">取消</button>
+    <button nz-button nzType="primary" (click)="importExcel()" [nzLoading]="importLoading" [disabled]="importLoading">
+      确定
+    </button>
+  </ng-template>
+</nz-modal>
+
+
+<nz-modal nzTitle="收款信息>业务公司" (nzOnOk)="changeBusinessModuleId()" [nzOkLoading]="businessModuleCompanyLoading" nzWidth="30%" [(nzVisible)]="businessModuleCompany" (nzOnCancel)="handleCancel1()">
+  <form nz-form [formGroup]="businessModuleValidate">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>业务板块</nz-form-label>
+       <nz-form-control [nzSpan]="16">
+         <nz-select formControlName="segmentId" nzAllowClear nzShowSearch>
+           <nz-option *ngFor="let b of segmentIdArr" [nzValue]="b.value" [nzLabel]="b.name"></nz-option>
+         </nz-select>
+       </nz-form-control>
+      <nz-form-explain *ngIf="businessModuleValidate.get('segmentId').dirty && businessModuleValidate.get('segmentId').errors" >
+        <div style="margin-left: 100px;">请选择业务板块!</div>
+      </nz-form-explain>
+    </nz-form-item>
+  </form>
+</nz-modal>

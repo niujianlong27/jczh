@@ -1,0 +1,120 @@
+<app-searchform (search)="listSearch($event)" [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+
+<div>
+  <app-table-form [dataSet]="dataSet"
+                  [pageSize]="pageSize" [totalPage]="totalPages"
+                  [isMutli]="true" [listLoading]="listLoading"
+                  [isCheckBox]="true" [showCount]="true" (updateDataResult)="selectData($event)">
+
+  </app-table-form>
+</div>
+
+<!--数据弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" nzWidth="40%" [nzTitle]="modalTitle" [nzMaskClosable]="false"  (nzAfterClose)="nzAfterClose()" (nzOnCancel)="handleCancel()" [nzFooter]="modalFooter">
+  <form nz-form [formGroup]="modalValidateForm" >
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-control [nzSpan]="23">
+        <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+        <nz-form-control [nzSpan]="16">
+          <input *ngIf="m.type == 'text'" type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName">
+          <nz-range-picker [nzSize]="small" *ngIf="m.type == 'date'" nzShowTime formControlName="{{m.eName}}"></nz-range-picker>
+
+          <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+            <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+              {{m.validateCon}}
+            </ng-container>
+            <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+              {{m.validators.patternErr}}
+            </ng-container>
+
+          </nz-form-explain>
+
+        </nz-form-control>
+
+      </nz-form-control>
+    </nz-form-item>
+
+  </form>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+    <button nz-button nzType="primary" (click)="handleOk()"  [nzLoading]="isConfirmLoading">同步</button>
+  </ng-template>
+</nz-modal>
+
+
+<ng-template #tplTitle>
+  <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #tplbody>
+  <form nz-form [formGroup]="validateForm1">
+    <div nz-row [nzGutter]="1"  nzType="flex">
+        <div nz-col [nzSpan]="12">
+           <nz-form-item>
+              <nz-form-label [nzSpan]="6" nzRequired>销售结算单号</nz-form-label>
+             <nz-form-control [nzSpan]="18">
+               <input nz-input formControlName="docuno" >
+               <nz-form-explain *ngIf="validateForm1.get('docuno').dirty && validateForm1.get('docuno').errors">
+                 <ng-container *ngIf="validateForm1.get('docuno').hasError('required')">
+                   请输入销售结算单号
+                 </ng-container>
+               </nz-form-explain>
+             </nz-form-control>
+           </nz-form-item>
+        </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzRequired>发货通知单号</nz-form-label>
+          <nz-form-control [nzSpan]="18">
+            <input nz-input formControlName="hxdh" >
+            <nz-form-explain *ngIf="validateForm1.get('hxdh').dirty && validateForm1.get('hxdh').errors">
+              <ng-container *ngIf="validateForm1.get('hxdh').hasError('required')">
+                请输入发货通知单号
+              </ng-container>
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzRequired>结算重量</nz-form-label>
+          <nz-form-control [nzSpan]="18">
+            <input nz-input formControlName="sjgbsl" nzRequired>
+            <nz-form-explain *ngIf="validateForm1.get('sjgbsl').dirty && validateForm1.get('sjgbsl').errors">
+              <ng-container *ngIf="validateForm1.get('sjgbsl').hasError('required')">
+                请输入结算重量
+              </ng-container>
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzRequired>销售日期</nz-form-label>
+          <nz-form-control [nzSpan]="18">
+              <nz-date-picker nzFormat="yyyy/MM/dd" formControlName="trxDate"></nz-date-picker>
+            <nz-form-explain *ngIf="validateForm1.get('trxDate').dirty && validateForm1.get('trxDate').errors">
+              <ng-container *ngIf="validateForm1.get('trxDate').hasError('required')">
+                请选择销售日期
+              </ng-container>
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+</ng-template>
+<ng-template  #tplFooter>
+  <button nz-button nzType="default" (click)="handleCancel1()" [disabled]="  implistLoading">取消</button>
+  <button nz-button nzType="primary" (click)="importConfirm()" [nzLoading]="implistLoading"
+          [disabled]="implistLoading">确定
+  </button>
+</ng-template>
+
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle2" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+
+</app-modal-confirm>

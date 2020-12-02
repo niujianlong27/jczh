@@ -1,0 +1,9 @@
+::ng-deep .invoice-detial-modal .ant-modal-body{
+    padding: 0;
+}
+.text-ellisped{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+}

@@ -1,0 +1,358 @@
+<div
+  style="margin: 0; min-width:1349px; max-width: 100%;overflow: hidden; ">
+  <!--头组件-->
+  <app-home-page-header></app-home-page-header>
+
+  <div class="img_posit">
+    <nz-carousel nzAutoPlay>
+      <div nz-carousel-content *ngFor="let index of array">
+        <img src="{{index}}" class="img_sub_posit">
+      </div>
+    </nz-carousel>
+  </div>
+
+  <div style="width:100%;overflow: hidden; text-align:center;padding: 20px 0; ">
+
+    <!--//平台业务-->
+    <div class="bgimg1">
+      <div class="bg-w">
+        <div class="ax_default heading_2">
+          <p class="u126"><span>PLATFORM BUSINESS</span></p>
+          <p style="text-align: center">
+            <img src="/assets/static/u16.png" alt="">
+            <span class="title">平台业务</span>
+            <img src="/assets/static/u16.png" alt=""></p>
+        </div>
+        <section>
+          <div class="type1">
+            <div class="bolck">
+              <span><img src="/assets/static/qiyun2.png" class="type-logo"></span>
+              <h1>汽运业务</h1>
+              <span style="position: absolute;top: 30px;right: 0;border-left: 1px solid #B3BAC3;height: 120px"></span>
+            </div>
+            <p class="details">
+              京创智汇合作汽运覆盖5个省份份和53家货运公司，价格透明,公正,触手可及!
+            </p>
+          </div>
+          <div class="type1">
+            <div class="bolck">
+              <span><img src="/assets/static/haiyun2.png" class="type-logo"></span>
+              <h1>国际海运</h1>
+              <span style="position: absolute;top: 30px;right: 0;border-left: 1px solid #B3BAC3;height: 120px"></span>
+            </div>
+            <p class="details">
+              京创智汇合作国际海运覆盖10个国家和35个港口，让您的货物通达全球！
+            </p>
+          </div>
+          <div class="type1">
+            <div class="bolck">
+              <span><img src="/assets/static/neihe2.png" class="type-logo"></span>
+              <h1>内河/沿海</h1>
+            </div>
+            <p class="details">
+              京创智汇合作内河/沿海运输覆盖5个省份和35个港口，让物流更简单更高效！</p>
+          </div>
+        </section>
+      </div>
+
+      <div class="bg-w">
+        <div class="ax_default heading_2">
+          <p class="u126"><span>TRANSPORT CAPACITY</span></p>
+          <p style="text-align: center">
+            <img src="/assets/static/u16.png" alt="">
+            <span class="title">平台运力</span>
+            <img src="/assets/static/u16.png" alt=""></p>
+        </div>
+        <section>
+          <div class="types1">
+            <img src="/assets/static/qys.png" class="type-logo2 ">
+            <span style="position: absolute;top: 10px;right: 0;border-left: 1px solid #B3BAC3;height: 100px"></span>
+            <p>
+              <span class="font">{{capaCity.bus_Carrier}}</span>
+              <span>合作汽运承运商数</span>
+            </p>
+          </div>
+          <div class="types1">
+            <img src="/assets/static/231.png" class="type-logo2">
+
+            <span style="position: absolute;top: 10px;right: 0;border-left: 1px solid #B3BAC3;height: 100px"></span>
+            <p>
+              <span class="font">{{capaCity.water_Carrier}}</span>
+              <span>合作水运承运商数</span>
+            </p>
+          </div>
+          <div class="types1">
+            <img src="/assets/static/233.png" class="type-logo2">
+            <span style="position: absolute;top: 20px;right: 0;border-left: 1px solid #B3BAC3;height: 90px"></span>
+            <p>
+              <span class="font">{{capaCity.dirver_sum}}</span>
+              <span>合作司机数</span>
+
+            </p>
+          </div>
+          <div class="types1">
+            <img src="/assets/static/234.png" class="type-logo2">
+            <p>
+              <span class="font">{{capaCity.bus_sum}}</span>
+              <span>合作车辆数</span>
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!--运单展示/外贸海运竞价-->
+    <div class="bg-w">
+      <div class="bgimg2">
+        <div class="ax_default heading_2">
+          <p class="u126"><span>CATEGORY OF GOODS</span></p>
+          <p style="text-align: center">
+            <img src="/assets/static/u16.png" alt="">
+            <span class="title">货物类别</span>
+            <img src="/assets/static/u16.png" alt=""></p>
+        </div>
+
+        <main class="goodsType">
+          <div class="oneOfType">
+            <div class="goodsTypeLeft">
+              <p>钢材</p>
+              <ul style="margin-top: 20px;margin-left: 20px">
+                <li>螺纹钢</li>
+                <li>线材</li>
+                <li>热卷</li>
+              </ul>
+            </div>
+            <div class="goodsTyperight">
+              <img src="/assets/static/225.png" style="width:90px;height:82px;margin-top: 60px">
+            </div>
+          </div>
+
+          <div class="oneOfType">
+            <div class="goodsTypeLeft">
+              <p>管材</p>
+              <ul style="margin-top: 20px;margin-left: 20px">
+                <li>无缝管</li>
+                <li>螺旋管</li>
+                <li>方矩管</li>
+              </ul>
+            </div>
+            <div class="goodsTyperight">
+              <img src="/assets/static/1056.png" style="width:90px;height:82px;margin-top: 60px">
+            </div>
+          </div>
+
+          <div class="oneOfType">
+            <div class="goodsTypeLeft">
+              <p>煤炭</p>
+              <ul style="margin-top: 20px;margin-left: 20px">
+                <li>炼焦精煤</li>
+                <li>动力煤</li>
+              </ul>
+            </div>
+            <div class="goodsTyperight">
+              <img src="/assets/static/227.png" style="width:90px;height:82px;margin-top: 60px">
+            </div>
+          </div>
+
+          <div class="oneOfType">
+            <div class="goodsTypeLeft">
+              <p>矿石</p>
+              <ul style="margin-top: 20px;margin-left: 20px">
+                <li>块矿</li>
+                <li>铁精粉</li>
+                <li>球团矿</li>
+              </ul>
+            </div>
+            <div class="goodsTyperight">
+              <img src="/assets/static/228.png" style="width:90px;height:82px;margin-top: 60px">
+            </div>
+          </div>
+
+          <div class="oneOfType">
+            <div class="goodsTypeLeft">
+              <p>焦炭</p>
+              <ul style="margin-top: 20px;margin-left: 20px">
+                <li>准I级焦</li>
+                <li>I级焦</li>
+                <li>II级焦</li>
+              </ul>
+            </div>
+            <div class="goodsTyperight">
+              <img src="/assets/static/229.png" style="width:90px;height:82px;margin-top: 60px">
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <div class="bgimg3">
+      <div class="bg-w">
+        <div class="ax_default heading_2">
+          <p class="u126"><span>REAL-TIME DATA</span></p>
+          <p style="text-align: center">
+            <img src="/assets/static/u16.png" alt="">
+            <span class="title">实时数据</span>
+            <img src="/assets/static/u16.png" alt=""></p>
+        </div>
+
+        <main class="realTime1 goodsType">
+          <div class="tabImg">
+            <img style="height: 100%;width: 100%" src="/assets/static/bid.png" alt="">
+          </div>
+          <div class="table line">
+            <nz-spin [nzSimple]="false" [nzSpinning]="bidtableLoading">
+              <table>
+                <thead>
+                <tr class="table-title">
+                  <th style="width:10.235vw">委托单位</th>
+                  <th style="width:13.235vw">品种</th>
+                  <th style="width:11.235vw">发布日期</th>
+                  <th style="width:30.235vw">路线</th>
+                  <th style="width:13.235vw">参考运量</th>
+                </tr>
+                </thead>
+              </table>
+              <div class="scroll-box">
+                <table #bidTable class="tab-scroll">
+                  <tbody>
+                  <tr  style="overflow-x: scroll" *ngFor="let item of bidDataSet">
+                    <td style="width:10.235vw">{{item.companyName}}</td>
+                    <td style="width:15.235vw">{{item.productName}}</td>
+                    <td style="width:11.235vw">{{item.createDate}}</td>
+                    <td style="width:21.235vw">{{item.flowDesc}}</td>
+                    <td style="width:15.235vw">{{item.refCapacity |number:'1.2-2'}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </nz-spin>
+          </div>
+
+        </main>
+
+        <main style="margin-top: 60px" class="realTime1 goodsType">
+          <div class="tabImg">
+            <img style="height: 100%;width: 100%" src="/assets/static/qiyunyundan.png" alt="">
+          </div>
+          <div class="tran table">
+            <nz-spin [nzSimple]="false" [nzSpinning]="tableLoading1">
+              <table>
+                <thead>
+                <tr class="table-title">
+                  <th>运输时间</th>
+                  <th>运输单位</th>
+                  <th>品种</th>
+                  <th>车号</th>
+                  <th>重量</th>
+                </tr>
+                </thead>
+              </table>
+              <div class="scroll-box">
+                <table #table class="tab-scroll">
+                  <tbody>
+                  <tr *ngFor="let item of dataSet">
+                    <td>{{item.loadDate}}</td>
+                    <td>{{item.carrierCompanyName}}</td>
+                    <td>{{item.productName}}</td>
+                    <td>{{item.travelNo}}</td>
+                    <td>{{item.preTotalWeight |number:'1.3-4'}}吨</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </nz-spin>
+          </div>
+
+        </main>
+
+        <main class="realTime2 goodsType">
+
+          <div class="tabImg">
+            <img style="height: 100%;width: 100%" src="/assets/static/haiyunxuqiu.png" alt="">
+          </div>
+
+          <div class="table line">
+            <nz-spin [nzSimple]="false" [nzSpinning]="tableLoading2">
+              <table>
+                <thead>
+                <tr class="table-title">
+                  <th style="width:23vw;">航线</th>
+                  <th style="width:15.17vw;">船型</th>
+                  <th style="width:15.17vw;">预计运量</th>
+                  <th style="width:15.17vw;">计划发运日期</th>
+                  <th style="width:15.17vw;">价格</th>
+
+                </tr>
+                </thead>
+              </table>
+              <div class="scroll-box">
+                <table #table2 class="tab-scroll">
+                  <tbody>
+                  <tr *ngFor="let item of dataSet2">
+                    <td style="width:21.235vw;max-width: 21.235vw;">{{item.lane}}</td>
+                    <td style="width:15.17vw;">{{item.shipType}}</td>
+                    <td style="width:15.17vw;">{{item.planWeight}}</td>
+                    <td style="width:15.17vw;">{{item.planDispatchDate}}</td>
+                    <td style="width:15.17vw;">{{item.price}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </nz-spin>
+          </div>
+        </main>
+
+      </div>
+
+
+      <!--运单展示/外贸海运竞价-->
+      <div class="bg-w">
+        <div class="ax_default heading_2">
+          <p class="u126"><span>SERVICE TENT</span></p>
+          <p style="text-align: center">
+            <img src="/assets/static/u16.png" alt="">
+            <span class="title">服务宗旨</span>
+            <img src="/assets/static/u16.png" alt=""></p>
+        </div>
+
+        <section class="service">
+          <div class="tmgk">
+            <div style="margin-top:10px;margin-left:0px">
+              <img src="/assets/static/tmgk.png">
+            </div>
+            <div style="font-weight:bold;margin-left: 0px;margin-top: 14px">透明公开</div>
+            <div style="margin-left: 0px;color: #666666;margin-top: 5px;font-size: 13px">业务资源透明公开</div>
+          </div>
+          <div class="gpjz">
+            <div style="margin-top:10px;margin-left:0px">
+              <img src="/assets/static/gpjz.png">
+            </div>
+            <div style="font-weight:bold;margin-left: 0px;margin-top: 14px">公平竞争</div>
+            <div style="margin-left: 0px;color: #666666;margin-top: 5px;font-size: 13px">平台规则合理公开</div>
+          </div>
+          <div class="cxgy">
+            <div style="margin-top:10px;margin-left:0px">
+              <img src="/assets/static/cxgy.png">
+            </div>
+            <div style="font-weight:bold;margin-left: 0px;margin-top: 14px">诚信共赢</div>
+            <div style="margin-left: 0px;color: #666666;margin-top: 5px;font-size: 13px">诚信合作共享互联</div>
+          </div>
+          <div class="yzfw">
+            <div style="margin-top:10px;margin-left:0px">
+              <img src="/assets/static/yzfw.png">
+            </div>
+            <div style="font-weight:bold;margin-left: 0px;margin-top: 14px">优质服务</div>
+            <div style="margin-left: 0px;color: #666666;margin-top: 5px;font-size: 13px">客户需求及时响应</div>
+          </div>
+
+        </section>
+      </div>
+    </div>
+
+
+  </div>
+  <!--尾组件-->
+  <app-home-page-footer></app-home-page-footer>
+</div>
+
+

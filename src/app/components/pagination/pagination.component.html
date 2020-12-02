@@ -1,0 +1,39 @@
+<div class="grid-pagination clearfix">
+    <div class="fl clearfix">
+        <p class="pagination-count fl m-re" *ngIf="showCount">
+            已选 <span>{{selectCount}}</span> 条
+        </p>
+        <p  class="m-re pagination-count fl" *ngFor="let c of caculateEnameArr;let dex = index">
+            <span *ngIf="dex == 0">,</span>
+            {{c.revStr}}
+            <span *ngIf="dex != caculateEnameArr.length-1">,</span>
+        </p>
+        <p class="fl m-re" style="margin-left:5px;" *ngIf="paginationRef">
+            <template *ngTemplateOutlet="paginationRef">
+           </template>
+        </p>
+    </div>
+    <div class="fr" >
+      <ng-container *ngIf="nzShowPagination">
+        <nz-pagination class="fl" [nzTotal]="_total" [(nzPageIndex)]="_pageIndex" [(nzPageSize)]="_pageSize" (nzPageIndexChange)="pageIndexFun($event)" [nzSize]="'small'" [nzShowTotal]="totalTemplate"></nz-pagination>
+        <ng-template #totalTemplate let-total>
+          <span style="margin-right:10px;">共有 {{total}} 条</span>
+          <nz-select nzSize="small" [(ngModel)]="_pageSize" (ngModelChange)="pageSizeChange()">
+            <ng-container *ngFor="let i of nzPageSizeOptions">
+              <nz-option [nzValue]="i" nzLabel="{{i}}条/页" *ngIf="i !== maxPageSize"></nz-option>
+              <nz-option [nzValue]="i" nzLabel="全部显示" *ngIf="i === maxPageSize"></nz-option>
+            </ng-container>
+          </nz-select>
+        </ng-template>
+        <div class="fl">
+          <input class="go-input" #input nz-input (keyup.enter)="pageIndexChange(input)" />
+          <button nz-button class="go-btn" nzType="primary" (click)="pageIndexChange(input)">GO</button>
+        </div>
+      </ng-container>
+
+      <div class="fr">
+        <app-muti-col [formId]="formId" [changedHeaders]="changedHeaders" [gridId]="gridId" *ngIf="colSet"></app-muti-col>
+      </div>
+    </div>
+
+</div>

@@ -1,0 +1,90 @@
+<div class="cars">
+  <nz-layout class="app-layout">
+    <app-home-page-header></app-home-page-header>
+    <div class="carsbg">
+      <main class="carsType">
+        <div class="oneOfType">
+          <div class="carsNumber">{{driverCount}}</div>
+          <div class="carsfont">司机数总计(人)</div>
+        </div>
+
+        <div class="oneOfType">
+          <div class="carsNumber">{{vehicleCount}}</div>
+          <div class="carsfont">车辆总计(辆)</div>
+        </div>
+
+        <div class="oneOfType">
+          <div class="carsNumber">212</div>
+          <div class="carsfont">覆盖城市(个)</div>
+        </div>
+
+      </main>
+      <button nz-button class="button" (click)="route()">
+        发布车源
+      </button>
+    </div>
+  </nz-layout>
+</div>
+<div style="margin-left: 120px;margin-top: 50px">
+  <div nz-col nzSpan="4">
+    <nz-form-label [nzSm]="6" [nzXs]="24">起点</nz-form-label>
+    <nz-form-control [nzSm]="17" [nzXs]="24">
+      <nz-cascader [(ngModel)]="startPoint" [nzLoadData]="loadData" (ngModelChange)="onChanges($event)" ></nz-cascader>
+    </nz-form-control>
+  </div>
+  <div nz-col nzSpan="4">
+    <nz-form-label [nzSm]="6" [nzXs]="24">终点</nz-form-label>
+
+    <nz-form-control [nzSm]="17" [nzXs]="24">
+      <nz-cascader [(ngModel)]="endPoint" [nzLoadData]="loadData" (ngModelChange)="onChanges($event)"></nz-cascader>
+    </nz-form-control>
+  </div>
+  <div nz-col nzSpan="4">
+    <nz-form-label [nzSm]="7" [nzXs]="24">空车时间</nz-form-label>
+    <nz-form-control [nzSm]="16" [nzXs]="24">
+      <nz-date-picker [(ngModel)]="vehiclennull"></nz-date-picker>
+    </nz-form-control>
+  </div>
+  <div nz-col nzSpan="8">
+    <nz-form-item>
+      <nz-form-label [nzSm]="4">车型</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <nz-select style="width:200px">
+          <nz-option [nzLabel]="'罐车'" [nzValue]="'罐车'"></nz-option>
+          <nz-option [nzLabel]="'平板'" [nzValue]="'平板'"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+  <div nz-col nzSpan="4">
+    <button nz-button nzType="primary" class="search">查询</button>
+  </div>
+</div>
+  <main class="tran table">
+      <table>
+        <thead>
+        <tr class="table-title">
+          <th>装点/卸点</th>
+          <th>车型</th>
+          <th>载重(吨)</th>
+          <th>空车时间</th>
+          <th>发布时间</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let i of driverList">
+          <td>{{i.startPoint}}<i nz-icon nzType="swap" nzTheme="outline"></i>{{i.endPoint}}</td>
+          <td>{{i.vehicleKind}}</td>
+          <td>{{i.transWeight}}</td>
+          <td>{{i.vehiclenullDate}}</td>
+          <td>{{i.publishDate}}</td>
+          <td >
+            <button nz-button class="read" (click)="route()" nzSize="small">查看详情</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+  </main>
+

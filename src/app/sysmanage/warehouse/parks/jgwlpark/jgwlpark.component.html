@@ -1,0 +1,8 @@
+<app-searchform [triggerSearch]="true" (search)="listSearch($event)">
+</app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)">
+</tpl-buttons>
+<app-table-form (updateDataResult)="updateDataResult($event)" [dataSet]="dataSet" [isMutli]="false"
+                [listLoading]="loading" [pageSize]="pageSize" [showCount]="false" [totalPage]="totalPage"
+                [trSelectedShow]="true" gridId='grid1'>
+</app-table-form>

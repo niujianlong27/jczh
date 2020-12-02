@@ -1,0 +1,61 @@
+<app-searchform  (search)="listSearch($event)" 
+    (searchComponent)='searchComponent($event)' 
+    [triggerSearch]="true"
+    [postQueryHidden]="true" [staticData]="staticData"  [btnHiden]={mutiSearch:true}>
+</app-searchform>
+<!-- <ng-container>
+    <div style="display: inline;margin-left:30px">
+        <label nz-checkbox [(ngModel)]="diffFlag">可叫车计划</label>
+    </div>
+</ng-container> -->
+<tpl-buttons (btnClick)="btnClick($event)" (btnDataReturn)="btnData($event)" [btnHiden]="{'Update':true}" [btnLoading]="{Save: saveLoading}">
+</tpl-buttons>
+<app-table-form (updateDataResult)="updateDataResult($event)" [dataSet]="dataSet" [isMutli]="true"
+                [listLoading]="loading" [showCount]="false" [totalPage]="totalPage"
+                [trSelectedShow]="true" gridId='grid1' (userColumnsEmit)="colName($event)" [gridOperate]="isUpdate ? {show: true, template: operate} : ''">
+                <ng-template #addWeight let-data let-header>
+                    <nz-input-number nzSize="small" [(ngModel)]="data.addWeight"  [nzStep]="1" [nzMin]="-data.planWeight" [nzMax]="9999" [ngClass]="{'selectShow':data.selectShow,'selectClose':!data.selectShow}" [nzFormatter]="inputFormat"  [nzParser]="nzParser"></nz-input-number>
+                    <div [ngClass]="{'divShow':!data.selectShow,'divClose':data.selectShow}">{{data.addWeight}}</div>
+                </ng-template>
+                <ng-template #operate let-data>
+                  <button nzType="primary" nz-button nzSize="small" [hidden]="data._setUpdate"
+                  (click)="updateMethod(data)">修改</button>
+                  <div [hidden]="!data._setUpdate">
+                      <button nzType="danger" [nzLoading]="data.btnloading" nz-button nzSize="small" (click)="saveMethod(data)" style="margin-right: 5px;">保存</button>
+                      <button nzType="default" [disabled]="data.btnloading" nz-button nzSize="small" (click)="cancelUpdate(data)">取消</button>
+                  </div>
+              </ng-template>
+</app-table-form>
+<nz-modal [(nzVisible)]="visible" nzTitle="成品仓库新增"
+  (nzOnCancel)="visible = false" (nzOnOk)="modalOk()" [nzOkLoading]="modalLoading">
+  <form nz-form [formGroup]="modalForm" class="entry-kind-modal">
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="matCode">品种名称</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-select nzAllowClear formControlName="matCode">
+                 <nz-option *ngFor="let data of kindArr" [nzValue]="data.value" [nzLabel]="data.name"></nz-option>
+            </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="warehouseCode">仓库</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-select nzAllowClear formControlName="warehouseCode">
+              <nz-option *ngFor="let data of warehouseArr" [nzValue]="data.value" [nzLabel]="data.name"></nz-option>
+            </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="planDate">计划日期</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-date-picker [nzStyle]="{width: '100%'}" formControlName="planDate"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="planWeight">计划量</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-input-number style="width: 100%;" formControlName="planWeight"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+  </form>
+</nz-modal>

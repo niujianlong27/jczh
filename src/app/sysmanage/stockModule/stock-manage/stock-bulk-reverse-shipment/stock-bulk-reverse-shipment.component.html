@@ -1,0 +1,48 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+<div class="clearfix" style="overflow: hidden;position: relative;">
+
+  <div class="fl trans" [ngStyle]="{width:leftWidth}">
+    <p>散货倒运信息</p>
+    <app-table-form [pageFun]='true'
+                    (pageIndexEmit)='getPageIndex1($event)'
+                    (pageSizeEmit)='getPageSize1($event)'
+                    [gridId]="'grid1'" [dataSet]="dataSet1"
+                    [extraTableHeight]="25"
+                    [pageSize]="pageSize1"
+                    [totalPage]="totalPages1" [isMutli]="true"
+                    (updateDataResult)="updateDataResult($event)"
+                    [trSelectedShow]="true"
+                    [listLoading]="listLoading1"
+                    (listClick)="listClick($event)"
+                    [paginationRef]="totalStats"></app-table-form>
+    <ng-template #totalStats>
+      <!--&nbsp;<span> 已选重量 {{totalWeight| number:'1.3-3'  }} 吨</span>-->
+      <!--&nbsp;<span> 已选件数 {{totalPackageNum | number:'1.2-2'}} 件</span>-->
+      <!--&nbsp;<span> 已选支数 {{ totalBranchNum| number:'1.2-2' }} 支</span>-->
+    </ng-template>
+  </div>
+
+  <div class="tableLine trans" gridLine [ngStyle]="{left:lineWidth}" (gridLineResult)="gridLineFun($event)">
+    <div class="tableLine-in">
+        <span class="grid-line-btn" (click)="rightShowFun()">
+            <i nz-icon type="caret-right" theme="outline" [hidden]="rightShow"></i>
+            <i nz-icon type="caret-left" theme="outline" [hidden]="!rightShow"></i>
+        </span>
+    </div>
+  </div>
+
+  <div class="fr trans" [ngStyle]="{width:rightWidth,display:display}">
+    <p input-blur>物资明细</p>
+    <app-table-form [pageFun]='true' (pageIndexEmit)='getPageIndex2($event)' (pageSizeEmit)='getPageSize2($event)'
+                    [gridId]="'grid2'" [dataSet]="dataSet2" [pageSize]="pageSize2"
+                    [totalPage]="totalPages2" [listLoading]="listLoading2" [isMutli]="true" [isCheckBox]="false"
+                    [showCount]="false" [extraTableHeight]="25"></app-table-form>
+  </div>
+</div>
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+
+</app-modal-confirm>
+

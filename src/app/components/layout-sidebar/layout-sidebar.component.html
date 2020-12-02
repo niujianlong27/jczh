@@ -1,0 +1,37 @@
+<aside class="nav-box">
+    <ul class="left-nav-box" navExpand cdkDropList (cdkDropListDropped)="drop($event)" [perfectScrollbar]="scrollBarConfig">
+        <li *ngFor="let i of leftNavArr" class="left-icon" [class.parentActive]="parentId === i.resourceId || (i.url && !parentId)" (click)="moduleNavFun(i)" cdkDrag>
+            <a class="icon"><img src="{{i.icon}}" /></a>
+            <span class="nav-label">
+            <span class="nav-resourceName">{{i.resourceName}}</span>
+            </span>
+        </li>
+    </ul>
+    <ul class="right-nav-box" *ngIf="rightshow" nz-menu [nzMode]="'inline'" [nzInlineIndent]="0" [class.expand-collapsed]="collapsed" [perfectScrollbar]="scrollBarConfig">
+        <li nz-submenu *ngFor="let j of subModuleMenuList;let dex = index" [(nzOpen)]="menuOpen[dex]" (nzOpenChange)="openChange($event,dex)">
+            <span title="{{j.resourceName}}" class="subName-box" [class.childrenActive]="j.resourceId === this.childrenId">
+                <a class="menu-icon">
+                    <img src="{{j.icon}}" [hidden]="!j.icon" />
+                    <i nz-icon type="fire" [hidden]="j.icon" theme="outline"></i>
+                </a>
+                <span class="subName">{{j.resourceName}}</span>
+                <span class="down" [ngClass]="{active: menuOpen[dex]}">
+                    <!-- <i nz-icon type="caret-down" [hidden]="menuOpen[dex]" theme="outline"></i>
+                    <i nz-icon type="caret-up" [hidden]="!menuOpen[dex]" theme="outline"></i> -->
+                </span>
+            </span>
+            <ul class="menuName">
+                <li *ngFor="let k of j.menuList" (click)="selectLeftNavFun(k)" [class.active]="_formId == k.formId">
+                    <a class="menu-icon">
+                        <img src="{{k.icon}}" [hidden]="!k.icon" />
+                        <i nz-icon type="fire" [hidden]="k.icon" theme="outline"></i>
+                    </a>
+                    <span [title]="k.resourceName">{{k.resourceName}}</span>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</aside>
+<a *ngIf="rightshow" class="menuCollapsed" [class.menuCollapsed-left]='!collapsed' (click)="collapsedFun()" [class.menuCollapsed-right]='collapsed'>
+
+</a>

@@ -1,0 +1,17 @@
+<form nz-form *ngIf="permissions">
+  <nz-form-item nzFlex="true" nzJustify="center" nzAlign="middle">
+
+    <nz-form-label [nzSpan]="3" nzFor="company">业务公司选择</nz-form-label>
+
+    <nz-form-control [nzSpan]="4">
+      <nz-select name="company" [(ngModel)]="selectedCompany" nzAllowClear nzPlaceHolder="选择">
+        <nz-option *ngFor="let data of selectedCompanyData" [nzValue]="data.companyId"
+                   [nzLabel]="data.companyName"></nz-option>
+      </nz-select>
+    </nz-form-control>
+
+    <nz-form-control [nzSpan]="3" nzOffset="1">
+      <button nz-button nzType="default" (click)="selectedCompanyClick()">选择</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>

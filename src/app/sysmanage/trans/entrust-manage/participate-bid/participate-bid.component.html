@@ -1,0 +1,215 @@
+<div>
+  <app-searchform (search)="listMainSearch($event)"></app-searchform>
+  <tpl-buttons [btnDisable]="btnDisable" (btnClick)="btnClick($event)"></tpl-buttons>
+  <app-table-form [gridId]="'grid1'" [dataSet]="dataSet" [totalPage]="totalPage" [trSelectedShow]="true"
+                  [listLoading]="listLoading" (updateDataResult)="updateDataResult($event)"
+                  (listClick)="listClick($event)"></app-table-form>
+</div>
+<div class="grid-pad">
+  <nz-tabset>
+    <nz-tab nzTitle="货盘明细">
+      <app-table-form [dataSet]="dataSetPallet" [totalPage]="totalPagePallet" [gridId]="'grid2'" [isCheckBox]="false"
+                      [nzShowPagination]="false" [showCount]="false"></app-table-form>
+    </nz-tab>
+    <nz-tab nzTitle="捆包明细">
+      <app-table-form [dataSet]="dataSetBale" [totalPage]="totalPageBale" [gridId]="'grid3'" [isCheckBox]="false"
+                      [nzShowPagination]="false" [showCount]="false"></app-table-form>
+    </nz-tab>
+  </nz-tabset>
+</div>
+
+<ng-template #modalContent>
+  <p><i nz-icon type="form" theme="outline"></i><span> 船舶信息</span></p>
+  <form nz-form [nzLayout]="'inline'" [formGroup]="boatForm">
+    <div nz-row [nzGutter]="8" nzJustify="center">
+
+      <div nz-col [nzSpan]="8">
+        <nz-form-item nzFlex="true">
+          <nz-form-label [nzSpan]="7" nzFor="boatName">船舶名称</nz-form-label>
+          <nz-form-control [nzSpan]="17">
+            <input nz-input name="boatName" type="text" id="boatName" formControlName="boatName">
+            <nz-form-explain *ngIf="boatForm.get('boatName').dirty && boatForm.get('boatName').errors">
+              请填写船舶名称
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzSpan]="16">
+        <nz-form-item nzFlex="true">
+          <nz-form-label [nzSpan]="3" nzFor="船期">船期</nz-form-label>
+          <nz-form-control [nzSpan]="21">
+            <div nz-row nzType="flex">
+              <div nz-col nzSpan="12">
+                <nz-date-picker
+                  nzShowTime
+                  nzFormat="yyyy-MM-dd HH:mm:ss"
+                  nzPlaceHolder="开始"
+                  formControlName="loadDateStart"
+                  [nzDisabledDate]="disabledStartDate"
+                  (nzOnOpenChange)="handleStartOpenChange($event)"
+                ></nz-date-picker>
+                <nz-form-explain *ngIf="boatForm.get('loadDateStart').dirty && boatForm.get('loadDateStart').errors">
+                  请填写开始船期
+                </nz-form-explain>
+              </div>
+              <div nz-col nzSpan="12">
+                <nz-date-picker
+                  class="m-l-sm"
+                  nzShowTime
+                  nzFormat="yyyy-MM-dd HH:mm:ss"
+                  nzPlaceHolder="结束"
+                  formControlName="loadDateEnd"
+                  [nzDisabledDate]="disabledEndDate"
+                  [nzOpen]="endOpen"
+                  (nzOnOpenChange)="handleEndOpenChange($event)"
+                ></nz-date-picker>
+                <nz-form-explain *ngIf="boatForm.get('loadDateEnd').dirty && boatForm.get('loadDateEnd').errors">
+                  请填写结束船期
+                </nz-form-explain>
+              </div>
+            </div>
+
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzSpan]="8">
+        <nz-form-item nzFlex="true">
+          <nz-form-label [nzSpan]="7" nzFor="capacity">载重</nz-form-label>
+          <nz-form-control [nzSpan]="17">
+            <nz-input-group nzAddOnAfter="MT">
+              <input nz-input name="capacity" type="number" id="capacity" formControlName="capacity">
+            </nz-input-group>
+            <nz-form-explain *ngIf="boatForm.get('capacity').dirty && boatForm.get('capacity').errors">
+              请填写载重
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+    </div>
+
+
+  </form>
+  <p style="padding-top: 20px"><i nz-icon type="form" theme="outline"></i><span> 出价</span></p>
+
+  <ng-template [ngIf]="type==='CJLX10'">
+
+    <form nz-form [nzLayout]="'inline'" [formGroup]="averageForm">
+      <div nz-row [nzGutter]="8" nzJustify="center">
+
+        <div nz-col [nzSpan]="8">
+          <nz-form-item nzFlex="true">
+            <nz-form-label [nzSpan]="7" nzFor="settleType">是否含税</nz-form-label>
+            <nz-form-control [nzSpan]="17">
+              <input nz-input name="settleType" type="text" id="settleType" formControlName="settleType">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col [nzSpan]="8">
+          <nz-form-item nzFlex="true">
+            <nz-form-label [nzSpan]="7" nzFor="max">最高限价</nz-form-label>
+            <nz-form-control [nzSpan]="17">
+              <nz-input-group nzAddOnAfter="元/吨">
+                <input nz-input name="max" type="number" id="max" formControlName="max">
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col [nzSpan]="8">
+          <nz-form-item nzFlex="true">
+            <nz-form-label [nzSpan]="7" nzFor="最低出价">最低出价</nz-form-label>
+            <nz-form-control [nzSpan]="17">
+              <nz-input-group nzAddOnAfter="元/吨">
+                <input nz-input name="min" type="number" id="min" formControlName="min">
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col [nzSpan]="8">
+          <nz-form-item nzFlex="true">
+            <nz-form-label [nzSpan]="7" nzFor="offerPriceTax">出价</nz-form-label>
+            <nz-form-control [nzSpan]="17">
+              <nz-input-group nzAddOnAfter="元/吨">
+                <nz-input-number [nzMin]="0" [nzPrecision]="2" id="offerPriceTax"
+                                 formControlName="offerPriceTax"></nz-input-number>
+                <!--<input nz-input name="offerPriceTax" type="number" id="offerPriceTax" formControlName="offerPriceTax">-->
+              </nz-input-group>
+              <nz-form-explain
+                *ngIf="averageForm.get('offerPriceTax').dirty && averageForm.get('offerPriceTax').errors">
+                请填写出价
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col [nzSpan]="8">
+          <nz-form-item nzFlex="true">
+            <nz-form-label [nzSpan]="7" nzFor="containerNo">箱数</nz-form-label>
+            <nz-form-control [nzSpan]="17">
+              <nz-input-group nzAddOnAfter="个">
+                <nz-input-number [nzMin]="0" [nzStep]="1" [nzPrecision]="1" name="offerPriceTax" id="containerNo"
+                                 formControlName="containerNo"></nz-input-number>
+                <!--<input nz-input name="containerNo" type="number" id="containerNo" formControlName="containerNo">-->
+              </nz-input-group>
+              <nz-form-explain
+                *ngIf="averageForm.get('containerNo').dirty && averageForm.get('containerNo').errors">
+                请填写箱数
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+    </form>
+  </ng-template>
+
+  <ng-template [ngIf]="type === 'CJLX20' || type === 'CJLX30'">
+
+    <nz-table
+      #table
+      nzBordered
+      nzSize="small"
+      [nzScroll]="{x:'150%',y:'100px'}"
+      [nzFrontPagination]="false"
+      [nzShowPagination]="false"
+      [nzData]="dataSetModal">
+      <thead>
+      <tr>
+        <ng-container *ngFor="let h of dataHeader">
+          <th title="{{h.cName}}" [nzWidth]="h.width">{{h.cName}}</th>
+        </ng-container>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of table.data">
+        <ng-container *ngFor="let n of dataHeader">
+          <td [ngClass]="n.type">
+            <ng-container *ngIf="!n.edit">
+              <span title="{{data[n.eName]}}">{{data[n.eName]}}</span>
+            </ng-container>
+            <ng-container *ngIf="n.edit">
+              <!--<input type="number" nz-input [(ngModel)]="data[n.eName]">-->
+              <nz-input-number [(ngModel)]="data[n.eName]" [nzMin]="0" [nzStep]="0.01"></nz-input-number>
+            </ng-container>
+          </td>
+        </ng-container>
+      </tr>
+      </tbody>
+    </nz-table>
+  </ng-template>
+</ng-template>
+
+<ng-template #modalFooter>
+  <div nz-row nzType="flex" nzJustify="center" *ngIf="buttonId === 'Bid'">
+    <button nz-button (click)="confirm()">确认</button>
+    <button nz-button (click)="close()">取消</button>
+  </div>
+  <div nz-row nzType="flex" nzJustify="center" *ngIf="buttonId === 'Viewbid'">
+    <button nz-button (click)="close()">关闭</button>
+  </div>
+</ng-template>

@@ -1,0 +1,176 @@
+
+.ant-layout{
+  background-color: white;
+}
+.goodsbg {
+  height: 400px;
+  width: 100%;
+  background: url(../../../assets/static/goodsbg.png) center no-repeat;
+  background-size: 100% 100%;
+  text-align: center;
+}
+
+.oneOfType {
+  width: 18%;
+  height: 90px;
+  margin: 0 1%;
+  display: inline-block;
+  border-radius: 2px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.5);
+
+}
+
+.goodsType {
+  width: 75%;
+  margin: 0 auto;
+  margin-top: 170px;
+}
+
+.button {
+  height: 40px;
+  width: 160px;
+  display: inline-block;
+  border: 2px solid #0099F8;
+  background: #0B1F4B;
+  color:#0099F8 ;
+  font-size: 16px;
+  line-height: 30px;
+  text-align: center;
+  margin: 40px auto 0;
+  border-radius: 7px;
+  cursor: pointer;
+
+}
+.carsNumber{
+  margin-top: 15px;;
+  text-align: center;
+  font-size: 29px;
+  color:rgb(255,255,255);
+  font-family:PingFangSC-Semibold ;
+}
+.carsfont{
+
+  text-align: center;
+  font-size: 10px;
+  color:rgb(255,255,255);
+  font-family:PingFangSC-Semibold ;
+}
+section{
+  padding-left:60px ;
+  margin: 30px 0;
+}
+section span{
+  display: inline-block;
+  height: 35px;
+  width: 130px;
+  font-size: 16px;
+  text-align: center;
+  line-height:35px;
+}
+section > span:first-child{
+  background-color: #0D63BC;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+  color:#EDF6FF ;
+
+}
+section >span:nth-child(2){
+  background-color: #EDF6FF;
+  color:#005ECA ;
+  border-bottom-right-radius:5px;
+  border-top-right-radius: 5px;
+}
+section span.search{
+  width: 80px;
+  background-color:#005ECA  ;
+  color: white;
+  border-radius: 5px;
+  height:30px;
+  line-height: 30px;
+  margin-left: 10px;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+
+
+/**表格*/
+.table {
+  margin: 100px auto 30px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  box-shadow: darkgrey 1px 1px 5px 0px;
+  width: 80%;
+  text-align: center;
+  padding:10px 30px ;
+}
+ tbody{
+   width: 100%;
+ }
+.scroll-box {
+  height: 330px;
+  overflow: hidden;
+  position: relative;
+}
+
+.tab-scroll {
+  border-top: none;
+  width: 100%;
+}
+
+.tran th {
+   height: 55px;
+   text-align: center;
+   vertical-align: middle;
+   padding: 5px;
+
+}
+
+.tran td {
+  height: 30px;
+  text-align: center;
+  vertical-align: middle;
+  border-top: none;
+
+}
+
+tbody tr td {
+  color: #000000;
+  width: 10.1175vw;
+  font-size: 8px;
+}
+
+tbody div:nth-child(odd) { /*even-奇数行；odd-偶数行*/
+  background-color: #f6f6f6;
+}
+
+tbody div:nth-child(even) { /*even-奇数行；odd-偶数行*/
+  background-color: #ffffff;
+}
+
+td {
+  word-break: break-word;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  padding: 5px;
+}
+tr p{
+  margin: 0;
+}
+
+td span.read{
+  display: inline-block;
+  width: 75px;
+  height: 25px;
+  color: #0D63BC;
+  line-height: 25px;
+  border: 1px solid #0D63BC;
+  border-radius: 3px;
+  background-color: white;
+  margin-top: 25px;
+  cursor: pointer;
+
+}
+
+

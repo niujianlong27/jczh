@@ -1,0 +1,55 @@
+<app-searchform (search)="listSearch($event)" [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+
+<div>
+  <app-table-form [dataSet]="dataSet"
+                  [pageSize]="pageSize" [totalPage]="totalPages"
+                  [isMutli]="true" [listLoading]="listLoading"
+                  [isCheckBox]="true" [showCount]="true"
+                  (updateDataResult)="selectData($event)">
+
+  </app-table-form>
+</div>
+
+<!--数据弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()"
+          (nzOnOk)="handleOk()">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-control [nzSpan]="23">
+        <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="15">
+          <input *ngIf="m.type == 'text'" type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName">
+
+          <!--<input-modal [DISABLED]="true" *ngIf="m.type == 'model'" [findset]="m.findset"-->
+          <!--[inputModalModel]="carrierCompanyName"-->
+          <!--[inputModalHiddenValue]="carrierCompanyId" [validate]="m.validate"></input-modal>-->
+
+          <!--<nz-input-number style="width: 100%;" *ngIf="m.type ==='text'" formControlName="{{m.eName}}"-->
+          <!--[nzMin]="0"></nz-input-number>-->
+          <input-modal *ngIf="m.type === 'inputModal'" [(inputModalModel)]="m.value" [DISABLED]="m.disabled"
+                       [findset]="{formId: m.formId,name: m.name,parameter: m.nameStr,parameterSend: m.idStr,url:m.url}"
+                       (inpEmit)="modalInputModal($event,m)" [extraParam]="m.extraParam">
+
+          </input-modal>
+
+          <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+            <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+              {{m.validateCon}}
+            </ng-container>
+            <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+              {{m.validators.patternErr}}
+            </ng-container>
+
+          </nz-form-explain>
+
+        </nz-form-control>
+
+      </nz-form-control>
+    </nz-form-item>
+
+  </form>
+</nz-modal>

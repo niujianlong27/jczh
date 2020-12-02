@@ -1,0 +1,22 @@
+<app-searchform (search)="search($event)" gridId="grid1" [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [btnDisable]="{'AutomaticAccount':!selectOrderData[0],ManualAccount: !selectOrderData[0]}"></tpl-buttons>
+<app-grid-resize [gridOne]="grid1" [gridTwo]="grid2">
+    <ng-template #grid1>
+        <app-table-form gridId="grid1" [dataSet]="orderData" [listLoading]="orderLoading" [isMutli]="true" [pageSize]="100" [totalPage]="totalPage" (updateDataResult)="selectOrder($event)"></app-table-form>
+    </ng-template>
+    <ng-template #grid2>
+        <app-table-form gridId="grid2" [dataSet]="settleData" [listLoading]="settleLoading" [nzShowPagination]="false"></app-table-form>
+    </ng-template>
+</app-grid-resize>
+<nz-modal [nzVisible]="modalObj.visible" [nzTitle]="modalObj.title" (nzOnCancel)="modalObj.visible = false" [nzContent]="modalContent" (nzOnOk)="manualAccount()" [nzOkLoading]="modalObj.loading">
+    <ng-template #modalContent>
+        <form nz-form>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24">理由</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <textarea rows="4" nz-input [(ngModel)]="modalObj.model" [ngModelOptions]="{standalone: true}"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </ng-template>
+</nz-modal>

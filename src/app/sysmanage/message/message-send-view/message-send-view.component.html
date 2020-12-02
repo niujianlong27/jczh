@@ -1,0 +1,45 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons
+  (btnClick)="btnClick($event)"
+  [btnDisable]="btnsDisable"
+></tpl-buttons>
+<app-table-form
+  [pageFun]="true"
+  (pageIndexEmit)="getPageIndex1($event)"
+  (pageSizeEmit)="getPageSize1($event)"
+  gridId="grid2"
+  [dataSet]="dataSet"
+  [pageSize]="pageSize"
+  (updateDataResult)="updateDataResult($event)"
+  [totalPage]="totalPage"
+  [isMutli]="true"
+  [listLoading]="listLoading"
+  [trSelectedShow]="true"
+  [gridOperate]="{ show: true, title: '操作', template: g1 }"
+></app-table-form>
+<!-- 消息组详情展示框 -->
+<nz-modal
+  nzWidth="80%"
+  [(nzVisible)]="listFormVisible"
+  [nzTitle]="detailModalTitle"
+  (nzOnCancel)="handleCancel()"
+  [nzOkText]="null"
+  (nzAfterClose)="closeResult()"
+>
+  <app-table-form
+    gridId="grid1"
+    [dataSet]="listDataSet"
+    [isCheckBox]="false"
+    [listLoading]="modalListLoading"
+    [pageSize]="listPageSize"
+    [totalPage]="listTotalPage"
+    (pageIndexEmit)="getPageIndex($event)"
+    (pageSizeEmit)="getPageSize($event)"
+    [pageFun]="true"
+  ></app-table-form>
+</nz-modal>
+
+<!-- 查看详情操作 -->
+<ng-template #g1 let-data let-index="index">
+  <a (click)="operateView(data)">查看</a>
+</ng-template>

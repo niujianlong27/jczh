@@ -1,0 +1,189 @@
+<div>
+   <tpl-buttons formId="scale_load_management" [btnHiden]="{'copyBales':true,'addBales':true,
+                  'delete':true,'Return':operateType =='add'}"
+                  [btnDisable]="{'Add':btnClick }"  (btnClick)="btnClickFun($event)">
+   </tpl-buttons>
+</div>
+<div nz-row class="waybill-add-box">
+   <div nz-col nzSpan="24">
+       <nz-card>
+           <form nz-form nzLayout="inline" style="height: 350px">
+               <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 36, xl: 32 }" nzType="flex" nzAlign="bottom">
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" >业务板块</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <app-select [apiParam]="businessTypeApi" [(ngModel)]="loadameter.businessType" name="businessType"></app-select>
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" nzRequired>车牌号</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <input type="text" nz-input [(ngModel)]="loadameter.plateNum" name="plateNum">
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" >客户单位名称</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <input-modal [(inputModalModel)]="loadameter.consignorCompanyName" [findset]="{formId:'company_pop',name:'客户名称',parameter:'companyName',parameterSend:'companyId'}" (inpEmit)="setPopSelectedValueId($event, 'consignorCompanyId')"></input-modal>
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" >一次称重时间</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <nz-date-picker nzShowTime [(ngModel)]="loadameter.firstTime" name="firstTime" nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" >二次称重时间</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <nz-date-picker nzShowTime [(ngModel)]="loadameter.secondTime" name="secondTime" nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8">净重</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <nz-input-number [(ngModel)]="loadameter.netWeight" name="netWeight" [nzMin]="0.01" [nzStep]="1"></nz-input-number>
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" nzRequired>一次称重重量</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <nz-input-number [(ngModel)]="loadameter.firstWeight" name="firstWeight" [nzMin]="0.01" [nzStep]="1"></nz-input-number>
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8">二次称重重量</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <nz-input-number [(ngModel)]="loadameter.secondWeight" name="secondWeight" [nzMin]="0.01" [nzStep]="1"></nz-input-number>
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" >源流水号</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <input type="text" nz-input [(ngModel)]="loadameter.otherNum" name="otherNum">
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" >一次称重磅位</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <input type="text" nz-input [(ngModel)]="loadameter.firstPoundName" name="firstPoundName">
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" >二次称重磅位</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <input type="text" nz-input [(ngModel)]="loadameter.secondPoundName" name="secondPoundName">
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" >通知单号</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <input type="text" nz-input [(ngModel)]="loadameter.noticeNum" name="noticeNum">
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" >一次司磅员</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <input type="text" nz-input [(ngModel)]="loadameter.firstWeighman" name="firstWeighman">
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" >二次司磅员</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <input type="text" nz-input [(ngModel)]="loadameter.secondWeighman" name="secondWeighman">
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <!--<div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" >销售流水号</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <input type="text" nz-input [(ngModel)]="loadameter.salesNum" name="salesNum">
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>-->
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" nzRequired>地磅编号</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <input type="text" nz-input [(ngModel)]="loadameter.salesNum" name="salesNum">
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" nzRequired>进出场标记</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <nz-radio-group [(ngModel)]="loadameter.inoutMark" name="inoutMark">
+                                   <label nz-radio nzValue="001">进场</label>
+                                   <label nz-radio nzValue="002">出场</label>
+                               </nz-radio-group>
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8" nzRequired>有效标记</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <nz-radio-group [(ngModel)]="loadameter.validMark" name="validMark">
+                                   <label nz-radio nzValue="10">有效</label>
+                                   <label nz-radio nzValue="00">无效</label>
+                               </nz-radio-group>
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>
+                   <!--<div nz-col nzSpan="8">
+                       <nz-form-item>
+                           <nz-form-label nzSpan="8">使用标记</nz-form-label>
+                           <nz-form-control nzSpan="16">
+                               <nz-radio-group [(ngModel)]="loadameter.isUse" name="isUse">
+                                   <label nz-radio nzValue="SYBJ10">已使用</label>
+                                   <label nz-radio nzValue="SYBJ20">未使用</label>
+                               </nz-radio-group>
+                           </nz-form-control>
+                       </nz-form-item>
+                   </div>-->
+               </div>
+           </form>
+       </nz-card>
+   </div>
+</div>
+
+<div nz-row>
+   <tpl-buttons formId="scale_load_management" [btnHiden]="{'Add':true,'Return':true}" (btnClick)="btnClickFun($event)"></tpl-buttons>
+</div>
+
+<app-table-form [formId]="formId1" gridId="grid2" [dataSet]="packData" tabIndex="1"
+                  [isMutli]="true" [colSet]="true" [nzShowPagination]="false"
+                  (userColumnsEmit)="columns($event)" (updateDataResult)="updateDataResult($event)"
+                  [extraTableHeight]="476">
+</app-table-form>
+
+

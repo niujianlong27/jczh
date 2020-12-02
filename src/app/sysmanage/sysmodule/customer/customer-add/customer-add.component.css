@@ -1,0 +1,20 @@
+:host ::ng-deep .ant-upload-text {
+    margin-top: 8px;
+    color: #666;
+}
+.btn{
+    width: 100px;
+}
+.btn-stroke{
+   background-color: transparent;
+   color: #1890ff ;
+   margin-left: 20px;
+   width: 100px;
+}
+
+.ant-form-explain {
+  position: absolute;
+  bottom: -20px;
+  margin-bottom: 5px;
+  left: 0;
+}

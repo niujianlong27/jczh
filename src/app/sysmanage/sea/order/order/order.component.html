@@ -1,0 +1,175 @@
+<app-searchform (searchComponent)="_initalSearch($event)" (search)="getList($event)" [suffixTemplate]="searchSuffix"></app-searchform>
+<ng-template #searchSuffix>
+  <!-- <div class="fl" style="width: 25%;margin-top: 4px;">
+    <div class="fl" style="padding-top: 5px;">
+      <span>来源：</span>
+    </div>
+    <div class="fl">
+      <nz-select style="width: 140px;" [(ngModel)]="inqu.sourceType" name="sourceType" nzAllowClear>
+        <nz-option *ngFor="let option of sourceType" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+      </nz-select>
+    </div>
+  </div>
+  <div class="fl" style="width: 28%;margin-top: 4px;">
+    <div class="fl" style="padding-top: 5px;">
+      <span>创建日期：</span>
+    </div>
+    <div class="fl">
+      <nz-date-picker style="width: 140px;" [(ngModel)]="inqu.createDateStart" name="createDateStart"></nz-date-picker>
+      -
+      <nz-date-picker style="width: 140px;" [(ngModel)]="inqu.createDateEnd" name="createDateEnd"></nz-date-picker>
+    </div>
+  </div>
+  <div class="fl" style="width: 22%;margin-top: 4px;">
+    <div class="fl" style="padding-top: 5px;">
+      <span>运输方式：</span>
+    </div>
+    <div class="fl">
+      <nz-radio-group [(ngModel)]="inqu.transType" name="transType" nzButtonStyle="solid" (ngModelChange)="initalSearch()">
+        <label *ngFor="let option of bizScope" nz-radio-button [nzValue]="option.value">{{ option.label }}</label>
+      </nz-radio-group>
+    </div>
+  </div> -->
+</ng-template>
+
+<tpl-buttons [btnDisable]="btnDisable" (btnClick)="btnClick($event)"></tpl-buttons>
+<app-table-form gridId="order" [dataSet]="result" [totalPage]="total" [trSelectedShow]="true" [listLoading]="queryLoading"
+  (updateDataResult)="checkboxClick($event)" (listClick)="rowClick($event)"></app-table-form>
+<!-- <app-table-form gridId="order" [dataSet]="result" [totalPage]="total" [trSelectedShow]="true" [listLoading]="loading"
+  [gridOperate]="{show:true,title:'操作',width:'100px',template:g1}"
+  (updateDataResult)="checkboxClick($event)" (listClick)="rowClick($event)">
+  <ng-template #g1 let-data let-index="index">
+    <button nz-button nzType="primary" nzGhost (click)="edit(data,index)">实绩</button>
+  </ng-template>
+</app-table-form> -->
+
+<app-table-form [dataSet]="orderItem" gridId="orderItem" [isCheckBox]="false" [nzShowPagination]="false" [showCount]="false"></app-table-form>
+
+
+<nz-modal [nzWidth]="'75%'" [nzVisible]="modalIsVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+  (nzOnCancel)="modalIsVisible=false">
+  <ng-template #modalTitle>
+    定单实际修改
+  </ng-template>
+  <ng-template #modalContent>
+    <p class="b-t p-sm-tb">
+      <button nz-button nzType="default" class="m-r" (click)="modalIsVisible=false">取消</button>
+      <button nz-button nzType="primary" class="m-r" [nzLoading]="saveLoading" (click)="save()">确认</button>
+    </p>
+    <form nz-form [formGroup]="form">
+      <p style="color:green;"><i nz-icon type="form" theme="outline"></i><span>订单信息</span></p>
+      <div nz-row nzType="flex" nzType="flex" nzJustify="space-around" nzAlign="middle">
+        <div nz-col nzSpan="8">
+          <div class="term">订单号</div>
+          <div class="detail">{{selectedData?.orderNo}}</div>
+        </div>
+        <div nz-col nzSpan="8">
+          <div class="term">订单来源</div>
+          <div class="detail">{{selectedData?.sourceTypeName}}</div>
+        </div>
+        <div nz-col nzSpan="8">
+          <div class="term">来源编号</div>
+          <div class="detail">{{selectedData?.sourceNo}}</div>
+        </div>
+        <div nz-col nzSpan="8">
+          <div class="term">运输方式</div>
+          <div class="detail">{{selectedData?.transTypeName}}</div>
+        </div>
+        <div nz-col nzSpan="8">
+          <div class="term">委托单位</div>
+          <div class="detail">{{selectedData?.consignorCompanyName}}</div>
+        </div>
+        <div nz-col nzSpan="8">
+          <div class="term">承运公司</div>
+          <div class="detail">{{selectedData?.carrierCompanyName}}</div>
+        </div>
+        <div nz-col nzSpan="8">
+          <div class="term">单价</div>
+          <div class="detail">{{selectedData?.transPrice}}</div>
+        </div>
+        <div nz-col nzSpan="8">
+          <div class="term">计价方式</div>
+          <div class="detail">{{selectedData?.calculationName}}</div>
+        </div>
+        <div nz-col nzSpan="8">
+          <div class="term">是否含税</div>
+          <div class="detail">{{selectedData?.settleTypeName}}</div>
+        </div>
+        <div nz-col nzSpan="8">
+          <div class="term">流向</div>
+          <div class="detail">{{selectedData?.flowDesc}}</div>
+        </div>
+        <div nz-col nzSpan="8">
+          <div class="term">总重量</div>
+          <div class="detail" *ngIf="selectedData?.actTotWeight==selectedData?.totWeight">{{selectedData?.actTotWeight}}</div>
+          <div class="detail" *ngIf="selectedData?.actTotWeight!==selectedData?.totWeight">{{selectedData?.actTotWeight}}(<span
+              class="delete">{{selectedData?.totWeight}}</span>)</div>
+        </div>
+        <div nz-col nzSpan="8">
+          <div class="term">总件数</div>
+          <div class="detail">{{selectedData?.actTotSheet}}</div>
+        </div>
+        <div nz-col nzSpan="8">
+          <div class="term">品名</div>
+          <div class="detail">{{selectedData?.productName}}</div>
+        </div>
+        <div nz-col nzSpan="8">
+          <div class="term">集装箱</div>
+          <div class="detail">{{selectedData?.containerDesc}}</div>
+        </div>
+        <div nz-col nzSpan="8">
+          <div class="term">船期</div>
+          <div class="detail">{{selectedData?.loadDateStart}}至{{selectedData?.loadDateEnd}}</div>
+        </div>
+      </div>
+
+      <p style="color:green;"><i nz-icon type="form" theme="outline"></i><span>船舶信息</span></p>
+      <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" nzType="flex" nzAlign="top">
+        <div nz-col nzSpan="8">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">船名</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <input nz-input formControlName="boatName" placeholder="船名" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="16">
+          <nz-form-item>
+            <nz-form-label nzSpan="4">船期</nz-form-label>
+            <nz-form-control nzSpan="20">
+              <nz-date-picker formControlName="loadDateStart" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+                nzPlaceHolder="开始">
+              </nz-date-picker>
+              <nz-date-picker formControlName="loadDateEnd" [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
+                nzPlaceHolder="结束">
+              </nz-date-picker>
+              <nz-form-explain *ngIf="form.get('loadDateStart').dirty && form.get('loadDateStart').errors">
+                请输入船期
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="16">
+          <nz-form-item>
+            <nz-form-label nzSpan="4">备注</nz-form-label>
+            <nz-form-control nzSpan="20">
+              <textarea nz-input formControlName="remark" nzAutosize [nzAutosize]="{ minRows: 2, maxRows: 3 }"></textarea>
+              <nz-form-explain *ngIf="form.get('remark').dirty && form.get('remark').errors">请输入备注!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <p style="color:green;margin-bottom: 3px;">
+        <i nz-icon type="form" theme="outline"></i><span>订单明细&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <button nz-button nzType="default" class="m-r" (click)="addOrderItem()"><i nz-icon type="plus" theme="outline"></i></button>
+        <button nz-button nzType="default" (click)="deleteOrderItem()"><i nz-icon type="minus" theme="outline"></i></button>
+      </p>
+      <app-table-form (userColumnsEmit)="orderItemColums($event)" [dataSet]="orderItemEdit" [isMutli]="true" gridId="orderItemEdit"
+        [nzShowPagination]="false" [showCount]="false"></app-table-form>
+    </form>
+
+  </ng-template>
+  <ng-template #modalFooter>
+  </ng-template>
+</nz-modal>

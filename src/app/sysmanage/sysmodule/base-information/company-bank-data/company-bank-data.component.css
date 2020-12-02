@@ -1,0 +1,8 @@
+.number-width{
+  width: 100%;
+}
+.in  .ant-form-explain {
+  position: absolute;
+  bottom: -17px;
+  left: 0;
+}

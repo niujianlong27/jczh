@@ -1,0 +1,47 @@
+<nz-table (nzPageIndexChange)="pageChange($event)" (nzPageSizeChange)="pageSizeChange($event)" [nzScroll]="{x:tableWidth, y:'750px'}"
+  nzSize="small" [nzShowQuickJumper]="true" [nzShowSizeChanger]="true" [nzShowPagination]="showPagination" [nzLoading]="_loading"
+  [nzData]="_data" [(nzPageSize)]="paginationInfo.pageSize" [(nzPageIndex)]="paginationInfo.pageIndex"
+  [nzFrontPagination]="false" [nzTotal]="paginationInfo.total" [nzPageSizeOptions]="paginationInfo.pageSizeOptions">
+  <thead>
+    <tr>
+      <th nzShowCheckbox *ngIf="mode === 'single' || mode === 'multiple'" [nzDisabled]="mode === 'single'" [(nzChecked)]="_allChecked" nzWidth="checkboxWidhStr" nzLeft="0px"
+        [nzIndeterminate]="_indeterminate" (nzCheckedChange)="checkAll($event)"></th>
+      <ng-container *ngFor="let column of _columns">
+        <th title="{{column.colCname}}" [nzWidth]="column.widthStr">{{column.colCname}}</th>
+      </ng-container>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of _data; let index=index" (click)="_rowClick($event, item, index)">
+      <td nzShowCheckbox *ngIf="mode === 'single' || mode === 'multiple'" [(nzChecked)]="item.checked" nzWidth="checkboxWidhStr"
+        nzLeft="0px" [nzDisabled]="item.disabled" (nzCheckedChange)="refreshStatus($event, index)"></td>
+      <ng-container *ngFor="let column of _columns;">
+        <td title="{{item[column.colEname]}}">
+          <ng-container *ngIf="column.type==='template'">
+            <ng-template [ngTemplateOutlet]="column.template" [ngTemplateOutletContext]="{$implicit: item, index: index, key: column.colEname }"></ng-template>
+          </ng-container>
+          <ng-container [ngSwitch]="item.checked&&column.edit==='BJBJ10'">
+            <span *ngSwitchDefault>{{item[column.colEname]}}</span>
+            <ng-container *ngSwitchCase="true">
+              <ng-container *ngIf="column.type==='string'">
+                <input nz-input [nzSize]="'small'" [(ngModel)]="item[column.colEname]" [name]="column.colEname">
+              </ng-container>
+              <ng-container *ngIf="column.type==='date'">
+                <nz-date-picker [nzSize]="'small'" [(ngModel)]="item[column.colEname]" [name]="column.colEname"></nz-date-picker>
+              </ng-container>
+              <ng-container *ngIf="column.type==='datetime'">
+                <nz-date-picker nzShowTime [nzSize]="'small'" [(ngModel)]="item[column.colEname]" [name]="column.colEname"></nz-date-picker>
+              </ng-container>
+              <ng-container *ngIf="column.type==='select'">
+                <app-select [(ngModel)]="item[column.colEname]" [name]="column.colEname" [apiParam]="column.apiParameter"></app-select>
+              </ng-container>
+              <ng-container *ngIf="column.type==='number'">
+                <nz-input-number [nzSize]="'small'" [(ngModel)]="item[column.colEname]" [name]="column.colEname"></nz-input-number>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </td>
+      </ng-container>
+    </tr>
+  </tbody>
+</nz-table>

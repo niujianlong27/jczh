@@ -1,0 +1,181 @@
+<div nz-row nzType="flex" nzType="flex" nzJustify="space-around" nzAlign="middle" style="margin-top: 1em;">
+  <div nz-col nzSpan="6">
+    <div class="term">订单号</div>
+    <div class="detail">
+      <input nz-input [(ngModel)]="inqu.orderNo" name="orderNo" placeholder="订单号" />
+    </div>
+  </div>
+  <div nz-col nzSpan="6">
+    <div class="term">运单号</div>
+    <div class="detail">
+      <input nz-input [(ngModel)]="inqu.waybillNo" name="waybillNo" placeholder="运单号" />
+    </div>
+  </div>
+  <div nz-col nzSpan="5">
+    <div class="term">运输方式</div>
+    <div class="detail">
+      <nz-radio-group [(ngModel)]="inqu.transType" name="transType" nzButtonStyle="solid" (ngModelChange)="query()">
+        <label *ngFor="let option of bizScope" nz-radio-button [nzValue]="option.value">{{ option.label }}</label>
+      </nz-radio-group>
+    </div>
+  </div>
+  <div nz-col nzSpan="7">
+    <div class="term">创建日期</div>
+    <div class="detail">
+      <nz-date-picker style="width: 140px;" [(ngModel)]="inqu.createDateStart" name="createDateStart"></nz-date-picker>
+      -
+      <nz-date-picker style="width: 140px;" [(ngModel)]="inqu.createDateEnd" name="createDateEnd"></nz-date-picker>
+    </div>
+  </div>
+  <div nz-col nzSpan="24" style="text-align: right;">
+    <p class="b-t p-sm-tb">
+      <button nz-button nzType="primary" nzGhost class="m-r" (click)="query()" [nzLoading]="queryLoading">查询</button>
+    </p>
+  </div>
+</div>
+
+<nz-table #orderTable [nzData]="result" [nzScroll]="{ x: '100%', y: '650px' }" [nzFrontPagination]="false" [nzBordered]="false"
+  nzShowPagination="false" [nzFooter]="tableFooter" [nzLoading]="queryLoading">
+  <ng-template #tableTotal>
+    总计 {{page.total}} 条
+  </ng-template>
+  <ng-template #tableFooter>
+    <div nz-row nzType="flex" nzAlign="middle" class='fr'>
+      <div nz-col nzSpan="24">
+        <nz-pagination [nzShowTotal]="tableTotal" [(nzPageIndex)]="page.pageIndex" [nzPageSize]="page.pageSize"
+          (nzPageSizeChange)="pageSizeChange($event)" (nzPageIndexChange)="pageIndexChange($event)" [(nzTotal)]="page.total"
+          nzShowSizeChanger [nzPageSizeOptions]="page.sizeOptions" nzShowQuickJumper></nz-pagination>
+      </div>
+    </div>
+  </ng-template>
+  <thead>
+    <tr>
+      <th nzWidth="4%" nzShowExpand></th>
+      <th nzWidth="8%">订单号</th>
+      <th nzWidth="8%">委托单位</th>
+      <th nzWidth="8%">运输方式</th>
+      <th nzWidth="8%">承运公司</th>
+      <th nzWidth="8%">单价</th>
+      <th nzWidth="8%">总重量</th>
+      <th nzWidth="15%">流向</th>
+      <th nzWidth="15%">船期</th>
+      <th nzWidth="8%">订单状态</th>
+      <th nzWidth="10%">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-template ngFor let-data [ngForOf]="orderTable.data">
+      <tr>
+        <td nzShowExpand [nzExpand]="data.expand" (nzExpandChange)="queryWaybill(data)"></td>
+        <td>{{ data.orderNo }}</td>
+        <td>{{ data.consignorCompanyName }}</td>
+        <td>{{ data.transTypeName }}</td>
+        <td>{{ data.carrierCompanyName }}</td>
+        <td>{{ data.transPrice }}（{{ data.settleTypeName }}）</td>
+        <td>{{ data.totWeight }}</td>
+        <td>{{ data.flowDesc }}</td>
+        <td>{{ data.loadDateStart }} {{data.loadDateEnd ? '至' : ''}} {{ data.loadDateEnd }}</td>
+        <td>{{ data.statusName }}</td>
+        <td>
+          <a (click)="insert(data)">派单</a>
+        </td>
+      </tr>
+      <tr [nzExpand]="data.expand">
+        <td></td>
+        <td colspan="10">
+          <nz-table #waybillTable [nzData]="waybill" [nzShowPagination]="false" class="inner-table">
+            <thead>
+              <tr>
+                <th>运单号</th>
+                <th>承运公司</th>
+                <th>运输公司</th>
+                <th>船名</th>
+                <th>联系电话</th>
+                <th>总重量</th>
+                <th>总件数</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of waybillTable.data">
+                <td>{{ data.waybillNo }}</td>
+                <td>{{ data.carrierCompanyName }}</td>
+                <td>{{ data.transCompanyName }}</td>
+                <td>{{ data.boatName }}</td>
+                <td>{{ data.driverPhone }}</td>
+                <td>{{ data.totWeight }}</td>
+                <td>{{ data.totSheet }}</td>
+                <td>
+                  <a>More</a>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </td>
+      </tr>
+    </ng-template>
+  </tbody>
+</nz-table>
+
+<nz-modal [nzWidth]="'75%'" [nzVisible]="modalIsVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+  (nzOnCancel)="modalIsVisible=false">
+  <ng-template #modalTitle>
+    派单
+  </ng-template>
+  <ng-template #modalContent>
+    <p class="b-t p-sm-tb">
+      <button nz-button nzType="default" class="m-r" (click)="modalIsVisible=false">取消</button>
+      <button nz-button nzType="primary" class="m-r" [nzLoading]="saveLoading" (click)="save()">确认</button>
+    </p>
+
+    <nz-table #orderItemTable [nzData]="orderItem" [nzScroll]="{ x: '100%', y: '650px' }" [nzBordered]="false"
+      nzShowPagination="false" [nzLoading]="queryItemLoading" class="modal-table">
+      <thead>
+        <tr>
+          <th nzWidth="60px" nzLeft="0px" nzShowCheckbox [(nzChecked)]="allChecked" [nzIndeterminate]="indeterminate"
+            (nzCheckedChange)="checkAll($event)"></th>
+          <th nzWidth="120px">订单明细号</th>
+          <th nzWidth="100px">品名</th>
+          <th nzWidth="80px">规格</th>
+          <th nzWidth="80px">重量</th>
+          <th nzWidth="80px">件数</th>
+          <th nzWidth="120px">分配重量</th>
+          <th nzWidth="120px">分配件数</th>
+          <th nzWidth="180px">集装箱</th>
+          <th nzWidth="80px">厚度</th>
+          <th nzWidth="80px">宽度</th>
+          <th nzWidth="80px">长度</th>
+          <th nzWidth="100px">合同号</th>
+          <th nzWidth="100px">备注</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-template ngFor let-item [ngForOf]="orderItemTable.data">
+          <tr ngForm #rowForm="ngForm" [ngClass]="item.rowClass" [ngStyle]="{'display': showMarked && !item.marked?'none':''}">
+            <td nzLeft="0px" nzShowCheckbox [(nzChecked)]="item.checked" name="checked" (nzCheckedChange)="refreshStatus(item)"></td>
+            <td [title]="item.orderItemNo"> {{ item.orderItemNo }} </td>
+            <td [title]="item.productName"> {{ item.productName }} </td>
+            <td [title]="item.specDesc"> {{ item.specDesc}} </td>
+            <td> {{ item.diffGoodsWeight }} </td>
+            <td> {{ item.diffGoodsNo }} </td>
+            <td>
+              <nz-input-number [(ngModel)]="item.goodsWeight" name="goodsWeight" [nzMin]="0" [nzMax]="item.diffGoodsWeight"></nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [(ngModel)]="item.goodsNo" name="goodsNo" [nzMin]="0" [nzMax]="item.diffGoodsNo"></nz-input-number>
+            </td>
+            <td [title]="item.containerType+':'+item.containerNo"> {{ item.containerType }}:{{ item.containerNo }} </td>
+            <td> {{ item.thickness }} </td>
+            <td> {{ item.width }} </td>
+            <td> {{ item.lengthSpec }} </td>
+            <td> {{ item.contractNo }} </td>
+            <td> {{ item.remark }} </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </nz-table>
+
+  </ng-template>
+  <ng-template #modalFooter>
+  </ng-template>
+</nz-modal>

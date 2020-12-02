@@ -1,0 +1,7 @@
+<nz-tabset (nzSelectChange)="selectChange($event)" [(nzSelectedIndex)]="index">
+    <nz-tab *ngFor="let tab of tabs;let i = index;" [nzTitle]='tab.itemCname+tab.itemCount'>
+    </nz-tab>
+</nz-tabset>
+<common-page [pageSize]="pageSize" (searchDataReturn)="searchDataFun($event)" [totalPage]="totalPage" (search)="listSearch($event)" [dataSet]="dataSet"
+    [listLoading]="listLoading" [dataSet]="dataSet" [isMutli]="true">
+</common-page>

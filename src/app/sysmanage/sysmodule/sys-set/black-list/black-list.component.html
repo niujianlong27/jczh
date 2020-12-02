@@ -1,0 +1,73 @@
+<app-searchform
+gridId="grid1"
+[triggerSearch]="true"
+(search)="search($event)"></app-searchform>
+<tpl-buttons
+gridId="grid1"
+(btnClick)="btnClick($event)"></tpl-buttons>
+<app-table-form
+gridId="grid1"
+[isMutli]="true"
+[dataSet]="data"
+[listLoading]="loading"
+[totalPage]="total"></app-table-form>
+<nz-modal
+[(nzVisible)]="visible"
+[nzTitle]="modalTitle"
+(nzOnCancel)="visible = false"
+[nzContent]="modalContent"
+[nzOkLoading]="modalLoading"
+(nzOnOk)="ok()">
+<ng-template #modalContent>
+  <form nz-form
+  [formGroup]="modalForm">
+    <ng-container *ngFor="let item of modalData">
+      <nz-form-item *ngIf="item.type">
+        <nz-form-label [nzSm]="6" [nzXs]="24" [nzRequired]="item.required" [nzFor]="item.eName" *ngIf="item.type">{{item.cName}}</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input-modal
+          *ngIf="item.type === 'inputModal'"
+          [(inputModalModel)]="modalForm.get(item.eName).value"
+          [findset]="{url: 'getAllUsers', name: '姓名', formId: 'form_getAllUsers',parameter:'name'}"
+          (inpEmit)="inpEmit($event)"
+          [showExplainFlag]="modalForm.get(item.eName)?.dirty && modalForm.get(item.eName)?.errors"></input-modal>
+          <nz-select
+          nzAllowClear
+          *ngIf="item.type === 'select'"
+          [formControlName]="item.eName"
+          [nzDisabled]="!modalForm.get('name')?.value">
+            <nz-option *ngFor="let o of item.list" [nzLabel]="o.vehicleNo" [nzValue]="o.vehicleNo"></nz-option>
+          </nz-select>
+          <nz-input-number
+          *ngIf="item.type === 'number'"
+          [formControlName]="item.eName"
+          [nzMin]="1"
+          [nzMax]="10000000"
+          [nzFormatter]="numberFormat"
+          [nzParser]="numberParser"
+          (nzBlur)="getEndTime(item.eName)"
+          [nzStep]="1"
+          style="width: 100%;"></nz-input-number>
+          <nz-date-picker
+            nzShowTime
+            (ngModelChange)="getEndTime(item.eName)"
+            [nzStyle]="{width: '100%'}"
+            style="width: 100%"
+            [formControlName]="item.eName"
+            nzFormat="yyyy-MM-dd HH:mm:ss"
+            *ngIf="item.type === 'date'"
+          ></nz-date-picker>
+          <nz-radio-group *ngIf="item.type === 'radio'" [formControlName]="item.eName">
+            <label nz-radio [nzValue]="1">有效</label>
+            <label nz-radio [nzValue]="0">无效</label>
+          </nz-radio-group>
+          <textarea rows="1" nz-input *ngIf="item.type === 'areatext'" [formControlName]="item.eName"></textarea>
+          <nz-form-explain *ngIf="modalForm.get(item.eName)?.dirty && modalForm.get(item.eName)?.errors">
+            {{item.cName}} 为必填项
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </ng-container>
+  </form>
+</ng-template>
+</nz-modal>

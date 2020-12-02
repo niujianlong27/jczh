@@ -1,0 +1,470 @@
+<!-- 消息发送form -->
+<div nz-row>
+  <div nz-col class="transition" nzSpan="24" style="padding-left:14px;">
+    <div nz-row>
+      <div nz-col nzSpan="24">
+        <form nz-form nzLayout="inline" [formGroup]="modalValidateForm">
+          <nz-form-item>
+            <nz-form-label [nzXs]="3" nzRequired>消息主题</nz-form-label>
+            <nz-form-control [nzXs]="5">
+              <nz-select
+                nzShowSearch
+                id="topicCode"
+                formControlName="topicCode"
+                appInputThrottle
+                (throttleSearch)="SearchChange($event)"
+                (nzScrollToBottom)="scrollToBottom()"
+                (ngModelChange)="optionsChange($event)"
+              >
+                <nz-option
+                  *ngFor="let i of topicCodeList"
+                  [nzLabel]="i.topicName"
+                  [nzValue]="i.topicCode"
+                ></nz-option>
+                <nz-option *ngIf="isLoadingTopic" nzDisabled nzCustomContent>
+                  <i nz-icon nzType="loading" class="loading-icon"></i>
+                  数据加载中...
+                </nz-option>
+              </nz-select>
+              <nz-form-explain
+                *ngIf="
+                  modalValidateForm.get('topicCode')?.dirty &&
+                  modalValidateForm.get('topicCode')?.errors
+                "
+              >
+                消息主题不能为空
+              </nz-form-explain>
+            </nz-form-control>
+            <nz-form-label [nzXs]="3">接收人</nz-form-label>
+            <nz-form-control [nzXs]="5">
+              <button
+                nz-button
+                (click)="showReceiversModal()"
+                [disabled]="receiveDisabled"
+                nzBlock
+              >
+                {{ btnText }}
+              </button>
+            </nz-form-control>
+            <nz-form-label [nzXs]="3">发送计划时间</nz-form-label>
+            <nz-form-control [nzXs]="5">
+              <nz-date-picker
+                nzShowTime
+                nzFormat="yyyy-MM-dd HH:mm"
+                formControlName="sendPlanTime"
+                [nzDisabledDate]="disabledDate"
+                [nzDisabledTime]="disabledTime"
+              ></nz-date-picker>
+              <nz-form-explain
+                *ngIf="
+                  modalValidateForm.get('sendPlanTime')?.dirty &&
+                  modalValidateForm.get('sendPlanTime')?.errors
+                "
+              >
+                <ng-container
+                  *ngIf="
+                    modalValidateForm
+                      .get('sendPlanTime')
+                      ?.hasError('hasExpiration')
+                  "
+                >
+                  发送计划时间不能晚于过期时间
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    modalValidateForm
+                      .get('sendPlanTime')
+                      ?.hasError('noExpiration')
+                  "
+                >
+                  发送计划时间不能早于当前时间
+                </ng-container>
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzXs]="3">消息过期时间</nz-form-label>
+            <nz-form-control [nzXs]="5">
+              <nz-date-picker
+                nzShowTime
+                nzFormat="yyyy-MM-dd HH:mm"
+                formControlName="expirationTime"
+                [nzDisabledDate]="disabledDate1"
+                [nzDisabledTime]="disabledTime1"
+              ></nz-date-picker>
+              <nz-form-explain
+                *ngIf="
+                  modalValidateForm.get('expirationTime')?.dirty &&
+                  modalValidateForm.get('expirationTime')?.errors
+                "
+              >
+                <ng-container
+                  *ngIf="
+                    modalValidateForm.get('expirationTime')?.hasError('hasPlan')
+                  "
+                >
+                  消息过期时间不能早于计划时间
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    modalValidateForm.get('expirationTime')?.hasError('noPlan')
+                  "
+                >
+                  消息过期时间不能早于当前时间
+                </ng-container>
+              </nz-form-explain>
+            </nz-form-control>
+            <nz-form-label [nzXs]="3" nzRequired>消息标题</nz-form-label>
+            <nz-form-control [nzXs]="5">
+              <input type="text" nz-input formControlName="messageTitle" trim />
+              <nz-form-explain
+                *ngIf="
+                  modalValidateForm.get('messageTitle')?.dirty &&
+                  modalValidateForm.get('messageTitle')?.errors
+                "
+              >
+                消息标题不能为空
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzXs]="4" style="max-width: 11.11%" nzRequired
+              >消息内容</nz-form-label
+            >
+            <nz-form-control [nzXs]="20">
+              <textarea
+                rows="3"
+                nz-input
+                formControlName="messageBody"
+                trim
+              ></textarea>
+              <nz-form-explain
+                *ngIf="
+                  modalValidateForm.get('messageBody')?.dirty &&
+                  modalValidateForm.get('messageBody')?.errors
+                "
+              >
+                消息内容不能为空
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label
+              [nzXs]="4"
+              style="max-width: 11.11%"
+              [nzRequired]="paramRequired"
+              >消息参数</nz-form-label
+            >
+            <nz-form-control [nzXs]="20">
+              <textarea
+                rows="5"
+                nz-input
+                formControlName="messageParam"
+              ></textarea>
+              <nz-form-explain
+                *ngIf="
+                  modalValidateForm.get('messageParam')?.dirty &&
+                  modalValidateForm.get('messageParam')?.errors
+                "
+              >
+                <ng-container
+                  *ngIf="
+                    modalValidateForm.get('messageParam')?.hasError('required')
+                  "
+                >
+                  消息参数不能为空
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    modalValidateForm.get('messageParam')?.hasError('complete')
+                  "
+                >
+                  消息参数填写不完整或格式不正确，请参照"参数名：参数值"进行填写;
+                </ng-container>
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzXs]="3">备注</nz-form-label>
+            <nz-form-control [nzXs]="5">
+              <input type="text" nz-input formControlName="remark" />
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      </div>
+      <div nz-col nzSpan="24" class="btns-line">
+        <tpl-buttons
+          formId="form_message_send"
+          (btnClick)="btnClick($event)"
+        ></tpl-buttons>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 接收人筛选弹框 -->
+<nz-modal
+  [(nzVisible)]="receiversModalVisible"
+  [nzTitle]="receiversModalTitle"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  (nzAfterClose)="closeResult()"
+  nzWidth="800px"
+>
+  <form nz-form [nzLayout]="'inline'">
+    <nz-form-item>
+      <nz-form-label>
+        已绑公司
+      </nz-form-label>
+      <nz-form-control>
+        <!-- 选中主题已订阅公司列表 -->
+        <nz-table
+          class="user-table"
+          #companySelectTable
+          nzSize="small"
+          [nzData]="companys"
+          reNzTable
+          (heightEmit)="heightFun($event, 2)"
+          [nzBordered]="false"
+          [nzShowPagination]="false"
+          [nzFrontPagination]="false"
+          [nzHideOnSinglePage]="true"
+          [nzLoading]="listLoadingCompany"
+          [nzScroll]="{ y: selectCompanyHeight, x: '500px' }"
+        >
+          <thead>
+            <tr>
+              <th
+                nzShowCheckbox
+                [nzDisabled]="companys.length < 1"
+                [(nzChecked)]="allCheckedCompany"
+                [nzIndeterminate]="indeterminateSelectCompany"
+                (nzCheckedChange)="checkAllCompany($event)"
+                nzWidth="30px"
+              ></th>
+              <ng-container *ngFor="let company of companySelectHeader">
+                <th [title]="company.cName" nzWidth="150px">
+                  {{ company.cName }}
+                </th>
+              </ng-container>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of companySelectTable.data">
+              <td
+                nzShowCheckbox
+                [(nzChecked)]="data.checked"
+                (nzCheckedChange)="refreshStatusCompany(data)"
+              ></td>
+              <ng-container
+                *ngFor="let company of companySelectHeader; let i = index"
+              >
+                <td [title]="data[company.eName]">
+                  <span>{{ data[company.eName] }}</span>
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-control>
+        <!-- 用户接收选择确认 -->
+        <label
+          nz-checkbox
+          [(ngModel)]="userKind"
+          [ngModelOptions]="{ standalone: true }"
+          >其他接收用户</label
+        >
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item [hidden]="!userKind">
+      <nz-form-control>
+        <!-- 用户搜索form -->
+        <form
+          nz-form
+          [nzLayout]="'inline'"
+          [formGroup]="userValidateForm"
+          (ngSubmit)="searchUsers()"
+        >
+          <nz-form-item>
+            <nz-form-label>公司名称</nz-form-label>
+            <nz-form-control>
+              <input
+                type="text"
+                nz-input
+                formControlName="companyName"
+                id="companyName"
+                nzAllowClear
+                nzPlaceHolder="公司名称"
+                trim
+              />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label>角色名称</nz-form-label>
+            <nz-form-control>
+              <input
+                type="text"
+                nz-input
+                formControlName="roleName"
+                id="roleName"
+                nzAllowClear
+                nzPlaceHolder="角色名称"
+                trim
+              />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label>用户类型</nz-form-label>
+            <nz-form-control>
+              <input
+                type="text"
+                nz-input
+                formControlName="userType"
+                id="userType"
+                nzAllowClear
+                nzPlaceHolder="用户类型"
+                trim
+              />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label>用户名</nz-form-label>
+            <nz-form-control>
+              <input
+                type="text"
+                nz-input
+                formControlName="name"
+                id="name"
+                nzAllowClear
+                nzPlaceHolder="用户名"
+                trim
+              />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control>
+              <button nz-button nzType="primary">查询</button>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item [hidden]="!userKind">
+      <!-- 用户选择table -->
+      <nz-table
+        [nzTitle]="'待选择接收人'"
+        class="user-table"
+        #usersSelectTable
+        nzSize="small"
+        [nzData]="usersSelectData"
+        reNzTable
+        (heightEmit)="heightFun($event, 0)"
+        [nzBordered]="false"
+        [nzFrontPagination]="false"
+        [nzHideOnSinglePage]="true"
+        [(nzPageSize)]="pageSize"
+        [nzTotal]="totalPage"
+        [nzLoading]="selectLoading"
+        (nzPageIndexChange)="pageChange($event)"
+        [(nzPageIndex)]="selectIndex"
+        [nzScroll]="{ y: selectHeight, x: '500px' }"
+      >
+        <thead>
+          <!-- 用户全选 -->
+          <tr>
+            <th
+              nzShowCheckbox
+              [nzDisabled]="usersSelectData.length < 1"
+              [(nzChecked)]="allChecked"
+              [nzIndeterminate]="indeterminate"
+              (nzCheckedChange)="checkAll($event)"
+              nzWidth="30px"
+            ></th>
+            <ng-container *ngFor="let user of userSelectHeader">
+              <th [title]="user.cName" nzWidth="150px">{{ user.cName }}</th>
+            </ng-container>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of usersSelectTable.data">
+            <!-- 用户单选 -->
+            <td
+              nzShowCheckbox
+              [(nzChecked)]="data.checked"
+              [nzDisabled]="data.disabled"
+              (nzCheckedChange)="refreshStatus(data)"
+            ></td>
+            <ng-container *ngFor="let user of userSelectHeader; let i = index">
+              <td [title]="data[user.eName]">
+                <span>{{ data[user.eName] }}</span>
+              </td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </nz-table>
+      <!-- 选择按钮 -->
+      <div class="push-btn" nz-row>
+        <button nz-button nzType="primary" (click)="pushData()">
+          <i nz-icon nzType="down"></i>
+        </button>
+      </div>
+      <!-- 用户已选择table -->
+      <nz-table
+        [nzTitle]="'已选择接收人'"
+        class="user-table"
+        #usersSelectedTable
+        nzSize="small"
+        [nzData]="usersSelectedData"
+        reNzTable
+        (heightEmit)="heightFun($event, 1)"
+        [nzBordered]="false"
+        [nzShowPagination]="false"
+        [nzFrontPagination]="false"
+        [nzHideOnSinglePage]="true"
+        [nzScroll]="{ y: selectedHeight, x: '500px' }"
+      >
+        <thead>
+          <tr>
+            <ng-container *ngFor="let user of userSelectedHeader">
+              <th [title]="user.cName" nzWidth="150px">{{ user.cName }}</th>
+            </ng-container>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of usersSelectedData; let idx = index">
+            <ng-container
+              *ngFor="let user of userSelectedHeader; let i = index"
+            >
+              <td [title]="data[user.eName]" *ngIf="user.eName !== 'delete'">
+                <span>{{ data[user.eName] }}</span>
+              </td>
+              <!-- 已选用户删除 -->
+              <td [title]="data[user.eName]" *ngIf="user.eName === 'delete'">
+                <button
+                  nz-button
+                  nzType="danger"
+                  [nzSize]="'small'"
+                  [nzGhost]="true"
+                  (click)="delUser(data, idx)"
+                >
+                  删除
+                </button>
+              </td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </nz-table>
+      <!-- 已选用户重置 -->
+      <div class="push-btn" nz-row>
+        <button nz-button nzType="primary" (click)="clearUsers()">
+          重置
+        </button>
+      </div>
+    </nz-form-item>
+  </form>
+</nz-modal>

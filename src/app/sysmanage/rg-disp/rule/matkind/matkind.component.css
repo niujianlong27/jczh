@@ -1,0 +1,227 @@
+
+/* .span1{
+    display: block;
+    width: 90px !important;
+    height: 30px !important;
+    margin:-8px 8px;
+    text-align: right
+}
+.input1{
+    display: block;
+    width: 142px !important;
+    height: 30px !important;
+    margin:-10px 8px;
+    outline:none;
+    border-radius: 6px;
+    border: 1px solid #DBDBDB;
+}
+.span2{
+    display: block;
+    width: 90px !important;
+    height: 30px !important;
+    margin:-8px 54px;
+}
+.input2{
+    display: block;
+    width: 152px !important;
+    height: 30px !important;
+    margin:-10px -26px;
+    border-radius: 6px;
+    outline:none;
+    border: 1px solid #DBDBDB;
+}
+.span3{
+    display: block;
+    width: 90px !important;
+    height: 30px !important;
+    margin:-8px 161px;
+}
+.select{
+
+    width: 160px !important;
+    height: 30px !important;
+    margin:-10px -140px;
+}*/
+.span4{
+    text-align: right;
+    width: 160px !important;
+    height: 30px !important;
+    margin:-8px 13px;
+}
+.text{
+    width: 320px !important;
+    height: 57px !important;
+    margin:-18px 235px;
+    border-radius: 6px;
+    outline:none;
+}
+.span5{
+    display: block;
+    width: 90px !important;
+    height: 30px !important;
+    margin:2px 29px;
+}
+.select1{
+    display: block;
+    width: 160px !important;
+    height: 30px !important;
+    margin:0px 130px;
+}
+.span6{
+    display: block;
+    width: 90px !important;
+    height: 30px !important;
+    margin:2px 20px;
+}
+.select2{
+    display: block;
+    width: 160px !important;
+    height: 30px !important;
+    margin:0px 80px;
+}
+.input7{
+    display: block;
+    width: 152px !important;
+    height: 30px !important;
+    margin:0px 5px;
+    border-radius: 6px;
+    outline:none;
+    border: 1px solid #DBDBDB;
+}
+.span7{
+    display: block;
+    width: 84px !important;
+    height: 30px !important;
+    margin:2px 25px;
+    text-align: right;
+}
+.span8{
+    width: 115px !important;
+    height: 19px !important;
+    margin:2px 88px;
+    text-align: right;
+}
+.span12{
+    width: 115px !important;
+    height: 19px !important;
+    margin:2px 82px;
+    text-align: right;
+}
+.input8{
+    width: 318px !important;
+    height: 32px !important;
+    margin:0px -41px;
+    border-radius: 6px;
+    outline:none;
+    border: 1px solid #DBDBDB;
+}
+
+.span9{
+    width: 115px !important;
+    height: 19px !important;
+    margin:2px 88px;
+    text-align: right;
+}
+.input9{
+    width: 318px !important;
+    height: 32px !important;
+    margin:0px -52px;
+    border-radius: 6px;
+    outline:none;
+    border: 1px solid #DBDBDB;
+}
+.span10{
+    width: 115px !important;
+    height: 19px !important;
+    margin:4px 137px;
+    text-align: right;
+}
+
+.input10{
+    width: 318px !important;
+
+    margin:-9px -79px;
+    border-radius: 6px;
+
+}
+.div6{
+    /* height:100px; */
+    margin:40px 0px ;
+}
+.div7{
+    margin:0px 0px;
+}
+.select5{
+    width: 318px;
+    margin:0px -28px;
+}
+.span11{
+    width: 115px !important;
+    height: 19px !important;
+    margin:2px 137px;
+    text-align: right;
+}
+.select6{
+    width: 318px;
+    margin:0px -80px;
+}
+.div10{
+    margin: 30px 0px;
+}
+.span15{
+    width: 115px !important;
+    height: 19px !important;
+    margin:4px 89px;
+    text-align: right;
+}
+.select15{
+    width: 318px;
+    margin:0px -40px;
+}
+.spanwl{
+    width: 115px !important;
+    height: 19px !important;
+    margin:2px 84px;
+    text-align: right;
+}
+.inpwl{
+    width: 318px !important;
+    height: 32px !important;
+    margin:0px -33px;
+    border-radius: 6px;
+    outline:none;
+    border: 1px solid #DBDBDB;
+}
+.Wldiv{
+    margin: 30px 0px;
+}
+.spanwlchild{
+    width: 115px !important;
+    height: 19px !important;
+    margin:2px 106px;
+    text-align: right;
+}
+.inpwlchild{
+    width: 318px !important;
+    height: 32px !important;
+    margin:0px -47px;
+    border-radius: 6px;
+    outline:none;
+    border: 1px solid #DBDBDB;
+}
+.Wldivchild{
+    margin: 30px 0px;
+}
+.required:before {
+    display: inline-block;
+    margin-right: 4px;
+    content: "*";
+    font-family: SimSun;
+    line-height: 1;
+    font-size: 14px;
+    color: #f5222d;
+}
+.ant-table-tbody > tr > td {
+    text-align: left;
+}
+

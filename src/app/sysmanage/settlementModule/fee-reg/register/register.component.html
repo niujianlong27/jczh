@@ -1,0 +1,94 @@
+<common-page (search)="listSearch($event)" [pageSize]="pageSize" [totalPage]="totalPage" [listLoading]="listLoading" [dataSet]="dataSet" [isMutli]="true" (btnClick)="register($event)" (btnUpdate)="update($event)" [caculateEnameArr]="caculateEnameArr" [triggerSearch]="true">
+</common-page>
+<modal-tpl [modalShow]="modalShow" [tplTitle]="tplTitle" (modalOkResult)="confirm()" (modalCancelResult)="cancel()" [nzWidth]="'80%'" [modalTplContent]="content">
+    <div class="clearfix feeModalBox" #content>
+        <form class="fl" *ngIf='showLeftArea' style="width: 25%;" nz-form>
+            <nz-form-item *ngFor="let i of leftControllArr">
+                <nz-form-label [nzSpan]="7">{{i.name}}</nz-form-label>
+                <nz-form-control [nzSpan]="12">
+                    <input nz-input [(ngModel)]="i.model" disabled [ngModelOptions]="{standalone: true}">
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+        <div class="fl" [ngStyle]="showLeftArea?{width:'75%'}:{width:'100%'}">
+            <p *ngIf='!showLeftArea' class="l_h">已选择运单 {{selectedLength}} 条 , 总吨位 {{selectedWeight}} 吨</p>
+            <nz-table [nzScroll]="{x:'1200px',y:'200px'}" [nzNoResult]="' '" [nzShowPagination]="false" [nzFrontPagination]="false" #regData [nzData]="modalData">
+                <thead>
+                    <tr>
+                        <th nzWidth="50px" title="应收">应收</th>
+                        <th nzWidth="50px" title="应付">应付</th>
+
+                        <th nzWidth="70px" title="费用">费用</th>
+                        <th nzWidth="100px" title="应收计价方式">应收计价方式</th>
+
+                        <th nzWidth="100px" title="应收单价">应收单价</th>
+                        <th nzWidth="100px" title="应收总价">应收总价</th>
+                        <th nzWidth="100px" title="应付计价方式">应付计价方式</th>
+                        <th nzWidth="100px" title="应付单价">应付单价</th>
+                        <th nzWidth="100px" title="应付总价">应付总价</th>
+
+                        <th nzWidth="120px" title="收款单位">应付单位</th>
+                        <th nzWidth="80px" title="结算报表">结算报表</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of regData.data">
+                        <td nzShowCheckbox [(nzChecked)]="data.agentFlag" [nzDisabled]='!data.agentFlagDis'></td>
+                        <td nzShowCheckbox [(nzChecked)]="data.payableFlag" [nzDisabled]='!data.payableFlagDis'></td>
+
+                        <td>
+                            {{data.feeName}}
+                        </td>
+                        <td>
+                            <nz-select [(ngModel)]="data.payType" nzSize="small" [nzDisabled]="!data.agentFlag">
+                                <nz-option nzValue="{{i.value}}" nzLabel="{{i.name}}" *ngFor="let i of priceType"></nz-option>
+                            </nz-select>
+                        </td>
+
+                        <td>
+                            <input nz-input type="text" nzSize="small" (blur)="priceChange(10,data)" [(ngModel)]="data.unitPrice" [disabled]="!(data.agentFlag && data.payType == 'JJFS10')">
+                        </td>
+                        <td>
+                            <input nz-input type="text" nzSize="small" (blur)="priceChange(20,data)" [(ngModel)]="data.totalPrice" [disabled]="!(data.agentFlag && data.payType == 'JJFS20')">
+                        </td>
+                        <td>
+                            <nz-select [(ngModel)]="data.payReceiveType" nzSize="small" [nzDisabled]="!data.payableFlag">
+                                <nz-option nzValue="{{i.value}}" nzLabel="{{i.name}}" *ngFor="let i of priceType"></nz-option>
+                            </nz-select>
+                        </td>
+                        <td>
+                            <input nz-input type="text" nzSize="small" (blur)="priceChange(30,data)" [(ngModel)]="data.payPrice" [disabled]="!(data.payableFlag && data.payReceiveType == 'JJFS10')">
+                        </td>
+                        <td>
+                            <input nz-input type="text" nzSize="small" (blur)="priceChange(40,data)" [(ngModel)]="data.payTotalPrice" [disabled]="!(data.payableFlag && data.payReceiveType == 'JJFS20')">
+                        </td>
+
+
+                        <td>
+                            <input-modal [inputSize]="'small'" [(inputModalModel)]="data.receivefeeClientName" [DISABLED]="!data.payableFlag" (inpEmit)='inpEmit($event,data)' [findset]="{formId:'company_pop',name:'收款单位',parameter:'companyName',parameterSend:'companyId'}"></input-modal>
+                        </td>
+                        <td>否</td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</modal-tpl>
+<ng-template #informationModal>
+    <div style="padding:0 70px;">
+        <div>
+            <span>收款单位:</span>
+            <div style="display:inline-block;margin-left:15px;">
+                <input-modal [inputSize]="'small'" [(inputModalModel)]="receivefeeClien.receivefeeClientName" (inpEmit)='inpEmit($event,receivefeeClien)' [findset]="{formId:'company_pop',name:'收款单位',parameter:'companyName',parameterSend:'companyId'}"></input-modal>
+            </div>
+        </div>
+        <nz-radio-group [(ngModel)]="informationRadio">
+            <div style="margin-top:15px;"> <label nz-radio nzValue="JJFS20"></label><span>运费百分比</span>
+                <nz-input-number [(ngModel)]="proportion" style="width:100px;margin:0 5px;" nzSize="small"></nz-input-number><span>%</span>
+            </div>
+            <div style="margin-top:15px"> <label nz-radio nzValue="JJFS10"></label><span>单价</span>
+                <nz-input-number [(ngModel)]="payPrice" nzSize="small" style="margin: 0 5px;"></nz-input-number>
+            </div>
+        </nz-radio-group>
+    </div>
+</ng-template>

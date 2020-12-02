@@ -1,0 +1,21 @@
+<!--<form nz-form [formGroup]="validateForm" >-->
+<!--  <div nz-row [nzGutter]="24">-->
+<!--    <div nz-col [nzSpan]="6">-->
+<!--      <nz-form-item>-->
+<!--        <nz-form-label [nzSpan]="8">品种规格</nz-form-label>-->
+<!--        <nz-form-control [nzSpan]="16" nzSize="small">-->
+<!--          <input nz-input formControlName="itemid">-->
+<!--        </nz-form-control>-->
+<!--      </nz-form-item>-->
+<!--    </div>-->
+<!--    <div style="float: right;margin-right: 5%" nz-col [nzSpan]="3">-->
+<!--      <button nz-button (click)="listSearch($event)"  [nzType]="'primary'">查询</button>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</form>-->
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons></tpl-buttons>
+
+<app-table-form  [pageFun]='true' (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)' gridId='grid1'  [dataSet]="dataSet"
+                 [pageSize]="pageSize1"  [totalPage]="totalPage" [isMutli]="true" [listLoading]="loading"
+                  [isCheckBox]="false" [showCount]="false"></app-table-form>

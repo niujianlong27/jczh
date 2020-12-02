@@ -1,0 +1,47 @@
+    <nz-layout class="app-layout">
+      <app-home-page-header></app-home-page-header>
+
+      <nz-content>
+        <main class="content-box">
+        <div class="login-box">
+          <section class="type1 color1">
+            <div class="img" style="line-height: 110px">
+              <img style="width: 70px;height: 35px" src="/assets/static/truck.png" alt="">
+            </div>
+            <h2>承运方</h2>
+            <div class="text">
+              <p>优化合作 一站式协同</p>
+            <ul>
+              <li>与货主企业、发货人、收货人、司机等人员在一个平台上工作，提升效率</li>
+              <li>根据运输需求进行竞价，以最低价格获得业务</li>
+              <li>实现连续运输、降低空载率、提升收益能力</li>
+            </ul>
+
+              <p class="register color1" (click)="register('transport')">立即注册</p>
+            </div>
+          </section>
+
+          <section class="type1 color2">
+            <div class="img" style="line-height: 90px">
+              <img style="width: 55px;height: 55px" src="/assets/static/person.png" alt="">
+            </div>
+            <h2>货主端</h2>
+
+            <div  class="text">
+              <p>整合资源 降低物流成本</p>
+              <ul>
+                <li>方便管理货运合同</li>
+                <li>查看运单，实时跟踪物流</li>
+                <li>查看核对运输余额</li>
+                <li>查看发票信息</li>
+              </ul>
+
+              <p class="register color2" (click)="register('shipper')">立即注册</p>
+            </div>
+          </section>
+        </div>
+      </main>
+        <app-home-page-footer></app-home-page-footer>
+
+      </nz-content>
+  </nz-layout>

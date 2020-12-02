@@ -1,0 +1,16 @@
+<nz-select class="areaSelect" style="margin-right: 2%"  [ngModelOptions]="{standalone: true}" [(ngModel)]="areaObj.provinceValue"
+             (ngModelChange)="placeChange($event,'DZDJ10')" nzPlaceHolder="省" nzShowSearch>
+      <nz-option *ngFor="let op of areaObj.province" [nzValue]="op" [nzLabel]="op.name"></nz-option>
+</nz-select>
+<nz-select class="areaSelect" style="margin-right: 2%"  [ngModelOptions]="{standalone: true}" [(ngModel)]="areaObj.cityValue" nzShowSearch
+               (ngModelChange)="placeChange($event,'DZDJ20')" nzPlaceHolder="市" [nzDisabled]="!areaObj.provinceValue">
+      <nz-option *ngFor="let op of areaObj.city" [nzValue]="op" [nzLabel]="op.name"></nz-option>
+</nz-select>
+<nz-select class="areaSelect" style="margin-right: 2%"  [ngModelOptions]="{standalone: true}" [(ngModel)]="areaObj.areaValue" nzShowSearch
+                (ngModelChange)="placeChange($event,'DZDJ30')" nzPlaceHolder="区" [nzDisabled]="!areaObj.cityValue">
+      <nz-option *ngFor="let op of areaObj.area" [nzValue]="op" [nzLabel]="op.name"></nz-option>
+</nz-select>
+<nz-select class="areaSelect"  [ngModelOptions]="{standalone: true}" [(ngModel)]="areaObj.townValue" nzShowSearch
+                (ngModelChange)="placeChange($event,'DZDJ40')" nzPlaceHolder="乡" [nzDisabled]="!areaObj.areaValue">
+      <nz-option *ngFor="let op of areaObj.town" [nzValue]="op" [nzLabel]="op.name"></nz-option>
+</nz-select>

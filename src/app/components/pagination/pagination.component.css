@@ -1,0 +1,31 @@
+.grid-pagination {
+    padding: 5px 0;
+}
+
+.grid-pagination ::ng-deep .ant-pagination .ant-pagination-options {
+    float: left;
+}
+
+.go-input {
+    padding: 1px 7px;
+    height: 24px;
+    width: 44px;
+    text-align: center;
+}
+
+.go-btn {
+    padding: 1px;
+    height: 24px;
+    width: 30px;
+    margin: 0 10px;
+}
+
+.setting-col {
+    display: inline-block;
+    height: 24px;
+    padding: 1px;
+    width: 24px;
+    background: #f7f7f7;
+    text-align: center;
+    border: 1px #ddd solid;
+}

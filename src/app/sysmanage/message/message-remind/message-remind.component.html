@@ -1,0 +1,242 @@
+<!-- 按钮栏 -->
+<tpl-buttons
+  (btnClick)="btnClick($event)"
+  [btnDisable]="btnDisable"
+></tpl-buttons>
+<!-- 消息主题/用户绑定区域 -->
+<div nz-row nzType="flex" nzJustify="space-around" style="padding-top: 20px">
+  <div nz-col nzSpan="12">
+    <!-- 消息主题表 -->
+    <nz-table
+      [nzTitle]="roleTitle"
+      #topicTable
+      reNzTable
+      [extraTableHeight]="permissions ? 36 : 0"
+      [nzData]="topicData"
+      nzSize="small"
+      [nzBordered]="false"
+      (heightEmit)="heightFun($event, 0)"
+      [nzFrontPagination]="false"
+      [nzHideOnSinglePage]="true"
+      [(nzPageSize)]="topicPageSize"
+      [nzTotal]="topicTotalPage"
+      [nzLoading]="listLoading1"
+      (nzPageIndexChange)="topicPageChange($event)"
+      [(nzPageIndex)]="topicPageIndex"
+      [nzScroll]="{ y: roleHeight, x: '500px' }"
+    >
+      <thead>
+        <tr>
+          <ng-container *ngFor="let topic of topicCodeHeader">
+            <th [title]="topic.cName" nzWidth="200px">{{ topic.cName }}</th>
+          </ng-container>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr
+          *ngFor="let data of topicTable.data"
+          [class.tr-selected]="data.isClick"
+        >
+          <ng-container *ngFor="let topic of topicCodeHeader">
+            <td [title]="data[topic.eName]" (click)="topicClick(data)">
+              <span>{{ data[topic.eName] }}</span>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </nz-table>
+    <!-- 主题搜索form -->
+    <ng-template #roleTitle>
+      <div>消息主题</div>
+      <form
+        nz-form
+        nzLayout="inline"
+        [formGroup]="topicValidateForm"
+        (ngSubmit)="searchTopic()"
+      >
+        <nz-form-item>
+          <nz-form-label>主题名称</nz-form-label>
+          <nz-form-control>
+            <input
+              type="text"
+              nz-input
+              id="searchValue"
+              formControlName="searchValue"
+              placeholder="主题名称搜索"
+            />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control>
+            <button nz-button nzType="primary">查询</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ng-template>
+  </div>
+  <!-- 绑定用户表 -->
+  <div nz-col nzSpan="12">
+    <nz-table
+      class="user-table"
+      #userTable
+      nzSize="small"
+      [nzTitle]="tableHead"
+      [nzData]="userData"
+      reNzTable
+      (heightEmit)="heightFun($event, 1)"
+      [extraTableHeight]="permissions ? 97 : 61"
+      [nzBordered]="false"
+      [nzFrontPagination]="false"
+      [nzHideOnSinglePage]="true"
+      [(nzPageSize)]="pageSize"
+      [nzTotal]="totalPage"
+      [nzLoading]="listLoading"
+      (nzPageIndexChange)="pageChange($event)"
+      [(nzPageIndex)]="pageIndex"
+      [nzScroll]="{ y: userHeight, x: '780px' }"
+    >
+      <thead>
+        <tr>
+          <!-- 绑定用户全选 -->
+          <th
+            nzShowCheckbox
+            [nzDisabled]="userData.length < 1"
+            [(nzChecked)]="allChecked"
+            [nzIndeterminate]="indeterminate"
+            (nzCheckedChange)="checkAll($event)"
+            nzWidth="30px"
+          ></th>
+          <ng-container *ngFor="let user of userHeaderData">
+            <th [title]="user.cName" nzWidth="150px">{{ user.cName }}</th>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 用户不可选高亮 -->
+        <tr
+          *ngFor="let data of userTable.data"
+          [ngStyle]="{ 'background-color': data.checkStatus ? ' #cccccc' : '' }"
+        >
+          <!-- 单行选择 -->
+          <td
+            nzShowCheckbox
+            [(nzChecked)]="data.checked"
+            [nzDisabled]="data.checkStatus && nzSelectedIndex === 1"
+            (nzCheckedChange)="refreshStatus(data)"
+          ></td>
+          <ng-container *ngFor="let user of userHeaderData">
+            <td [title]="data[user.eName]">
+              <span>{{ data[user.eName] }}</span>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </nz-table>
+
+    <ng-template #tableHead>
+      <div>用户绑定设置</div>
+      <!-- 已选用户/未选用户tab切换 -->
+      <nz-tabset [(nzSelectedIndex)]="nzSelectedIndex">
+        <nz-tab
+          nzTitle="已选用户"
+          [nzDisabled]="topicData.length === 0"
+          (nzSelect)="tabClick('select')"
+        >
+          <!-- 已选用户搜索form -->
+          <form
+            nz-form
+            nzLayout="inline"
+            [formGroup]="bindValidateForm"
+            (ngSubmit)="submitForm('bind')"
+          >
+            <nz-form-item>
+              <nz-form-label>所属角色</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  id="platformRoleBind"
+                  formControlName="platformRoleBind"
+                  nzPlaceHolder="请选择所属角色"
+                  [nzAllowClear]="true"
+                  style="min-width: 100px"
+                >
+                  <nz-option
+                    *ngFor="let i of roleGroupList"
+                    [nzLabel]="i.roleName"
+                    [nzValue]="i"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label>用户名称</nz-form-label>
+              <nz-form-control>
+                <input
+                  type="text"
+                  nz-input
+                  id="searchValueBind"
+                  formControlName="searchValueBind"
+                  placeholder="用户名称搜索"
+                />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-control>
+                <button nz-button nzType="primary">查询</button>
+              </nz-form-control>
+            </nz-form-item>
+          </form>
+        </nz-tab>
+        <nz-tab
+          nzTitle="未选用户"
+          [nzDisabled]="topicData.length === 0"
+          (nzSelect)="tabClick('notToChoose')"
+        >
+          <!-- 未选用户搜索form -->
+          <form
+            nz-form
+            nzLayout="inline"
+            [formGroup]="unBindValidateForm"
+            (ngSubmit)="submitForm('unbind')"
+          >
+            <nz-form-item>
+              <nz-form-label>所属角色</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  id="platformRoleUnBind"
+                  formControlName="platformRoleUnBind"
+                  nzPlaceHolder="请选择所属角色"
+                  [nzAllowClear]="true"
+                  style="min-width: 100px"
+                >
+                  <nz-option
+                    *ngFor="let i of roleGroupList"
+                    [nzLabel]="i.roleName"
+                    [nzValue]="i"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label>用户名称</nz-form-label>
+              <nz-form-control>
+                <input
+                  type="text"
+                  nz-input
+                  id="searchValueUnBind"
+                  formControlName="searchValueUnBind"
+                  placeholder="用户名称搜索"
+                />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-control>
+                <button nz-button nzType="primary">查询</button>
+              </nz-form-control>
+            </nz-form-item>
+          </form>
+        </nz-tab>
+      </nz-tabset>
+    </ng-template>
+  </div>
+</div>

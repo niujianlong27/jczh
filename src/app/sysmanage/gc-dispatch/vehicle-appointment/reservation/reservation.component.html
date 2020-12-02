@@ -1,0 +1,105 @@
+<common-page
+  (search)="listSearch($event)"
+  [dataSet]="dataSet"
+  [trSelectedShow]="false"
+  [listLoading]="listLoading"
+  [pageSize]="pageSize"
+  [totalPage]="totalPage"
+  [triggerSearch]="true"
+  [isCheckBox]="false"
+  gridId="grid1"
+  [gridOperate]=" {show: true, title: '操作', width: '120px', template: operate}"
+>
+</common-page>
+
+<ng-template
+  #operate
+  let-data
+>
+  <button
+    nz-button
+    nzType="default"
+    nzSize="small"
+    [disabled]="modalFormVisible"
+    (click)="btnUpdate(data)"
+  >
+    修改
+  </button>
+</ng-template>
+
+
+<!--弹出框-->
+<nz-modal
+  [(nzVisible)]="modalFormVisible"
+  [nzTitle]="modalTitle"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  (nzAfterClose)="closeResult()"
+  [nzOkLoading]="nzOkLoading"
+>
+  <form
+    nz-form
+    [formGroup]="modalValidateForm"
+  >
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="12">
+
+        <input
+          [type]="m.type"
+          *ngIf="m.type == 'text'"
+          nz-input
+          [formControlName]="m.eName"
+          [id]="m.eName"
+        >
+        <nz-input-number
+          *ngIf="m.type == 'number'"
+          [nzMin]="0"
+          [formControlName]="m.eName"
+          [id]="m.eName"
+          [nzPrecision]="0"
+          [nzMax]="99999"
+        >
+        </nz-input-number>
+
+        <nz-select *ngIf="m.type==='select'"
+                   [attr.id]="m.eName"
+                   [formControlName]="m.eName"
+                   nzMode="default"
+        >
+          <nz-option
+            *ngFor="let option of m.selectList"
+            [nzLabel]="option.name"
+            [nzValue]="option.value"
+          >
+          </nz-option>
+        </nz-select>
+
+        <nz-time-picker
+          *ngIf="m.type==='timePicker'"
+          [attr.id]="m.eName"
+          [formControlName]="m.eName"
+          nzFormat="HH:mm"
+        >
+        </nz-time-picker>
+
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+            {{m.validators.patternErr}}
+          </ng-container>
+
+        </nz-form-explain>
+
+      </nz-form-control>
+
+    </nz-form-item>
+
+  </form>
+</nz-modal>

@@ -1,0 +1,67 @@
+
+<div>
+  <app-searchform  (search)="listSearch($event)"></app-searchform>
+  <tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+  <app-table-form [dataSet]="dataSet" [pageSize]="pageSize"
+                  tabIndex="1"  isMutli="true"
+                  (updateDataResult)="selectData($event)"
+                  [colSet]="true"    [totalPage]="totalPage"
+                  [showCount]="false" [listLoading]="listLoading">
+
+  </app-table-form>
+</div>
+<!--弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="addhandleCancel()" (nzOnOk)="handleOk()"
+          (nzAfterClose)="closeResult()">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of addModalFormData">
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.require" *ngIf="m.type !== ''">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="12">
+
+        <input-modal *ngIf="m.type == 'modal'" [isMutli]="false" [findset]="formIdFindset"
+                     [(inputModalModel)]="inputModalModel" (inpEmit)="inpEmit($event)"   [borderRed]="borderRed" ></input-modal>
+
+        <nz-select [attr.id]="m.eName" *ngIf="m.type == 'select'" [formControlName]="m.eName">
+          <nz-option *ngFor="let i of m.selectArr" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+        </nz-select>
+
+        <nz-select [attr.id]="m.eName" *ngIf="m.type == 'select1'" [formControlName]="m.eName">
+          <nz-option *ngFor="let i of cityArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+        </nz-select>
+
+        <input type="{{m.type}}" *ngIf="m.type == 'text' || m.type == 'number'" nz-input formControlName="{{m.eName}}"
+               [id]="m.eName">
+
+        <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+          <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+        </nz-radio-group>
+        <nz-date-picker *ngIf="m.type == 'date'" [formControlName]="m.eName"></nz-date-picker>
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+            {{m.validators.patternErr}}
+          </ng-container>
+
+        </nz-form-explain>
+
+      </nz-form-control>
+
+    </nz-form-item>
+
+  </form>
+</nz-modal>
+
+<ng-container>
+  <ng-template #confirmTitle>提示信息</ng-template>
+  <ng-template #confirmContent>{{confimCon}}</ng-template>
+  <ng-template #confirmFooter>
+    <button nz-button nzType="primary" (click)="handleOk()">确定</button>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  </ng-template>
+</ng-container>

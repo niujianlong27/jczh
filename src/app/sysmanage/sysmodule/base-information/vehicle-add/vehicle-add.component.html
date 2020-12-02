@@ -1,0 +1,161 @@
+<!-- <form nz-form [formGroup]="validateForm" style="padding:15px 20px 0 0">
+  <div nz-row [nzGutter]="24" nzAlign="top" nzJustify="space-around">
+    <ng-container *ngFor="let control of controlArray">
+      <div nz-col [nzSpan]="8" *ngIf="control.type !== null">
+        <nz-form-item>
+          <nz-form-label [nzRequired]="control.require" [nzSpan]="6"
+                        [nzFor]="control.eName">{{ control.cName}}</nz-form-label>
+          <nz-form-control [nzSpan]="18">
+            <input-modal *ngIf="control.type == 'modal'" [isMutli]="false" [findset]="formIdFindset"
+                        [inputModalModel]="inputModalModel" (inpEmit)="inpEmit($event)" [borderRed]="borderRed"
+                        [DISABLED]="true"></input-modal>
+
+            <input *ngIf="control.type == 'text' " nz-input [type]="control.type" [maxlength]="control.maxLength" autocomplete="off"
+                  [formControlName]="control.eName" [attr.id]="control.eName">
+
+            <nz-date-picker *ngIf="control.type == 'data'" [formControlName]="control.eName" style="width:100%" [nzStyle]="{width: '100%'}"></nz-date-picker>
+            <nz-input-number *ngIf="control.type == 'number'"  [formControlName]="control.eName" style="width:100%"
+                            ></nz-input-number>
+            <div *ngIf="control.type == 'upload'">
+              <nz-upload
+                [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="control.dataArr"
+                nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData" (nzChange)="handleChange($event,control.eName)"
+                [nzShowButton]="control.dataArr.length < 2">
+                <i nz-icon type="plus"></i>
+                <div class="ant-upload-text">Upload</div>
+              </nz-upload>
+              <input type="hidden" formControlName={{control.eName}} readonly="readonly">
+              <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+                        (nzOnCancel)="previewVisible=false">
+                <ng-template #modalContent>
+                  <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }"/>
+                </ng-template>
+              </nz-modal>
+            </div>
+
+            <nz-radio-group [attr.id]="control.eName" *ngIf="control.type == 'radio'" [formControlName]="control.eName">
+              <label nz-radio nzValue="{{r.value}}" *ngFor="let r of control.radioArr">{{r.name}}</label>
+            </nz-radio-group>
+            <nz-select *ngIf="control.type == 'select' " nz-input style="width:100%"
+            [formControlName]="control.eName" [attr.id]="control.eName">
+                <nz-option *ngFor="let i of control.selectList" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+            </nz-select>
+            <nz-form-explain *ngIf="validateForm.get(control.eName).dirty && validateForm.get(control.eName).errors">
+              <ng-container *ngIf="validateForm.get(control.eName).hasError('required')">
+                {{control.validateCon}}
+              </ng-container>
+              <ng-container *ngIf="validateForm.get(control.eName).hasError(control.customValidateStatus)">
+                {{control.customValidateCon}}
+              </ng-container>
+            </nz-form-explain>
+
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </ng-container>
+  </div>
+  <div nz-row>
+    <div nz-col [nzSpan]="24" style="text-align: right;">
+      <button nz-button [nzType]="'primary'" (click)="submitForm()" style="margin-right: 15px">确定</button>
+      <button nz-button (click)="cancel()">取消</button>
+    </div>
+  </div>
+</form> -->
+<form nz-form class="vehicle-form" [formGroup]="vehicleForm">
+  <ng-container *ngFor="let f of formData">
+    <h5><i nz-icon nzType="form" nzTheme="outline"></i><span>{{f.title}}</span></h5>
+    <div class="p-lr">
+      <ng-container *ngFor="let b of f.form">
+        <div class="inline-block" *ngIf="b.type">
+          <nz-form-item nzFlex>
+            <nz-form-label [nzRequired]="b.required" *ngIf="b.type !== 'checkbox'">{{b.cName}}</nz-form-label>
+            <nz-form-control>
+              <input nz-input *ngIf="b.type === 'text'" [formControlName]="b.eName"/>
+              <nz-select *ngIf="b.type === 'select'" style="width: 174px;" [formControlName]="b.eName">
+                <nz-option *ngFor="let o of b.list" [nzLabel]="o.name" [nzValue]="o.value"></nz-option>
+              </nz-select>
+              <input-modal
+              [placeholder]="b.placeholder || ''"
+              *ngIf="b.type === 'inputModal'"
+              [DISABLED]="pageStatus === 'check'"
+              [(inputModalModel)]="vehicleForm.get(b.eName).value"
+              [findset]="b.findset"
+              [extraParam]="b.extraParam"
+              (inpEmit)="inpEmit($event, b)"
+              [showExplainFlag]="vehicleForm.get(b.eName)?.dirty && vehicleForm.get(b.eName)?.errors"></input-modal>
+              <app-input-number
+              *ngIf="b.type === 'number'"
+              [disabled]="pageStatus === 'check'"
+              [formControlName]="b.eName"></app-input-number>
+              <nz-date-picker
+              [formControlName]="b.eName"
+              *ngIf="b.type === 'date'"
+              [nzShowTime]="b.showTime"
+              [nzFormat]="b.format || 'yyyy-MM-dd'"></nz-date-picker>
+
+              <nz-upload
+              [nzShowUploadList]="{showRemoveIcon: pageStatus === 'check' ? false : true, showPreviewIcon: true}"
+              [nzDisabled]="pageStatus === 'check'"
+              [nzLimit]="b.limit || 1"
+              [nzMultiple]="true"
+              [nzShowButton]="b.value.length < 1"
+              *ngIf="b.type === 'upload'"
+              [nzAccept]="b.nzFileType || imgType"
+              [nzFileType]="b.nzFileType || imgType"
+              [nzFilter]="b.nzFilter || filters"
+              [nzAction]="upload.action"
+              [(nzFileList)]="b.value"
+              (nzChange)="handleChange(b)"
+              [nzCustomRequest]='upload.handleRequest'
+              nzListType="picture-card"
+              [nzPreview]="handlePreview"
+              [nzData]="upload.handleData">
+                  <i class="anticon anticon-plus"></i>
+              </nz-upload>
+
+              <textarea nz-input nzAutosize *ngIf="b.type === 'areaText'" [formControlName]="b.eName"></textarea>
+              <label nz-checkbox *ngIf="b.type === 'checkbox'" [formControlName]="b.eName">{{b.cName}}</label>
+            </nz-form-control>
+            <nz-form-explain *ngIf="vehicleForm.get(b.eName)?.dirty && vehicleForm.get(b.eName)?.errors">
+             <ng-container *ngIf="vehicleForm.get(b.eName)?.dirty && vehicleForm.get(b.eName)?.hasError('required')">
+              {{b.cName}} 为必填项
+             </ng-container>
+             <ng-container *ngIf="vehicleForm.get(b.eName)?.dirty && vehicleForm.get(b.eName)?.hasError('pattern')">
+              {{b.errorMsg}}
+             </ng-container>
+            </nz-form-explain>
+          </nz-form-item>
+        </div>
+        <div *ngIf="b.eName === 'drivelicenseImg2' || b.eName === 'vehicleImgUrl2' ||
+        b.eName === 'vipImgUrl2'"></div>
+      </ng-container>
+    </div>
+  </ng-container>
+  <div class="form-btn">
+    <button nz-button nzType="primary" [nzLoading]="btnLoading" (click)="save()" *ngIf="pageStatus !== 'check'">保存</button>
+    <button nz-button nzType="primary" [nzLoading]="checkLoading" [disabled]="rejectLoading" (click)="check()" *ngIf="pageStatus === 'check'">通过</button>
+    <button nz-button nzType="danger" [nzLoading]="rejectLoading"  [disabled]="checkLoading" (click)="reject()" *ngIf="pageStatus === 'check'">驳回</button>
+    <button nz-button nzType="default" (click)="back()">返回</button>
+  </div>
+</form>
+<nz-modal
+[(nzVisible)]="visible"
+nzTitle="驳回理由"
+[nzContent]="content"
+(nzOnOk)="rejectResult()"
+[nzOkLoading]="rejectLoading"
+(nzOnCancel)="visible = false">
+  <ng-template #content>
+    <form [formGroup]="modalForm">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>驳回理由</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <textarea formControlName="backReason" nz-input rows="2" ></textarea>
+          <nz-form-explain
+            *ngIf="modalForm.get('backReason')?.dirty && modalForm.get('backReason')?.hasError('required')"
+            >驳回理由必填!</nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-template>
+</nz-modal>

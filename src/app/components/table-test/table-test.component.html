@@ -1,0 +1,37 @@
+<p>
+  table-test works!
+
+</p>
+
+<!-- <input [(ngModel)]="name" type="text"/> -->
+<!-- 
+<h1>你好呀!!!!!{{name}}</h1>
+
+<h2>userName: {{userNames}}</h2>
+
+<ul>
+  <li *ngFor="let item of userNames">
+    {{item}}
+  </li>
+</ul> -->
+
+<div>
+  <textarea rows="20" cols="60" nz-input [(ngModel)]="leftText"></textarea>
+  <nz-button-group [nzSize]="'default'">
+    <div class="btnDiv" style="padding: 4cm 0cm;">
+        <button nz-button nzType="primary" (click)="conversionCiphertext()">转换<i nz-icon type="right"></i></button>
+      <br>
+      <br>
+      <br>
+      <br>
+      <button nz-button nzType="primary" (click)="conversionCiphertext2()"><i nz-icon type="left"></i>转换</button>
+
+    </div>
+  </nz-button-group>
+  <textarea rows="20" cols="60" nz-input [(ngModel)]="rightText"></textarea>
+</div>
+
+<!-- <div *ngFor="let hero of heroes">{{hero.name}}</div>
+<input #heroInput>{{heroInput.id}}
+
+<button [disabled]="isUnchanged">Save</button> -->

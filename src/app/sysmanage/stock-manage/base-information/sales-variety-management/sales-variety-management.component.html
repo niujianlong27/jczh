@@ -1,0 +1,59 @@
+<common-page
+  (search)="listSearch($event)"
+  [pageSize]="pageSize"
+  [totalPage]="totalPage"
+  [listLoading]="listLoading"
+  [dataSet]="dataSet"
+  [isMutli]="true"
+  [triggerSearch]="true"
+  (btnClick)='btnClick($event)'
+  [btnDisable]="{Update:selectedData.length!==1,Delete:selectedData.length===0}"
+  (updateDataResult)="updateDataResult($event)"
+>
+</common-page>
+
+<!--弹出框-->
+<nz-modal
+  [(nzVisible)]="modalFormVisible"
+  [nzTitle]="modalTitle"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  (nzAfterClose)="closeResult()"
+  [nzOkLoading]="nzOkLoading"
+>
+  <form
+    nz-form
+    [formGroup]="modalValidateForm"
+  >
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+        {{m.name}}
+      </nz-form-label>
+
+      <nz-form-control [nzSpan]="12">
+
+        <input
+          type="{{m.type}}"
+          *ngIf="m.type == 'text'"
+          nz-input
+          formControlName="{{m.eName}}"
+          [id]="m.eName"
+        >
+
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+            {{m.validators.patternErr}}
+          </ng-container>
+
+        </nz-form-explain>
+
+      </nz-form-control>
+
+    </nz-form-item>
+
+  </form>
+</nz-modal>

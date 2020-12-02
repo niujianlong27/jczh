@@ -1,0 +1,32 @@
+:host input{
+  height: 26px;
+}
+:host ::ng-deep .ant-select-selection--single{
+  height: 26px;
+}
+:host ::ng-deep .ant-select-selection__rendered {
+  line-height: 26px;
+}
+
+:host ::ng-deep .ant-input{
+  height: 26px;
+  line-height: 26px;
+  font-size: 12px;
+}
+:host ::ng-deep .ant-calendar-picker  .ant-input{
+  height: 26px;
+  line-height: 15px;
+  font-size: 12px;
+}
+:host ::ng-deep .ant-form label{
+  font-size: 12px;
+}
+:host ::ng-deep .ant-select-selection-selected-value{
+  font-size: 12px;
+}
+:host ::ng-deep .ant-form-item{
+  margin-bottom: 12px;
+}
+::ng-deep .ant-select-dropdown .ant-select-dropdown-menu-item{
+  font-size: 12px!important;
+}

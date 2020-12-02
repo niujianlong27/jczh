@@ -1,0 +1,259 @@
+<!-- <nz-card [nzTitle]="title" [nzBordered]="false">
+  <ng-template #title> -->
+    <form nz-form [nzLayout]="'inline'">
+      <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" style="padding-right: 16px;">
+        <div nz-col nzSpan="9">
+          <nz-form-label nzSpan="6">新增时间</nz-form-label>
+          <nz-date-picker nzSpan="9" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" nzPlaceHolder="开始时间" (ngModelChange)="onChange($event)" (nzOnOk)="onOk($event)" [(ngModel)]="inqu.startDate" name="startDate"></nz-date-picker>
+          <nz-date-picker nzSpan="9" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" nzPlaceHolder="结束时间" (ngModelChange)="onChange($event)" (nzOnOk)="onOk($event)" [(ngModel)]="inqu.endDate" name="endDate"></nz-date-picker>
+        </div>
+
+        <div nz-col nzSpan="5">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">港口名称</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <input type="text" nz-input [(ngModel)]="inqu.harborName" name="harborName" nzPlaceHolder="港口名称">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="5">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">港口代码</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <input type="text" nz-input [(ngModel)]="inqu.harborCode" name="harborCode" nzPlaceHolder="港口代码">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="5">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">港口类型</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <nz-select style="width: 120px;" [(ngModel)]="inqu.type" name="type" nzPlaceHolder="--请选择--">
+                <nz-option *ngFor="let option of statusHarborselect" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+    
+        <div nz-col nzSpan="24" style="text-align: right;">
+          <p class="b-t p-sm-tb">
+            <button nz-button nzType="primary" nzGhost class="m-r" (click)="query()" [nzLoading]="queryLoading">
+              <a class="btn-icon">
+                <img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/查询.svg">
+              </a>查询</button>
+            <button nz-button nzType="primary" nzGhost class="m-r" (click)="openModal()">
+              <a class="btn-icon">
+                <img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/新增.svg">
+              </a>新增</button>
+          </p>
+        </div>
+      </div>
+    </form>
+    <!-- </ng-template> -->
+    
+    
+    <nz-table #basicTable [nzData]="result" [nzScroll]="{ x: '100%', y: '650px' }" [nzFrontPagination]="false" [nzBordered]="false" nzShowPagination="false"
+    [nzFooter]="tableFooter">
+    <ng-template #tableTotal>
+      总计 {{page.total}} 条
+    </ng-template>
+      <ng-template #tableFooter>
+        <div nz-row nzType="flex" nzAlign="middle" class="fr">
+          <div nz-col nzSpan="24">
+            <nz-pagination [nzShowTotal]="tableTotal" [(nzPageIndex)]="page.pageIndex" [nzPageSize]="page.pageSize"
+              (nzPageSizeChange)="pageSizeChange($event)" (nzPageIndexChange)="pageIndexChange($event)" [(nzTotal)]="page.total"
+              nzShowSizeChanger [nzPageSizeOptions]="page.sizeOptions" nzShowQuickJumper></nz-pagination>
+          </div>
+        </div>
+      </ng-template>
+      <thead>
+        <tr>
+          <th nzWidth="100px">类型</th>
+          <th nzWidth="100px">所在区域(省)</th>
+          <th nzWidth="100px">所在国家(市)</th>
+          <th nzWidth="180px">名称</th>
+          <th nzWidth="100px">港口代码</th>
+          <th nzWidth="100px">是否启用</th>
+          <th nzWidth="100px">新增人</th>
+          <th nzWidth="100px">新增时间</th>
+          <th nzWidth="100px">修改人</th>
+          <th nzWidth="100px">修改时间</th>
+          <th nzWidth="100px">备注</th>
+          <th nzWidth="180px">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-template ngFor let-item [ngForOf]="basicTable.data">
+          <tr ngForm #rowForm="ngForm" [ngClass]="item.rowClass">
+            <td> 
+                <ng-container *ngIf="item.isEditing">
+                    <nz-select  style="width: 120px;" [(ngModel)]="item.type" name="type" nzPlaceHolder="状态">
+                        <nz-option *ngFor="let option of statusHarbor" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+                    </nz-select>
+                </ng-container>
+                <ng-container *ngIf="!item.isEditing">
+                    {{ item.type }} 
+                </ng-container>
+             </td>
+            <td> 
+                <ng-container *ngIf="item.isEditing">
+                  <input type="text" style="width: 120px;" nz-input  [(ngModel)]="item.continent" name="continent" value={{item.continent}}> 
+                </ng-container>
+                <ng-container *ngIf="!item.isEditing">
+                  {{ item.continent }}  
+                </ng-container>
+            </td>
+            <td> 
+                <ng-container *ngIf="item.isEditing">
+                    <input type="text" style="width: 120px;" nz-input  [(ngModel)]="item.country" name="country" value={{item.country}}> 
+                  </ng-container>
+                  <ng-container *ngIf="!item.isEditing">
+                      {{ item.country }} 
+                </ng-container>
+            </td>
+            <td>
+                <ng-container *ngIf="item.isEditing">
+                    <input type="text" style="width: 80px;" nz-input  [(ngModel)]="item.harborName" name="harborName" value={{item.harborName}}> 
+                  </ng-container>
+                  <ng-container *ngIf="!item.isEditing">
+                      {{ item.harborName }}
+                </ng-container>
+            </td>
+            <td> 
+                <ng-container *ngIf="item.isEditing">
+                    <input type="text" style="width: 80px;" nz-input  [(ngModel)]="item.harborCode" name="harborCode" value={{item.harborCode}}> 
+                  </ng-container>
+                  <ng-container *ngIf="!item.isEditing">
+                      {{ item.harborCode }}
+                </ng-container>
+            </td>
+            <td>
+                <ng-container *ngIf="item.status==='10'">
+                  启用
+                </ng-container>
+                <ng-container *ngIf="item.status==='20'">
+                  禁用
+                </ng-container>
+            </td><!--10为启用，20为禁用-->
+            <td> {{ item.createId }} </td>
+            <td> {{ item. createDate}} </td>
+            <td> {{ item. updateId}} </td>
+            <td> {{ item. updateDate}} </td>
+            <td> 
+                <ng-container *ngIf="item.isEditing">
+                    <input type="text" style="width: 150px;" nz-input  [(ngModel)]="item.remark" name="remark" value={{item.remark}}> 
+                  </ng-container>
+                  <ng-container *ngIf="!item.isEditing">
+                      {{ item. remark}} 
+                </ng-container>
+            </td>
+            <td nzRight="0px">
+              <ng-container *ngIf="!item.isEditing">
+                <button nz-button nzType="default" class="m-r" (click)="item.isEditing = true">修改</button>
+                <button nz-popconfirm nzTitle="是否确认修改启用状态?" (nzOnConfirm)="delete(item)" (nzOnCancel)="cancel()" 
+                        nz-button nzType="{{item.status==='10'?'default':'primary'}}" nzGhost class="m-r">
+                  <ng-container *ngIf="item.status==='10'">
+                      禁用
+                    </ng-container>
+                    <ng-container *ngIf="item.status==='20'">
+                      启用
+                    </ng-container></button>
+              </ng-container>
+              <ng-container *ngIf="item.isEditing">
+                <p class="b-t p-sm-tb">
+                  <button nz-button nzType="default" class="m-r" (click)="item.isEditing=false">取消</button>
+                  <button nz-button nzType="primary" class="m-r" [nzLoading]="loading" [disabled]="rowForm.pristine || rowForm.invalid"
+                    (click)="save(item)">保存</button>
+                </p>
+              </ng-container>
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </nz-table>
+    
+    <!-- </nz-card> -->
+    
+    
+    <nz-modal [nzWidth]="'75%'" [nzVisible]="companyIsVisible" [nzTitle]="companyTitle" [nzContent]="companyContent"
+      [nzFooter]="companyFooter" (nzOnCancel)="companyIsVisible=false">
+      <ng-template #companyTitle>
+        新增港口
+      </ng-template>
+      <ng-template #companyContent>
+        <form nz-form [nzLayout]="'inline'" >
+          <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" style="padding-right: 16px;">
+          <!--填写的东西-->
+          <nz-form-item>
+            <div nz-col nzSpan="24">
+                <div nz-col nzSpan="8">
+                  <nz-form-item>
+                    <nz-form-label nzRequired  nzSpan="10">港口类型</nz-form-label>
+                    <nz-form-control nzSpan="14">
+                      <nz-select style="width: 120px;" [(ngModel)]="basicHarborNew.type" name="type" nzPlaceHolder="--请选择--">
+                        <nz-option *ngFor="let option of statusHarbor" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+                      </nz-select>
+                      <!-- <nz-form-explain *ngIf="basicHarborNew.type.dirty && basicHarborNew.type.errors">请选择货主!</nz-form-explain> -->
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                
+                <div nz-col nzSpan="8">
+                  <nz-form-item>
+                    <nz-form-label nzRequired  nzSpan="10">港口所在城市</nz-form-label>
+                    <nz-form-control nzSpan="14">
+                      <input type="text" nz-input [(ngModel)]="basicHarborNew.continent" name="continent" >
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+
+                <div nz-col nzSpan="8">
+                  <nz-form-item>
+                    <nz-form-label nzRequired  nzSpan="10">港口所在省份</nz-form-label>
+                    <nz-form-control nzSpan="14">
+                      <input type="text" nz-input [(ngModel)]="basicHarborNew.country"  name="country">
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+              <div nz-col nzSpan="24">
+                <div nz-col nzSpan="8">
+                  <nz-form-item>
+                    <nz-form-label nzRequired  nzSpan="10">港口名称</nz-form-label>
+                    <nz-form-control nzSpan="14">
+                      <input type="text" nz-input  [(ngModel)]="basicHarborNew.harborName" name="harborName" >
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+
+                <div nz-col nzSpan="8">
+                  <nz-form-item>
+                    <nz-form-label   nzSpan="10">港口代码</nz-form-label>
+                    <nz-form-control nzSpan="14">
+                      <input type="text" nz-input [(ngModel)]="basicHarborNew.harborCode" name="harborCode" >
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+
+                <div nz-col nzSpan="8">
+                    <nz-form-item>
+                      <nz-form-label   nzSpan="10">港口备注</nz-form-label>
+                      <nz-form-control nzSpan="14">
+                        <input type="text" nz-input  [(ngModel)]="basicHarborNew.remark" name="remark" >
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+            </div>
+
+          </nz-form-item>
+          </div>
+        </form>
+      </ng-template>
+    
+      <ng-template #companyFooter>
+        <p class="b-t p-sm-tb">
+          <button nz-button nzType="default" class="m-r" (click)="companyIsVisible=false">取消</button>
+          <button nz-button nzType="primary" class="m-r" [nzLoading]="insertLoading" (click)="insertList()">确认</button>
+        </p>
+      </ng-template>
+    </nz-modal>

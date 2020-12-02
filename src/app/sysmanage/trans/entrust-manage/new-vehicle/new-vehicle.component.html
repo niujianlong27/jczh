@@ -1,0 +1,10 @@
+<app-searchform gridId="grid1" [triggerSearch]="true" (search)="search($event)"></app-searchform>
+<tpl-buttons
+gridId="grid1"
+(btnClick)="click($event)"
+[btnLoading]="{ Export: downLoading }"></tpl-buttons>
+<app-table-form 
+gridId="grid1"
+[listLoading]="loading"
+[totalPage]="total"
+[dataSet]="data"></app-table-form>

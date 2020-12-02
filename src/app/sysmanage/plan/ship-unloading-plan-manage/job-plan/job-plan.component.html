@@ -1,0 +1,153 @@
+<app-searchform (search)="listSearch($event)">
+</app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)">
+</tpl-buttons>
+<app-grid-resize [gridOne]="gridOne" [gridTwo]="gridTwo" (selfHeightResult)="gridHeight($event)">
+  <ng-template #gridOne>
+    <app-table-form [gridId]="'grid1'" [selfTableHeight]="gridOneHeight" [dataSet]="dataSet1" [pageSize]="pageSize1"
+                    [totalPage]="totalPages1" [isMutli]="true" [trSelectedShow]="true" [listLoading]="listLoading1"
+                    (listClick)="listClick($event)" (pageIndexEmit)='getPageIndex1($event)'
+                    (pageSizeEmit)='getPageSize1($event)' (updateDataResult)="updateDataResult($event)">
+    </app-table-form>
+  </ng-template>
+  <ng-template #gridTwo>
+<!--    <p input-blur>作业计划明细</p>-->
+    <app-table-form [pageFun]='true' [extraTableHeight]="30" [gridId]="'grid2'" [dataSet]="dataSet2"
+                    [pageSize]="pageSize2" [totalPage]="totalPages2" [listLoading]="listLoading2" [isMutli]="true"
+                    [isCheckBox]="false" [selfTableHeight]="gridTwoHeight" [showCount]="false"
+                    (pageIndexEmit)='getPageIndex2($event)' (pageSizeEmit)='getPageSize2($event)'>
+    </app-table-form>
+  </ng-template>
+</app-grid-resize>
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>
+
+
+<nz-modal nzWidth="70%" [nzStyle]="{ top: '10px' }" [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" [nzOkLoading]="modalOkLoading"
+          [nzMaskClosable]="false" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()">
+<!--  <button nz-button nzGhost type="button" nzType="primary" [disabled]="this.status==='update'" (click)="openModule()">-->
+<!--    选择调度计划-->
+<!--  </button>-->
+  <form nz-form [formGroup]="modalValidateForm" style="padding:15px 20px 0px 0px">
+
+    <nz-form-item>
+<!--      <nz-form-label [nzXs]="2" nzFor="disNum">作业计划号</nz-form-label>-->
+<!--      <nz-form-control [nzXs]="4">-->
+<!--        <input type="text" nz-input name="disNum" formControlName="disNum" placeholder="系统生成">-->
+<!--      </nz-form-control>-->
+
+<!--      <nz-form-label [nzXs]="2" nzFor="scheduleNum">调度计划号</nz-form-label>-->
+<!--      <nz-form-control [nzXs]="4">-->
+<!--        <input type="text" nz-input name="scheduleNum" formControlName="scheduleNum">-->
+<!--      </nz-form-control>-->
+
+      <nz-form-label [nzXs]="2" nzFor="boatBatchNum">船批号</nz-form-label>
+      <nz-form-control [nzXs]="4">
+        <input type="text" nz-input name="boatBatchNum" formControlName="boatBatchNum">
+      </nz-form-control>
+
+      <nz-form-label [nzXs]="2" nzFor="boatName">船名</nz-form-label>
+      <nz-form-control [nzXs]="4">
+        <input type="text" nz-input name="boatName" formControlName="boatName">
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzXs]="2" nzFor="captain">船长</nz-form-label>
+      <nz-form-control [nzXs]="4">
+        <input type="text" nz-input name="captain" formControlName="captain">
+      </nz-form-control>
+
+      <nz-form-label [nzXs]="2" nzFor="captain">联系电话</nz-form-label>
+      <nz-form-control [nzXs]="4">
+        <input type="text" nz-input name="captain" formControlName="captain">
+      </nz-form-control>
+      <nz-form-label [nzXs]="2" nzRequired nzFor="optTeamNum">作业班组</nz-form-label>
+      <nz-form-control [nzXs]="4">
+
+        <ng-container *ngIf="status == 'add'">
+          <nz-select formControlName="optTeamNum" (ngModelChange)="selectModelChange($event)">
+            <nz-option *ngFor="let i of boatTeam" [nzLabel]="i.teamName" [nzValue]="i.teamId"></nz-option>
+          </nz-select>
+        </ng-container>
+
+        <ng-container *ngIf="status == 'update'">
+          <input type="text" nz-input name="optTeamNum" formControlName="optTeamNum">
+        </ng-container>
+
+        <nz-form-explain
+          *ngIf="modalValidateForm.get('optTeamNum').dirty && modalValidateForm.get('optTeamNum').errors">
+          请选择作业班组
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <!--    <nz-form-item>-->
+
+    <!--      <nz-form-label nzRequired [nzXs]="3" nzFor="expectStartTime">计划开始作业时间</nz-form-label>-->
+    <!--      <nz-form-control [nzXs]="6">-->
+    <!--        <nz-date-picker nzShowTime name="expectStartTime" formControlName="expectStartTime"-->
+    <!--                        nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>-->
+    <!--        <nz-form-explain-->
+    <!--          *ngIf="modalValidateForm.get('expectStartTime').dirty && modalValidateForm.get('expectStartTime').errors">-->
+    <!--          请选择计划开始作业时间-->
+    <!--        </nz-form-explain>-->
+    <!--      </nz-form-control>-->
+
+    <!--      <nz-form-label nzRequired [nzXs]="3" nzFor="expectEndTime">计划结束作业时间</nz-form-label>-->
+    <!--      <nz-form-control [nzXs]="6">-->
+    <!--        <nz-date-picker nzShowTime name="expectEndTime" formControlName="expectEndTime"-->
+    <!--                        nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>-->
+    <!--        <nz-form-explain-->
+    <!--          *ngIf="modalValidateForm.get('expectEndTime').dirty && modalValidateForm.get('expectEndTime').errors">-->
+    <!--          请选择计划结束作业时间-->
+    <!--        </nz-form-explain>-->
+    <!--      </nz-form-control>-->
+
+    <!--    </nz-form-item>-->
+  </form>
+  <!--  <div *ngIf="status == 'add'">-->
+  <!--    <app-table-form formId="form_boat_workschedule_item" [pageFun]='true' [gridId]="'grid2'" [dataSet]="modelRight"-->
+  <!--                    [pageSize]="modelRightSize" [totalPage]="modelRighttotal" [listLoading]="modellistLoading2"-->
+  <!--                    [showCount]="false" [isMutli]="true" [isCheckBox]="true" (updateDataResult)="itemSelect($event)"-->
+  <!--                    (pageSizeEmit)="modalPageSize($event)" (pageIndexEmit)="modalPageIndex($event)"-->
+  <!--    >-->
+
+  <!--    </app-table-form>-->
+  <!--  </div>-->
+
+
+  <div class="clearfix" style="overflow: hidden;position: relative;">
+    <div nz-row>
+      <div nz-col [nzSpan]="24">
+        <p>待选列表</p>
+        <app-table-form formId="form_boat_workschedule_item" [pageFun]='true' [gridId]="'grid1'" [dataSet]="modelRight"
+                        [pageSize]="modelRightSize" [totalPage]="modelRighttotal" [listLoading]="modellistLoading2"
+                        [isMutli]="true" [isCheckBox]="false" [showCount]="false" [extraTableHeight]="240" [nzShowPagination]="false"
+                        (listClick)="rightupdateDataResult($event)">
+        </app-table-form>
+      </div>
+
+      <div nz-col [nzSpan]="24">
+        <p>已选列表</p>
+        <app-table-form formId="form_boat_workschedule_item" [pageFun]='true' [gridId]="'grid2'" [dataSet]="modelLeft"
+                        [pageSize]="modelLeftSize" [totalPage]="modelLefttotal" [isMutli]="true" [isCheckBox]="false"
+                        [trSelectedShow]="true" [listLoading]="modellistLoading1" [extraTableHeight]="240"
+                        (listClick)="leftupdateDataResult($event)">
+        </app-table-form>
+      </div>
+    </div>
+
+  </div>
+
+
+</nz-modal>
+
+<!--调度计划弹窗-->
+<nz-modal nzWidth="60%" [(nzVisible)]="modalFormVisible1" [nzTitle]="modalTitle2" (nzOnCancel)="handleCancel1()"
+          (nzOnOk)="handleOk1()" (nzAfterClose)="handleCancel1()">
+  <app-table-form formId="form_boat_schedule" gridId="grid1" [dataSet]="PlanModalList" [totalPage]="PlanModalTotal"
+                  [pageSize]="PlanModalPageSize" [pageFun]="true" (updateDataResult)="PlanModalUpdateChange($event)"
+                  (pageSizeEmit)="PlanModalPageSizeChange($event)" (pageIndexEmit)="PlanModalPageIndexChange($event)">
+  </app-table-form>
+</nz-modal>

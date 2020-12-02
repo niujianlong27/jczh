@@ -1,0 +1,191 @@
+<!-- <nz-layout>
+  <nz-header class="w">
+    <img src="../../assets/img/banner.svg" alt="图片" width="222" height="48">
+  </nz-header>
+
+  <nz-content class="w">
+    <div class="content-box">
+      <div class="login-box">
+
+        <p class="login-title">密码登录</p>
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-input-group>
+                <div class="login-user">
+                  <nz-input-group [nzAddOnBefore]="namePrefix" [nzSuffix]="nameSuffix">
+                    <input type="text" nz-input formControlName="userName" placeholder="输入用户名/手机号">
+                  </nz-input-group>
+                  <ng-template #namePrefix>
+                    <img src="../../assets/img/1.svg" height="21" width="13.34">
+                  </ng-template>
+                  <ng-template #nameSuffix>
+                    <img src="../../assets/img/2.svg" height="14" width="14">
+                  </ng-template>
+                  <nz-form-explain *ngIf="validateForm.get('userName')?.dirty && validateForm.get('userName')?.errors">
+                    请输入用户名!
+                  </nz-form-explain>
+                </div>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control>
+              <nz-input-group>
+                <div class="login-password">
+                  <nz-input-group [nzAddOnBefore]="passwordPrefix" [nzSuffix]="passwordSuffix">
+                    <input type="password" nz-input formControlName="password" placeholder="输入密码" autocomplete="off">
+                  </nz-input-group>
+                  <ng-template #passwordPrefix>
+                    <img src="../../assets/img/3.svg" height="21" width="13.34">
+                  </ng-template>
+                  <ng-template #passwordSuffix>
+                    <img src="../../assets/img/4.svg" height="11" width="15">
+                  </ng-template>
+                  <nz-form-explain *ngIf="validateForm.get('password')?.dirty && validateForm.get('password')?.errors">
+                    请输入密码!
+                  </nz-form-explain>
+                </div>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control>
+              <div class="btn">
+                <p>
+                  <label nz-checkbox formControlName="remember">
+                    <span>记住密码</span>
+                  </label>
+                  <button nz-button class="login-form-button btn-pass" [nzType]="'primary'">
+                    <span [hidden]="!logining" class="btn-text"><i nz-icon nzType="loading" nzTheme="outline"></i>&nbsp;<b>正在登录中</b></span>
+                    <span [hidden]="logining" class="btn-text">登  录</span>
+                  </button>
+                </p>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+        <p class="login-text">
+          <a class="fr">免费注册</a>
+          <a class="fr">忘记账户名</a>
+          <a class="fr">忘记密码?</a>
+
+        </p>
+
+      </div>
+    </div>
+  </nz-content>
+</nz-layout>
+
+<app-footer></app-footer>
+<app-reset-psw [nzClosable]="false" [nzMaskClosable]="false" title="初始密码修改" [cancelBtnShow]="false"
+               [pswModalOpen]="pswModalOpen" (pswResult)="pswModalResult($event)"></app-reset-psw>
+
+<app-switch-company [isLogin]="true" [modalVisible]='modalVisible' [data]='list' (modalClose)="modalClose()" (modalResult)="modalOk($event)"></app-switch-company> -->
+
+<nz-layout class="app-layout">
+  <app-home-page-header></app-home-page-header>
+  <nz-content>
+    <div class="background">
+
+      <div class="login">
+        <nz-spin [nzSimple]="false" [nzSpinning]="loginLoading">
+
+          <div nz-row nzJustify="center" nzType="flex">
+            <div nz-col nzSpan="16">
+              <!-- <p class="loginText">欢迎登录</p> -->
+              <nz-tabset (nzSelectedIndexChange)="SelectedIndexChange($event)">
+                <nz-tab nzTitle="运输端"></nz-tab>
+                <nz-tab nzTitle="货主端"></nz-tab>
+              </nz-tabset>
+            </div>
+            <div nz-col nzSpan="16">
+              <!-- <nz-radio-group class="platform" nzSize="small" [(ngModel)]="loginModeValue"
+                              [ngModelOptions]="{standalone:true}">
+                <div nz-row nzJustify="center" nzGutter="1" nzType="flex">
+                  <label class="label-text" nz-col nzSpan="7" nz-radio nzValue="v3">汽运</label>
+
+                  <label class="label-text" nzDisabled="true" nz-col nzSpan="6" nz-radio nzValue="v1">水运</label>
+
+                  <label class="label-text" nzDisabled="true" nz-col nzSpan="7" nz-radio nzValue="cargoOwner">货主</label>
+                </div>
+              </nz-radio-group> -->
+              <!-- <ng-container *ngIf="loginModeValue==='v1'">
+                <div nz-row nzJustify="center" nzType="flex">
+                  <nz-radio-group nzSize="small" [(ngModel)]="v1RadioValue">
+                    <label class="v1-label-text" nz-radio nzValue="2">承运</label>
+
+                    <label class="v1-label-text" nz-radio nzValue="1">货主</label>
+
+                    <label class="v1-label-text" nz-radio nzValue="3">物流公司</label>
+                  </nz-radio-group>
+                </div>
+
+              </ng-container> -->
+
+            </div>
+            <div nz-col nzSpan="16">
+              <form nz-form class="login-form" [formGroup]="form">
+                <nz-form-item>
+                  <nz-form-control>
+                    <nz-input-group [nzPrefix]="prefixUser">
+                      <input type="text" nz-input formControlName="loginName" placeholder="请输入用户名/手机号"/>
+                    </nz-input-group>
+                    <nz-form-explain *ngIf="form.get('loginName')?.dirty && form.get('loginName')?.errors">
+                      请输入用户名!
+                    </nz-form-explain>
+                  </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                  <nz-form-control>
+                    <nz-input-group [nzPrefix]="prefixLock">
+                      <input type="password" nz-input formControlName="password" placeholder="请输入密码"/>
+                    </nz-input-group>
+                    <nz-form-explain *ngIf="form.get('password')?.dirty && form.get('password')?.errors">
+                      请输入密码!
+                    </nz-form-explain>
+                  </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                  <nz-form-control>
+                    <button nz-button class="login-form-button" [nzType]="'primary'" (click)="selectLogin()">立即登录
+                    </button>
+
+                    <label nz-checkbox > <span style="color: white;">记住密码</span></label>
+                    <div class="clear">
+                      <p class="login-other-text">
+                        <span (click)="register()">免费注册</span>
+                        <span (click)="update()">忘记密码</span>
+                      </p>
+                    </div>
+
+                  </nz-form-control>
+                </nz-form-item>
+              </form>
+              <ng-template #prefixUser><i nz-icon type="user"></i></ng-template>
+              <ng-template #prefixLock><i nz-icon type="lock"></i></ng-template>
+            </div>
+          </div>
+        </nz-spin>
+      </div>
+    </div>
+  </nz-content>
+
+</nz-layout>
+
+
+  <nz-modal [(nzVisible)]="isVisible" nzWidth="30%" [nzFooter]="null" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()">
+    <p class="massge">您认证的信息有误，需重新填写</p>
+    <p (click)="handleOk()" class="jump">点此完善信息>></p>
+  </nz-modal>
+
+  <ng-template #modalTitle>
+    <div class="massge">提示信息</div>
+  </ng-template>
+
+
+<app-switch-company [isLogin]="true"  [modalVisible]="modalVisible" [data]="list"  (modalClose)="modalClose()"
+                    (modalResult)="modalOk($event)"></app-switch-company>
+<app-home-page-footer></app-home-page-footer>
+<app-reset-psw [nzClosable]="false" [nzMaskClosable]="false" title="初始密码修改" [cancelBtnShow]="false"
+               [pswModalOpen]="pswModalOpen" (pswResult)="pswModalResult($event)"></app-reset-psw>

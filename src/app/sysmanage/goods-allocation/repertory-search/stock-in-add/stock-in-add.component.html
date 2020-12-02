@@ -1,0 +1,88 @@
+<form nz-form [formGroup]="validateForm" style="padding:15px 20px 0px 0px">
+  <nz-form-item>
+    <nz-form-label [nzXs]="2" nzFor="inWsNo">入库单号</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input type="text" nz-input name="inWsNo" formControlName="inWsNo" placeholder="系统生成" disabled="true">
+    </nz-form-control>
+    <nz-form-label [nzXs]="2" nzRequired nzFor="inWsTime">入库时间</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <nz-date-picker nzShowTime name="inWsTime" formControlName="inWsTime"
+                      nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>
+      <nz-form-explain *ngIf="validateForm.get('inWsTime').dirty && validateForm.get('inWsTime').errors">请选择入库时间
+      </nz-form-explain>
+    </nz-form-control>
+
+
+
+
+    <nz-form-label [nzXs]="2" nzFor="travelno">车船号</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="travelno" id="travelno">
+      <nz-form-explain *ngIf="validateForm.get('travelno').dirty && validateForm.get('travelno').errors">请输入船号
+      </nz-form-explain>
+    </nz-form-control>
+
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzXs]="2" nzRequired nzFor="operUser">操作人</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="operUser" id="poerUser">
+      <nz-form-explain *ngIf="validateForm.get('operUser').dirty && validateForm.get('operUser').errors">请输入操作人
+      </nz-form-explain>
+    </nz-form-control>
+
+    <nz-form-label [nzXs]="2" nzRequired nzFor="operTime">操作时间</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <nz-date-picker nzShowTime name="operTime" formControlName="operTime"
+                      nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>
+      <nz-form-explain *ngIf="validateForm.get('operTime').dirty && validateForm.get('operTime').errors">请选择操作时间
+      </nz-form-explain>
+    </nz-form-control>
+
+    <nz-form-label [nzXs]="2" nzRequired nzFor="operTeam">操作班组</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <!--<input nz-input formControlName="operTeam" id="operTeam">-->
+      <!--<nz-form-explain *ngIf="validateForm.get('operTeam').dirty && validateForm.get('operTeam').errors">请输入操作班组-->
+      <!--</nz-form-explain>-->
+
+
+    </nz-form-control>
+
+    <nz-form-label [nzXs]="2" nzFor="tallyman">理货员</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="tallyman" id="tallyman">
+      <nz-form-explain *ngIf="validateForm.get('tallyman').dirty && validateForm.get('tallyman').errors">请输入理货员
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+
+
+    <nz-form-label [nzXs]="2" nzFor="craneOper">吊机工</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input nz-input formControlName="craneOper" id="craneOper">
+      <nz-form-explain *ngIf="validateForm.get('craneOper').dirty && validateForm.get('craneOper').errors">请输入吊机工
+      </nz-form-explain>
+    </nz-form-control>
+    <nz-form-label [nzXs]="2" nzFor="remark">备注</nz-form-label>
+    <nz-form-control [nzXs]="10">
+      <input nz-input formControlName="remark" id="remark">
+    </nz-form-control>
+  </nz-form-item>
+
+
+</form>
+<tpl-buttons [formId]="'form_stock_in_add'" (btnClick)='btnClick($event)' [btnDisable]="btnDisable"></tpl-buttons>
+<app-table-form [popData]='popData' [formId]="'form_stock_in_add'"
+                [gridId]="'grid1'"
+                (userColumnsEmit)='getUserHeader($event)'
+                [dataSet]="dataSet1" [gridOperate]="{show:true,title:'操作',template:g1}"
+                [popTableData]="popTableData"
+                [nzShowPagination]="false" [isCheckBox]="false"
+                [listLoading]="listLoading1"
+                (inpEmit)="inpEmitDetail($event)">
+  <ng-template #g1 let-data let-index="index">
+    <a (click)="delete(data,index)" a>删除</a>
+  </ng-template>
+</app-table-form>

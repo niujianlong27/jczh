@@ -1,0 +1,44 @@
+<form nz-form [formGroup]="validateForm" style="padding-top: 2%">
+  <div nz-row [nzGutter]="8" [nzType]="'flex'">
+    <div nz-col [nzSpan]="6" *ngFor="let control of controlArray">
+      <nz-form-item>
+        <nz-form-label [nzRequired]="control.require" [nzSpan]="8"
+                       [nzFor]="control.eName">{{ control.cName}}</nz-form-label>
+        <nz-form-control [nzSpan]="16">
+
+          <input-modal *ngIf="control.type == 'modal'" [isMutli]="false" [findset]="formIdFindset"
+                       [inputModalModel]="inputModalModel" (inpEmit)="inpEmit($event)" [borderRed]="borderRed"
+                       [DISABLED]="true"></input-modal>
+
+          <input *ngIf="control.type == 'text'" nz-input [type]="control.type" [formControlName]="control.eName"
+                 [attr.id]="control.eName">
+
+          <nz-date-picker *ngIf="control.type == 'data'" [formControlName]="control.eName"></nz-date-picker>
+
+
+
+          <nz-radio-group [attr.id]="control.eName" *ngIf="control.type == 'radio'" [formControlName]="control.eName">
+            <label nz-radio [nzValue]="r.value" *ngFor="let r of isShArr">{{r.name}}</label>
+          </nz-radio-group>
+
+          <nz-form-explain *ngIf="validateForm.get(control.eName).dirty && validateForm.get(control.eName).errors">
+            <ng-container *ngIf="validateForm.get(control.eName).hasError('required')">
+              {{control.validateCon}}
+            </ng-container>
+            <ng-container *ngIf="validateForm.get(control.eName).hasError('pattern')">
+              {{control.validators.patternErr}}
+            </ng-container>
+
+          </nz-form-explain>
+
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row>
+    <div nz-col [nzSpan]="24" style="text-align: right;">
+      <button nz-button [nzLoading]="submitLoading" [nzType]="'primary'" (click)="submitForm()">确定</button>
+      <button nz-button (click)="cancel()">取消</button>
+    </div>
+  </div>
+</form>

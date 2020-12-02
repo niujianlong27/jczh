@@ -1,0 +1,168 @@
+<common-page [caculateEnameArr]='caculateEnameArr' (search)='listSearch($event)' [isMutli]="isMutli" [dataSet]='dataSet'
+             [triggerSearch]="true"
+             [pageSize]='pageSize' [totalPage]='totalPages' [listLoading]='listLoading' (btnClick)='btnClick($event)'
+             (updateDataResult)='updateData($event)'></common-page>
+
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+          [nzMaskClosable]="false">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData" [hidden]='m.hidden'>
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.validators.require">
+        {{m.name}}
+      </nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-date-picker *ngIf="m.type == 'time'" [formControlName]="m.eName"></nz-date-picker>
+        <nz-select style="width: 100px" nzAllowClear nzPlaceHolder="请选择" formControlName="{{m.eName}}"
+                   *ngIf="m.type == 'select'">
+          <nz-option *ngFor="let o of m.selectArr" [nzValue]="o.value" [nzLabel]="o.name"></nz-option>
+        </nz-select>
+
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'number'">
+
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'">
+
+        <input-modal *ngIf="m.type == 'inputModal'" [borderRed]="status" [(inputModalModel)]="commissionClientName"
+                     [findset]="{formId:'company_pop',name:'收款单位',parameter:'companyName',parameterSend:'companyId'}"
+                     [DISABLED]="true" (inpEmit)='inpEmit($event)'></input-modal>
+        <input-modal *ngIf="m.type == 'inputModalCarrier'" [(inputModalModel)]="carrierCompanyName"
+                     [findset]="{formId:'form_rec_test',name:'付款单位',parameter:'companyName',parameterSend:'settleCompanyId', url: 'getRecCompany'}"
+                     [DISABLED]="true"></input-modal>
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+          <div *ngIf="modalValidateForm.get(m.eName).errors['pattern'];else erroInf">
+            {{ m.validators.patternErr}}
+          </div>
+          <ng-template #erroInf>
+            {{ m.validateCon}}
+          </ng-template>
+        </nz-form-explain>
+        <nz-form-explain style="color: #f5222d;" *ngIf="status && m.eName ==='commissionClientName'">请输入收款单位
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>
+
+<nz-modal [nzWidth]="800" [(nzVisible)]="modalFormVisible2" [nzTitle]="modalTitle" [nzOkLoading]="modalOkLoading"
+          (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzMaskClosable]="false">
+  <form nz-form [formGroup]="modalValidateForm2">
+    <nz-form-item *ngFor="let m of modalFormData2" [hidden]='m.hidden'>
+      <nz-form-label [nzRequired]="m.validators.require" [nzSpan]="3">
+        {{m.name}}
+      </nz-form-label>
+      <nz-form-control [nzSpan]="21">
+
+        <nz-date-picker *ngIf="m.type == 'time'" [formControlName]="m.eName"></nz-date-picker>
+
+        <nz-radio-group *ngIf="m.type == 'radio'" formControlName="{{m.eName}}"
+                        (ngModelChange)="channelsChange($event)">
+          <label nz-radio *ngFor="let o of channelData" [nzValue]="o.channelId">
+            <img src="{{o.logo?o.logo:logo}}" height="20" width="20">{{o.channelName}}
+          </label>
+        </nz-radio-group>
+
+        <!--        <nz-select style="width: 100px" nzAllowClear nzPlaceHolder="请选择" formControlName="{{m.eName}}"
+                           (ngModelChange)="channelsChange($event)" *ngIf="m.type == 'select'">
+                  <nz-option nzCustomContent *ngFor="let o of channelData" [nzValue]="o.channelId" [nzLabel]="o.channelName">
+                    <img src="{{o.logo?o.logo:logo}}" height="20" width="20">{{o.channelName}}
+                  </nz-option>
+                </nz-select>-->
+
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'number'">
+
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'">
+
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName"
+               *ngIf="m.type == 'password'">
+
+        <input-modal *ngIf="m.type == 'inputModal'" [borderRed]="status" [(inputModalModel)]="commissionClientName"
+                     [findset]="{formId:'company_pop',name:'收款单位',parameter:'companyName',parameterSend:'companyId'}"
+                     [DISABLED]="true"
+                     (inpEmit)='inpEmit($event)'></input-modal>
+
+        <textarea *ngIf="m.type == 'textarea'" rows="9" cols="100" style="font-family: '宋体',sans-serif " nz-input
+                  formControlName="remark"></textarea>
+
+        <nz-form-explain *ngIf="modalValidateForm2.get(m.eName).dirty && modalValidateForm2.get(m.eName).errors">
+          <div *ngIf="modalValidateForm2.get(m.eName).errors['pattern'];else erroInf">
+            {{ m.validators.patternErr}}
+          </div>
+          <ng-template #erroInf>
+            {{ m.validateCon}}
+          </ng-template>
+        </nz-form-explain>
+        <nz-form-explain style="color: #f5222d;" *ngIf="status && m.eName ==='commissionClientName'">请输入收款单位
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>
+
+
+<nz-modal [nzWidth]="800" [(nzVisible)]="modalFormVisible3" [nzTitle]="modalTitle" [nzOkLoading]="modalOkLoading"
+          (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzMaskClosable]="false">
+  <form nz-form [formGroup]="modalValidateForm3">
+    <nz-form-item *ngFor="let m of modalFormData3" [hidden]='m.hidden'>
+      <nz-form-label [nzRequired]="m.validators.require" [nzSpan]="3">
+        {{m.name}}
+      </nz-form-label>
+      <nz-form-control [nzSpan]="21">
+
+        <nz-date-picker *ngIf="m.type == 'time'" [formControlName]="m.eName"></nz-date-picker>
+
+        <nz-radio-group *ngIf="m.type == 'radio'" formControlName="{{m.eName}}"
+                        (ngModelChange)="batchChannelsChange($event)">
+          <label nz-radio *ngFor="let o of channelData" [nzValue]="o.channelId">
+            <img src="{{o.logo?o.logo:logo}}" height="20" width="20">{{o.channelName}}
+          </label>
+        </nz-radio-group>
+
+        <!--        <nz-select style="width: 100px" nzAllowClear nzPlaceHolder="请选择" formControlName="{{m.eName}}"
+                           (ngModelChange)="channelsChange($event,modalValidateForm3)" *ngIf="m.type == 'select'">
+                  <nz-option nzCustomContent *ngFor="let o of channelData" [nzValue]="o.channelId" [nzLabel]="o.channelName">
+                    <img src="{{o.logo?o.logo:logo}}" height="20" width="20">{{o.channelName}}
+                  </nz-option>
+                </nz-select>-->
+
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'number'">
+
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName" *ngIf="m.type == 'text'">
+
+        <input type="{{m.type}}" nz-input formControlName="{{m.eName}}" [attr.id]="m.eName"
+               *ngIf="m.type == 'password'">
+
+        <input-modal *ngIf="m.type == 'inputModal'" [borderRed]="status" [(inputModalModel)]="commissionClientName"
+                     [findset]="{formId:'company_pop',name:'收款单位',parameter:'companyName',parameterSend:'companyId'}"
+                     [DISABLED]="true" (inpEmit)='inpEmit($event)'></input-modal>
+
+        <textarea *ngIf="m.type == 'textarea'" rows="9" cols="100" style="font-family: '宋体',sans-serif " nz-input
+                  formControlName="remark"></textarea>
+
+        <nz-form-explain *ngIf="modalValidateForm2.get(m.eName).dirty && modalValidateForm2.get(m.eName).errors">
+          <div *ngIf="modalValidateForm2.get(m.eName).errors['pattern'];else erroInf">
+            {{ m.validators.patternErr}}
+          </div>
+          <ng-template #erroInf>
+            {{ m.validateCon}}
+          </ng-template>
+        </nz-form-explain>
+        <nz-form-explain style="color: #f5222d;" *ngIf="status && m.eName ==='commissionClientName'">请输入收款单位
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>
+
+<ng-template #reject>
+  <form nz-form [formGroup]="rejectForm">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzFor="paymentNo" nzRequired>请款单号</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <input nz-input name="paymentNo" type="text" id="paymentNo" formControlName="paymentNo">
+      </nz-form-control>
+      <nz-form-label [nzSpan]="6" nzFor="rejectReason" nzRequired>驳回理由</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <input nz-input name="rejectReason" type="text" id="rejectReason" formControlName="rejectReason">
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</ng-template>

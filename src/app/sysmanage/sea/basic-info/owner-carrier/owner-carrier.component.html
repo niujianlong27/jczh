@@ -1,0 +1,173 @@
+<!-- <nz-card [nzTitle]="title" [nzBordered]="false">
+  <ng-template #title> -->
+<form nz-form [nzLayout]="'inline'">
+  <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" style="padding-right: 16px;">
+    <div nz-col nzSpan="6">
+      <nz-form-item>
+        <nz-form-label nzSpan="8">货主公司名称</nz-form-label>
+        <nz-form-control nzSpan="16">
+          <nz-select style="width: 100%;" [(ngModel)]="inqu.ownerCompanyId" name="ownerCompanyId" nzPlaceHolder="货主公司名称" 
+            (ngModelChange)="query()" nzShowSearch nzAllowClear>
+            <nz-option *ngFor="let option of ownerCompany" [nzValue]="option.companyId" [nzLabel]="option.companyName"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzSpan="6">
+      <nz-form-item>
+        <nz-form-label nzSpan="8">承运商公司名称</nz-form-label>
+        <nz-form-control nzSpan="16">
+          <input type="text" nz-input [(ngModel)]="inqu.carrierCompanyName" name="carrierCompanyName" nzPlaceHolder="承运商公司名称">
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzSpan="6">
+      <nz-form-item>
+        <nz-form-label nzSpan="8">承运商状态</nz-form-label>
+        <nz-form-control nzSpan="16">
+          <nz-select style="width: 120px;" [(ngModel)]="inqu.status" name="status" nzPlaceHolder="状态" nzAllowClear>
+            <nz-option *ngFor="let option of statusBlacklist" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col nzSpan="24" style="text-align: right;">
+      <p class="b-t p-sm-tb">
+        <button nz-button nzType="default" [hidden]="!isShowCancelButton" class="m-r" (click)="cancel()">
+          <a class="btn-icon">
+            <img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/返回.svg">
+          </a>返回</button>
+        <button nz-button nzType="primary" nzGhost class="m-r" (click)="query()" [nzLoading]="queryLoading">
+          <a class="btn-icon">
+            <img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/查询.svg">
+          </a>查询</button>
+        <button nz-button nzType="primary" nzGhost class="m-r" (click)="openModal()">
+          <a class="btn-icon">
+            <img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/新增.svg">
+          </a>新增</button>
+      </p>
+    </div>
+  </div>
+</form>
+<!-- </ng-template> -->
+
+
+<nz-table #basicTable [nzData]="result" [nzScroll]="{ x: '100%', y: '650px' }" [nzFrontPagination]="false" [nzBordered]="false" nzShowPagination="false"
+  [nzFooter]="tableFooter">
+  <ng-template #tableTotal>
+    总计 {{page.total}} 条
+  </ng-template>
+  <ng-template #tableFooter>
+    <div nz-row nzType="flex" nzAlign="middle" class="fr">
+      <div nz-col nzSpan="24">
+        <nz-pagination [nzShowTotal]="tableTotal" [(nzPageIndex)]="page.pageIndex" [nzPageSize]="page.pageSize"
+          (nzPageSizeChange)="pageSizeChange($event)" (nzPageIndexChange)="pageIndexChange($event)" [(nzTotal)]="page.total"
+          nzShowSizeChanger [nzPageSizeOptions]="page.sizeOptions" nzShowQuickJumper></nz-pagination>
+      </div>
+    </div>
+  </ng-template>
+  <thead>
+    <tr>
+      <th nzWidth="30px" nzLeft="0px" nzShowCheckbox [(nzChecked)]="allChecked" [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="checkAll($event)"></th>
+      <th nzWidth="60px">货主公司ID</th>
+      <th nzWidth="100px">货主公司名称</th>
+      <th nzWidth="60px">承运商公司ID</th>
+      <th nzWidth="100px">承运商公司名称</th>
+      <th nzWidth="60px">状态</th>
+      <th nzWidth="80px">拉黑截止日期</th>
+      
+      <th nzWidth="120px" nzRight="0px">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-template ngFor let-item [ngForOf]="basicTable.data">
+      <tr ngForm #rowForm="ngForm" [ngClass]="item.rowClass">
+        <td nzLeft="0px" nzShowCheckbox [(nzChecked)]="item.checked" name="checked" (nzCheckedChange)="refreshStatus()"></td>
+        <td> {{ item.ownerCompanyId }} </td>
+        <td> {{ item.ownerCompanyName }} </td>
+        <td> {{ item.carrierCompanyId }} </td>
+        <td> {{ item.carrierCompanyName }} </td>
+        <td>
+          <ng-container *ngIf="item.isEditing">
+            <nz-select style="width: 120px;" [(ngModel)]="item.status" name="status" nzPlaceHolder="状态">
+              <nz-option *ngFor="let option of statusBlacklist" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+            </nz-select>
+          </ng-container>
+          <ng-container *ngIf="!item.isEditing">
+            {{item.status | value2label:statusBlacklist }}
+          </ng-container>
+        </td>
+        <td>
+          <ng-container *ngIf="item.isEditing && item.status == '20'">
+            <nz-date-picker [(ngModel)]="item.blacklistEndDate" name="blacklistEndDate" [nzDisabledDate]="disabledDate"></nz-date-picker>
+          </ng-container>
+          <ng-container *ngIf="!item.isEditing">
+            {{item.blacklistEndDate}}
+          </ng-container>
+        </td>
+        <td nzRight="0px">
+          <ng-container *ngIf="!item.isEditing">
+            <button nz-button nzType="default" class="m-r" (click)="item.isEditing = true">修改</button>
+            <button nz-popconfirm nzTitle="是否确认解除该承运商关联?" (nzOnConfirm)="delete(item)" (nzOnCancel)="cancel()" 
+                nz-button nzType="default" nzGhost class="m-r">解除</button>
+      
+          </ng-container>
+          <ng-container *ngIf="item.isEditing">
+            <p class="b-t p-sm-tb">
+              <button nz-button nzType="default" class="m-r" (click)="item.isEditing=false">取消</button>
+              <button nz-button nzType="primary" class="m-r" [nzLoading]="loading" [disabled]="rowForm.pristine || rowForm.invalid"
+                (click)="save(item)">保存</button>
+            </p>
+          </ng-container>
+        </td>
+      </tr>
+    </ng-template>
+  </tbody>
+</nz-table>
+
+<!-- </nz-card> -->
+
+
+<nz-modal [nzWidth]="'75%'" [nzVisible]="companyIsVisible" [nzTitle]="companyTitle" [nzContent]="companyContent"
+  [nzFooter]="companyFooter" (nzOnCancel)="companyIsVisible=false">
+  <ng-template #companyTitle>
+    货主-承运商关系维护
+  </ng-template>
+  <ng-template #companyContent>
+    <form nz-form [formGroup]="form" [nzLayout]="'inline'">
+      <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" style="padding-right: 16px;">
+        <div nz-col nzSpan="8">
+          <nz-form-item>
+            <nz-form-label nzSpan="8">货主</nz-form-label>
+            <nz-form-control nzSpan="16">
+              <nz-select style="width: 100%;" formControlName="ownerCompanyId" (ngModelChange)="queryCarrier()" nzPlaceHolder="请选择货主">
+                <nz-option *ngFor="let option of ownerCompany" [nzValue]="option.companyId" [nzLabel]="option.companyName"></nz-option>
+              </nz-select>
+              <nz-form-explain *ngIf="form.get('ownerCompanyId').dirty && form.get('ownerCompanyId').errors">请选择货主!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="16">
+          <nz-form-item>
+            <nz-form-label nzSpan="4">承运商</nz-form-label>
+            <nz-form-control nzSpan="20">
+              <nz-select style="width: 100%;" formControlName="carrierCompanyIds" nzMode="multiple" nzPlaceHolder="请选择承运商">
+                <nz-option *ngFor="let option of carrierCompany" [nzValue]="option.companyId" [nzLabel]="option.companyName"></nz-option>
+              </nz-select>
+              <nz-form-explain *ngIf="form.get('carrierCompanyIds').dirty && form.get('carrierCompanyIds').errors">请选择承运商!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #companyFooter>
+    <p class="b-t p-sm-tb">
+      <button nz-button nzType="default" class="m-r" (click)="companyIsVisible=false">取消</button>
+      <button nz-button nzType="primary" class="m-r" [nzLoading]="insertLoading" (click)="insertList()">确认</button>
+    </p>
+  </ng-template>
+</nz-modal>

@@ -1,0 +1,45 @@
+<app-searchform (search)="listSearch($event)" (searchDataReturn)="searchDataReturn($event)" [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+<div>
+    <p>委托记录</p>
+    <app-table-form [gridId]="'grid1'" (updateDataResult)="selectData1Fun($event)" [dataSet]="settleRec" [pageSize]="pageSize1" [colSet]="false" [totalPage]="total1" [isMutli]="isTrueGrid1" selfTableHeight="270px" [listLoading]="isLoading" [pageFun]="true"
+        (pageIndexEmit)="settleRecIndexEmit($event)" (listClick)="rowCilcked($event)" (pageSizeEmit)="settleRecSizeEmit($event)" [paginationRef]="totalStats"></app-table-form>
+    <ng-template #totalStats>
+        <!--&nbsp;<span> 已选 {{selectData1.length}} 条</span>-->
+        &nbsp;<span> 合同总金额: {{totalSum| number:'1.2-2'  }}元</span> &nbsp;
+        <span> 未收总金额: {{uncollectedAmount | number:'1.2-2'}}元</span> &nbsp;
+        <span> 已收总金额: {{collectedAmount | number:'1.2-2' }}元</span>
+
+    </ng-template>
+</div>
+
+<div style="margin-top:30px;">
+    <div nz-row nzType="flex" nzJustify="start" nzAlign="middle" style="margin-bottom: 5px">
+        <p nz-col>收款登记记录</p>
+        <nz-input-group nz-col nzSearch [nzAddOnAfter]="suffixIconButton" style="width: 265px;margin-left: 50px">
+            <input type="text" nz-input placeholder="输入，回车触发" nzSize="small" [(ngModel)]="receiptData" (keyup.enter)="receiptSearch()">
+        </nz-input-group>
+        <ng-template #suffixIconButton>
+            <button nz-button nzType="primary" nzSearch (click)="receiptSearch()"><i nz-icon type="search"></i></button>
+        </ng-template>
+    </div>
+
+    <app-table-form [gridId]="'grid2'" (inputBlurFun)="inputBlur($event)" [dataSet]="settleReport" [pageSize]="pageSize2" (updateDataResult)="selectData2Fun($event)" [totalPage]="total2" [isMutli]="isTrueGrid2" selfTableHeight="270px" (modelChange)="inputModelFun($event)"
+        [colSet]="false" [pageFun]="true" (pageIndexEmit)="settleReportIndexEmit($event)" (pageSizeEmit)="settleReportSizeEmit($event)" [nzShowPagination]="false" [paginationRef]="totalStats2"></app-table-form>
+    <ng-template #totalStats2>
+        <!--&nbsp;<span> 已选 {{selectData1.length}} 条</span>-->
+        &nbsp;<span> 收款总金额: {{itemTotalSum| number:'1.2-2'  }}元</span>
+
+    </ng-template>
+</div>
+
+<ng-template #tplTitle>
+    <span>{{modalTitle}}</span>
+</ng-template>
+<ng-template #confirmContent>
+    <div class="text-center f-b">{{modalContent}}</div>
+</ng-template>
+<ng-template #confirmFooter>
+    <button nz-button nzType="default" (click)="modalCancel(2)">取消</button>
+    <button nz-button nzType="primary" (click)="modalConfirm()">确定</button>
+</ng-template>

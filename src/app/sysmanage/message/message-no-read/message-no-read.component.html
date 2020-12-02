@@ -1,0 +1,10 @@
+<common-page (search)="listSearch($event)" [pageSize]="pageSize" [totalPage]="totalPage"
+             [listLoading]="listLoading" (btnClick)="readBtn($event)" (btnDelete)="btnDelete($event)"
+             [dataSet]="dataSet" [isMutli]="true">
+</common-page>
+
+<!--确认弹窗-->
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   >
+
+</app-modal-confirm>

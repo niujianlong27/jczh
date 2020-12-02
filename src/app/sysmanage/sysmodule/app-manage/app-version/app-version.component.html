@@ -1,0 +1,54 @@
+<common-page [pageSize]="pageSize" [totalPage]="total" [listLoading]="listLoading" [isMutli]="true"
+             [dataSet]="dataSet" (search)="listSearch($event)" (btnClick)="btnClick($event)"
+             (updateDataResult)="updateDataResult($event)">
+</common-page>
+
+<nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+          (nzAfterClose)="closeResult()">
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData" [hidden]='m.hidden'>
+      <nz-form-label [nzSpan]="6" [nzRequired]="m.require">{{m.name}}</nz-form-label>
+
+      <nz-form-control [nzSpan]="12">
+
+        <input [type]="m.type" *ngIf="m.type == 'text'" nz-input [formControlName]="m.eName" [id]="m.eName" trim>
+
+        <ng-container *ngIf="m.type == 'file'">
+          <nz-input-group nzCompact>
+            <div nz-col nzSpan="15">
+              <input nz-input [formControlName]="m.eName" readonly="readonly">
+
+            </div>
+
+            <div nz-col nzSpan="4">
+              <nz-upload [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest'
+                         [(nzFileList)]="formFileList" [nzData]="this.handleData" [nzShowUploadList]="false"
+                         (nzChange)="handleChange($event,'formImg')">
+                <button nz-button><i nz-icon type="upload"></i><span>上传</span></button>
+              </nz-upload>
+            </div>
+
+          </nz-input-group>
+        </ng-container>
+
+        <nz-select *ngIf="m.type === 'select'" style="width: 120px;" [formControlName]="m.eName">
+          <nz-option *ngFor="let i of m.selectList" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+        </nz-select>
+
+        <textarea *ngIf="m.type === 'textarea'" rows="4" nz-input [formControlName]="m.eName"></textarea>
+
+        <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+            {{m.validateCon}}
+          </ng-container>
+          <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+            {{m.validators.patternErr}}
+          </ng-container>
+        </nz-form-explain>
+
+      </nz-form-control>
+
+    </nz-form-item>
+
+  </form>
+</nz-modal>

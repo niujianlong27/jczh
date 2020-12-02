@@ -1,0 +1,254 @@
+
+<nz-tabset (nzSelectChange)="selectChange()" [(nzSelectedIndex)]="carNum">
+  <nz-tab nzTitle="厂内车辆上限设置">
+    <common-page [pageFun]='true' (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)'(search)="listSearch($event)" [pageSize]="pageSize" [totalPage]="totalPage" [formId]="'form_entryRule'"
+      [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" [dataSet]="dataSet" [isMutli]="false"></common-page>
+
+  </nz-tab>
+  <nz-tab nzTitle="厂内品种车辆上限设置">
+    <common-page [pageFun]='true' (pageIndexEmit)='getPageIndex2($event)' (pageSizeEmit)='getPageSize2($event)' (search)="listSearch1($event)" (btnAdd)="btnAdd()" [pageSize]="pageSize" [totalPage]="totalPage"
+      [formId]="'form_entryRule1'" [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" [dataSet]="dataSet"
+      [isMutli]="false"></common-page>
+
+  </nz-tab>
+  <nz-tab nzTitle="厂内大门车辆上限设置">
+    <common-page [pageFun]='true' (pageIndexEmit)='getPageIndex3($event)' (pageSizeEmit)='getPageSize3($event)' (search)="listSearch2($event)" (btnAdd)="btnAdd()" [pageSize]="pageSize" [totalPage]="totalPage"
+      [formId]="'form_entryRule2'" [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" [dataSet]="dataSet"
+      [isMutli]="false"></common-page>
+  </nz-tab>
+  <nz-tab nzTitle="厂内大门品种车辆上限设置">
+    <common-page [pageFun]='true' (pageIndexEmit)='getPageIndex4($event)' (pageSizeEmit)='getPageSize4($event)' (search)="listSearch3($event)" (btnAdd)="btnAdd()" [pageSize]="pageSize" [totalPage]="totalPage"
+      [formId]="'form_entryRule3'" [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" [dataSet]="dataSet"
+      [isMutli]="false"></common-page>
+  </nz-tab>
+  <nz-tab nzTitle="仓库同时卸车上限设置">
+    <common-page [pageFun]='true' (pageIndexEmit)='getPageIndex5($event)' (pageSizeEmit)='getPageSize5($event)' (search)="listSearch4($event)" (btnAdd)="btnAdd()" [pageSize]="pageSize" [totalPage]="totalPage"
+      [formId]="'form_entryRule4'" [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" [dataSet]="dataSet"
+      [isMutli]="false"></common-page>
+  </nz-tab>
+
+  <!-- 厂内车辆上限设置表单 -->
+  <nz-modal [nzWidth]="'45%'" [(nzVisible)]="modalFormVisible1" nzTitle="{{ modalTitle }}" (nzOnCancel)="handleCancel()"
+  [nzOkLoading]="isOkLoading" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()">
+
+    <form nz-form [formGroup]="modalValidateForm1">
+      <nz-form-item *ngFor="let m of modalFormData1">
+        <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="12">
+
+          <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'; else other" formControlName="{{m.eName}}">
+            <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+          </nz-radio-group>
+
+          <ng-template #other>
+            <nz-input-number style="width: 200px;" *ngIf="m.type === 'num'" [nzMin]="0" [nzMax]="5000" [nzStep]="1" formControlName="{{m.eName}}"></nz-input-number>
+          </ng-template>
+          <nz-form-explain *ngIf="modalValidateForm1.get(m.eName) && modalValidateForm1.get(m.eName).dirty && modalValidateForm1.get(m.eName).errors">
+            <div *ngIf="modalValidateForm1.get(m.eName).errors.pattern;else erroInf">
+              {{ m.validators.patternErr}}
+            </div>
+            <ng-template #erroInf>
+              {{ m.validateCon}}
+            </ng-template>
+          </nz-form-explain>
+
+        </nz-form-control>
+
+      </nz-form-item>
+
+    </form>
+  </nz-modal>
+
+<!-- 厂内品种车辆上限设置表单 -->
+  <nz-modal [nzWidth]="'45%'" [(nzVisible)]="modalFormVisible2" nzTitle="{{ modalTitle }}" (nzOnCancel)="handleCancel()"
+  [nzOkLoading]="isOkLoading" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()">
+
+    <form nz-form [formGroup]="modalValidateForm2">
+      <nz-form-item *ngFor="let m of modalFormData2">
+        <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="12">
+
+          <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'; else other" formControlName="{{m.eName}}">
+            <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+          </nz-radio-group>
+
+          <ng-template #other>
+
+            <ng-container *ngIf="m.eName === 'kindCode'">
+              <nz-tree-select style="width: 200px;" nzDisabled="{{ disable }}" [nzDefaultExpandedKeys]="expandKeys" [nzNodes]="nodes" nzShowSearch nzPlaceHolder="品种名称"
+              (ngModelChange)="onChange($event)" formControlName="{{m.eName}}" [nzDropdownStyle]="{ 'max-height': '300px' }">
+              </nz-tree-select>
+            </ng-container>
+            <nz-select style="width: 200px;" *ngIf="m.type === 'select3'" nzShowSearch nzAllowClear nzPlaceHolder="状态"
+              formControlName="{{m.eName}}">
+              <nz-option *ngFor="let option of statusList" [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+              </nz-option>
+            </nz-select>
+            <nz-input-number style="width: 200px;" *ngIf="m.type === 'num'" [nzMin]="0" [nzMax]="5000" [nzStep]="1" formControlName="{{m.eName}}"></nz-input-number>
+          </ng-template>
+          <nz-form-explain *ngIf="modalValidateForm2.get(m.eName) && modalValidateForm2.get(m.eName).dirty && modalValidateForm2.get(m.eName).errors">
+            <div *ngIf="modalValidateForm2.get(m.eName).errors.pattern;else erroInf">
+              {{ m.validators.patternErr}}
+            </div>
+            <ng-template #erroInf>
+              {{ m.validateCon}}
+            </ng-template>
+          </nz-form-explain>
+
+        </nz-form-control>
+
+      </nz-form-item>
+
+    </form>
+  </nz-modal>
+
+  <!-- 大门在途车辆上限设置表单 -->
+  <nz-modal [nzWidth]="'45%'" [(nzVisible)]="modalFormVisible3" nzTitle="{{ modalTitle }}" (nzOnCancel)="handleCancel()"
+  [nzOkLoading]="isOkLoading" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()">
+
+    <form nz-form [formGroup]="modalValidateForm3">
+      <nz-form-item *ngFor="let m of modalFormData3">
+        <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="12">
+
+          <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'; else other" formControlName="{{m.eName}}">
+            <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+          </nz-radio-group>
+
+          <ng-template #other>
+
+            <nz-select style="width: 200px;" *ngIf="m.type === 'select1'" nzDisabled="{{ disable }}" nzShowSearch nzAllowClear nzPlaceHolder="进厂大门"
+              formControlName="{{m.eName}}">
+              <nz-option *ngFor="let option of gateList" [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+              </nz-option>
+            </nz-select>
+            <nz-select style="width: 200px;" *ngIf="m.type === 'select3'" nzShowSearch nzAllowClear nzPlaceHolder="状态"
+              formControlName="{{m.eName}}">
+              <nz-option *ngFor="let option of statusList" [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+              </nz-option>
+            </nz-select>
+            <nz-input-number style="width: 200px;" *ngIf="m.type === 'num'" [nzMin]="0" [nzMax]="5000" [nzStep]="1" formControlName="{{m.eName}}"></nz-input-number>
+          </ng-template>
+          <nz-form-explain *ngIf="modalValidateForm3.get(m.eName) && modalValidateForm3.get(m.eName).dirty && modalValidateForm3.get(m.eName).errors">
+            <div *ngIf="modalValidateForm3.get(m.eName).errors.pattern;else erroInf">
+              {{ m.validators.patternErr}}
+            </div>
+            <ng-template #erroInf>
+              {{ m.validateCon}}
+            </ng-template>
+          </nz-form-explain>
+
+        </nz-form-control>
+
+      </nz-form-item>
+
+    </form>
+  </nz-modal>
+
+    <!-- 大门品种在途车辆上限设置表单 -->
+  <nz-modal [nzWidth]="'45%'" [(nzVisible)]="modalFormVisible4" nzTitle="{{ modalTitle }}" (nzOnCancel)="handleCancel()"
+  [nzOkLoading]="isOkLoading" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()">
+
+    <form nz-form [formGroup]="modalValidateForm4">
+      <nz-form-item *ngFor="let m of modalFormData4">
+        <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="12">
+
+          <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'; else other" formControlName="{{m.eName}}">
+            <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+          </nz-radio-group>
+
+          <ng-template #other>
+
+            <ng-container *ngIf="m.eName === 'kindCode'">
+              <nz-tree-select style="width: 200px;" nzDisabled="{{ disable }}" [nzDefaultExpandedKeys]="expandKeys" [nzNodes]="nodes" nzShowSearch nzPlaceHolder="品种名称"
+              (ngModelChange)="onChange($event)" formControlName="{{m.eName}}" [nzDropdownStyle]="{ 'max-height': '300px' }">
+              </nz-tree-select>
+            </ng-container>
+
+            <nz-select style="width: 200px;" *ngIf="m.type === 'select1'" nzDisabled="{{ disable }}" nzShowSearch nzAllowClear nzPlaceHolder="进厂大门"
+              formControlName="{{m.eName}}">
+              <nz-option *ngFor="let option of gateList" [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+              </nz-option>
+            </nz-select>
+            <nz-select style="width: 200px;" *ngIf="m.type === 'select3'" nzShowSearch nzAllowClear nzPlaceHolder="状态"
+              formControlName="{{m.eName}}">
+              <nz-option *ngFor="let option of statusList" [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+              </nz-option>
+            </nz-select>
+            <nz-input-number style="width: 200px;" *ngIf="m.type === 'num'" [nzMin]="0" [nzMax]="5000" [nzStep]="1" formControlName="{{m.eName}}"></nz-input-number>
+          </ng-template>
+          <nz-form-explain *ngIf="modalValidateForm4.get(m.eName) && modalValidateForm4.get(m.eName).dirty && modalValidateForm4.get(m.eName).errors">
+            <div *ngIf="modalValidateForm4.get(m.eName).errors.pattern;else erroInf">
+              {{ m.validators.patternErr}}
+            </div>
+            <ng-template #erroInf>
+              {{ m.validateCon}}
+            </ng-template>
+          </nz-form-explain>
+
+        </nz-form-control>
+
+      </nz-form-item>
+
+    </form>
+  </nz-modal>
+
+    <!-- 仓库同时卸车上限设置表单 -->
+  <nz-modal [nzWidth]="'45%'" [(nzVisible)]="modalFormVisible5" nzTitle="{{ modalTitle }}" (nzOnCancel)="handleCancel()"
+  [nzOkLoading]="isOkLoading" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()">
+
+    <form nz-form [formGroup]="modalValidateForm5">
+      <nz-form-item *ngFor="let m of modalFormData5">
+        <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="12">
+
+          <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'; else other" formControlName="{{m.eName}}">
+            <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+          </nz-radio-group>
+
+          <ng-template #other>
+
+            <nz-select style="width: 200px;" *ngIf="m.type === 'select2'" nzDisabled="{{ disable }}" nzShowSearch nzAllowClear nzPlaceHolder="仓库名称"
+              formControlName="{{m.eName}}">
+              <nz-option *ngFor="let option of wareHouseList" [nzLabel]="option.warehouseName" [nzValue]="option.warehouseCode">
+              </nz-option>
+            </nz-select>
+            <nz-select style="width: 200px;" *ngIf="m.type === 'select3'" nzShowSearch nzAllowClear nzPlaceHolder="状态"
+              formControlName="{{m.eName}}">
+              <nz-option *ngFor="let option of statusList" [nzLabel]="option.itemCname" [nzValue]="option.itemCode">
+              </nz-option>
+            </nz-select>
+            <nz-input-number style="width: 200px;" *ngIf="m.type === 'num'" [nzMin]="0" [nzMax]="5000" [nzStep]="1" formControlName="{{m.eName}}"></nz-input-number>
+          </ng-template>
+          <nz-form-explain *ngIf="modalValidateForm5.get(m.eName) && modalValidateForm5.get(m.eName).dirty && modalValidateForm5.get(m.eName).errors">
+            <div *ngIf="modalValidateForm5.get(m.eName).errors.pattern;else erroInf">
+              {{ m.validators.patternErr}}
+            </div>
+            <ng-template #erroInf>
+              {{ m.validateCon}}
+            </ng-template>
+          </nz-form-explain>
+
+        </nz-form-control>
+
+      </nz-form-item>
+
+    </form>
+  </nz-modal>
+</nz-tabset>

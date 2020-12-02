@@ -1,0 +1,72 @@
+<!-- <common-page (search)="listSearch($event)" (btnAdd)="btnAdd()"  (btnDelete)="delete($event)" (btnUpdate)="btnUpdate($event)" [totalPage]="totalPage" [pageSize]="pageSize"
+    [listLoading]="listLoading" [dataSet]="dataSet" [isMutli]="false"(updateDataResult)="updateDataResult($event)"></common-page> -->
+<common-page (search)="listSearch($event)"  (btnUpdate)="btnUpdate($event)" (btnDelete)="btnDelete($event)" [totalPage]="totalPage" [pageSize]="pageSize" 
+    [listLoading]="listLoading" [dataSet]="dataSet" [isMutli]="false"  (btnClick)="btnclick($event)"  (updateDataResult)="updateDataResult($event)"></common-page>
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+
+</app-modal-confirm>
+
+<app-modal-confirm [deleteVisible]="unbindVisible" [modalTitle]="unbindmodalTitle" [modalCon]="unbindCon"
+                   (modalConfirmResult)="driverUnbind($event)">
+</app-modal-confirm>
+
+    <!--弹出框-->
+    <nz-modal [(nzVisible)]="modalFormVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzOkLoading]="isOkLoading"
+    (nzAfterClose)="closeResult()">
+    <form nz-form [formGroup]="modalValidateForm">
+        <nz-form-item *ngFor="let m of modalFormData">
+            <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+                {{m.name}}
+            </nz-form-label>
+    
+            <nz-form-control [nzSpan]="12">
+    
+                <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+                    <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+                </nz-radio-group>
+
+                
+                <input *ngIf="m.eName == 'userCode'" nz-input placeholder="工号" [formControlName]="m.eName" disabled="true" style="background-color: #fafafa">
+                <input *ngIf="m.eName == 'userName'" nz-input placeholder="姓名" [formControlName]="m.eName">
+                <input *ngIf="m.eName == 'mobile'" nz-input placeholder="电话" [formControlName]="m.eName" disabled="true" style="background-color: #fafafa">
+                <input *ngIf="m.eName == 'truckNo'" nz-input placeholder="车牌号" [formControlName]="m.eName">
+                <input *ngIf="m.eName == 'truckTeam'" nz-input placeholder="所属车队" [formControlName]="m.eName">
+
+                <nz-select style="width: 236px;" *ngIf="m.eName === 'type1'" 
+                nzShowSearch nzAllowClear nzPlaceHolder="类型" [formControlName]="m.eName" >
+                    <nz-option *ngFor="let i of themeArrL" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+                </nz-select>
+
+                <!-- <nz-select style="width: 236px;" *ngIf="m.eName === 'enable1'" [(ngModel)]="enable1"
+                nzShowSearch nzAllowClear nzPlaceHolder="是否启用" [formControlName]="m.eName" >
+                    <nz-option *ngFor="let i of themeArrS" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+                </nz-select> -->
+                
+
+                <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+                    <div *ngIf="modalValidateForm.get(m.eName).errors.pattern;else erroInf">
+                        {{ m.validators.patternErr}}
+                    </div>
+                    <ng-template #erroInf>
+                        {{ m.validateCon}}
+                    </ng-template>
+                </nz-form-explain>
+    
+            </nz-form-control>
+    
+        </nz-form-item>
+    </form>
+
+    <!-- <div *ngIf=isShow>
+      <label class="label">是否启用 :</label>
+      
+      <nz-select class="select"  [(ngModel)]="enable1"
+           nzShowSearch nzAllowClear nzPlaceHolder="是否启用"  >
+           <nz-option *ngFor="let i of themeArrS" [nzLabel]="i.itemCname" [nzValue]="i.itemCode"></nz-option>
+    </nz-select>
+    </div> -->
+
+</nz-modal>
+     

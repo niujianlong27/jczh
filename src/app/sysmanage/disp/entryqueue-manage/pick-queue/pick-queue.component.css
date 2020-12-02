@@ -1,0 +1,31 @@
+.w1000{
+  width: 1000px;
+  margin: 0 auto;
+}
+.ant-input {
+  width: 160px;
+  height: 30px;
+  margin: 0 8px 8px 0;
+}
+.ml_25{
+   margin-right:25px;
+}
+.ml_100{
+  margin-left: 100px;
+}
+.ant-select-selection--single{
+    height: 30px;
+}
+/* input字体大小
+.ant-input{
+  color: black;
+} */
+.required:before {
+  display: inline-block;
+  margin-right: 4px;
+  content: "*";
+  font-family: SimSun;
+  line-height: 1;
+  font-size: 14px;
+  color: #f5222d;
+}

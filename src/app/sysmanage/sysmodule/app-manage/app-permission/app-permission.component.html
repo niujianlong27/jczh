@@ -1,0 +1,96 @@
+<tpl-buttons (btnClick)="btnClick($event)" [btnDisable]="btnDisable"></tpl-buttons>
+<div nz-row>
+  <div nz-col nzSpan="7" nzOffset="1">
+    <div nz-row nzType="flex" nzJustify="center">
+      <div nz-col>
+        <p>角色管理</p>
+      </div>
+    </div>
+    <div nz-row nzType="flex" nzJustify="center">
+      <div nz-col nzSpan="24">
+        <app-table-form gridId="grid1" [dataSet]="roleData" [isCheckBox]="false" [listLoading]="listLoading1"
+                        [nzShowPagination]="false" [showCount]="false" [colSet]="false" [closeBgTr]="false"
+                        [trSelectedShow]="true" [trSelected]="[true]" [extraTableHeight]="52"
+                        (listClick)="listClick($event)">
+        </app-table-form>
+      </div>
+    </div>
+  </div>
+
+  <div nz-col nzSpan="14" nzOffset="1">
+    <nz-spin [nzSize]="'large'" [nzSpinning]="nzSpinning">
+      <div nz-row nzType="flex" nzJustify="center">
+        <div nz-col>
+          <p>权限管理</p>
+        </div>
+      </div>
+
+      <div nz-row nzType="flex" nzJustify="center">
+        <div nz-col nzSpan="10">
+          <app-table-form gridId="grid2" tableTitle="已选权限" [dataSet]="selectedPermissionData" [isMutli]="true"
+                          [pageSize]="pageSize1" [totalPage]="totalPage1" [listLoading]="listLoading2" [extraTableHeight]="155"
+                          [selectedChange]="true" [tableFooter]="tableFooter" [showCount]="false" [colSet]="false"
+                          [pageFun]="true" (updateDataResult)="updateDataResult1($event)"
+                          (currentTableHeightFun)="currentTableHeightFun($event)"
+                          (pageIndexEmit)="pageIndexEmit1($event)"
+                          (pageSizeEmit)="pageSizeEmit1($event)">
+          </app-table-form>
+          <ng-template #tableFooter>
+            <div nz-row nzType="flex" nzJustify="center">
+              <div nz-col>
+                <button nz-button appCilckOnce [disabled]="selectedPermissionSelectedData.length !== 1"
+                        (click)="move(0)">上移
+                </button>
+              </div>
+              <div nz-col nzOffset="1">
+                <button nz-button appCilckOnce [disabled]="selectedPermissionSelectedData.length !== 1"
+                        (click)="move(1)">下移
+                </button>
+              </div>
+            </div>
+
+          </ng-template>
+        </div>
+        <div nz-col nzSpan="4">
+
+          <div nz-row nzType="flex" nzJustify="center" nzAlign="middle"
+               [ngStyle]="{'margin-top':tableHeight/2-10+'px'}">
+            <div nz-col>
+              <button nz-button nzType="default" appClickDisabled
+                      [disabled]="unselectedPermissionSelectedData.length === 0" (click)="btnClick({buttonId:'Add'})">
+                添加
+              </button>
+            </div>
+          </div>
+
+          <div nz-row nzType="flex" nzJustify="center" nzAlign="middle" class="m-t-5">
+            <div nz-col>
+              <button nz-button nzType="default" appClickDisabled [disabled]="selectedPermissionSelectedData.length===0"
+                      (click)="btnClick({buttonId:'Remove'})">
+                移除
+              </button>
+            </div>
+          </div>
+
+          <div nz-row nzType="flex" nzJustify="center" nzAlign="middle" class="m-t-5">
+            <div nz-col>
+              <button nz-button nzType="default" appCilckOnce [duration]="2000" (click)="btnClick({buttonId:'Reset'})">
+                重置
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <div nz-col nzSpan="10">
+          <app-table-form gridId="grid2" tableTitle="未选权限" [dataSet]="unselectedPermissionData" [isMutli]="true"
+                          [selectedChange]="true" [pageFun]="true" [pageSize]="pageSize2" [totalPage]="totalPage2"
+                          [listLoading]="listLoading3" [showCount]="false" [colSet]="false" [extraTableHeight]="90"
+                          (updateDataResult)="updateDataResult2($event)" (pageIndexEmit)="pageIndexEmit2($event)"
+                          (pageSizeEmit)="pageSizeEmit2($event)">
+          </app-table-form>
+        </div>
+      </div>
+    </nz-spin>
+  </div>
+
+</div>

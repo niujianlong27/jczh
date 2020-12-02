@@ -1,0 +1,134 @@
+<common-page
+        (btnClick)="btnClick($event)"
+        (search)="listSearch($event)"
+        (updateDataResult)="updateDataResult($event)"
+        [dataSet]="dataSet"
+        [isCheckBox]="true"
+        [isMutli]="false"
+        [listLoading]="listLoading"
+        [showCount]="false"
+        [pageSize]="pageSize"
+        [totalPage]="totalPage"
+        gridId="grid1"
+        [triggerSearch]="true"
+>
+</common-page>
+
+<ng-template #modal>
+    <ng-container *ngTemplateOutlet="buttonId==='Data'?dataButtons:visibleButtons">
+    </ng-container>
+    <div style="margin-top: 5px">
+        <app-table-form
+                [gridId]="buttonId==='Data'?'grid2':'grid3'"
+                [pageFun]="true"
+                [isCheckBox]="!(buttonId==='Data')"
+                [showCount]="!(buttonId==='Data')"
+                [isMutli]="true"
+                [nzShowPagination]="false"
+                [selfTableHeight]="'400px'"
+                [dataSet]="modalDataSet"
+                [listLoading]="modalTableLoading"
+                (updateDataResult)="modalUpdateDataResult($event)"
+                (userColumnsEmit)="modalColumns($event)"
+                (modelChange)="modelChange($event)"
+        >
+            <ng-template [grid-row]="'tpl-grid2-district'"
+                         let-index="index" let-key="key" let-obj>
+                <nz-select
+                        nzSize='small'
+                        style="width:100%"
+                        [(ngModel)]="obj.district"
+                        nzAllowClear
+                        [disabled]="(!obj.city)||obj.districtDisabled"
+                >
+                    <nz-option *ngFor="let option of obj.optionList" [nzValue]="option.value"
+                               [nzLabel]="option.name"></nz-option>
+                </nz-select>
+            </ng-template>
+            <ng-template [grid-row]="'tpl-grid2-price'"
+                         let-index="index" let-key="key" let-obj>
+                <nz-input-number [(ngModel)]="obj.price" [nzMin]="0" [nzMax]="99999999" [nzSize]="'small'">
+                </nz-input-number>
+            </ng-template>
+            <ng-template [grid-row]="'tpl-grid3-district'"
+                         let-index="index" let-key="key" let-obj>
+                <nz-select
+                        nzSize='small'
+                        style="width:100%"
+                        [(ngModel)]="obj.district"
+                        nzAllowClear
+                        [disabled]="(!obj.city)||obj.districtDisabled"
+                >
+                    <nz-option *ngFor="let option of obj.optionList" [nzValue]="option.value"
+                               [nzLabel]="option.name"></nz-option>
+                </nz-select>
+            </ng-template>
+        </app-table-form>
+    </div>
+</ng-template>
+
+<ng-template #dataFooter>
+    <div nz-row nzJustify="center" nzType="flex" nzGutter="8">
+        <div nz-col>
+            <button nz-button [nzLoading]="modalButtonLoading" (click)="btnModalClick('dataSave')">
+                保存
+            </button>
+        </div>
+        <div nz-col>
+            <button nz-button [nzLoading]="modalButtonLoading" (click)="btnModalClick('cancel')">
+                取消
+            </button>
+        </div>
+        <div nz-col>
+        </div>
+    </div>
+</ng-template>
+<ng-template #visibleFooter>
+    <div nz-row nzJustify="end" nzType="flex" nzGutter="8" nzAlign="middle">
+        <div nz-col>
+            <button nz-button nzSize="small" [nzLoading]="modalButtonLoading" (click)="btnModalClick('preview')">
+                预览
+            </button>
+        </div>
+        <div nz-col>
+            <button nz-button [nzLoading]="modalButtonLoading" (click)="btnModalClick('visibleSave')">
+                保存
+            </button>
+        </div>
+        <div nz-col>
+            <button nz-button [nzLoading]="modalButtonLoading" (click)="btnModalClick('cancel')">
+                取消
+            </button>
+        </div>
+        <div nz-col>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #dataButtons>
+    <button nz-button [nzLoading]="modalButtonLoading" (click)="btnModalClick('dataAdd')">
+        新增
+    </button>
+</ng-template>
+<ng-template #visibleButtons>
+    <div nz-row nzJustify="start" nzType="flex" nzGutter="8" nzAlign="middle">
+        <div nz-col>
+            <button nz-button [nzLoading]="modalButtonLoading" (click)="btnModalClick('visibleAdd')">
+                新增
+            </button>
+        </div>
+        <div nz-col>
+            <button nz-button [nzLoading]="modalButtonLoading" (click)="btnModalClick('visibleUpdate')">
+                修改
+            </button>
+        </div>
+        <div nz-col>
+            <button nz-button [nzLoading]="modalButtonLoading" (click)="btnModalClick('visibleDelete')">
+                删除
+            </button>
+        </div>
+        <div nz-col>
+        </div>
+    </div>
+</ng-template>
+

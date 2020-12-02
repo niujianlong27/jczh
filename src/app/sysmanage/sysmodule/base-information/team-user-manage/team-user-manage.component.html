@@ -1,0 +1,90 @@
+<!--<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>-->
+<!--<tpl-buttons (btnClick)="btnClick($event)" [btnDisable]="btnDisable"></tpl-buttons>-->
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+<div nz-row nzType="flex" nzJustify="space-around" style="padding-top: 20px">
+
+  <div nz-col nzSpan="12">
+    <!--<nz-table [nzTitle]="roleTitle" #roleTable reNzTable [extraTableHeight]="permissions ? 36 : 0"  [nzData]="roleData" nzSize="small" [nzBordered]="false" (heightEimt)="heightFun($event,0)"-->
+    <!--[nzShowPagination]=false [nzFrontPagination]=false [nzHideOnSinglePage]="true" [nzScroll]="{y: roleHeight}">-->
+    <!--<thead>-->
+    <!--<tr>-->
+    <!--<ng-container *ngFor="let role of roleHeaderData">-->
+    <!--<th [title]="role.cName" nzWidth="100px">{{role.cName}}</th>-->
+    <!--</ng-container>-->
+    <!--</tr>-->
+    <!--</thead>-->
+
+    <!--<tbody>-->
+    <!--<tr *ngFor="let data of roleTable.data" [class.tr-selected]="data.isClick">-->
+    <!--<ng-container *ngFor="let role of roleHeaderData">-->
+    <!--<td [title]="data[role.eName]" (click)="roleClick(data)">-->
+    <!--<span>{{ data[role.eName]}}</span>-->
+    <!--</td>-->
+    <!--</ng-container>-->
+    <!--</tr>-->
+    <!--</tbody>-->
+    <!--</nz-table>-->
+
+    <!--<ng-template #roleTitle>-->
+    <!--<div>班组管理</div>-->
+    <!--</ng-template>-->
+    <div>班组管理</div>
+    <app-table-form
+      [gridId]="'grid1'"
+      [isMutli]="false"
+      [showCount]="false"
+      [colSet]="true"
+      [isCheckBox]="true"
+      [dataSet]="dataSet"
+      [pageSize]="pageSize"
+      [totalPage]="totalPage"
+      (listClick)="roleClick($event)"
+      (updateDataResult)="select($event)"
+      [listLoading]="islistLoading">
+    </app-table-form>
+  </div>
+
+  <div nz-col nzSpan="12">
+    <div>用户管理</div>
+    <nz-tabset [(nzSelectedIndex)]="nzSelectedIndex">
+      <nz-tab nzTitle="已选用户" (nzSelect)="tabClick('select')">
+        <app-table-form
+          [isMutli]="true"
+          [pageFun]="true"
+          [colSet]="true"
+          [gridId]="'grid2'"
+          [isCheckBox]="true"
+          (pageIndexEmit)='getPageIndex1($event)'
+          (pageSizeEmit)='getPageSize1($event)'
+          [dataSet]="selectUserData"
+          [selectedChange]="true"
+          [listLoading]="grid2listLoading"
+          [pageSize]="pageSize2"
+          [totalPage]="selecttotalPage"
+          (updateDataResult)="selectData($event)">
+        </app-table-form>
+      </nz-tab>
+      <nz-tab nzTitle="未选用户" (nzSelect)="tabClick('notToChoose')">
+        <app-table-form
+          [isMutli]="true"
+          [pageFun]="true"
+          [colSet]="true"
+          [gridId]="'grid3'"
+          [isCheckBox]="true"
+          [dataSet]="userData"
+          [pageSize]="pageSize3"
+          [selectedChange]="true"
+          (pageIndexEmit)='getPageIndex2($event)'
+          (pageSizeEmit)='getPageSize2($event)'
+          [totalPage]="notselecttotalPage"
+          [listLoading]="grid3listLoading"
+          (updateDataResult)="notToChooseData($event)">
+        </app-table-form>
+      </nz-tab>
+    </nz-tabset>
+
+  </div>
+
+</div>
+

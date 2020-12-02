@@ -1,0 +1,51 @@
+<app-searchform [formId]="'form_approval_config'" (search)="listSearch($event)"></app-searchform>
+<tpl-buttons [formId]="'form_approval_config'" (btnClick)='btnClick($event)'></tpl-buttons>
+
+<div>
+  <app-table-form [formId]="'form_approval_config'" [gridId]="'grid1'" [dataSet]="dataSet"
+                  [pageSize]="pageSize" [totalPage]="totalPages"
+                  [isMutli]="true" [listLoading]="listLoading"
+                  [isCheckBox]="true" [showCount]="true" (updateDataResult)="selectData($event)">
+
+  </app-table-form>
+</div>
+
+<nz-modal [(nzVisible)]="modalFormVisible" nzWidth="70%" [nzTitle]="modalTitle" [nzMaskClosable]="false"
+          (nzAfterClose)="nzAfterClose()" (nzOnCancel)="handleCancel()" (nzOnOk)="nzOnOk()">
+
+  <form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData">
+      <nz-form-control [nzSpan]="12">
+        <nz-form-label [nzSpan]="6" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+        <nz-form-control [nzSpan]="13">
+          <nz-select nzShowSearch [attr.id]="m.eName" *ngIf="m.type == 'select'" [formControlName]="m.eName">
+            <nz-option *ngFor="let i of documentsType" [nzLabel]="i.name" [nzValue]="i.valueId"></nz-option>
+          </nz-select>
+          <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+            <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+              {{m.validateCon}}
+            </ng-container>
+            <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+              {{m.validators.patternErr}}
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-control>
+
+    </nz-form-item>
+  </form>
+  <button nz-button class="button" (click)="addItem()" nzType="default">新增</button>
+  <button nz-button class="button" (click)="delete()" nzType="default">删除</button>
+  <button nz-button class="button" (click)="insert()" nzType="default">插入</button>
+  <div style="margin-top: 10px">
+    <app-table-form [formId]="'form_approval_config'" [gridId]="'grid2'" [dataSet]="itemData"
+                    (userColumnsEmit)="userColumnsEmit($event)"
+                    [pageSize]="pageSize" [isMutli]="true" [nzShowPagination]="false" [selfTableHeight]="'200px'"
+                    [isCheckBox]="true" [showCount]="false" (updateDataResult)="selectitem($event)">
+
+    </app-table-form>
+  </div>
+
+</nz-modal>

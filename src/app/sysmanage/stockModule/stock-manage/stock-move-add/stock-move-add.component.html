@@ -1,0 +1,37 @@
+<form nz-form [formGroup]="validateForm" style="padding:15px 20px 0px 0px">
+  <nz-form-item>
+    <nz-form-label [nzXs]="2" nzFor="moveWsNo">移库单号</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <input type="text" nz-input name="moveWsNo" formControlName="moveWsNo" placeholder="系统生成" disabled="true">
+    </nz-form-control>
+    <nz-form-label [nzXs]="2" nzRequired nzFor="moveWsTime">移库时间</nz-form-label>
+    <nz-form-control [nzXs]="4">
+      <nz-date-picker nzShowTime name="moveWsTime" formControlName="moveWsTime"
+                      nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>
+      <nz-form-explain *ngIf="validateForm.get('moveWsTime').dirty && validateForm.get('moveWsTime').errors">请选择移库时间
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzXs]="2" nzFor="remark">备注</nz-form-label>
+    <nz-form-control [nzXs]="10">
+      <input nz-input formControlName="remark" id="remark">
+    </nz-form-control>
+  </nz-form-item>
+  <tpl-buttons [btnDisable]="btnDisable" [formId]="'form_stock_move_add'" (btnClick)='btnClick($event)'></tpl-buttons>
+  <app-table-form [popTableData]="popTableData"
+                  searchParamFiled="stockName"
+                  searchListFiled="wsName"
+                  [formId]="'form_stock_move_add'"
+                  [gridId]="'grid1'"
+                  (userColumnsEmit)='getUserHeader($event)'
+                  [dataSet]="dataSet1"
+                  [gridOperate]="{show:true,title:'操作',template:g1}"
+                  [nzShowPagination]="false" [isCheckBox]="false"
+                  [listLoading]="listLoading1"
+                  (inpEmit)="inpEmitDetail($event)">
+    <ng-template #g1 let-data let-index="index">
+      <a (click)="delete(data,index)" a>删除</a>
+    </ng-template>
+  </app-table-form>
+</form>

@@ -1,0 +1,18 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+<div>
+  <p>调港信息</p>
+  <app-table-form  [pageFun]='true' (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)' [gridId]="'grid1'"  [dataSet]="dataSet1"
+      [pageSize]="pageSize1"  [totalPage]="totalPages1" [isMutli]="true" (updateDataResult)="updateDataResult($event)"
+                  [trSelectedShow]="true" [listLoading]="listLoading1" (listClick)="listClick($event)"></app-table-form>
+</div>
+<div style="margin-top:30px;">
+  <p input-blur>物资明细</p>
+  <app-table-form [pageFun]='true'  (pageIndexEmit)='getPageIndex2($event)' (pageSizeEmit)='getPageSize2($event)' [gridId]="'grid2'" [dataSet]="dataSet2" [pageSize]="pageSize2"
+     [totalPage]="totalPages2" [listLoading]="listLoading2" [isMutli]="true" [isCheckBox]="false" [showCount]="false"></app-table-form>
+</div>
+
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+    (modalConfirmResult)="modalConfirmResult($event)">
+
+</app-modal-confirm>

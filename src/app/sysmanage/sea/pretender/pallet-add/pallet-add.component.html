@@ -1,0 +1,343 @@
+<p class="b-t p-sm-tb">
+  <button nz-button nzType="default" *ngIf="!operateType && !isDisableForm" class="m-r" (click)="add()" title="保存成功后，点击<清除>按钮可新增下一货盘">
+    <a class="btn-icon">
+      <img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/删除.svg">
+    </a>清除</button>
+  <button nz-button nzType="default" *ngIf="operateType && !isDisableForm" class="m-r" (click)="cancel()">
+    <a class="btn-icon">
+      <img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/返回.svg">
+    </a>返回</button>
+  <button nz-button nzType="primary" *ngIf="!isDisableForm" nzGhost class="m-r" (click)="save()" [nzLoading]="loading">
+    <a class="btn-icon">
+      <img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/保存.svg">
+    </a>保存</button>
+  <button nz-button nzType="primary" *ngIf="!isDisableForm" nzGhost class="m-r" (click)="directOrder()">
+    <a class="btn-icon">
+      <img src="http://another2.oss-cn-hangzhou.aliyuncs.com/icon/确认.svg">
+    </a>定向下单</button>
+</p>
+<div class="clearfix" style="overflow: hidden;">
+  <div class="fl" style="width:20%;">
+    <app-table-form [isCheckBox]="false" formId="sea_pretender_pallet" [nzShowPagination]="false" [trSelectedShow]="true"
+      [showCount]="false" gridId="pallet" [dataSet]="pallet" (listClick)="palletClick($event)"></app-table-form>
+  </div>
+  <div class="fl clearfix" style="width:80%;padding-left:10px;padding-bottom:10px;">
+    <div class="fl">
+      <form [formGroup]="form">
+        <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" nzType="flex" nzAlign="top">
+          <div nz-col nzSpan="6">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>委托单位</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <nz-select style="width: 100%;" [nzDisabled]="companyType == '20'" formControlName="consignorCompanyId"
+                  (ngModelChange)="getUsedHarbor()" nzPlaceHolder="请选择委托单位" nzShowSearch>
+                  <nz-option *ngFor="let option of ownerCompany" [nzValue]="option.companyId" [nzLabel]="option.companyName"></nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="form.get('consignorCompanyId').dirty && form.get('consignorCompanyId').errors">
+                  请输入委托单位
+                </nz-form-explain>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="6">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>平台</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <input nz-input formControlName="companyId" type="hidden">
+                <input #companyName nz-input formControlName="companyName" disabled="true" [title]="companyName.value">
+                <nz-form-explain *ngIf="form.get('companyName').dirty && form.get('companyName').errors">
+                  请输入平台
+                </nz-form-explain>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>运输方式</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <nz-radio-group formControlName="transType" nzButtonStyle="solid">
+                  <label *ngFor="let option of bizScope" nz-radio-button [nzValue]="option.value">{{ option.label }}</label>
+                </nz-radio-group>
+                <nz-form-explain *ngIf="form.get('transType').dirty && form.get('transType').errors">
+                  请输入运输方式
+                </nz-form-explain>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+
+        <p style="color:green;"><i nz-icon type="form" theme="outline"></i><span>运输路线</span></p>
+        <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" nzType="flex" nzAlign="top">
+          <div nz-col nzSpan="6">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>装货港</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <nz-select nzShowSearch nzAllowClear class="select-address" (ngModelChange)="getAddress($event,1)"
+                  formControlName="startPoint" nzPlaceHolder="请选择装货港">
+                  <nz-option nzCustomContent *ngFor="let o of startHarborShow" [nzLabel]="o.harborName" [nzValue]="o.harborName">
+                    <span [title]="o.harborName" [ngStyle]="{'color': o.used ? 'green' : '' }">{{o.harborName}}</span>
+                  </nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="form.get('startPoint').dirty && form.get('startPoint').errors">请选择装货港
+                </nz-form-explain>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="6">
+            <nz-form-item>
+              <nz-form-label nzSpan="8">码头</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <input nz-input formControlName="startAddress" [nzAutocomplete]="startPierAuto" nzPlaceHolder="请输入码头"
+                  (input)="filterPier($event.target?.value, 1)">
+                <nz-autocomplete nzBackfill #startPierAuto>
+                  <nz-auto-option *ngFor="let o of startPierShow" [nzValue]="o.pierName">{{o.pierName}}</nz-auto-option>
+                </nz-autocomplete>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="6">
+            <nz-form-item class="clearfix">
+              <nz-form-label nzSpan="8" nzRequired>卸货港</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <nz-select nzShowSearch nzAllowClear class="select-address" (ngModelChange)="getAddress($event,2)"
+                  formControlName="endPoint" nzPlaceHolder="请选择卸货港">
+                  <nz-option nzCustomContent *ngFor="let o of endHarborShow" [nzLabel]="o.harborName" [nzValue]="o.harborName">
+                    <span [title]="o.harborName" [ngStyle]="{'color': o.used ? 'green' : '' }">{{o.harborName}}</span>
+                  </nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="form.get('endPoint').dirty && form.get('endPoint').errors">请选择卸货港
+                </nz-form-explain>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="6">
+            <nz-form-item>
+              <nz-form-label nzSpan="8">码头</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <input nz-input formControlName="endAddress" [nzAutocomplete]="endPierAuto" nzPlaceHolder="请输入码头"
+                  (input)="filterPier($event.target?.value, 2)">
+                <nz-autocomplete nzBackfill #endPierAuto>
+                  <nz-auto-option *ngFor="let o of endPierShow" [nzValue]="o.pierName">{{o.pierName}}</nz-auto-option>
+                </nz-autocomplete>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <p style="color:green;"><i nz-icon type="form" theme="outline"></i><span>运输条件</span></p>
+        <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" nzType="flex" nzAlign="top">
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="4" nzRequired>船期</nz-form-label>
+              <nz-form-control nzSpan="20">
+                <nz-date-picker formControlName="loadDateStart" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
+                  nzPlaceHolder="开始">
+                </nz-date-picker>
+                <nz-date-picker formControlName="loadDateEnd" [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
+                  nzPlaceHolder="结束">
+                </nz-date-picker>
+                <nz-form-explain *ngIf="form.get('loadDateStart').dirty && form.get('loadDateStart').errors">
+                  请输入船期
+                </nz-form-explain>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="6">
+            <nz-form-item>
+              <nz-form-label nzSpan="8">预抵日期</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <nz-date-picker formControlName="targetDate" [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd">
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="6">
+            <nz-form-item>
+              <nz-form-label nzSpan="8">装载天数</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <nz-input-number [nzMin]="0" class="day-input" formControlName="loadDays" [nzStep]="1"></nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="6">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>船级社</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <nz-select class="select-common" formControlName="shipSociety" nzPlaceHolder="请选择船级社">
+                  <nz-option *ngFor="let option of shipSociety" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="form.get('shipSociety').dirty && form.get('shipSociety').errors">
+                  请输入船级社
+                </nz-form-explain>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="6">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>船龄</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <nz-input-number [nzMin]="0" formControlName="shipAge" [nzStep]="1" nzPlaceHolder="请输入船龄"></nz-input-number>
+                <nz-form-explain *ngIf="form.get('shipAge').dirty && form.get('shipAge').errors">请输入船龄
+                </nz-form-explain>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="6">
+            <nz-form-item>
+              <nz-form-label nzSpan="8" nzRequired>装卸条款</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <nz-select class="select-common" formControlName="shipmentTerm" nzPlaceHolder="请选择装卸条款">
+                  <nz-option *ngFor="let option of shipmentTerm" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+                </nz-select>
+                <nz-form-explain *ngIf="form.get('shipmentTerm').dirty && form.get('shipmentTerm').errors">
+                  请输入装卸条款
+                </nz-form-explain>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="6">
+            <nz-form-item>
+              <nz-form-label nzSpan="8">结算节点</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <nz-select class="select-common" formControlName="settleNode" nzPlaceHolder="请选择结算节点">
+                  <nz-option *ngFor="let option of settleNode" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" nzType="flex" nzAlign="top">
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label nzSpan="2">备注</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <textarea nz-input formControlName="remark" nzAutosize [nzAutosize]="{ minRows: 2, maxRows: 3 }"></textarea>
+                <nz-form-explain *ngIf="form.get('remark').dirty && form.get('remark').errors">请输入备注!</nz-form-explain>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label nzSpan="4">滞期费</nz-form-label>
+              <nz-form-control nzSpan="20">
+                <nz-input-group nzCompact>
+                  <nz-input-number style="width:20%" [nzMin]="0" formControlName="demurrageFee" [nzStep]="1"></nz-input-number>
+                  <nz-select style="width:15%" formControlName="demurrageFeeType">
+                    <nz-option *ngFor="let option of demurrageFeeType" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+                  </nz-select>
+                  <nz-select style="width:25%" formControlName="demurrageFeePoing">
+                    <nz-option *ngFor="let option of demurrageFeePoing" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+                  </nz-select>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="6">
+            <nz-form-item>
+              <nz-form-label nzSpan="8">附件</nz-form-label>
+              <nz-form-control nzSpan="16">
+                <nz-upload [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="docUrlsList"
+                  nzListType="text" [nzData]="upload.handleData" (nzChange)="handleChange($event,'docUrls')" nzMultiple="true"
+                  nzLimit="3" [nzShowButton]="!isDisableForm">
+                  <button nz-button>
+                    <i nz-icon type="upload"></i><span>附件上传</span>
+                  </button>
+                </nz-upload>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+      </form>
+    </div>
+    <div class="fl" style="width:100%;position: relative;">
+      <p style="color:green;margin-bottom: 3px;">
+        <i nz-icon type="form" theme="outline"></i><span>货物明细&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <button nz-button nzType="default" *ngIf="!isDisableForm" class="m-r" (click)="addPalletItem()"><i nz-icon type="plus"
+            theme="outline"></i></button>
+        <button nz-button nzType="default" *ngIf="!isDisableForm" (click)="deletePalletItem()"><i nz-icon type="minus"
+            theme="outline"></i></button>
+      </p>
+      <app-table-form formId="sea_pretender_pallet" (userColumnsEmit)="palletItemColums($event)" [dataSet]="palletItem"
+        [isMutli]="true" gridId="palletItem" [nzShowPagination]="false" [showCount]="false"></app-table-form>
+
+    </div>
+  </div>
+</div>
+
+<nz-modal [nzWidth]="'45%'" [nzVisible]="modalIsVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+  (nzOnCancel)="modalIsVisible=false">
+  <ng-template #modalTitle>
+    定向下单
+  </ng-template>
+  <ng-template #modalContent>
+    <form nz-form [formGroup]="orderForm">
+      <nz-form-item>
+        <nz-form-label nzSpan="8" nzRequired>承运公司</nz-form-label>
+        <nz-form-control nzSpan="8">
+          <input type="hidden" nz-input formControlName="carrierCompanyName" />
+          <nz-select style="width: 100%;" formControlName="carrierCompanyId" (ngModelChange)="setTransCompanyName($event)"
+            nzPlaceHolder="承运公司">
+            <nz-option *ngFor="let option of carriers" [nzValue]="option.carrierCompanyId" [nzLabel]="option.carrierCompanyName"></nz-option>
+          </nz-select>
+          <nz-form-explain *ngIf="orderForm.get('carrierCompanyId').dirty && orderForm.get('carrierCompanyId').errors">
+            请选择承运公司！
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzSpan="8" nzRequired>单价</nz-form-label>
+        <nz-form-control nzSpan="8">
+          <nz-input-group nzCompact>
+            <nz-input-number style="width:40%" [nzMin]="0" formControlName="transPrice" [nzStep]="1" placeholder="单价"></nz-input-number>
+            <nz-select style="width:50%" formControlName="calculation" [(ngModel)]="orderForm_calculation">
+              <nz-option *ngFor="let option of calculation" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+            </nz-select>
+          </nz-input-group>
+          <nz-form-explain *ngIf="(orderForm.get('transPrice').dirty && orderForm.get('transPrice').errors) || (orderForm.get('calculation').dirty && orderForm.get('calculation').errors)">
+            请输入单价和计价方式！
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzSpan="8" nzRequired>是否含税</nz-form-label>
+        <nz-form-control nzSpan="8">
+          <nz-radio-group formControlName="settleType" [(ngModel)]="orderForm_settleType">
+            <label *ngFor="let option of settleType" nz-radio [nzValue]="option.value">{{option.label}}</label>
+          </nz-radio-group>
+          <nz-form-explain *ngIf="orderForm.get('settleType').dirty && orderForm.get('settleType').errors">
+            请选中是否含税！
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzSpan="8" [ngClass]="{'ant-form-item-required':orderForm.value.settleType==='JSFS10'}">税率</nz-form-label>
+        <nz-form-control nzSpan="8">
+          <nz-input-number [nzMin]="0" formControlName="taxRate" [nzStep]="1" placeholder="税率"></nz-input-number>
+          <nz-form-explain *ngIf="orderForm.get('taxRate').dirty && orderForm.get('taxRate').errors">
+            请输入税率！
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzSpan="8">船名</nz-form-label>
+        <nz-form-control nzSpan="8">
+          <input nz-input formControlName="boatName" placeholder="船名" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzSpan="8">运力</nz-form-label>
+        <nz-form-control nzSpan="8">
+          <nz-input-number [nzMin]="0" formControlName="capacity" [nzStep]="100" placeholder="运力"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-template>
+  <ng-template #modalFooter>
+    <p class="b-t p-sm-tb">
+      <button nz-button nzType="default" class="m-r" (click)="modalIsVisible=false">取消</button>
+      <button nz-button nzType="primary" class="m-r" [nzLoading]="loading" (click)="save(directOrderUrl)">确认</button>
+    </p>
+  </ng-template>
+</nz-modal>

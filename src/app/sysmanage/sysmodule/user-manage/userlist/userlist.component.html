@@ -1,0 +1,35 @@
+<company-choice [(selectedCompany)]="selectedCompany" (companyChange)="companyChange()"></company-choice>
+
+<common-page gridId="grid1" (search)="listSearch($event)" (btnAdd)="btnAdd()" [pageSize]="pageSize"
+             [totalPage]="totalPage" [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)"
+             (btnDelete)="delete($event)" (btnClick)="btnClick($event)" [dataSet]="dataSet"
+             [extraTableHeight]="permissions ? 52 : 0" [isMutli]="true"></common-page>
+<!--删除弹窗-->
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>
+
+<nz-modal [nzMask]="false" [(nzVisible)]="isVisible" nzTitle="选择用户" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+          [nzFooter]="null" [nzWidth]="700" [nzMaskClosable]="false"  >
+  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+    <input type="text" nz-input placeholder="输入姓名查找,回车触发查询" [(ngModel)]="userSearch" (keyup.enter)="find()">
+  </nz-input-group>
+  <ng-template #suffixIconButton>
+    <button nz-button nzType="primary" nzSearch (click)="find()"><i nz-icon type="search"></i></button>
+  </ng-template>
+  <p class="m-re" style="padding:10px 0;">
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+    <button class="m-l" nz-button nzType="primary" (click)="handleOk()">确认</button>
+  </p>
+  <app-table-form [dataSet]="userDataSet" [listLoading]="userListLoading" [gridId]="'grid2'" selfTableHeight="550px"
+                  [colSet]="false" [pageSize]="userPageSize" [totalPage]="userTotalPage" [isMutli]="true"
+                  [pageFun]="true" (pageIndexEmit)='getPageIndex($event)' (pageSizeEmit)='getPageSize($event)'
+                  (updateDataResult)="updateDataResult($event)"></app-table-form>
+</nz-modal>
+
+
+<ng-template #appDriverImport>
+  <nz-upload nzAction="" [(nzFileList)]="fileList" [nzShowButton]="fileList.length === 0" [nzBeforeUpload]="beforeUpload">
+    <button nz-button><i nz-icon nzType="upload"></i><span>点击上传文件</span></button>
+  </nz-upload>
+</ng-template>

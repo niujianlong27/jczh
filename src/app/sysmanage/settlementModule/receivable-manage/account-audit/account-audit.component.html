@@ -1,0 +1,12 @@
+<!-- <common-page (search)='listSearch($event)' [listLoading]='listLoading' [isMutli]="isMutli" [dataSet]='dataSet' [totalPage]='totalPages'
+  (btnClick)='btnClick($event)' ></common-page> -->
+<app-searchform (search)='listSearch($event)' gridId="grid1" [triggerSearch]="true"></app-searchform>
+<tpl-buttons gridId="grid1" (btnClick)='btnClick($event)' [btnDisable]="{'check_pass': !selectListData[0],'cancel_review': !selectListData[0], 'cancel_apply': !selectListData[0]}" [btnLoading]="{'check_pass': checkPassLoading, 'cancel_review': cancelReview, 'cancel_apply': cancelApply }"></tpl-buttons>
+<app-grid-resize [gridOne]="grid1" [gridTwo]="grid2">
+    <ng-template #grid1>
+        <app-table-form gridId="grid1" [listLoading]='listLoading' [isMutli]="isMutli" [dataSet]='dataSet' [totalPage]='totalPages' (updateDataResult)="selectData($event)"></app-table-form>
+    </ng-template>
+    <ng-template #grid2>
+        <app-table-form gridId="grid2" [nzShowPagination]="false" [isCheckBox]="false" [dataSet]="detailsData" [listLoading]="detailLoading"></app-table-form>
+    </ng-template>
+</app-grid-resize>

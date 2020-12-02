@@ -1,0 +1,52 @@
+<app-searchform (search)="listSearch($event)" (searchComponent)="_initalSearch($event)"></app-searchform>
+
+<tpl-buttons (btnClick)='btnClick($event)' [btnDisable]="btnDisable"></tpl-buttons>
+
+<nz-tabset class="table-list" [(nzSelectedIndex)]="tabIndex" (nzSelectedIndexChange)="tabIndexChanged()">
+    <nz-tab nzTitle="作业计划捆包">
+        <app-table-form gridId="grid1" [dataSet]="result" [totalPage]="total" [trSelectedShow]="true" [listLoading]="loading"
+            (updateDataResult)="checkboxClick($event)" [isMutli]="true">
+            <ng-template grid-row="tpl-grid1-isLoad" let-obj let-index="index" let-key="key">
+                <nz-radio-group [(ngModel)]="result[index][key]" [name]="key">
+                    <label nz-radio nzValue="CBDD50">已装船</label>
+                    <label nz-radio nzValue="CBDD40">未装船</label>
+                </nz-radio-group>
+            </ng-template>
+        </app-table-form>
+    </nz-tab>
+    <nz-tab nzTitle="PDA采集信息">
+        <app-table-form gridId="grid2" [dataSet]="resultPda" [totalPage]="totalPda" [trSelectedShow]="true"
+            [listLoading]="loadingPda" [isMutli]="true"></app-table-form>
+    </nz-tab>
+</nz-tabset>
+
+<!-- <essence-ng2-print [mode]="'popup'" [popTitle]="'表格打印'" [btnText]="'打印表格'" [btnClass]="{'btn': true, 'btn-info': true}"
+    [printHTML]="print" style="float:right" [printStyle]="printStyle" [printCSS]="printCSS" [showBtn]="printBtnBoolean"
+    (click)="beforePrint()" (printComplete)="printComplete()">
+</essence-ng2-print>
+<div #print>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>名称</th>
+                <th>时间</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>张掖市</td>
+                <td>2019-1-12</td>
+
+            </tr>
+            <tr>
+                <td>石家庄</td>
+                <td>2019-2-18</td>
+
+            </tr>
+        </tbody>
+    </table>
+</div> -->
+
+

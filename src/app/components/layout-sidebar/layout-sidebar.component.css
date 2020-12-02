@@ -1,0 +1,224 @@
+
+/*左侧导航*/
+
+.nav-box .left-nav-box,.nav-box .right-nav-box{
+    position: fixed;
+    width: auto;
+    height: 100%;
+    border-right:0;
+    top: 50px;
+    overflow-x: auto;
+    padding-bottom: 50px;
+}
+.left-nav-box{
+    background-color: #094f7b;
+    z-index:12;
+    left: 0;
+}
+
+.left-nav-box.nav-expand .nav-label{
+    width:90px;
+    transition: width .3s ease-in-out;
+}
+.left-icon{
+    padding:5px 0;
+    list-style: none;
+}
+.left-icon,.right-nav-box li{
+    cursor: pointer;
+}
+.parentActive{
+    background-color:#013d63;
+}
+.childrenActive{
+   color:#428bca;
+}
+.left-icon:hover{
+    background-color:#013d63;
+    transition: all ease-out 0.2s;
+}
+.left-icon:hover .nav-resourceName{
+    color:#428bca;
+    transition: all ease-out 0.2s;
+}
+.left-icon .icon{
+    display: inline-block;
+    vertical-align: middle;
+    width:50px;
+    height:30px;
+    text-align: center;
+}
+.left-icon .icon img{
+    display: inline-block;
+    width:15px;
+    height:15px;
+    margin:7px auto;
+}
+.nav-label {
+    display: inline-block;
+    width:0;
+    transition: width .3s ease-in-out;
+}
+.nav-resourceName{
+    color: #fff;
+    font-size: 12px;
+    display: inline-block;
+    vertical-align: middle;
+    width: calc(100%-50px);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+ul.right-nav-box{
+    left:50px !important;
+    z-index:5;
+    background-color:#f0f3f4 !important;
+    color:#333;
+    width:180px !important; /*@^@*/
+}
+.right-nav-box .icon{
+    display: inline-block;
+    vertical-align: middle;
+    width:30px;
+    height:30px;
+    text-align: center;
+    line-height: 30px;
+}
+.right-nav-box .icon i{
+    margin-left:10px;
+}
+.menu-icon{
+    display: inline-block;
+    width:15px;
+    height:15px;
+    margin-right:3px;
+}
+.menu-icon img{
+    display:inline-block;
+    vertical-align: middle;
+    margin-top:-2px;
+    width:15px;
+    height:15px;
+
+}
+.right-nav-box li ::ng-deep div.ant-menu-submenu-title{
+    height:30px;
+    line-height: 30px;
+    font-size:12px;
+}
+span.subName-box{
+    display:inline-block;
+    padding-left: 5px;
+    width:auto;
+    height:auto;
+}
+span.subName-box .down{
+    width: 10px;
+    position: absolute;
+    right: 10px;
+    z-index: 1;
+    top: 55%;
+}
+span.subName-box .down:before, span.subName-box .down:after{
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 1.5px;
+    background: #333;
+    border-radius: 2px;
+}
+span.subName-box .down:before{
+    transform: rotate(-45deg) translateX(2px);
+    transition: transform .3s cubic-bezier(.645,.045,.355,1);
+}
+span.subName-box .down:after{
+    transform: rotate(45deg) translateX(-2px);
+    transition: transform .3s cubic-bezier(.645,.045,.355,1);
+}
+span.subName-box .active.down:before{
+    transform: rotate(45deg) translateX(2px);
+}
+span.subName-box .active.down:after{
+    transform: rotate(-45deg) translateX(-2px);
+}
+.subName{
+    font-size: 12px;
+    display: inline-block;
+    vertical-align: middle;
+   /* width: 89px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;*/
+}
+.menuName li{
+    font-size:12px;
+    padding-left:10px;
+    /*height:30px;*/
+    line-height: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+}
+.menuName li:hover,.menuName li.active{
+   background-color:  #9ac6f0;
+   color:#fff;
+}
+
+.right-nav-box.ant-menu{
+    background-color: transparent;
+}
+.right-nav-box ::ng-deep .ant-menu-submenu-arrow{
+    display:none;
+}
+.right-nav-box.ant-menu-inline ::ng-deep .ant-menu-submenu-title{
+    padding:0;
+    margin-top:0;
+    margin-bottom:0;
+}
+.right-nav-box.ant-menu-inline ::ng-deep .ant-menu-submenu > .ant-menu{
+    background-color:transparent;
+}
+.menuCollapsed{
+    position: absolute;
+    margin:auto;
+    top:50%;
+    height:50px;
+    width:20px;
+}
+.menuCollapsed-left:hover{
+    left:209px;
+}
+.menuCollapsed-right:hover{
+    left:50px;
+}
+.menuCollapsed-left{
+    left:215px;
+    z-index:6;
+    transition: left 0.2s ease-out;
+    background:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMy42MiA1Ni43MyI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNkOWRmZTU7fS5jbHMtMntmaWxsOiM1NDY0Nzg7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT7otYTmupAgMTY8L3RpdGxlPjxnIGlkPSLlm77lsYJfMiIgZGF0YS1uYW1lPSLlm77lsYIgMiI+PGcgaWQ9IuWbvuWxgl8xLTIiIGRhdGEtbmFtZT0i5Zu+5bGCIDEiPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTIuNSw3LjkxLDIzLjU0LDBhLjA2LjA2LDAsMCwxLC4wOC4wNlY1Ni43M0wxLjkzLDQ4LjM2QTIuNzMsMi43MywwLDAsMSwuMTgsNDUuNzhMMCwxMC43MUMwLDkuNTksMS40Niw4LjMsMi41LDcuOTFaIi8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNSwyMC45NEgxOC43NEExLDEsMCwwLDEsMTkuOCwyMmExLjA5LDEuMDksMCwwLDEtMS4wNiwxLjFINC44N0ExLjEsMS4xLDAsMCwxLDMuODEsMjIsMS4xNywxLjE3LDAsMCwxLDUsMjAuOTRabTUuODMsNi4zMmg4YTEuMSwxLjEsMCwwLDEsMCwyLjJoLThhMS4xLDEuMSwwLDAsMS0xLjA2LTEuMSwxLjI1LDEuMjUsMCwwLDEsMS4xNS0xLjFabS02LjE4LjM3LDEuOTQtMmEuODUuODUsMCwwLDEsLjYyLS4yNy44Ni44NiwwLDAsMSwuNjIuMjcsMS4wNiwxLjA2LDAsMCwxLC4yNi42NEw4LDMwLjE5YS45LjksMCwwLDEtLjg4LjkyLjc2Ljc2LDAsMCwxLS42Mi0uMjdMNC42MSwyOC45MWEuODkuODksMCwwLDEsMC0xLjI4Wk01LDMzLjY4SDE4Ljc0YTEsMSwwLDAsMSwxLjA2LDEsMS4wOSwxLjA5LDAsMCwxLTEuMDYsMS4xSDQuODdhMS4wOSwxLjA5LDAsMCwxLTEuMDYtMS4xLDEuMTcsMS4xNywwLDAsMSwxLjE1LTFabTAsMCIvPjwvZz48L2c+PC9zdmc+) top left no-repeat;
+}
+.menuCollapsed-right{
+    left:44px;
+    z-index:11;
+    transition: left 0.2s ease-out;
+    background:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMy42MiA1Ni43MyI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNkOWRmZTU7fS5jbHMtMntmaWxsOiM1NDY0Nzg7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT7otYTmupAgMTQ8L3RpdGxlPjxnIGlkPSLlm77lsYJfMiIgZGF0YS1uYW1lPSLlm77lsYIgMiI+PGcgaWQ9IuWbvuWxgl8xLTIiIGRhdGEtbmFtZT0i5Zu+5bGCIDEiPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTIxLjEyLDQ4LjgybC0yMSw3LjlhLjA1LjA1LDAsMCwxLS4wOCwwVjBMMjEuNyw4LjM3QTIuNzIsMi43MiwwLDAsMSwyMy40NCwxMUwyMy42Miw0NkMyMy42LDQ3LjE0LDIyLjE3LDQ4LjQyLDIxLjEyLDQ4LjgyWiIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTE4LjY2LDM1Ljc5SDQuODlhMSwxLDAsMCwxLTEuMDYtMS4xLDEuMDksMS4wOSwwLDAsMSwxLjA2LTEuMUgxOC43NWExLjEsMS4xLDAsMCwxLDEuMDYsMS4xLDEuMTcsMS4xNywwLDAsMS0xLjE1LDEuMVptLTUuODMtNi4zMkg0Ljg5YTEuMSwxLjEsMCwwLDEsMC0yLjJoOEExLjA4LDEuMDgsMCwwLDEsMTQsMjguMzdhMS4yNSwxLjI1LDAsMCwxLTEuMTUsMS4xWk0xOSwyOS4xbC0xLjk1LDJhLjgyLjgyLDAsMCwxLTEuMjMsMCwxLDEsMCwwLDEtLjI3LS42NGwuMDktMy45NGEuOS45LDAsMCwxLC44OC0uOTEuNzYuNzYsMCwwLDEsLjYyLjI3TDE5LDI3LjgyYS45MS45MSwwLDAsMSwwLDEuMjhabS0uMzYtNi4wNUg0Ljg5YTEsMSwwLDAsMS0xLjA2LTEsMS4wOSwxLjA5LDAsMCwxLDEuMDYtMS4xSDE4Ljc1QTEuMSwxLjEsMCwwLDEsMTkuODEsMjJhMS4xNywxLjE3LDAsMCwxLTEuMTUsMVptMCwwIi8+PC9nPjwvZz48L3N2Zz4=) top left no-repeat;
+}
+ul.right-nav-box.expand-collapsed{
+    transition: left 0.5s ease-out;
+    left:-180px !important;
+}
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+  
+  .cdk-drag-placeholder{
+    opacity: 0;
+  }
+  .cdk-drop-list-dragging li:not(.cdk-drag-placeholder), .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }

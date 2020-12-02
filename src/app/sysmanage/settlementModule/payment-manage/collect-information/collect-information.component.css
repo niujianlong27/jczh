@@ -1,0 +1,19 @@
+.cellect-information ::ng-deep td.invoiceSerialNumber-multi {
+  color: gray ;
+  position: relative;
+}
+
+.int {
+  position: absolute;
+  right: 12%;
+  top:40%;
+  width:4px;
+  height:4px;
+  border-left:4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 8px solid gray;
+}
+
+.cellect-information ::ng-deep td.invoiceSerialNumber-sig {
+  color: gray
+}

@@ -1,0 +1,17 @@
+.chart{
+  margin-top: -20px
+}
+.firstColor{
+  width: 6px;
+  height:6px;
+  background-color: #5793f3;
+  margin-top:-13px;
+  margin-left:130px
+}
+.secondColor{
+  width: 6px;
+  height:6px;
+  background-color: #d14a61;
+  margin-top:-13px;
+  margin-left:230px
+}

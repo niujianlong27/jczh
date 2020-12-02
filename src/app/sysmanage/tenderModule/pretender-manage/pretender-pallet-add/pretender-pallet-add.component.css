@@ -1,0 +1,48 @@
+.day-style{
+    display: inline-block;
+    line-height: 39px;
+    font-size:12px;
+    vertical-align: middle;
+    margin-left:5px;
+}
+.day-input{
+    width:70px;
+}
+.select-address{
+    width:170px;
+}
+.select-common{
+   width:150px;
+}
+::ng-deep .ant-table-tbody > tr > td.string {
+  text-align: center;
+}
+
+.btn-icon{
+  display: inline-block;
+  width:15px;
+  height:15px;
+  margin-right:3px;
+}
+.btn-icon img{
+  display:inline-block;
+  vertical-align: middle;
+  margin-top:-2px;
+  width:15px;
+  height:15px;
+
+}
+.locationStyle{
+  float: left;
+  width: 120px;
+  margin-left: 10px;
+}
+nz-date-picker .ant-calendar-picker{
+  width: 120px!important;
+}
+/*.ant-table-fixed-header > .ant-table-content > .ant-table-scroll > .ant-table-body{
+
+}*/
+.modal-table ::ng-deep .ant-table-fixed-header > .ant-table-content > .ant-table-scroll > .ant-table-body{
+  min-height: 150px!important;
+}

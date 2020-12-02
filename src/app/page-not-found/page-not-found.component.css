@@ -1,0 +1,118 @@
+/* .c-pnf-box{
+    padding-top:13%;
+    background-color:#10a2e9;
+    position: fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+}
+.c-pnf-title{
+    width:440px;
+    margin:0 auto;
+}
+.c-pnf-desc{
+    font-size:16px;
+    text-align: center;
+    opacity: 0.8;
+    color:#fefefe;
+    filter: alpha(opacity=8);
+} */
+.acolor{
+    text-decoration: underline;
+    color:#094f7b;
+}
+.left-eye{
+    position: absolute;
+    z-index:1;
+    left:113px;
+    top:47px;
+    display: block;
+    animation-name: leftEyeAnimate;
+    animation-play-state: running;
+    animation-duration: 7s;
+    animation-delay: 6s;
+    animation-iteration-count: infinite;
+}
+.right-eye{
+    position: absolute;
+    z-index:1;
+    left:210px;
+    top:50px;
+    display: block;
+    animation-name: rightEyeAnimate;
+    animation-play-state: running;
+    animation-duration: 7s;
+    animation-delay: 6s;
+    animation-iteration-count: infinite;
+}
+ @keyframes leftEyeAnimate{
+  0%{
+      top:47px;
+      left:113px;
+  }
+  10%{
+      top:40px;
+      left:104px;
+  }
+  20%{
+      top:40px;
+      left:104px;
+  }
+  40%{
+      top:46px;
+      left:124px;
+  }
+  50%{
+      top:56px;
+      left:121px;
+  }
+  60%{
+      top:54px;
+      left:107px;
+  }
+  70%{
+    left:113px;
+    top:47px;
+  }
+  100%{
+    left:113px;
+    top:47px;
+  }
+
+}
+@keyframes rightEyeAnimate{
+    0%{
+        top:50px;
+        left:210px;
+    }
+    10%{
+        top:44px;
+        left:191px;
+    }
+    20%{
+        top:44px;
+        left:191px;
+    }
+    40%{
+        top:46px;
+        left:218px;
+    }
+    50%{
+        top:62px;
+        left:219px;
+    }
+    60%{
+        top:55px;
+        left:194px;
+    }
+    70%{
+      left:210px;
+      top:50px;
+    }
+    100%{
+      left:210px;
+      top:50px;
+    }
+  
+  } 

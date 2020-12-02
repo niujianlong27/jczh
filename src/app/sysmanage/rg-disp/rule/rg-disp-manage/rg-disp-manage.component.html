@@ -1,0 +1,12 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [btnHiden]="{'Find':false,'Add':false,'Set':false}"></tpl-buttons>
+
+<app-table-form  [pageFun]='true' (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)' [gridId]="'grid1'"
+                 [dataSet]="dataSet1" (updateDataResult)="updateDataResult($event)"  [isMutli] ='false'
+                 [pageSize]="pageSize1" [totalPage]="totalPages1" [isMutli]="true" [listLoading]="listLoading1" >
+
+</app-table-form>
+<app-modal-confirm [deleteVisible]="updateVisible" [modalTitle]="modalTitle2" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+
+</app-modal-confirm>

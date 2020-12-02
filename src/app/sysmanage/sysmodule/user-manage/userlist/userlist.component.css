@@ -1,0 +1,63 @@
+.br{
+    border: 1px solid #f00;
+}
+.fl{
+    float: left;
+}
+.fr{
+    float: right;
+}
+.clearfix:after{
+  content: "020"; 
+  display: block; 
+  height: 0; 
+  clear: both; 
+  visibility: hidden;  
+  }
+
+.search-box{
+    width: 100%;
+    padding: 10px 20px;
+}
+.search-box>div{
+    width: 25%;
+    height: 30px;
+}
+.search-box label{
+    float: left;
+    display: block;
+    widows: 100%;
+}
+.search-box label span{
+    display: block;
+    width:69px;
+    margin-top: 5px;
+    height: 100%;
+    float: left;
+    text-align: right;
+}
+.search-box input{
+    width: 200px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.search-btn{
+    width: 100px;
+}
+
+.padding-big-right{
+    padding-right: 200px;
+}
+.btn-box{
+    width: 100%;
+    padding: 20px 20px;
+    border-top:1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+.btn-stroke{
+   background-color: transparent;
+   color: #1890ff ;
+   margin-left: 20px;
+   width: 100px;
+}

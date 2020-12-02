@@ -1,0 +1,12 @@
+/* .margin{
+  margin-right: 1px;
+} */
+.rotate-icon{
+  text-align: center;
+  background: #ededed;
+}
+.rotate-icon i{
+  font-size: 24px;
+  cursor: pointer;
+  color: #f00;
+}

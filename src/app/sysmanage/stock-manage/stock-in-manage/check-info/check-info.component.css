@@ -1,0 +1,7 @@
+.check-info{
+    padding-top: 10px;
+}
+.matching-search ::ng-deep .search-form {
+    border-bottom: none;
+    padding: 0 0 5px;
+}

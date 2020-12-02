@@ -1,0 +1,109 @@
+<nz-spin [nzSize]="'large'" [nzSpinning]="spinning">
+  <app-searchform (search)='listSearch($event)'>
+  </app-searchform>
+  <tpl-buttons [btnDisable]="{AddPack1:tmpButtonId==='UpdatePack' ,UpdatePack:tmpButtonId==='AddPack1'}"
+               (btnClick)='btnClick($event)'>
+  </tpl-buttons>
+
+  <app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+  </app-grid-resize>
+
+  <ng-template #one>
+    <app-table-form gridId="grid1" [isMutli]="false" [listLoading]='listLoading' [dataSet]='dataSet'
+                    [totalPage]='total' [selfTableHeight]="gridOneHeight" (btnClick)='btnClick($event)'
+                    (updateDataResult)='updateDataResult($event)' (listClick)="listClick($event)"
+    >
+    </app-table-form>
+  </ng-template>
+  <ng-template #two>
+    <app-table-form gridId="grid2" [isMutli]="true" [dataSet]="packDataSet" [totalPage]="packTotal"
+                    [selfTableHeight]="gridTwoHeight" [pageSize]="packPageSize" [pageFun]="true"
+                    [paginationRef]="summary" [nzShowPagination]="false" (pageIndexEmit)="packPageIndex($event)"
+                    (pageSizeEmit)="packPageSizeChange($event)" (updateDataResult)="packUpdateDataResult($event)"
+                    (inpEmit)="childModalChange($event)"
+    >
+    </app-table-form>
+
+    <ng-template #summary>
+      当前页总重量{{packDataSet | dataAggregation:'weight' | gridData:{type: 'number', format: '3'} }}吨
+    </ng-template>
+  </ng-template>
+</nz-spin>
+<nz-modal nzWidth="70%" [nzFooter]="null" [nzMaskClosable]="false" [(nzVisible)]="modalFormVisible"
+          [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" (nzAfterClose)="closeResult()">
+  <nz-spin [nzSpinning]="modalSpinning">
+    <tpl-buttons formId="form_boat_schedule_add_unload" (btnClick)='btnClick($event)'
+                 [btnDisable]="{SaveAdd:!modalValidateForm.get('boatBatchNum').value}">
+    </tpl-buttons>
+    <form nz-form [formGroup]="modalValidateForm">
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="8" *ngFor="let m of modalFormData">
+          <nz-form-item nzFlex>
+            <nz-form-label [nzSpan]="10" [nzRequired]="m.require">{{m.name}}</nz-form-label>
+
+            <nz-form-control [nzSpan]="14">
+
+              <ng-container *ngIf="m.eName==='scheduleNum' else templateRef">
+                <input nz-input placeholder="系统自动生成" type="text" *ngIf="m.type == 'text'" [formControlName]="m.eName"
+                       [id]="m.eName">
+              </ng-container>
+
+              <ng-template #templateRef>
+                <input nz-input type="text" *ngIf="m.type == 'text'" [formControlName]="m.eName" [id]="m.eName">
+              </ng-template>
+
+              <nz-input-number *ngIf="m.type == 'number'" [formControlName]="m.eName" [nzMin]="0"
+                               [nzStep]="1">
+              </nz-input-number>
+
+              <nz-date-picker *ngIf="m.type == 'date'" nzFormat="yyyy-MM-dd HH:mm:ss" [formControlName]="m.eName">
+              </nz-date-picker>
+
+              <nz-select *ngIf="m.type === 'select'" style="width: 120px;" [formControlName]="m.eName">
+                <nz-option *ngFor="let i of m.selectList" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+              </nz-select>
+
+              <nz-form-explain
+                *ngIf="modalValidateForm.get(m.eName).invalid && (modalValidateForm.get(m.eName).dirty || modalValidateForm.get(m.eName).touched)">
+                <ng-container *ngIf="modalValidateForm.get(m.eName).errors.required">
+                  {{m.validateCon}}
+                </ng-container>
+              </nz-form-explain>
+
+            </nz-form-control>
+
+          </nz-form-item>
+        </div>
+      </div>
+
+    </form>
+
+    <!--  <tpl-buttons formId="form_boat_schedule_add_unload2" (btnClick)='btnClick($event)'></tpl-buttons>-->
+    <tpl-buttons formId="form_boat_schedule_pack_add" (btnClick)='btnClick($event)'>
+    </tpl-buttons>
+
+    <app-table-form gridId="grid2" [dataSet]="detailDataModalList" [isMutli]="true" [paginationRef]="summary2"
+                    (inpEmit)="modalPop($event)" (updateDataResult)="detailModalUpdateDataResult($event)">
+    </app-table-form>
+    <ng-template #summary2>
+      总重量{{detailDataModalList | dataAggregation:'weight' | gridData:{type: 'number', format: '3'} }}吨
+    </ng-template>
+  </nz-spin>
+
+</nz-modal>
+
+<ng-template #boatPlan>
+  <app-table-form formId="form_boat_plan" [extraTableHeight]="150" [dataSet]="shipPlanModalList"
+                  [totalPage]="shipPlanModalTotal" [pageSize]="shipPlanModalPageSize" [pageFun]="true"
+                  [selfTableHeight]="'260px'" [nzShowPagination]="false"
+                  (updateDataResult)="shipPlanModalUpdateChange($event)"
+  >
+  </app-table-form>
+</ng-template>
+
+<ng-template #importDataModal>
+  <nz-upload [(nzFileList)]="fileList" [nzAction]="importUrl" [nzLimit]="1" [nzShowButton]="fileList.length < 1"
+             [nzBeforeUpload]="beforeUpload">
+    <button nz-button><i nz-icon nzType="upload"></i><span>点击上传</span></button>
+  </nz-upload>
+</ng-template>

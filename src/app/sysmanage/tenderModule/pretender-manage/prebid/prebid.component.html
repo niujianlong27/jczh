@@ -1,0 +1,441 @@
+<div>
+  <app-searchform (search)="listMainSearch($event)"></app-searchform>
+  <tpl-buttons (btnClick)="btnClick($event)" [btnDisable]="{'Result':btnDisabled.Result,'Withdraw':btnDisabled.Withdraw,'Select':btnDisabled.Select,
+  'Afresh':btnDisabled.Afresh,'Failure':btnDisabled.Failure,'Update':btnDisabled.Update,'TenderStatus':btnDisabled.TenderStatus}"></tpl-buttons>
+  <app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+    <ng-template #one>
+      <app-table-form [gridId]="'grid1'" [dataSet]="dataSet" [totalPage]="totalPage" [pageSize]="pageSize"
+                      [trSelectedShow]="true" [selfTableHeight]="gridOneHeight"
+                      [listLoading]="listLoading" (updateDataResult)="selectData($event)"
+                      [isMutli]="true" selfTableHeight="250px" (listClick)="listMainClick($event)"></app-table-form>
+    </ng-template>
+    <ng-template #two>
+      <!--<nz-tabset>-->
+      <!--<nz-tab nzTitle="货盘明细">-->
+      <app-table-form gridId="grid2" [dataSet]="dataSetPallet" [isCheckBox]="false" [listLoading]="nextLoading"
+                      [totalPage]="totalpage2" [pageSize]="pageSize2" [pageFun]="true"
+                      [showCount]="false" (pageSizeEmit)="pageSizeEmit($event)"
+                      (pageIndexEmit)="pageIndexEmit($event)" [selfTableHeight]="gridTwoHeight"
+                      [nzShowPagination]="true">
+      </app-table-form>
+      <!--</nz-tab>-->
+      <!--</nz-tabset>-->
+    </ng-template>
+  </app-grid-resize>
+</div>
+
+<ng-template #Result>
+  <nz-tabset [(nzSelectedIndex)]="nzSelectedIndex" (nzSelectedIndexChange)="getHistory()">
+    <nz-tab nzTitle="投标详情">
+    </nz-tab>
+    <nz-tab nzTitle="投标历史">
+    </nz-tab>
+  </nz-tabset>
+  <ng-container [ngTemplateOutlet]="detail"></ng-container>
+  <ng-template #detail>
+
+    <div nz-row nzGutter="8">
+
+      <div nz-col [nzSpan]="showChildList&&(type !== 'FBFS10' && type !== 'FBFS20')?13:24">
+        <app-table-form
+          [dataSet]="tenderDataSet" [colSet]="false" [isCheckBox]="false" [showCount]="false"
+          [gridId]="(type === 'FBFS10' && type === 'FBFS20')?'grid4':'grid5'" [listLoading]="detailListLoading"
+          [trSelectedShow]="trSelectedShow" [nzShowPagination]="false" (listClick)="listClick($event)"></app-table-form>
+      </div>
+
+      <ng-container *ngIf="(type !== 'FBFS10' && type !== 'FBFS20')">
+
+        <div nz-col [nzSpan]="showChildList&&(type !== 'FBFS10' && type !== 'FBFS20')?11:0">
+          <app-table-form
+            [dataSet]="tenderChildDataSet" [colSet]="false" [nzShowPagination]="false" [showCount]="false"
+            [isCheckBox]="false" [gridId]="type === 'FBFS30'?'grid4':'grid5'"></app-table-form>
+        </div>
+
+      </ng-container>
+    </div>
+
+  </ng-template>
+
+  <ng-template #history>
+    <app-table-form></app-table-form>
+  </ng-template>
+</ng-template>
+
+<ng-container>
+  <ng-template #pubishTitle>
+    {{modalTitle}}
+  </ng-template>
+  <ng-template #pubishContent>
+    <p><i nz-icon type="form" theme="outline"></i><span>招标定价</span></p>
+    <!---分别发布-->
+    <ng-container
+      *ngIf="selectData1[0].issueType === 'FBFS10' || selectData1[0].issueType === 'FBFS20' || selectData1[0].issueType === 'FBFS60'">
+      <ng-container [ngTemplateOutlet]="classificationTemplate"></ng-container>
+    </ng-container>
+    <!--捆绑发布-->
+    <ng-container
+      *ngIf="selectData1[0].issueType === 'FBFS30' || selectData1[0].issueType === 'FBFS40' || selectData1[0].issueType === 'FBFS50' || selectData1[0].issueType === 'FBFS70'">
+      <nz-radio-group [(ngModel)]="bidPriceType" class="m-b-sm" (ngModelChange)="radioChange($event)">
+        <label nz-radio nzValue="10" [nzDisabled]="afresh">按均价</label>
+        <label nz-radio nzValue="20" [nzDisabled]="afresh">分别报价</label>
+      </nz-radio-group>
+      <div class="clearfix" *ngIf="bidPriceType === '10'">
+        <div class="fl clearfix">
+          <nz-form-label class="fl" nzRequired>参考运价</nz-form-label>
+          <nz-form-control class="fl">
+            <nz-input-number [nzDisabled]="afresh" [(ngModel)]="modalForm.price" [nzPrecision]="2"></nz-input-number>
+          </nz-form-control>
+          <nz-form-control class="fl m-l-sm">
+            <nz-select style="width: 90px;" nzAllowClear [(ngModel)]="modalForm.calculation" [nzDisabled]="afresh">
+              <nz-option [nzValue]="i.value" [nzLabel]="i.name" *ngFor="let i of calculationArr"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+        <div class="fl clearfix m-l">
+          <nz-form-label class="fl" nzRequired>是否含税</nz-form-label>
+          <nz-form-control class="fl">
+            <nz-select style="width: 90px;" nzAllowClear [(ngModel)]="modalForm.settleType" [nzDisabled]="afresh">
+              <nz-option [nzValue]="i.value" [nzLabel]="i.name" *ngFor="let i of settleTypeArr"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+      </div>
+      <ng-container *ngIf="bidPriceType === '20'" [ngTemplateOutlet]="classificationTemplate"></ng-container>
+    </ng-container>
+    <p><i nz-icon type="form" theme="outline"></i><span>投标人</span></p>
+    <nz-transfer
+      nzShowSearch
+      [nzDataSource]="bidCompanyUser"
+      [nzTitles]="['投标人查询','已选择投标人']"
+      [nzListStyle]="{'width': '45%', 'height.px': 300}"
+      [nzFilterOption]="dataFilter"
+      [nzOperations]="['添加', '删除']"
+      (nzChange)="selectedBider($event)"
+      [nzRender]="render">
+      <ng-template #render let-item>
+        {{ item.companyName}}
+      </ng-template>
+    </nz-transfer>
+    <p><i nz-icon type="form" theme="outline"></i><span>招标时效</span></p>
+    <div class="clearfix">
+      <div class="fl clearfix">
+        <nz-form-label class="fl" nzRequired>业务执行时间</nz-form-label>
+        <nz-form-control class="fl">
+          <nz-date-picker [(ngModel)]="modalForm.executionTimeStart" [nzDisabled]="afresh"
+                          [nzDisabledDate]="disabledStartDate" [nzShowToday]="false"
+                          nzFormat="yyyy-MM-dd"
+                          nzPlaceHolder="开始">
+          </nz-date-picker>
+          <nz-date-picker class="m-l-sm" [(ngModel)]="modalForm.executionTimeEnd" [nzDisabled]="afresh"
+                          [nzDisabledDate]="disabledEndDate" [nzShowToday]="false"
+                          nzFormat="yyyy-MM-dd"
+                          nzPlaceHolder="结束">
+          </nz-date-picker>
+        </nz-form-control>
+      </div>
+      <div class="fl clearfix m-l" *ngIf="buttonId !== 'Afresh'">
+        <nz-form-label class="fl" nzRequired>投标时间</nz-form-label>
+        <nz-form-control class="fl">
+          <nz-date-picker [(ngModel)]="modalForm.bidTimeStart"
+                          [nzDisabledDate]="bidStartDate" nzShowTime [nzShowToday]="false"
+                          nzFormat="yyyy-MM-dd HH:mm"
+                          nzPlaceHolder="开始">
+          </nz-date-picker>
+          <nz-date-picker class="m-l-sm" [(ngModel)]="modalForm.bidTimeEnd"
+                          [nzDisabledDate]="bidEndDate" nzShowTime [nzShowToday]="false"
+                          nzFormat="yyyy-MM-dd HH:mm"
+                          nzPlaceHolder="结束">
+          </nz-date-picker>
+        </nz-form-control>
+      </div>
+      <div class="fl clearfix m-l" *ngIf="buttonId === 'Afresh'">
+        <nz-form-label class="fl" nzRequired>投标截止倒计时</nz-form-label>
+        <nz-input-number class="reference" style="width: 120px; margin-top: 10px;" nzSize="small" [nzMin]="0"
+                         [(ngModel)]="modalForm.addMinute" [nzStep]="1">
+        </nz-input-number>
+        分钟
+      </div>
+    </div>
+    <ng-container
+      *ngIf="selectData1[0].issueType === 'FBFS30' || selectData1[0].issueType === 'FBFS40' || selectData1[0].issueType === 'FBFS50' || selectData1[0].issueType === 'FBFS70'">
+      <p><i nz-icon type="form" theme="outline"></i><span>备注</span></p>
+      <textarea rows="4" nz-input maxLength="200" [(ngModel)]="modalForm.remark"></textarea>
+    </ng-container>
+  </ng-template>
+  <ng-template #pubishFooter>
+    <button nz-button nzType="primary" (click)="confirmPublish(buttonId)" [nzLoading]="confirmLoading"
+            [disabled]="confirmLoading">确认发布
+    </button>
+  </ng-template>
+</ng-container>
+<ng-container>
+  <ng-template #confirmTitle>提示信息</ng-template>
+  <ng-template #confirmContent>
+    <p class="text-center f-b" style="margin:0;"> {{confimCon}} </p>
+  </ng-template>
+  <ng-template #confirmFooter>
+    <button nz-button nzType="primary" (click)="confirm()" [nzLoading]="confirmLoading">确定</button>
+    <button nz-button nzType="default" (click)="cancelClose()">取消</button>
+  </ng-template>
+</ng-container>
+
+<nz-modal [nzWidth]="'75%'" [nzVisible]="historyIsVisible" [nzTitle]="historyTitle" [nzContent]="historyContent"
+          [nzFooter]="historyFooter" (nzOnCancel)="historyIsVisible=false">
+
+  <ng-template #historyTitle>
+    <span *ngIf="buttonId == 'Result'">查看评标结果</span>
+    <span *ngIf="buttonId == 'Select'">评标</span>
+  </ng-template>
+
+  <ng-template #historyContent>
+    <nz-tabset *ngIf="!bidFlag" [(nzSelectedIndex)]="selectedIndex" (nzSelectedIndexChange)="getHistory()">
+      <nz-tab nzTitle="评标详情">
+      </nz-tab>
+      <nz-tab nzTitle="评标历史">
+      </nz-tab>
+    </nz-tabset>
+
+    <nz-table #nestedTable [nzScroll]="{x:'100%',y:tableHeight }" [nzData]="bidHistoryAll" [nzShowPagination]="false"
+    >
+      <thead>
+      <tr>
+        <th style="width:5%" nzShowExpand></th>
+        <ng-container *ngFor="let h of allColumsArr;let h_dex = index;">
+          <th class="table-th" title="{{h.colCname}}" [nzWidth]="h.width" nzCustomFilter>
+            <span [class.header-span]="h.required">{{h.colCname}}</span>
+
+          </th>
+        </ng-container>
+
+      </tr>
+      </thead>
+      <tbody>
+      <ng-template ngFor let-data [ngForOf]="nestedTable.data">
+        <tr [class.bg-grid-tr]=" ( dex % 2 !== 0 ) && closeBgTr"
+            [ngStyle]="data.replaceCheckBox?{'background-color':'#fafafa'}:{}">
+
+          <td nzShowExpand [(nzExpand)]="data.expand"></td>
+          <ng-container *ngFor="let n of allColumsArr; let ind = index;">
+            <td>
+              <span title="{{data[n.colEname]}}">{{ data[n.colEname]}}</span>
+            </td>
+          </ng-container>
+        </tr>
+
+        <tr [nzExpand]="data.expand">
+          <td colspan="24">
+            <nz-table #innerTable [nzScroll]="{x:tableWidth,y:tableHeight }" [nzData]="data['tBidModelsThree']"
+                      nzSize="middle" [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th *ngIf="buttonId == 'Select'"  nzShowCheckbox  [(nzChecked)]=" data.allChecked" [nzDisabled]="!isMutli || !data.tBidModelsThree[0]"
+            nzLeft="0px" [nzIndeterminate]="data.indeterminate"
+            (nzCheckedChange)="checkAll($event,data)">
+        </th>
+        <ng-container *ngFor="let h1 of columsArr;let c_dex = index;">
+          <th class="table-th" title="{{h1.colCname}}" [nzWidth]="h1.width">
+            <span [class.header-span]="h1.required">{{h1.colCname}}</span>
+            <span class="resize-handle"></span>
+          </th>
+        </ng-container>
+
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let data of innerTable.data">
+        <td [ngStyle]="{background: data._bgColor}" [class.bg-grid-tr]=" ( dex % 2 !== 0 ) && closeBgTr" nzShowCheckbox
+            [(nzChecked)]="data.checked" nzLeft="0px" *ngIf="buttonId == 'Select'"
+            [nzDisabled]="data.disabled" (nzCheckedChange)="refreshStatus(data)">
+
+        </td>
+        <ng-container *ngFor="let n1 of columsArr; let ind1 = index;">
+          <ng-container *ngIf="!n1.tdTemplate"
+                        [ngSwitch]="(n1.edit==='BJBJ20' && !data.EDIT) ||(n1.edit==='BJBJ10' && data.editstate == 0) || !n1.edit">
+            <td>
+              <ng-template [ngSwitchCase]="true">
+                <span title="{{data[n1.colEname]}}">{{ data[n1.colEname]}}</span>
+
+              </ng-template>
+              <ng-template [ngSwitchCase]="false">
+                <!--文本框-->
+                <input *ngIf="n1.type==='string'" [disabled]="data.inputDisabled && data.inputDisabled[n1.colEname]"
+                       nz-input nzSize="small" [(ngModel)]="data[n1.colEname]" #input
+                       [ngModelOptions]="{standalone: true}">
+                <!--数字框-->
+                <app-input-number *ngIf="n1.type==='number'" [intType]="n1.intType" [notAbs]="n1.notAbs"
+                                  [disabled]="data.inputDisabled && data.inputDisabled[n1.colEname]" [format]="n1.format"
+                                  size="small" [(ngModel)]="data[n1.colEname]" #input
+                              [ngModelOptions]="{standalone: true}"></app-input-number>
+              </ng-template>
+            </td>
+          </ng-container>
+        </ng-container>
+      </tr>
+      </tbody>
+    </nz-table>
+    </td>
+    </tr>
+  </ng-template>
+
+  </tbody>
+  </nz-table>
+
+  </ng-template>
+
+  <ng-template #historyFooter>
+    <button nz-button nzType="primary" *ngIf="buttonId == 'Select' && !selectedIndex" (click)="evaluation()"
+            [nzLoading]="confirmLoading">评标
+    </button>
+    <button nz-button nzType="default" (click)="historyIsVisible = false">关闭</button>
+  </ng-template>
+</nz-modal>
+
+<!--按流向/按品名查询列表-->
+<ng-template #classificationTemplate>
+  <nz-tabset [(nzSelectedIndex)]="selectedIndex1" (nzSelectedIndexChange)="selectedIndexChange($event)">
+    <nz-tab nzTitle="按流向" [nzDisabled]="buttonId == 'Afresh'">
+      <nz-table #table1 [nzScroll]="{x:'100%',y:'500px'}" nzSize="small" class="modal-table"
+                [nzData]="classificationData" [nzShowPagination]="false" [nzFrontPagination]="false"
+                [nzWidthConfig]="['16%','16%','16%','16%','16%','20%']">
+        <thead>
+        <tr>
+          <!--<th>货盘号</th>-->
+          <th>装点</th>
+          <th>卸点</th>
+          <th>品名</th>
+          <th>参考运量(T)</th>
+          <th>是否含税</th>
+          <!--<th colspan="2"><span class="header-span">参考运价</span></th>-->
+          <th colspan="2"><span
+            class="header-span">{{selectData1[0] && selectData1[0].hiredType === '10' ? '参考运价（元）' : '参考运价（元/吨）'}}</span>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of table1.data">
+          <!--<td [title]="data.palletNos">{{data.palletNos}}</td>-->
+          <td [title]="data.flowNameStart">{{data.flowNameStart}}</td>
+          <td [title]="data.flowNameEnd">{{data.flowNameEnd}}</td>
+          <td [title]="data.productName">{{data.productName}}</td>
+          <td [title]="data.refCapacity">{{data.refCapacity | number:'1.3-3'}}</td>
+          <td>
+            <nz-select style="width: 100px;" nzAllowClear nzSize="small" [(ngModel)]="data.settleType"
+                       [nzDisabled]="afresh">
+              <nz-option [nzValue]="i.value" [nzLabel]="i.name" *ngFor="let i of settleTypeArr"></nz-option>
+            </nz-select>
+          </td>
+          <td>
+            <nz-input-group nzCompact>
+              <nz-input-number class="reference" [nzDisabled]="afresh" style="width: 80px;" nzSize="small" [nzMin]="0"
+                               [(ngModel)]="data.price" [nzStep]="1" [nzPrecision]="2">
+              </nz-input-number>
+              <nz-select class="reference" nzAllowClear nzSize="small" [(ngModel)]="data.calculation"
+                         [nzDisabled]="afresh">
+                <nz-option [nzValue]="i.value" [nzLabel]="i.name" *ngFor="let i of calculationArr"></nz-option>
+              </nz-select>
+            </nz-input-group>
+
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+
+    </nz-tab>
+    <nz-tab nzTitle="按品名" [nzDisabled]="buttonId == 'Afresh'">
+      <nz-table #table2 [nzScroll]="{x:'100%',y:'500px'}" nzSize="small" class="modal-table"
+                [nzData]="classificationData" [nzShowPagination]="false" [nzFrontPagination]="false"
+                [nzWidthConfig]="['16%','16%','16%','16%','16%','20%']">
+        <thead>
+        <tr>
+          <!--<th>货盘号</th>
+          <th>货盘明细号</th>-->
+          <th>装点</th>
+          <th>卸点</th>
+          <th>品名</th>
+          <th>参考运量(T)</th>
+          <th>是否含税</th>
+          <!--<th colspan="2"><span class="header-span">参考运价</span></th>-->
+          <th colspan="2"><span
+            class="header-span">{{selectData1[0] && selectData1[0].hiredType === '10' ? '参考运价（元）' : '参考运价（元/吨）'}}</span>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of table2.data">
+          <!--<td [title]="data.palletNos">{{data.palletNos}}</td>
+          <td [title]="data.palletItemNos">{{data.palletItemNos}}</td>-->
+          <td [title]="data.flowNameStart">{{data.flowNameStart}}</td>
+          <td [title]="data.flowNameEnd">{{data.flowNameEnd}}</td>
+          <td [title]="data.productName">{{data.productName}}</td>
+          <td [title]="data.refCapacity">{{data.refCapacity | number:'1.3-3'}}</td>
+          <td>
+            <nz-select style="width: 100px;" nzAllowClear nzSize="small" [(ngModel)]="data.settleType"
+                       [nzDisabled]="afresh">
+              <nz-option [nzValue]="i.value" [nzLabel]="i.name" *ngFor="let i of settleTypeArr"></nz-option>
+            </nz-select>
+          </td>
+          <td>
+            <nz-input-group nzCompact>
+              <nz-input-number [nzDisabled]="afresh" class="reference" style="width: 80px;" nzSize="small" [nzMin]="0"
+                               [(ngModel)]="data.price" [nzStep]="1" [nzPrecision]="2">
+              </nz-input-number>
+              <nz-select class="reference" nzAllowClear nzSize="small" style="width: 60px;"
+                         [(ngModel)]="data.calculation" [nzDisabled]="afresh">
+                <nz-option [nzValue]="i.value" [nzLabel]="i.name" *ngFor="let i of calculationArr"></nz-option>
+              </nz-select>
+            </nz-input-group>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </nz-tab>
+    <nz-tab nzTitle="按尺寸" [nzDisabled]="buttonId == 'Afresh'">
+      <nz-table #table3 [nzScroll]="{x:'119%',y:'500px'}" nzSize="small" class="modal-table"
+                [nzData]="classificationData"
+                [nzWidthConfig]="['16%','16%','16%','19%','16%','17%','19%']">
+        <thead>
+        <tr>
+          <th>装点</th>
+          <th>卸点</th>
+          <th>品名</th>
+          <th>尺寸规格</th>
+          <th>参考运量(T)</th>
+          <th>是否含税</th>
+          <th colspan="2"><span
+            class="header-span">{{selectData1[0] && selectData1[0].hiredType === '10' ? '参考运价（元）' : '参考运价（元/吨）'}}</span>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of table3.data">
+          <td [title]="data.flowNameStart">{{data.flowNameStart}}</td>
+          <td [title]="data.flowNameEnd">{{data.flowNameEnd}}</td>
+          <td [title]="data.productName">{{data.productName}}</td>
+          <td [title]="data.specifications">{{data.specifications}}</td>
+          <td [title]="data.refCapacity">{{data.refCapacity | number:'1.3-3'}}</td>
+
+          <td>
+            <nz-select style="width: 100px;" nzAllowClear nzSize="small" [(ngModel)]="data.settleType"
+                       [nzDisabled]="afresh">
+              <nz-option [nzValue]="i.value" [nzLabel]="i.name" *ngFor="let i of settleTypeArr"></nz-option>
+            </nz-select>
+          </td>
+          <td>
+            <nz-input-group nzCompact>
+              <nz-input-number [nzDisabled]="afresh" class="reference" style="width: 80px;" nzSize="small" [nzMin]="0"
+                               [(ngModel)]="data.price" [nzStep]="1" [nzPrecision]="2">
+              </nz-input-number>
+              <nz-select class="reference" nzAllowClear nzSize="small" style="width: 60px;"
+                         [(ngModel)]="data.calculation" [nzDisabled]="afresh">
+                <nz-option [nzValue]="i.value" [nzLabel]="i.name" *ngFor="let i of calculationArr"></nz-option>
+              </nz-select>
+            </nz-input-group>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+
+    </nz-tab>
+  </nz-tabset>
+</ng-template>

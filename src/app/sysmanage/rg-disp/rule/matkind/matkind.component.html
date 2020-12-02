@@ -1,0 +1,205 @@
+<app-searchform [formId]="'form_rgDisp_matkind'" (search)="listSearch($event)"  ></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [formId]="'form_rgDisp_matkind'" [btnHiden]="{'Find':false,'Update':Update,'Save':!Update,'Add':false,'Set':false}"></tpl-buttons>
+<!--<app-table-form -->
+                  <!--[formId]="'form_rgDisp_matkind'" [gridId]="'grid1'"-->
+                  <!--[isMutli]="false"-->
+                  <!--[dataSet]="dataSet"-->
+                  <!--[gridOperate]="{show:true,title:'操作',template:g1}"-->
+                  <!--[isCheckBox]="false"-->
+                  <!--[listLoading]="listLoading" -->
+                  <!--[pageSize]="pageSize" [totalPage]="totalPage"-->
+                  <!--(userColumnsEmit)="colName($event)"-->
+                 <!--&gt;-->
+    <!--<ng-template #g1 let-data let-index="index">-->
+     <!---->
+      <!--<a (click)="update(data,index)" *ngIf="!hidden[index]">修改</a>-->
+      <!--<ng-container *ngIf="hidden[index]">-->
+        <!--<a (click)='saveData1(data,index)'>保存</a>-->
+        <!--<a>&nbsp;&nbsp;</a>-->
+        <!--<a (click)='cancle(data,index)'>取消</a>-->
+    <!--</ng-container>-->
+      <!--<a>&nbsp;&nbsp;&nbsp;</a>-->
+      <!--<a (click)="addData(data)" *ngIf="data.matKindCode.length == 5" a>新增子项</a>-->
+    <!--</ng-template>-->
+  <!--</app-table-form>-->
+<nz-table #expandTable [nzData]="listOfMapData" [nzFrontPagination]="false" [nzShowPagination] ='false' >
+  <thead>
+  <tr>
+    <th
+      nzShowCheckbox
+      [(nzChecked)]="isAllDisplayDataChecked"
+      [nzIndeterminate]="isIndeterminate"
+      (nzCheckedChange)="checkAll($event)"
+    ></th>
+    <th style="width: 20%">物料分类编码</th>
+    <th style="width: 15%">物料分类名称</th>
+    <th>排队大类</th>
+    <th>备注</th>
+    <th>状态</th>
+    <th>辅助分类</th>
+    <th>最近修改人</th>
+    <th>最近修改时间</th>
+    <!--<th style="width: 20%">操作</th>-->
+  </tr>
+  </thead>
+  <tbody>
+  <ng-container *ngFor="let data of expandTable.data">
+    <ng-container *ngFor="let item of mapOfExpandedData[data.matKindCode]">
+      <tr *ngIf="(item.parent && item.parent.expand) || !item.parent||item.parent==0">
+        <td
+          nzShowCheckbox
+          [(nzChecked)]="item.check"
+          (nzCheckedChange)="refreshStatus()"
+        ></td>
+        <td
+          [nzIndentSize]="item.level * 30"
+          [nzShowExpand]="!!item.children&&item.children.length!=0"
+          [(nzExpand)]="item.expand"
+          (nzExpandChange)="collapse(mapOfExpandedData[data.matKindCode], item, $event)"
+          nzAlign="left" 
+        >
+          {{item.matKindCode}}
+        </td>
+        <td style="width: 15%">{{item.matKindName}}</td>
+        <td>
+          <ng-container *ngIf="!editCache[item.matKindCode].edit; else kindName">
+            {{item.kindName}}
+          </ng-container>
+          <ng-template #kindName>
+            <nz-select [(ngModel)]="editCache[item.matKindCode].data.kindName" style="width: 100%" [nzAllowClear]="true">
+              <nz-option *ngFor="let i of kindNameArr1" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+            </nz-select>
+          </ng-template></td>
+        <td>
+          <ng-container *ngIf="!editCache[item.matKindCode].edit; else remark">
+            {{item.remark}}
+          </ng-container>
+          <ng-template #remark>
+            <input type="text" nz-input [(ngModel)]="editCache[item.matKindCode].data.remark" />
+          </ng-template></td>
+        <td>
+          <ng-container *ngIf="!editCache[item.matKindCode].edit; else status">
+            {{item.status}}
+          </ng-container>
+          <ng-template #status>
+            <nz-select [(ngModel)]="editCache[item.matKindCode].data.status" style="width: 100%">
+              <nz-option *ngFor="let i of statusArr" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+            </nz-select>
+          </ng-template></td>
+         <td><ng-container>
+              {{item.auxiliaryName}}
+            </ng-container>
+         </td>
+        <td>{{item.revisor}}</td>
+        <td>{{item.reviseTime}}</td>
+        <!--<td>-->
+          <!--<a (click) =update(item.matKindCode) *ngIf="!editCache[item.matKindCode].edit">修改</a>-->
+          <!--<nz-divider nzType="vertical" *ngIf="!editCache[item.matKindCode].edit"></nz-divider>-->
+          <!--<a (click)="saveData1(item.matKindCode)" *ngIf="editCache[item.matKindCode].edit">保存</a>-->
+          <!--<nz-divider nzType="vertical" *ngIf="editCache[item.matKindCode].edit"></nz-divider>-->
+          <!--<a (click)="cancle(item.matKindCode)"  *ngIf="editCache[item.matKindCode].edit">取消</a>-->
+          <!--<nz-divider nzType="vertical" *ngIf="editCache[item.matKindCode].edit"></nz-divider>-->
+          <!--<a (click)="addData($event)" *ngIf="item.matKindCode.length==5">新增明细</a>-->
+          <!--<nz-divider nzType="vertical" *ngIf="editCache[item.matKindCode].edit"></nz-divider>-->
+          <!--<a (click)="deleteData(item)" *ngIf="item.status =='物料作废'">删除</a>-->
+          <!--<a (click)="addFz(item)" *ngIf="item.matKindCode.length==14">设置辅助分类</a>-->
+        <!--</td>-->
+      </tr>
+    </ng-container>
+  </ng-container>
+  </tbody>
+</nz-table>
+`
+
+
+
+
+
+  <nz-modal [nzWidth]="'800px'" [nzVisible]="InsertFormVisible" [nzTitle]="modalTitle1" [nzContent]="modalContent1" [nzFooter]="modalFooter1" (nzOnCancel)="InsertFormVisible=false">
+    <ng-template #modalTitle1>
+        新增->基本信息
+    </ng-template>
+    <ng-template #modalContent1>
+
+        <div class="div5" *ngIf="this.modalType == 2">
+          <span class="span8 required">物料分类名称:</span>
+          <input class="input8" [(ngModel)]="matKindName" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="div6"  *ngIf="this.modalType == 2">
+          <span class="span9 required">物料分类编码：</span>
+          <input class="input9" [(ngModel)]="matKindCode" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="div5" *ngIf="this.modalType == 1">
+            <span class="span8 required">物料名称:</span>
+            <input class="input8" [(ngModel)]="matKindName" [ngModelOptions]="{standalone: true}">
+          </div>
+          <p style="width:60%;margin-left: 15%;color:red">输入的是三位数为第一级品种，五位数为第二级品种，五位以上为第三级品种，例如燃料为103，燃料下面煤为10301，电煤为10301000010000</p>
+          <div class="div6"  *ngIf="this.modalType == 1">
+            <span class="span9 required">物料编码：</span>
+            <!-- <input class="input9" [(ngModel)]="matKindCode" [ngModelOptions]="{standalone: true}"> -->
+            <!-- <input nz-input  class="input9" [(ngModel)]="matKindCode" [ngModelOptions]="{standalone: true}"> -->
+            <input   value='{$ITEM->inoutnum}' min="0"
+            onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+            onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}"
+            [(ngModel)]="matKindCode" class="input9" />
+          </div>
+
+        <div class="div6 ">
+          <label class="span15 ">排队大类名称:</label>
+          <nz-select class="select15" nzShowSearch nzAllowClear [(ngModel)]="kindCode" [ngModelOptions]="{standalone: true}" >
+            <!-- <nz-option nzLabel="西门口" nzValue="西门口"></nz-option>
+            <nz-option nzLabel="东门口" nzValue="东门口"></nz-option> -->
+            <nz-option *ngFor="let i of kindNameArr1" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+          </nz-select>
+        </div>
+        <div style="width:100%; height: 40px;">
+          <span class="span4  pull-left">备注:</span>
+          <textarea class="text  pull-left" [(ngModel)]="remark"></textarea>
+        </div>
+ </ng-template>
+ <ng-template #modalFooter1>
+  <button nz-button nzType="primary" (click)="saveData()"  [nzLoading]="isLoading"
+  >保存</button>
+  <button nz-button nzType="default" (click)="quitData()">取消</button>
+</ng-template>
+</nz-modal>
+
+
+<nz-modal [(nzVisible)]="InsertFormVisibleFZ" [nzTitle]="modalTitleFZ" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzOkLoading]="isOkLoading"
+(nzAfterClose)="closeResult()">
+<form nz-form [formGroup]="modalValidateForm">
+    <nz-form-item *ngFor="let m of modalFormData" >
+        <nz-form-label [nzSpan]="6" [nzRequired]="m.require" >
+            {{m.name}}
+        </nz-form-label>
+        <nz-form-control [nzSpan]="12">
+            <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+                <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+            </nz-radio-group>
+
+                <input type="{{m.type}}" *ngIf="m.type == 'input'" nz-input formControlName="{{m.eName}}" [id]="m.eName" disabled=true>
+
+                <nz-select #select  style="width: 236px;" *ngIf="m.eName === 'auxiliary'" 
+                nzShowSearch nzAllowClear  [formControlName]="m.eName" (ngModelChange)='fzChange($event)'>
+                  <nz-option *ngFor="let i of auxiliaryNameArr" [nzLabel]="i.codesetDesc" [nzValue]="i.codesetCode"></nz-option>
+                </nz-select>
+
+            <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+                <div *ngIf="modalValidateForm.get(m.eName).errors['pattern'];else erroInf">
+                    {{ m.validators.patternErr}}
+                </div>
+                <ng-template #erroInf>
+                    {{ m.validateCon}}
+                </ng-template>
+
+            </nz-form-explain>
+
+
+
+        </nz-form-control>
+
+    </nz-form-item>
+
+
+</form>
+</nz-modal>

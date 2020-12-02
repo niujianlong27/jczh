@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>营口排队</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<style>
+    p{
+        font-size: 14px;
+        line-height: 38px;
+    }
+    .imgHight{
+        overflow: hidden;
+        margin-bottom: 50px;
+    }
+    .imgHight img{
+        width: 30%;
+        float: left;
+    }
+    .imgCover{width: 30%; margin: 0 auto;}
+    .imgCover img{width: 100%;}
+    .imgCover .showClick{position: fixed; top: 0; display: none;}
+    .hrefStyle{
+        text-decoration:none;
+        color:#333; width: 80px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: #eeeeee;
+        position: fixed;
+        right: 0px;
+        top: 50%;
+    }
+</style>
+
+<body style="margin: 0px; background-color: #ffffff;">
+<div style="width: 80%; margin: 0 auto;">
+    <a class="hrefStyle" href="index.html">返回首页</a>
+    <h2>排队系统概述</h2>
+    <h3>1.业务流程介绍</h3>
+    <p>　　司机在根据实际的运输信息在APP端录入数据，确认运输。打开厂外导航功能，可以查看到厂门口的线路，
+        车辆行驶到厂区10公里范围内的电子围栏时，自动获取到排队号码。运输处对已排队车辆进行分车调度，
+        满足进厂条件的车辆，通过消息和语音提示，通知司机进厂。司机收到通知后，向门岗展示APP端生成的二维码，
+        经门岗核实确认后，进厂，到目的仓库装货/卸货(提货的车辆，需要由仓库人员指定装车位)，出厂，完成运输任务。</p>
+
+    <h3>创建任务-送货任务</h3>
+    <h4>1、送货任务</h4>
+    <p>　　在预约排队的初始菜单页面，点击“送货任务”，进入送货任务的编辑页面，送货任务有以下任务信息需要录入：
+        预报号、车牌号（不可编辑）、供应商、品种、总重、皮重、车辆分类。</br>
+        　　编辑送货任务完成后，点击‘<span style="color: red;">装载完成</span>’按钮，系统会弹出选择新老厂区的选项，系统会根据当前送货任务所选品种，
+        计算出新老厂区当前已拿号未入厂正在排队的车辆数，供司机参考选择厂区，以便快速入厂，点击选项自动进行选择确定，并进入排队序列。</p>
+    <div class="imgHight">
+        <div class="imgCover">
+            <img src="img/car1.png">
+            <img class="showClick" src="img/car1.png">
+            <p style="text-align: center;">编辑送货任务图1</p>
+        </div>
+        <div class="imgCover">
+            <img src="img/car2.png">
+            <img class="showClick" src="img/car2.png">
+            <p style="text-align: center;">编辑送货任务图2</p>
+        </div>
+    </div>
+    <h4>2、送货任务详情</h4>
+    <p>　　在送货任务页面，输入完所有的任务信息后，点击“装载完成”按钮,并确定任务信息后，进入任务详情页面，
+        其页面项目信息如下所示：排队号、剩余排队、目标库房、装车位、状态、进厂二维码、预报号、车牌号、总/皮重、
+        净重、进厂大门、车型、车辆分类、品种、供应商、起止地址。任务详情页面的功能有：修改装载信息、查看通知消息、导航、进厂二维码。</p>
+    <div class="imgHight">
+        <div class="imgCover">
+            <img src="img/task.png">
+            <img class="showClick" src="img/task.png">
+            <p style="text-align: center;">送货任务详情图1</p>
+        </div>
+    </div>
+    <h4>3、修改装载信息</h4>
+    <p>　　状态为“已入厂”前的所有状态，都可对当前任务信息进行修改。点击“修改装载信息”按钮，
+        页面跳转到送货任务的编辑页面，且所有项目的输入数据会自动带入。（修改装载信息会将已排队的排队号作废，
+        修改装载信息完成后重新获取排队号进行排队）</p>
+    <div class="imgHight">
+        <div class="imgCover">
+            <img src="img/task1.png">
+            <img class="showClick" src="img/task1.png">
+            <p style="text-align: center;">修改装载信息图1</p>
+        </div>
+    </div>
+    <h4>4、通知消息</h4>
+    <p>　　页面展示当前运输任务收到的消息通知列表，如下图所示：</p>
+    <div class="imgHight">
+        <div class="imgCover">
+            <img src="img/massage.png">
+            <img class="showClick" src="img/massage.png">
+            <p style="text-align: center;">通知消息图1</p>
+        </div>
+    </div>
+    <h4>5、导航</h4>
+    <p>　　客户端设置默认目的地进行厂外导航，如下图所示：</p>
+    <div class="imgHight">
+        <div class="imgCover">
+            <img src="img/nav.png">
+            <img class="showClick" src="img/nav.png">
+            <p style="text-align: center;">导航消息图1</p>
+        </div>
+    </div>
+    <h4>6、进厂二维码</h4>
+    <p>　　当排队车辆收到叫号通知时，便可以点击“进厂二维码”按钮，点击后，APP自动生成如下图的二维码，
+        信息包含：预报号、进厂大门、仓库、物料名、总重/皮重、手机号、车牌号，以及二维码图片。</p>
+    <div class="imgHight">
+        <div class="imgCover">
+            <img src="img/two.png">
+            <img class="showClick" src="img/two.png">
+            <p style="text-align: center;">进场二维码图1</p>
+        </div>
+    </div>
+    <h3>创建任务-提货任务</h3>
+    <h4>1、提货任务</h4>
+    <p>　　在预约排队的初始菜单页面，点击“提货任务”，进入提货任务的编辑页面，提货任务有如下任务信息：
+        发运号、车牌号（不可编辑）、客户名称、品种、毛重、皮重、仓库、车型、车辆分类。</br>
+        　　编辑提货任务完成后，点击‘<span style="color: red;">开始运输</span>’按钮，系统会弹出选择新老厂区的选项，系统会根据当前提货任务所选品种，
+        计算出新老厂区当前已拿号未入厂正在排队的车辆数，供司机参考选择厂区，以便快速入厂，点击选项自动进行选择确定，并进入排队序列。</p>
+    <div class="imgHight">
+        <div class="imgCover">
+            <img src="img/car3.png">
+            <img class="showClick" src="img/car3.png">
+            <p style="text-align: center;">编辑提货任务图1</p>
+        </div>
+        <div class="imgCover">
+            <img src="img/car4.png">
+            <img class="showClick" src="img/car4.png">
+            <p style="text-align: center;">编辑提货任务图2</p>
+        </div>
+    </div>
+    <h4>2、提货任务详情</h4>
+    <p>　　在提货任务页面，输入完所有的任务信息后，点击“开始运输”按钮,并确定任务信息后，进入任务详情页面，
+        其页面项目信息如下所示：排队号、剩余排队、目标库房、装车位、状态、进厂二维码、发运号、车牌号、毛/皮重、
+        净重、进厂大门、车型、车辆分类、品种、供应商、起止地址。任务详情页面的功能有：修改运输信息、查看通知消息、
+        导航、进厂二维码。（<span style="color: red">注</span>：装车位，是仓库人员在车辆入厂后手动分配的，二维码信息是车辆进入待入厂状态时进行生成）</p>
+    <div class="imgHight">
+        <div class="imgCover">
+            <img src="img/task2.png">
+            <img class="showClick" src="img/task2.png">
+            <p style="text-align: center;">提货任务详情图1</p>
+        </div>
+    </div>
+    <h4>3、修改运输信息</h4>
+    <p>　　状态为“已入厂”前的所有状态，都可对当前任务信息进行修改。点击“修改运输信息”按钮，
+        页面跳转到提货任务的编辑页面，且所有项目的输入数据会自动带入。
+        （<span style="color: red">若执行修改运输信息，车辆需要重新进行拿号排队，谨慎操作</span>）</p>
+    <h4>4、通知消息</h4>
+    <p>　　页面展示当前运输任务收到的消息通知列表，如下图所示：</p>
+    <div class="imgHight">
+        <div class="imgCover">
+            <img src="img/massage1.png">
+            <img class="showClick" src="img/massage1.png">
+            <p style="text-align: center;">提货通知图1</p>
+        </div>
+    </div>
+    <h4>5、导航</h4>
+    <p>　　客户端设置默认目的地进行厂外导航，如下图所示：</p>
+    <div class="imgHight">
+        <div class="imgCover">
+            <img src="img/nav.png">
+            <img class="showClick" src="img/nav.png">
+            <p style="text-align: center;">导航消息图1</p>
+        </div>
+    </div>
+    <h4>6、进厂二维码</h4>
+    <p>　　当排队车辆收到叫号通知时，便可以点击“进厂二维码”按钮，点击后，APP自动生成如下图的二维码，信息包含：
+        发运号、进厂大门、仓库、物料名、毛重/皮重、手机号、车牌号，以及二维码图片。</p>
+    <div class="imgHight">
+        <div class="imgCover">
+            <img src="img/two1.png">
+            <img class="showClick" src="img/two1.png">
+            <p style="text-align: center;">进场二维码图1</p>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+<script type="text/javascript">
+    //浏览器的宽
+    var diviceWidth = document.documentElement.clientWidth;
+    //浏览器的高
+    var diviceHeight = document.documentElement.clientHeight;
+    $('.imgCover').click(function(){
+		//console.log($(this).children(".showClick:eq(0)"));
+        if($(this).children(".showClick:eq(0)").is(':hidden')){
+			var realHeight = $(this).children(".showClick:eq(0)").height();
+			var realWidth = $(this).children(".showClick:eq(0)").width();
+			var imgWidth, imgHeight;
+			if(realHeight>diviceHeight){
+				imgHeight = diviceHeight;
+				imgWidth = imgHeight/realHeight*realWidth;//等比例缩放宽度
+				if(imgWidth>diviceWidth) {//如宽度扔大于窗口宽度
+					imgWidth = diviceWidth;//再对宽度进行缩放
+				}
+			} else if(realWidth>diviceWidth) {//如图片高度合适，判断图片宽度
+				imgWidth = diviceWidth;//如大于窗口宽度，图片宽度进行缩放
+				imgHeight = imgWidth/realWidth*realHeight;//等比例缩放高度
+			} else {//如果图片真实高度和宽度都符合要求，高宽不变
+				imgWidth = realWidth;
+				imgHeight = realHeight;
+			}
+			$(this).children(".showClick:eq(0)").css("width",imgWidth);//以最终的宽度对图片缩放
+            console.log(imgWidth)
+			$(this).children(".showClick").css("left",diviceWidth*0.5-imgWidth/2);
+			$(this).children(".showClick:eq(0)").show();
+        }else{
+            $(this).children(".showClick:eq(0)").hide();
+        }
+    })
+</script>

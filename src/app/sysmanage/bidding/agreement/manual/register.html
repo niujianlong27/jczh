@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册认证</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<style>
+    p{
+        font-size: 14px;
+        line-height: 38px;
+    }
+    .imgHight{
+        overflow: hidden;
+        margin-bottom: 50px;
+    }
+    .imgHight img{
+        width: 30%;
+        float: left;
+    }
+    .imgCover{width: 30%; margin: 0 auto;}
+    .imgCover img{width: 100%;}
+    .imgCover .showClick{position: fixed; top: 0; display: none;}
+    .hrefStyle{
+        text-decoration:none;
+        color:#333; width: 80px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: #eeeeee;
+        position: fixed;
+        right: 0px;
+        top: 50%;
+    }
+</style>
+
+<body style="margin: 0px; background-color: #ffffff;">
+<div style="width: 80%; margin: 0 auto;">
+    <a class="hrefStyle" href="index.html">返回首页</a>
+    <h3>第一步：用户注册</h3>
+    <p>　　在手机上的应用商店输入‘京创智汇’并下载APP应用，安装完成之后点击‘京创智汇’APP图标进入登录页面，
+        点击快速注册按钮输入常用的手机号获取验证码，设置密码后点击‘完成’按钮完成注册。
+        （<span style=" color: red;">用于注册账号的手机号码必须是司机手机号码，否则，
+            用户注册验证码和车辆的提货以及送货任务无法获取系统的提示信息，影响排队进厂</span>）</p>
+    <div class="imgHight">
+        <div class="imgCover">
+            <img src="img/register.png">
+            <img class="showClick" src="img/register.png">
+            <p style="text-align: center;">司机用户注册图1</p>
+        </div>
+        <div class="imgCover">
+            <img src="img/login.png">
+            <img class="showClick" src="img/login.png">
+            <p style="text-align: center;">司机用户注册图2</p>
+        </div>
+    </div>
+    <h3>第二步：完善个人信息申请认证</h3>
+    <p>　　司机用户完成注册后，在登录页面进行登录操作，登录成功后，系统会提示用户进行认证申请，
+        在弹出框点击按钮‘是’进入个人信息页面，维护个人信息，个人信息包括姓名、身份证照片、和驾驶证照片。
+        通过点击拍照图标选择拍照或者从相册中选择图片上传，每项仅可上传一张相片。上传图片完成后点击申请认证按钮，
+        将信息上传给系统由管理员进行审核，审核完成后系统会通过‘消息’进行通知。</p>
+    <div class="imgHight">
+        <div class="imgCover">
+            <img src="img/authenticationNo.png">
+            <img class="showClick" src="img/authenticationNo.png">
+            <p style="text-align: center;">完善资料图1</p>
+        </div>
+        <div class="imgCover">
+            <img src="img/apply.png">
+            <img class="showClick" src="img/apply.png">
+            <p style="text-align: center;">完善资料图2</p>
+        </div>
+        <div class="imgCover">
+            <img src="img/success.png">
+            <img class="showClick" src="img/success.png">
+            <p style="text-align: center;">完善资料图2</p>
+        </div>
+    </div>
+    <h3>第三步：车辆管理，完善车辆信息</h3>
+    <p>　　一个登录手机号可以新增多个车牌号，且新增后无法修改，仅可删除，车辆管理用于用户创建任务时进行选择关联，拿号排队进厂。</br>
+        　　在‘我的’模块下点击‘车辆管理’按钮，进入车牌号展示页面，车辆管理如下图所示，点击‘新增车辆’按钮，弹出新增车辆输入框，
+        输入正确车牌号信息点击确定按钮，保存成功，即车牌创建成功。</p>
+    <div class="imgHight">
+        <div class="imgCover">
+            <img src="img/my.png">
+            <img class="showClick" src="img/my.png">
+            <p style="text-align: center;">车辆管理图1</p>
+        </div>
+        <div class="imgCover">
+            <img src="img/car.png">
+            <img class="showClick" src="img/car.png">
+            <p style="text-align: center;">车辆管理图2</p>
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>
+<script type="text/javascript">
+    //浏览器的宽
+    var diviceWidth = document.documentElement.clientWidth;
+    //浏览器的高
+    var diviceHeight = document.documentElement.clientHeight;
+    $('.imgCover').click(function(){
+		//console.log($(this).children(".showClick:eq(0)"));
+        if($(this).children(".showClick:eq(0)").is(':hidden')){
+			var realHeight = $(this).children(".showClick:eq(0)").height();
+			var realWidth = $(this).children(".showClick:eq(0)").width();
+			var imgWidth, imgHeight;
+			if(realHeight>diviceHeight){
+				imgHeight = diviceHeight;
+				imgWidth = imgHeight/realHeight*realWidth;//等比例缩放宽度
+				if(imgWidth>diviceWidth) {//如宽度扔大于窗口宽度
+					imgWidth = diviceWidth;//再对宽度进行缩放
+				}
+			} else if(realWidth>diviceWidth) {//如图片高度合适，判断图片宽度
+				imgWidth = diviceWidth;//如大于窗口宽度，图片宽度进行缩放
+				imgHeight = imgWidth/realWidth*realHeight;//等比例缩放高度
+			} else {//如果图片真实高度和宽度都符合要求，高宽不变
+				imgWidth = realWidth;
+				imgHeight = realHeight;
+			}
+			$(this).children(".showClick:eq(0)").css("width",imgWidth);//以最终的宽度对图片缩放
+            console.log(imgWidth)
+			$(this).children(".showClick").css("left",diviceWidth*0.5-imgWidth/2);
+			$(this).children(".showClick:eq(0)").show();
+        }else{
+            $(this).children(".showClick:eq(0)").hide();
+        }
+    })
+</script>

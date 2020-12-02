@@ -1,0 +1,88 @@
+<app-searchform formId="form_waybill_fee_reg" (search)="query($event)" [triggerSearch]="true"></app-searchform>
+<tpl-buttons formId="form_waybill_fee_reg" (btnClick)="btnClick($event)" [btnDisable]="{'update': selectedWaybillData.length != 1,exportList:selectedWaybillData.length===0}"
+[btnLoading]="{'save':btnLoading.save,'createSettle': btnLoading.createSettle,'createCopeSettle': btnLoading.createCopeSettle, 'createReceivableSettle': btnLoading.createReceivableSettle}"></tpl-buttons>
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+  <ng-template #one>
+    <app-table-form formId="form_waybill_fee_reg" gridId="grid1" [dataSet]="waybillData" [pageSize]="pageSize" tabIndex="1" [totalPage]="total" [isMutli]="true" (updateDataResult)="selectedWaybill($event)" (listClick)="rowCilcked($event)" [colSet]="true"
+    [paginationRef]="totalStats" [showCount]="false" [listLoading]="loading" [selfTableHeight]="gridOneHeight"></app-table-form>
+
+  <ng-template #totalStats>
+      已选&nbsp;{{selectedWaybillData.length}}&nbsp;条&nbsp;已选总重量:{{totalWeight | number:'1.3-3'}}吨 已选总件数:{{totalSheet | number}}件
+      &nbsp;<span>应收运费 <em>{{rcvTransFeeTotal | number:'1.2-2'}}</em></span>
+      &nbsp;<span>应付运费 <em> {{ transFeeTotal | number:'1.2-2'}} </em></span>
+  </ng-template>
+  </ng-template>
+  <ng-template #two>
+    <app-table-form (inputBlurFun)="inputBlur($event)" formId="form_waybill_fee_reg" gridId="waybillPack" [paginationRef]="paginationref" [selfTableHeight]="gridOneHeight"
+    (updateDataResult)="selectedPack($event)" [dataSet]="packData" [pageSize]="packPageSize" [updateHeader]="true" [colSet]="true" [totalPage]="packTotal" [isMutli]="true"
+     [listLoading]="packLoading" [nzShowPagination]="false" (modelChange)="modelChange($event)"></app-table-form>
+  </ng-template>
+</app-grid-resize>
+<ng-template #paginationref>
+   <span>应收运费  <em>{{ rcvTransTotalFee | number:'1.2-2' }}</em></span> &nbsp;
+   <span>应付运费  <em>{{ transTotalFee | number:'1.2-2' }}</em></span>
+</ng-template>
+<ng-template #copyPriceModal>
+    <nz-radio-group [(ngModel)]="radioValue" style="padding-left:20px;" *ngIf="businessType !== '009'">
+          <label nz-radio [ngStyle]="style" nzValue="10">
+            自定义单价
+          </label>
+          <div *ngIf="radioValue=='10'" style="padding-left: 30px;margin-top: 5px;">
+              <label nz-checkbox [(ngModel)]="agentFlag" name="">应收单价</label>
+              <input [disabled]="!agentFlag" nz-input type="number" min="1" nzSize="small" style="margin-left: 15px;width: 80px;" [(ngModel)]="unitPrice">
+              <!-- <input type="number" nzMin="1" nz-input *ngIf="radioValue=='10'" [(ngModel)]='ownPrice' style="width: 100px; margin-left: 10px;"> -->
+          </div>
+          <div *ngIf="radioValue=='10'" style="padding-left: 30px;margin-top: 10px;margin-bottom: 5px;">
+              <label nz-checkbox [(ngModel)]="payableFlag" name="">应付单价</label>
+              <input [disabled]="!payableFlag" nz-input type="number" min="1" nzSize="small" style="margin-left: 15px;width: 80px;" [(ngModel)]="payPrice">
+          </div>
+          <label nz-radio [ngStyle]="style" nzValue="20">委托单价</label>
+          <label nz-radio [ngStyle]="style" nzValue="30">线路单价</label>
+          <label nz-radio [ngStyle]="style" nzValue="40">委托或线路单价</label>
+    </nz-radio-group>
+    <ng-container *ngIf="businessType === '009'">
+         <div style="padding-left:20px;">
+           <span>应收价格</span>
+           <label class="label-inline" [nzDisabled]="true" [ngModel]="true" nz-radio [ngStyle]="style" nzValue="50">运输合同价格</label>
+
+         </div>
+         <div class="clearfix m-t" style="padding-left:20px;">
+            <span class="fl">应付价格</span>
+            <div class="fl">
+                <nz-radio-group [(ngModel)]="radioValue">
+                  <label nz-radio [ngStyle]="style" nzValue="50" style="margin-left:15px;">线路价格</label>
+                </nz-radio-group>
+                <div>
+                    <nz-radio-group [(ngModel)]="radioValue">
+                      <label nz-radio [ngStyle]="style" nzValue="60" class="label-inline">自定义</label>
+                    </nz-radio-group>
+                    <input nz-input type="number" min="1" nzSize="small" style="width: 80px;" [(ngModel)]="linePrice">
+                </div>
+                <div>
+                  <nz-radio-group [(ngModel)]="radioValue">
+                     <label nz-radio [ngStyle]="style" nzValue="70" class="label-inline">总价录入</label>
+                  </nz-radio-group>
+                  <input nz-input type="number" min="1" nzSize="small" style="width: 80px;" [(ngModel)]="addPrice">
+                  <nz-radio-group [(ngModel)]="choiceType" style="margin-left: 15px;" nzName="choiceType"
+                   [nzDisabled]="radioValue != '70'">
+                    <label nz-radio nzValue="waybill">按运单</label>
+                    <label nz-radio nzValue="weight">按重量</label>
+                  </nz-radio-group>
+                </div>
+            </div>
+         </div>
+     </ng-container>
+</ng-template>
+
+<ng-template #importDataModal>
+  <nz-upload
+    [(nzFileList)]="fileList"
+    [nzAction]="importUrl"
+    [nzShowButton]="fileList.length < 1"
+    [nzBeforeUpload]="beforeUpload"
+  >
+    <button nz-button>
+      <i nz-icon type="upload"></i><span>点击上传文件</span>
+    </button>
+  </nz-upload>
+</ng-template>

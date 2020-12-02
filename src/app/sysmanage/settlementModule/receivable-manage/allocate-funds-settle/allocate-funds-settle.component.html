@@ -1,0 +1,41 @@
+<app-searchform (search)='listSearch($event)' [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)='btnClick($event)'></tpl-buttons>
+<div class="clearfix" style="overflow: hidden;position: relative;">
+  <p>委托结算报表</p>
+  <div class="fl trans" [ngStyle]="{width:leftWidth}">
+  <app-table-form nz-col [isMutli]="isMulti" [gridId]='"grid1"' selfTableHeight="200px"
+                  [dataSet]='dataSet' [totalPage]='totalPages' [listLoading]='listLoading'
+                  (updateDataResult)='updateData($event)' [trSelectedShow]='trSelectedShow' (listClick)="listClick($event)"></app-table-form>
+  </div>
+
+  <div class="tableLine trans" gridLine [ngStyle]="{left:lineWidth}" (gridLineResult)="gridLineFun($event)">
+    <div class="tableLine-in">
+        <span class="grid-line-btn" (click)="rightShowFun()">
+            <i nz-icon type="caret-right" theme="outline" [hidden]="rightShow"></i>
+            <i nz-icon type="caret-left" theme="outline" [hidden]="!rightShow"></i>
+        </span>
+    </div>
+  </div>
+
+  <div class="fr trans" [ngStyle]="{width:rightWidth,display:display}">
+  <app-table-form nz-col [isCheckBox]="false" [gridId]='"grid2"' [listLoading]='listLoading2' selfTableHeight="200px"
+                  [dataSet]='childrenDataSet' [nzShowPagination]="false"></app-table-form>
+  </div>
+
+</div>
+
+<p>委托配款记录</p>
+<app-table-form  [isCheckBox]="false" [gridId]='"grid3"' [listLoading]='listLoading3' [extraTableHeight]="355"
+                [dataSet]='ApposeDataSet' [nzShowPagination]="false"></app-table-form>
+
+<ng-template #detail>
+  <nz-card nzTitle="结算详情" >
+    <p>合同号：{{selectData[0].orderNo}}</p>
+    <p>合同金额：{{selectData[0].totalPrice}}</p>
+    <p>应收金额：{{settleData.payPrice}}</p>
+    <p>结算重量：{{settleData.settleWeight}}</p>
+    <p>合同重量：{{selectData[0].totalWeight}}</p>
+    <p>运输重量：{{settleData.transTotWeight}}</p>
+
+  </nz-card>
+</ng-template>

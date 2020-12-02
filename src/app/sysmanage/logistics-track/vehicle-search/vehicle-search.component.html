@@ -1,0 +1,35 @@
+<common-page (search)="listSearch($event)"  [pageSize]="pageSize" [totalPage]="totalPage"
+             [listLoading]="listLoading" [dataSet]="dataSet" [isCheckBox]="false" (listClick)="listClick($event)">
+
+</common-page>
+
+<ng-template #pubishTitle>
+    派车单详情
+ </ng-template>
+ <ng-template #pubishContent>
+    <!---订单详情-->
+    <ng-container >
+      <nz-table #table [nzScroll]="{x:'100%',y:'100px'}" nzSize="small" class="modal-table" [nzData]="data2" [nzShowPagination]="false"
+      [nzWidthConfig]="['170px','170px','170px','170px','170px','170px','170px']">
+         <thead>
+           <tr>
+             <th>捆包号</th>
+             <!-- <th>货物类型</th> -->
+             <th>重量</th>
+             <th>件数</th>
+           </tr>
+         </thead>
+         <tbody>
+           <tr *ngFor="let data of table.data">
+             <td>{{data.orderPackNo}}</td>
+             <!-- <td>{{data.varieties}}</td> -->
+             <td>{{data.planWeight}}</td>
+             <td>{{data.planQuantity}}</td>
+           </tr>
+         </tbody>
+     </nz-table>
+    </ng-container>
+    <ng-template #pubishFooter>
+      <button nz-button nzType="primary" >确定</button>
+      <button nz-button nzType="default" >取消</button>
+     </ng-template>

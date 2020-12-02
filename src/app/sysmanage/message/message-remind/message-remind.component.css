@@ -1,0 +1,5 @@
+
+/* 用户管理高度设置 */
+.user-table ::ng-deep div.ant-table-body{
+    min-height: 408px;
+}

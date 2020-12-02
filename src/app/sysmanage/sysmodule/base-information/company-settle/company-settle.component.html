@@ -1,0 +1,90 @@
+<common-page (search)="listSearch($event)" (btnAdd)="btnAdd()" [pageSize]="pageSize" [totalPage]="totalPage"
+             [listLoading]="listLoading" (btnUpdate)="btnUpdate($event)" (btnDelete)="btnDelete($event)"
+             [dataSet]="dataSet" [isMutli]="true" (btnClick)="btnClick($event)">
+
+</common-page>
+
+<!--弹出框-->
+<nz-modal [(nzVisible)]="modalFormVisible" [nzWidth]="'65%'" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()"
+          (nzOnOk)="handleOk()"
+          (nzAfterClose)="closeResult()" [nzMaskClosable]="false">
+  <form nz-form [formGroup]="modalValidateForm">
+    <div nz-row [nzGutter]="8" [nzType]="'flex'">
+      <div nz-col [nzSpan]="11" *ngFor="let m of modalFormData" [hidden]='m.hidden'>
+        <nz-form-label [nzSpan]="8" [nzRequired]="m.require">
+          {{m.name}}
+        </nz-form-label>
+
+        <nz-form-control [nzSpan]="15">
+
+          <input type="{{m.type}}" *ngIf="m.type == 'text' || m.type == 'number'" nz-input formControlName="{{m.eName}}"
+                 [id]="m.eName">
+
+          <nz-radio-group [attr.id]="m.eName" *ngIf="m.type == 'radio'" formControlName="{{m.eName}}">
+            <label nz-radio nzValue="{{r.value}}" *ngFor="let r of m.radioArr">{{r.name}}</label>
+          </nz-radio-group>
+
+          <nz-select [attr.id]="m.eName" *ngIf="m.type == 'select'" [formControlName]="m.eName">
+            <nz-option *ngFor="let i of m.selectArr" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+          </nz-select>
+
+          <input-modal *ngIf="m.type == 'modal'" [isMutli]="false" [findset]="formIdFindset"
+                       [(inputModalModel)]="inputModalModel" (inpEmit)="inpEmit($event)"
+                       [borderRed]="borderRed" [validate]="{validateOpt:'inpValue',validateCon:'请选择结算公司'}"
+                       [showExplainFlag]="showExplainFlag"></input-modal>
+
+        <nz-upload *ngIf="m.type == 'upload'" [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest'
+                   [(nzFileList)]="stampImgArray"
+                   nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData"
+                   (nzChange)="handleChange($event,'stampImg')" [nzShowButton]="stampImgArray.length < 2">
+          <i class="anticon anticon-plus"></i>
+          <div class="ant-upload-text">Upload</div>
+        </nz-upload>
+        <nz-upload *ngIf="m.type == 'uploadFile'"  [nzAction]="upload.action" [nzCustomRequest]='upload.handleRequest'
+         nzListType="picture-card"  [nzShowButton]="deliverImg.length < 1"
+        [(nzFileList)]="deliverImg" [nzPreview]="handlePreview" [nzData]="upload.handleData">
+        <i class="anticon anticon-plus"></i>
+        <div class="ant-upload-text">Upload</div>
+        </nz-upload>
+        <input type="hidden" formControlName="stampImg" readonly="readonly">
+        <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+                  (nzOnCancel)="previewVisible=false">
+          <ng-template #modalContent>
+            <img [src]="domImg(previewImage)" [ngStyle]="{ 'width': '100%' }"/>
+          </ng-template>
+        </nz-modal>
+
+          <nz-form-explain *ngIf="modalValidateForm.get(m.eName).dirty && modalValidateForm.get(m.eName).errors">
+
+            <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('required')">
+              {{m.validateCon}}
+            </ng-container>
+            <ng-container *ngIf="modalValidateForm.get(m.eName).hasError('pattern')">
+              {{m.validators.patternErr}}
+            </ng-container>
+
+          </nz-form-explain>
+
+        </nz-form-control>
+
+      </div>
+    </div>
+  </form>
+</nz-modal>
+
+<ng-template #detail>
+  <nz-card nzTitle="开票资料">
+    <p>公司名称：{{detailData.settleCompanyName}}</p>
+    <p>纳税人识别号：{{detailData.taxCode}}</p>
+    <p>地址：{{detailData.address}}</p>
+    <p>电话：{{detailData.telphone}}</p>
+    <p>开户行：{{detailData.bank}}</p>
+    <p>账号：{{detailData.bankAccount}}</p>
+  </nz-card>
+</ng-template>
+
+
+<!--确认弹窗-->
+<app-modal-confirm [deleteVisible]="deleteVisible" [modalTitle]="modalTitle" [modalCon]="deleteCon"
+                   (modalConfirmResult)="modalConfirmResult($event)">
+</app-modal-confirm>

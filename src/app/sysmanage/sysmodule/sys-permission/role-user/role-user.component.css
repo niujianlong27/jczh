@@ -1,0 +1,9 @@
+/* 避免被全局样式修改 */
+.ant-table-wrapper ::ng-deep div.ant-table-body{
+    /*margin-top:unset;*/
+}
+
+/* 用户管理高度设置 */
+ .user-table ::ng-deep div.ant-table-body{
+    min-height: 100px;
+}

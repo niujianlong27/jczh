@@ -1,0 +1,54 @@
+<fieldset>
+  <legend style="padding-top: 2%; padding-left: 5%; font-size: 16px; color: #ffbf00">竞价参数</legend>
+  <form nz-form [formGroup]="form">
+    <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" nzType="flex" nzAlign="top">
+      <div nz-col nzSpan="8">
+        <nz-form-item>
+          <nz-form-label nzSpan="8" nzRequired>第一阶段</nz-form-label>
+          <nz-form-control nzSpan="16">
+            <nz-input-number nz-input formControlName="oneTime" [nzMin]="1" [nzStep]="1" placeholder="第一阶段时长"></nz-input-number>
+            <nz-form-explain *ngIf="form.get('oneTime').dirty && form.get('oneTime').errors">
+              请输入第一阶段时长
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="8">
+        <nz-form-item>
+          <nz-form-label nzSpan="8" nzRequired>第二阶段</nz-form-label>
+          <nz-form-control nzSpan="16">
+            <nz-input-number nz-input formControlName="twoTime" [nzMin]="0" [nzStep]="1" placeholder="第二阶段时长"></nz-input-number>
+            <nz-form-explain *ngIf="form.get('twoTime').dirty && form.get('twoTime').errors">
+              请输入第二阶段时长
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="8">
+        <nz-form-item>
+          <nz-form-label nzSpan="8" nzRequired>延时时间</nz-form-label>
+          <nz-form-control nzSpan="16">
+            <nz-input-number nz-input formControlName="delay" [nzMin]="0" [nzStep]="1" placeholder="延时时间"></nz-input-number>
+            <nz-form-explain *ngIf="form.get('delay').dirty && form.get('delay').errors">
+              请输入延时时长
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="8">
+        <nz-form-item>
+          <nz-form-label nzSpan="8" nzRequired>暗标最大人数</nz-form-label>
+          <nz-form-control nzSpan="16">
+            <nz-input-number nz-input formControlName="maxNo" [nzMin]="1" [nzStep]="1" placeholder="暗标最大人数"></nz-input-number>
+            <nz-form-explain *ngIf="form.get('maxNo').dirty && form.get('maxNo').errors">
+              请输入暗标最大人数
+            </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzOffset="12" nzSpan="2">
+        <button nz-button nzType="primary" class="m-r" [nzLoading]="loading" (click)="save()" [disabled]="form.pristine || form.invalid">保存</button>
+      </div>
+    </div>
+  </form>
+</fieldset>

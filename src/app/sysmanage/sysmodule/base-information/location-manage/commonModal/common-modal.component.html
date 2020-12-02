@@ -1,0 +1,51 @@
+<nz-modal [(nzVisible)]="visible" [nzTitle]="title" (nzOnCancel)="visible = false" (nzOnOk)="handleOk()" nzWidth="1000" 
+(nzAfterClose)="closeResult()" [nzContent]="modalContent" [nzOkLoading]="loading" [nzMaskClosable]="false" >
+      <ng-template #modalContent>
+            <form nz-form [formGroup]="validateForm" class="ant-advanced-search-form" style="padding:15px 20px 0px 0px">
+                    <div nz-row [nzGutter]="24" nzAlign="top" nzJustify="space-around">
+                        <ng-container *ngFor="let control of controlArray">
+                            <ng-container *ngIf="!control.hidden">
+                                <div nz-col [nzSpan]="control.span?control.span:8">
+                                    <nz-form-item nzFlex>
+                                        <nz-form-label [nzRequired]="control.require" [nzSpan]="control.span1?control.span1:6" [nzFor]="control.eName">{{ control.cName}}</nz-form-label>
+                                        <nz-form-control [nzSpan]="control.span2?control.span2:18">
+                                            <input *ngIf="control.type == 'text'" nz-input [type]="control.type" [formControlName]="control.eName" [attr.id]="control.eName" (blur)="locationName(control.eName)">
+                                            <input *ngIf="control.type == 'number'" nz-input [type]="control.type" [formControlName]="control.eName" [attr.id]="control.eName">
+                                            <nz-input-number
+                                                *ngIf="control.type == 'inputNumber'"
+                                                [formControlName]="control.eName" [attr.id]="control.eName"
+                                                [nzMin]="0"
+                                                [nzPrecision]="3"
+                                            ></nz-input-number>
+                                            <nz-radio-group [attr.id]="control.eName" *ngIf="control.type == 'radio'" [formControlName]="control.eName">
+                                                <label nz-radio nzValue="{{r.value}}" *ngFor="let r of control.radioArr">{{r.name}}</label>
+                                            </nz-radio-group>
+                                            <nz-select nzShowSearch [attr.id]="control.eName" *ngIf="control.type == 'province'" [formControlName]="control.eName" (ngModelChange)="addressChange($event,'DZDJ10')">
+                                                <nz-option *ngFor="let i of provinceArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+                                            </nz-select>
+                                            <nz-select nzShowSearch [attr.id]="control.eName" *ngIf="control.type == 'city'" [formControlName]="control.eName" (ngModelChange)="addressChange($event,'DZDJ20')">
+                                                <nz-option *ngFor="let i of cityArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+                                            </nz-select>
+                                            <nz-select nzShowSearch [attr.id]="control.eName" *ngIf="control.type == 'area'" [formControlName]="control.eName" (ngModelChange)="addressChange($event,'DZDJ30')">
+                                                <nz-option *ngFor="let i of areaArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+                                            </nz-select>
+                                            <nz-select nzShowSearch nzAllowClear [attr.id]="control.eName" *ngIf="control.type == 'town'" [formControlName]="control.eName" (ngModelChange)="addressChange($event,'DZDJ40')">
+                                                <nz-option *ngFor="let i of townArr" [nzLabel]="i.name" [nzValue]="i.code"></nz-option>
+                                            </nz-select>
+            
+                                            <nz-form-explain *ngIf="validateForm.get(control.eName).dirty && validateForm.get(control.eName).errors">
+                                                <ng-container *ngIf="validateForm.get(control.eName).hasError('required')">
+                                                    {{control.validateCon}}
+                                                </ng-container>
+                                            </nz-form-explain>
+            
+                                        </nz-form-control>
+                                    </nz-form-item>
+            
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+            </form>
+      </ng-template>
+</nz-modal>

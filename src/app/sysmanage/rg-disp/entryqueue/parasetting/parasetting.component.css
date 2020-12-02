@@ -1,0 +1,136 @@
+.fliMaxtime,.f2sMaxTime{
+    float: left !important;
+}
+.f7sSelectedValue,.f8select{
+    float: left !important;
+}
+.f9sPostponeTime,.f10IpostponeTime{
+    float: left !important;
+}
+.f11sPostponeNum,.f12IpostponeNum{
+    float: left !important;
+}
+.f3sRemindNum,.f4iRemindNum{
+    float: left !important;
+}
+.f5sRemindInterval,.f6iRemindInterval{
+    float: left !important;
+}
+.f13Telephone,.f14but,.f15tel{
+    float: left !important;
+}
+.ant-input {
+    width: 90px;
+    height: 30px;
+    margin: 8px 2px;
+  }
+
+.f2sMaxTime{
+    width: 122px;
+    height: 30px;
+    margin: 8px 2px 8px -11px;
+    text-align: right
+}
+
+.f7sSelectedValue{
+    width: 100px;
+    height: 30px;
+    margin: 8px 7px;
+    text-align: right
+}
+.f8select{
+    width: 100px;
+    height: 30px;
+    margin: 8px 0px;
+    text-align: right
+}
+.f3sRemindNum{
+    width: 110px;
+    height: 30px;
+    margin: 8px 0px;
+    text-align: right
+}
+.f9sPostponeTime{
+    width: 110px;
+    height: 30px;
+    margin: 8px -3px;
+    text-align: right
+}
+.f5sRemindInterval{
+    width: 110px;
+    height: 30px;
+    margin: 8px 10px;
+    text-align: right
+}
+.f11sPostponeNum{
+    width: 110px;
+    height: 30px;
+    margin: 8px 10px;
+    text-align: right
+}
+.f10IpostponeTime{
+    margin: 8px 3px;
+}
+
+.f13Telephone{
+    width: 250px;
+    height: 77px;
+    margin: 1px 46px;
+    text-align:left
+}
+.f14but{
+    width: 80px;
+    height: 25px;
+    margin: 0px 554px;
+    display: block;
+}
+.f15tel{
+    width: 150px;
+    height: 30px;
+    margin: 8px -41px;
+    text-align: right
+}
+.dd{
+   width: 730px;
+   margin: 0 auto;
+}
+.div1{
+    width: 100%;
+    margin: 20px 0px;
+
+}
+.div5{
+    width: 100%;
+    margin: 50px 0px;
+
+}
+.div2{
+    float: left;
+    width: 100%;
+    margin: 20px 0px;
+}
+.loading-icon {
+    margin-right: 8px;
+  }
+.div3{
+    width: 730px;
+    float: left;
+}
+.div4{
+    float: left;
+    margin-top: 15px;
+}
+.required:before {
+    display: inline-block;
+    margin-right: 4px;
+    content: "*";
+    font-family: SimSun;
+    line-height: 1;
+    font-size: 14px;
+    color: #f5222d;
+}
+
+
+:host::ng-deep .ant-table-tbody > tr > td{
+  text-align: left;
+}

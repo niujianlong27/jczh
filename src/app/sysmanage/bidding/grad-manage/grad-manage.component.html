@@ -1,0 +1,91 @@
+<app-searchform (search)="listSearch($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [btnDisable]="{'Robbery':btnDis.Robbery}"></tpl-buttons>
+
+<app-grid-resize [gridOne]="one" [gridTwo]="two" (selfHeightResult)="gridHeight($event)">
+</app-grid-resize>
+<ng-template #one>
+  <app-table-form gridId="grid1" [dataSet]="data1" [trSelectedShow]="true"
+                  [listLoading]="loading" [totalPage]="totalpage" [pageSize]="pageSize"
+                  (updateDataResult)="selectData($event)"
+                  [isMutli]="false" [selfTableHeight]="gridOneHeight">
+  </app-table-form>
+</ng-template>
+<ng-template #two>
+  <nz-tabset>
+    <nz-tab nzTitle="抢单明细">
+      <app-table-form gridId="grid2" [dataSet]="data2" [isCheckBox]="false" [listLoading]="nextLoading"
+                      [totalPage]="totalpage2" [pageSize]="pageSize2" [pageFun]="true"
+                      [showCount]="false" (pageSizeEmit)="pageSizeEmit($event)" [selfTableHeight]="gridTwoHeight"
+                      (pageIndexEmit)="pageIndexEmit($event)">
+      </app-table-form>
+
+    </nz-tab>
+
+  </nz-tabset>
+</ng-template>
+
+
+<ng-container>
+  <ng-template #robberyTitle>
+    {{robberyTit}}
+  </ng-template>
+  <ng-template #robberyContent>
+    <ng-container>
+      <!--<p><i nz-icon type="form" theme="outline"></i><span>出价</span></p>-->
+      <div class="clearfix">
+        <div class="clearfix">
+          <nz-form-label class="fl">是否含税</nz-form-label>
+          <div class="fl" style="line-height: 40px;">
+            {{robInfo.settleType == '10' ? '含税' : '不含税'}}
+          </div>
+        </div>
+        <div class="clearfix">
+          <div class="clearfix" style="width: 100%; color: rgba(0, 0, 0, 0.85); margin-top: 10px;">装卸点</div>
+          <div class="clearfix" style="line-height: 30px;">
+            <span>装点：</span><span *ngFor="let data of robInfo.robbedItemModels"><span
+            *ngIf="!robInfo.robbedItemModels[0]">/</span>{{data.startPoint}}</span>
+          </div>
+          <div class="clearfix" style="line-height: 30px;">
+            <span>卸点：</span><span *ngFor="let data of robInfo.robbedItemModels"><span
+            *ngIf="!robInfo.robbedItemModels[0]">/</span>{{data.endPoint}}</span>
+          </div>
+        </div>
+        <div class="clearfix">
+          <div class="clearfix" style="width: 100%; color: rgba(0, 0, 0, 0.85); margin-top: 10px;">价格信息</div>
+          <div class="clearfix" style="line-height: 40px;">
+            <div class="fl">单价（￥/t）：</div>
+            <nz-form-control class="fl" style="width: 80px; margin-right: 30px;">
+              <input nz-input name="price"
+                     [(ngModel)]="robInfo.settleType == '10'?robInfo.unitPriceTax:robInfo.unitPriceTaxNo"
+                     [disabled]="true">
+            </nz-form-control>
+            <div class="fl">参考总价（￥）：</div>
+            <nz-form-control class="fl" style="width: 80px;">
+              <input nz-input name="price"
+                     [(ngModel)]="robInfo.settleType == '10'?robInfo.totalPriceTax:robInfo.totalPriceTaxNo"
+                     [disabled]="true">
+            </nz-form-control>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+  <ng-template #robberyFooter>
+    <ng-container>
+      <button nz-button nzType="primary" (click)="gradConfirm()" [nzLoading]="comfirmLoading"
+              [disabled]="comfirmLoading">确定
+      </button>
+      <button nz-button nzType="default" (click)="cancel()">取消</button>
+    </ng-container>
+  </ng-template>
+</ng-container>
+<ng-container>
+  <ng-template #confirmTitle>提示信息</ng-template>
+  <ng-template #confirmContent>
+    <p class="text-center f-b" style="margin:0;"> {{confirmCon}} </p>
+  </ng-template>
+  <ng-template #confirmFooter>
+    <button nz-button nzType="primary" (click)="confirm()">确定</button>
+    <button nz-button nzType="default" (click)="cancel()">取消</button>
+  </ng-template>
+</ng-container>

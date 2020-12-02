@@ -1,0 +1,51 @@
+<app-searchform [triggerSearch]="true" (search)="search($event)"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)"></tpl-buttons>
+<app-table-form 
+ [dataSet]="data"
+ [listLoading]="loading"
+ [isMutli]="true"
+ [totalPage]="total"></app-table-form>
+<nz-modal
+  [(nzVisible)]="visible"
+  [nzTitle]="modalTitle"
+  (nzOnOk)="ok()"
+  (nzOnCancel)="visible = false">
+  <form nz-form [formGroup]="modalForm">
+    <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>仓库</nz-form-label>
+        <nz-form-control [nzSm]="13" [nzXs]="24" nzErrorTip="请选择仓库">
+            <nz-select nzAllowClear formControlName="storeCode">
+                <nz-option [nzValue]="item.storeCode" [nzLabel]="item.storeName" *ngFor="let item of storeData"></nz-option>
+            </nz-select>
+            <nz-form-explain *ngIf="modalForm.get('storeCode')?.dirty && modalForm.get('storeCode')?.errors"
+            >请选择仓库</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>品种</nz-form-label>
+        <nz-form-control [nzSm]="13" [nzXs]="24" nzErrorTip="请选择品种">
+            <nz-select nzAllowClear formControlName="prodName">
+                <nz-option [nzValue]="item.itemId" [nzLabel]="item.cName" *ngFor="let item of prodNameData"></nz-option>
+            </nz-select>
+            <nz-form-explain *ngIf="modalForm.get('prodName')?.dirty && modalForm.get('prodName')?.errors"
+            >请选择品种</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>是否捆包管理</nz-form-label>
+        <nz-form-control [nzSm]="13" [nzXs]="24" nzErrorTip="请选择是否捆包管理">
+            <nz-select nzAllowClear formControlName="isPack">
+                <nz-option [nzValue]="item.value" [nzLabel]="item.name" *ngFor="let item of kbglData"></nz-option>
+            </nz-select>
+            <nz-form-explain *ngIf="modalForm.get('isPack')?.dirty && modalForm.get('isPack')?.errors"
+            >请选择是否捆包管理</nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="24">备注</nz-form-label>
+        <nz-form-control [nzSm]="13" [nzXs]="24">
+            <input nz-input formControlName="remark"/>
+        </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>

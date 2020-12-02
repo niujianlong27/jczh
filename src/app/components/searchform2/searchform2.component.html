@@ -1,0 +1,62 @@
+<form nz-form class="ant-advanced-search-form b-t search-form clearfix" *ngIf="findObj.buttonId === 'Find'">
+    <ng-container *ngFor="let control of controlArray">
+        <!---如果queryBoxType类型未定义隐藏，searchDataHiden是个对象 设置对应的parameter属性值true隐藏---->
+        <div class="fl clearfix" [hidden]="!control.queryBoxType || searchDataHiden[control.parameter]" [ngStyle]="{'width':control.queryBoxType=='date' && control.query === '介于'?'50%':'25%'}">
+            <div class="clearfix fl search-input-label">
+                <label class="search-checkbox" [hidden]="!checkBoxVisible" nz-checkbox [(ngModel)]="control.checkBox"
+                    [ngModelOptions]="{standalone: true}"></label>
+                <span>{{control.name}} :</span>
+            </div>
+            <div class="fl search-input-group clearfix" [ngSwitch]="control.queryBoxType">
+                <nz-select class="search-query" [(ngModel)]="control.query" [ngModelOptions]="{standalone: true}" style="display:none">
+                    <nz-option [nzLabel]="'包含'" [nzValue]="'包含'"></nz-option>
+                    <nz-option [nzLabel]="'等于'" [nzValue]="'等于'"></nz-option>
+                    <nz-option [nzLabel]="'介于'" [nzValue]="'介于'"></nz-option>
+                </nz-select>
+                <!--数字-->
+                <ng-template [ngSwitchCase]="'number'">
+                    <app-input-number class="number-input fl" (ngModelChange)="searchModelChange($event,control)"
+                        [(ngModel)]="control.value1" name="control.parameter"></app-input-number>
+                    <app-input-number class="number-input-last fl" style="margin-left:4px;" (ngModelChange)="searchModelChange($event,control)"
+                        [hidden]="control.query !== '介于'" [(ngModel)]="control.value2" name="control.parameter"></app-input-number>
+                </ng-template>
+                <!--文本-->
+                <ng-template [ngSwitchCase]="'string'">
+                    <input nz-input autocomplete="off" class="first-input1" (ngModelChange)="searchModelChange($event,control)"
+                        [(ngModel)]="control.value1" name="control.parameter">
+                    <input nz-input autocomplete="off" style="margin-left:4px;" (ngModelChange)="searchModelChange($event,control)"
+                        [hidden]="control.query !== '介于'" class="search-input-right" [(ngModel)]="control.value2" name="control.parameter">
+                </ng-template>
+                <!--日期-->
+                <ng-template [ngSwitchCase]="'date'">
+                    <nz-date-picker nzShowTime [nzPlaceHolder]="control.query === '介于'?'开始日期':'日期'" [nzFormat]="'yyyy-MM-dd HH:mm:ss'"
+                        [nzDisabledDate]="disabledDate(control,1)" class="fl search-date single-date1" (ngModelChange)="searchModelChange($event,control)"
+                        [(ngModel)]="control.value1" name="control.parameter"></nz-date-picker>
+                    <nz-date-picker nzShowTime [hidden]="control.query !== '介于'" nzPlaceHolder="结束日期" [nzFormat]="'yyyy-MM-dd HH:mm:ss'"
+                        [nzDisabledDate]="disabledDate(control,2)" class="fl last-date" (ngModelChange)="searchModelChange($event,control)"
+                        [(ngModel)]="control.value2" name="control.parameter"></nz-date-picker>
+                </ng-template>
+                <!--条件下拉框-->
+                <ng-template [ngSwitchCase]="'select'">
+                    <nz-select class="search-select" (ngModelChange)="searchModelChange($event,control)" [(ngModel)]="control.value1"
+                        name="control.parameter" nzAllowClear>
+                        <nz-option *ngFor="let s of selectArr[control.parameter]" [nzLabel]="s.name" [nzValue]="s.value"></nz-option>
+                    </nz-select>
+                </ng-template>
+                <!--数据下拉框-->
+                <ng-template [ngSwitchCase]="'pop'">
+                    <input-modal class="fl search-pop" (ngModelChange)="searchModelChange($event,control)" [isMutli]=false
+                        [findset]="control.apiParameter" (inpEmit)="selectedData($event,control)" [(inputModalModel)]="control.value1"></input-modal>
+                </ng-template>
+            </div>
+            <nz-select [(ngModel)]="control.postQuery" class="post-query" [ngModelOptions]="{standalone: true}" style="display:none">
+                <nz-option [nzLabel]="'且'" [nzValue]="'且'"></nz-option>
+                <nz-option [nzLabel]="'或'" [nzValue]="'或'"></nz-option>
+            </nz-select>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="suffixTemplate">
+        <ng-template [ngTemplateOutlet]="suffixTemplate"></ng-template>
+    </ng-container>
+    
+</form>

@@ -1,0 +1,52 @@
+<app-searchform (search)="listSearch($event)" [triggerSearch]="true"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [btnDisable]="{'sub':tabIndex != 0,'del':tabIndex != 1}"></tpl-buttons>
+<div>
+    <p>收款信息</p>
+    <app-table-form [gridId]="'grid1'" (updateDataResult)="selectData1Fun($event)" [dataSet]="settleRec" [pageSize]="pageSize1" [colSet]="false"  selfTableHeight="245px"
+    [totalPage]="total1" [isMutli]="false" [tabArr]="tabArr" [tabIndex]="tabIndex" (tabResultFun)="tabFun($event)" [listLoading]="isLoading"></app-table-form>
+</div>
+
+<div style="margin-top:30px;">
+    <p input-blur>结算报表</p>
+    <app-table-form [gridId]="'grid2'" [dataSet]="settleReport" [pageSize]="pageSize2" (updateDataResult)="selectData2Fun($event)"
+    [totalPage]="total2" [isMutli]="true" (modelChange)="inputModelFun($event)" [colSet]="false" selfTableHeight="245px"></app-table-form>
+</div>
+<ng-template #applyTitle>
+  <span>平帐申请</span>
+</ng-template>
+<ng-template #tplTitle>
+  <span>{{modalTitle}}</span>
+</ng-template>
+
+<ng-template #tplContent>
+      <app-searchform (search)="modalSearch($event)" [formId]="'form_rev_write_off_pop'"></app-searchform>
+      <app-table-form [formId]="'form_rev_write_off_pop'" [gridId]="'grid1'" (updateDataResult)="modalSelectDataFun($event)" [totalPage]="modaltotal" [dataSet]="modalData" [pageSize]="pageSize3"
+      [totalPage]="total3" [isMutli]="true" [listLoading]="isLoading"></app-table-form>
+</ng-template>
+<ng-template #tplFooter>
+      <button nz-button nzType="primary" (click)="modalAuto()">自动平账</button>
+      <button nz-button nzType="primary" (click)="modalApply()">申请平账</button>
+      <button nz-button nzType="default" (click)="modalCancel(1)">取消</button>
+</ng-template>
+
+<ng-template #confirmContent>
+    <div class="text-center f-b">{{modalContent}}</div>
+</ng-template>
+<ng-template #confirmFooter>
+    <button nz-button nzType="primary" (click)="modalConfirm()">确定</button>
+    <button nz-button nzType="default" (click)="modalCancel(2)">取消</button>
+</ng-template>
+
+<ng-template #why>
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">原因</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <textarea nz-input [(ngModel)] = "whyData" [ngModelOptions]="{standalone: true}" ></textarea>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+
+</ng-template>
+
+

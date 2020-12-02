@@ -1,0 +1,9 @@
+<app-searchform (search)="searchList($event)" formId="form_storage_StoreOutPlan"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" formId="form_storage_StoreOutPlan"></tpl-buttons>
+    <app-table-form
+      gridId="grid1"
+      [dataSet]="dataSet1"
+      [isMutli]="true" formId="form_storage_StoreOutPlan"
+      [totalPage]="totalPage"
+      (updateDataResult)="selectData($event)"
+      (modelChange)="modelChange($event)"></app-table-form>

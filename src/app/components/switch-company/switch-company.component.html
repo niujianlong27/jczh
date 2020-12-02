@@ -1,0 +1,33 @@
+<nz-modal [(nzVisible)]="visible" nzTitle="选择您的服务公司" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+(nzAfterClose)="afterClose()" nzWidth="35%">
+   <div nz-row>
+      <div nz-col nzSpan="1"></div>
+      <div nz-col nzSpan="6">公司编号</div>
+      <div nz-col nzSpan="16">
+         <span>公司名称</span>
+         <nz-dropdown [nzClickHide]="false">
+            <i nz-dropdown nz-icon nzType="search" nzTheme="outline" class="switch-company-search"></i>
+            <ul nz-menu>
+               <li nz-menu-item>
+                     <input nz-input nzSize="small" autocomplete="off" [(ngModel)]="value" name="companyName"
+                      (keydown.enter)="keydown()"/>
+               </li>
+               <li nz-menu-divider></li>
+               <li nz-menu-item class="clearfix">
+                  <button nz-button nzSize="small" nzType="primary" class="fl" (click)="confirm()">确定</button>
+                  <button nz-button nzSize="small" nzType="default" class="fr" (click)="reset()">重置</button>
+               </li>
+            </ul>
+         </nz-dropdown>
+      </div>
+      <div nz-col nzSpan="1"></div>
+   </div>
+   <div class="switch-company-content">
+      <div (click)="selectCompant(i,dex)" nz-row *ngFor="let i of listData;let dex = index;" class="list-company" [class.f5]="i.companyId === result.companyId">
+         <div nz-col nzSpan="1"></div>
+         <div nz-col nzSpan="6">{{i.companyId}}</div>
+         <div nz-col nzSpan="16">{{i.companyName}}</div>
+         <div nz-col nzSpan="1"></div>
+      </div>
+   </div>
+</nz-modal>

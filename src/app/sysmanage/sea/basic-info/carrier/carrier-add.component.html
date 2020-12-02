@@ -1,0 +1,631 @@
+<!-- <nz-card [nzBordered]="false">
+    <form nz-form [formGroup]="form" [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="24">
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8">承运商编码</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input type="hidden" [(ngModel)]="carrier.id" formControlName="id" readonly="readonly">
+                        <input type="hidden" [(ngModel)]="carrier.carrierId" formControlName="carrierId" readonly="readonly">
+                        <input nz-input [(ngModel)]="carrier.carrierCode" formControlName="carrierCode">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8" nzRequired>承运商名称</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input [(ngModel)]="carrier.carrierName" formControlName="carrierName">
+                        <nz-form-explain *ngIf="form.get('carrierName').dirty && form.get('carrierName').errors">请输入承运商名称!</nz-form-explain>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8">拼音</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input [(ngModel)]="carrier.pinyin" formControlName="pinyin">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row [nzGutter]="24">
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8" nzRequired>企业类型</nz-form-label>
+                    <nz-form-control nzSpan="16">
+
+                        <nz-select [(ngModel)]="carrier.type" nzAllowClear formControlName="type"  style="width: 120px;" nzPlaceHolder="请选择">
+
+                            <nz-option nzValue="1" nzLabel="船东"></nz-option>
+                            <nz-option nzValue="2" nzLabel="船代"></nz-option>
+
+                        </nz-select>
+                        <nz-form-explain *ngIf="form.get('type').dirty && form.get('type').errors">请选择企业类型!</nz-form-explain>
+
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8" nzRequired>业务类型</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <nz-select [(ngModel)]="carrier.bizType" nzAllowClear formControlName="bizType"  style="width: 120px;" nzPlaceHolder="请选择">
+
+                            <nz-option nzValue="1" nzLabel="近洋"></nz-option>
+                            <nz-option nzValue="2" nzLabel="远洋"></nz-option>
+                            <nz-option nzValue="0" nzLabel="全部"></nz-option>
+
+                        </nz-select>
+                        <nz-form-explain *ngIf="form.get('bizType').dirty && form.get('bizType').errors">请选择业务类型!</nz-form-explain>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8" nzRequired>统一社会信用代码</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input [(ngModel)]="carrier.creditCode" formControlName="creditCode">
+                        <nz-form-explain *ngIf="form.get('creditCode').dirty && form.get('creditCode').errors">请输入正确的社会信用代码!</nz-form-explain>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <nz-card nzTitle="联系人信息" [nzBordered]="true" style="margin: 0px 24px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>联系人姓名</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input [(ngModel)]="carrier.contact" formControlName="contact">
+                            <nz-form-explain *ngIf="form.get('contact').dirty && form.get('contact').errors">请输入联系人姓名!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>联系电话</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input [(ngModel)]="carrier.contactPhone" formControlName="contactPhone">
+                            <nz-form-explain *ngIf="form.get('contactPhone').dirty && form.get('contactPhone').errors">请输入联系电话!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>邮箱</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input [(ngModel)]="carrier.email" formControlName="email">
+                            <nz-form-explain *ngIf="form.get('email').dirty && form.get('email').errors">请输入正确的邮箱!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="24">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="3">联系地址</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <textarea nz-input [(ngModel)]="carrier.contactAddress" formControlName="contactAddress" [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-card>
+
+        <nz-card nzTitle="开户信息" [nzBordered]="true" style="margin: 0px 24px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>开户名</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input [(ngModel)]="carrier.accountName" formControlName="accountName">
+                            <nz-form-explain *ngIf="form.get('accountName').dirty && form.get('accountName').errors">请输入开户名!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>开户行</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input [(ngModel)]="carrier.accountBank" formControlName="accountBank">
+                            <nz-form-explain *ngIf="form.get('accountBank').dirty && form.get('accountBank').errors">请输入开户行!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>银行账户</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input [(ngModel)]="carrier.accountNo" formControlName="accountNo">
+                            <nz-form-explain *ngIf="form.get('accountNo').dirty && form.get('accountNo').errors">请输入银行账户!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-card>
+
+        <nz-card nzTitle="资质信息" [nzBordered]="true" style="margin: 0px 24px;">
+            <div nz-row [nzGutter]="12">
+                <div nz-col nzXl="6">
+                    <nz-form-item>
+                        <label nz-checkbox [(ngModel)]="carrier.isMarginFlag" (ngModelChange)="changeMargin('isMarginFlag')" formControlName="isMargin">
+                            <span>是否缴纳保证金</span>
+                        </label>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="6">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">保证金金额</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input [(ngModel)]="carrier.marginAmt" id="marginAmt" formControlName="marginAmt" [readonly]="!carrier.isMarginFlag">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-row [nzGutter]="12">
+                <div nz-col nzXl="6">
+                    <nz-form-item>
+                        <label nz-checkbox [(ngModel)]="carrier.isBillingFlag" (ngModelChange)="changeMargin('isBillingFlag')" formControlName="isBilling">是否有开票资质</label>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="6">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">开票金额</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input [(ngModel)]="carrier.billingAmt" formControlName="billingAmt" [readonly]="!carrier.isBillingFlag">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-card>
+
+        <nz-card nzTitle="图片信息" [nzBordered]="true" style="margin: 0px 24px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">公司照片</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <div class="clearfix">
+                                <nz-upload nzAction="http://hywm.oss-cn-beijing.aliyuncs.com/" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="imageFileList"
+                                    nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData" (nzChange)="handleChange($event,'imageUrl')"
+                                    [nzShowButton]="imageFileList.length < 1">
+                                    <i class="anticon anticon-plus"></i>
+                                    <div class="ant-upload-text">Upload</div>
+                                </nz-upload>
+                                <input type="hidden" [(ngModel)]="carrier.imageUrl" formControlName="imageUrl" readonly="readonly">
+                                <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+                                    <ng-template #modalContent>
+                                        <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+                                    </ng-template>
+                                </nz-modal>
+                            </div>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">营业执照</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <div class="clearfix">
+                                <nz-upload nzAction="http://hywm.oss-cn-beijing.aliyuncs.com/" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="licenseImageFileList"
+                                    nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData" (nzChange)="handleChange($event,'licenseImageUrl')"
+                                    [nzShowButton]="licenseImageFileList.length < 1">
+                                    <i class="anticon anticon-plus"></i>
+                                    <div class="ant-upload-text">Upload</div>
+                                </nz-upload>
+                                <input type="hidden" [(ngModel)]="carrier.licenseImageUrl" formControlName="licenseImageUrl" readonly="readonly">
+                                <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+                                    <ng-template #modalContent>
+                                        <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+                                    </ng-template>
+                                </nz-modal>
+                            </div>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">nvocc证书</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <nz-upload nzAction="http://hywm.oss-cn-beijing.aliyuncs.com/" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="nvoccImageFileList"
+                                nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData" (nzChange)="handleChange($event,'nvoccImageUrl')"
+                                [nzShowButton]="nvoccImageFileList.length < 1">
+                                <i class="anticon anticon-plus"></i>
+                                <div class="ant-upload-text">Upload</div>
+                            </nz-upload>
+                            <input type="hidden" [(ngModel)]="carrier.nvoccImageUrl" formControlName="nvoccImageUrl" readonly="readonly">
+                            <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+                                <ng-template #modalContent>
+                                    <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+                                </ng-template>
+                            </nz-modal>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-card>
+
+        <div nz-row [nzGutter]="24">
+            <div nz-col nzXl="6">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8">创建人</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input [(ngModel)]="carrier.creator" formControlName="creator" readonly="readonly">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="6">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8">创建时间</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input [(ngModel)]="carrier.createTime" formControlName="createTime" readonly="readonly">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="6">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8">修改人</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input [(ngModel)]="carrier.revisor" formControlName="revisor" readonly="readonly">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="6">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8">修改时间</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input [(ngModel)]="carrier.reviseTime" formControlName="reviseTime" readonly="readonly">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+
+        <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="24" style="text-align: center;" *ngIf="!auditFlag; else elseBlock">
+                <button nz-button [nzType]="'primary'" (click)="save()">
+                    <span>暂存</span>
+                </button>
+                <button nz-button [nzType]="'primary'" (click)="submit($event)">
+                    <span>提交</span>
+                </button>
+                <button nz-button [nzType]="'primary'" (click)="cancel($event)">
+                    <span>取消</span>
+                </button>
+            </div>
+            <ng-template #elseBlock>
+                <div nz-col nzSpan="24" style="text-align: center;">
+                    <button nz-button [nzType]="'primary'" (click)="audit($event)">
+                        <span>审核通过</span>
+                    </button>
+                    <button nz-button [nzType]="'primary'" (click)="rejected($event)">
+                        <span>驳回</span>
+                    </button>
+                    <button nz-button [nzType]="'primary'" (click)="cancel($event)">
+                        <span>取消</span>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </form>
+</nz-card> -->
+<nz-card [nzBordered]="false">
+    <form nz-form [formGroup]="form" [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="24">
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8">承运商编码</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input type="hidden" formControlName="id" readonly="readonly">
+                        <input type="hidden"  formControlName="carrierId" readonly="readonly">
+                        <input type="hidden"  formControlName="status" readonly="readonly">
+                        <input nz-input  formControlName="carrierCode">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8" nzRequired>承运商名称</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input  formControlName="carrierName">
+                        <nz-form-explain *ngIf="form.get('carrierName').dirty && form.get('carrierName').errors">请输入承运商名称!</nz-form-explain>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8">拼音</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input  formControlName="pinyin">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row [nzGutter]="24">
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8" nzRequired>企业类型</nz-form-label>
+                    <nz-form-control nzSpan="16">
+
+                        <nz-select  nzAllowClear formControlName="type"  style="width: 120px;" nzPlaceHolder="请选择">
+
+                            <nz-option nzValue="1" nzLabel="船东"></nz-option>
+                            <nz-option nzValue="2" nzLabel="船代"></nz-option>
+
+                        </nz-select>
+                        <nz-form-explain *ngIf="form.get('type').dirty && form.get('type').errors">请选择企业类型!</nz-form-explain>
+
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8" nzRequired>业务类型</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <nz-select nzAllowClear formControlName="bizType"  style="width: 120px;" nzPlaceHolder="请选择">
+
+                            <nz-option nzValue="1" nzLabel="近洋"></nz-option>
+                            <nz-option nzValue="2" nzLabel="远洋"></nz-option>
+                            <nz-option nzValue="0" nzLabel="全部"></nz-option>
+
+                        </nz-select>
+                        <nz-form-explain *ngIf="form.get('bizType').dirty && form.get('bizType').errors">请选择业务类型!</nz-form-explain>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="8">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8" nzRequired>统一社会信用代码</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input  formControlName="creditCode">
+                        <nz-form-explain *ngIf="form.get('creditCode').dirty && form.get('creditCode').errors">请输入正确的社会信用代码!</nz-form-explain>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <nz-card nzTitle="联系人信息" [nzBordered]="true" style="margin: 0px 24px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>联系人姓名</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="contact">
+                            <nz-form-explain *ngIf="form.get('contact').dirty && form.get('contact').errors">请输入联系人姓名!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>联系电话</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="contactPhone">
+                            <nz-form-explain *ngIf="form.get('contactPhone').dirty && form.get('contactPhone').errors">请输入联系电话!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>邮箱</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="email">
+                            <nz-form-explain *ngIf="form.get('email').dirty && form.get('email').errors">请输入正确的邮箱!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="24">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">联系地址</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <textarea nz-input  formControlName="contactAddress" style="width: 180px;" [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-card>
+
+        <nz-card nzTitle="开户信息" [nzBordered]="true" style="margin: 0px 24px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>开户名</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="accountName">
+                            <nz-form-explain *ngIf="form.get('accountName').dirty && form.get('accountName').errors">请输入开户名!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>开户行</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="accountBank">
+                            <nz-form-explain *ngIf="form.get('accountBank').dirty && form.get('accountBank').errors">请输入开户行!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8" nzRequired>银行账户</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="accountNo">
+                            <nz-form-explain *ngIf="form.get('accountNo').dirty && form.get('accountNo').errors">请输入银行账户!</nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-card>
+
+        <nz-card nzTitle="资质信息" [nzBordered]="true" style="margin: 0px 24px;">
+            <div nz-row [nzGutter]="12">
+                <div nz-col nzXl="6">
+                    <nz-form-item>
+                        <label nz-checkbox  (ngModelChange)="changeMargin()" formControlName="isMargin">
+                                <!-- <label nz-checkbox  (ngModelChange)="changeMargin()" formControlName="isMargin"> -->
+                            <span>是否缴纳保证金</span>
+                        </label>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="6">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">保证金金额</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  id="marginAmt" formControlName="marginAmt" [readonly]="!isMarginFlag">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-row [nzGutter]="12">
+                <div nz-col nzXl="6">
+                    <nz-form-item>
+                        <label nz-checkbox  (ngModelChange)="changeBilling()" formControlName="isBilling">是否有开票资质</label>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzXl="6">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">开票金额</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <input nz-input  formControlName="billingAmt" [readonly]="!isBillingFlag">
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-card>
+
+        <nz-card nzTitle="图片信息" [nzBordered]="true" style="margin: 0px 24px;">
+            <div nz-row [nzGutter]="24">
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">公司照片</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <div class="clearfix">
+                                <nz-upload nzAction="http://hywm.oss-cn-beijing.aliyuncs.com/" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="imageFileList"
+                                    nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData" (nzChange)="handleChange($event,'imageUrl')"
+                                    [nzShowButton]="imageFileList.length < 1">
+                                    <i class="anticon anticon-plus"></i>
+                                    <div class="ant-upload-text">Upload</div>
+                                </nz-upload>
+                                <input type="hidden" [(ngModel)]="carrier.imageUrl" formControlName="imageUrl" readonly="readonly">
+                                <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+                                    <ng-template #modalContent>
+                                        <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+                                    </ng-template>
+                                </nz-modal>
+                            </div>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">营业执照</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <div class="clearfix">
+                                <nz-upload nzAction="http://hywm.oss-cn-beijing.aliyuncs.com/" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="licenseImageFileList"
+                                    nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData" (nzChange)="handleChange($event,'licenseImageUrl')"
+                                    [nzShowButton]="licenseImageFileList.length < 1">
+                                    <i class="anticon anticon-plus"></i>
+                                    <div class="ant-upload-text">Upload</div>
+                                </nz-upload>
+                                <input type="hidden" [(ngModel)]="carrier.licenseImageUrl" formControlName="licenseImageUrl" readonly="readonly">
+                                <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+                                    <ng-template #modalContent>
+                                        <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+                                    </ng-template>
+                                </nz-modal>
+                            </div>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col nzXl="8">
+                    <nz-form-item>
+                        <nz-form-label nzSpan="8">nvocc证书</nz-form-label>
+                        <nz-form-control nzSpan="16">
+                            <nz-upload nzAction="http://hywm.oss-cn-beijing.aliyuncs.com/" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="nvoccImageFileList"
+                                nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData" (nzChange)="handleChange($event,'nvoccImageUrl')"
+                                [nzShowButton]="nvoccImageFileList.length < 1">
+                                <i class="anticon anticon-plus"></i>
+                                <div class="ant-upload-text">Upload</div>
+                            </nz-upload>
+                            <input type="hidden" [(ngModel)]="carrier.nvoccImageUrl" formControlName="nvoccImageUrl" readonly="readonly">
+                            <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+                                <ng-template #modalContent>
+                                    <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+                                </ng-template>
+                            </nz-modal>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </nz-card>
+
+        <div nz-row [nzGutter]="24">
+            <div nz-col nzXl="6">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8">创建人</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input [(ngModel)]="carrier.creator" formControlName="creator" readonly="readonly">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="6">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8">创建时间</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input [(ngModel)]="carrier.createTime" formControlName="createTime" readonly="readonly">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="6">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8">修改人</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input [(ngModel)]="carrier.revisor" formControlName="revisor" readonly="readonly">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzXl="6">
+                <nz-form-item>
+                    <nz-form-label nzSpan="8">修改时间</nz-form-label>
+                    <nz-form-control nzSpan="16">
+                        <input nz-input [(ngModel)]="carrier.reviseTime" formControlName="reviseTime" readonly="readonly">
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+
+        <div nz-row [nzGutter]="24">
+            
+            <div nz-col nzSpan="24" style="text-align: center;" *ngIf="!auditFlag; else elseBlock">
+             <p class="b-t p-sm-tb">
+                <button nz-button [nzType]="'primary'"class="m-r" (click)="save()">
+                    <span>暂存</span>
+                </button>
+                <button nz-button [nzType]="'primary'" class="m-r"(click)="submit($event)">
+                    <span>提交</span>
+                </button>
+                <button nz-button [nzType]="'primary'"class="m-r" (click)="cancel($event)">
+                    <span>取消</span>
+                </button>
+             </p>
+            </div>
+            <ng-template #elseBlock>
+                <div nz-col nzSpan="24" style="text-align: center;">
+                    <button nz-button [nzType]="'primary'"class="m-r" (click)="audit($event)">
+                        <span>审核通过</span>
+                    </button>
+                    <button nz-button [nzType]="'primary'"class="m-r" (click)="rejected($event)">
+                        <span>驳回</span>
+                    </button>
+                    <button nz-button [nzType]="'primary'" class="m-r" (click)="cancel($event)">
+                        <span>取消</span>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </form>
+</nz-card>

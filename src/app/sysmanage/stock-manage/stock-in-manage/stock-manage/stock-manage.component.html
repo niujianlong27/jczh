@@ -1,0 +1,13 @@
+<app-searchform (search)="searchList($event)" formId="form_storage_StoreInfo"></app-searchform>
+<tpl-buttons (btnClick)="btnClick($event)" [btnHiden]="{'Export':isRoute,'Define':!isRoute}" formId="form_storage_StoreInfo"></tpl-buttons>
+
+    <app-table-form
+      gridId="grid1" formId="form_storage_StoreInfo"
+      [dataSet]="dataSet1"
+      [isMutli]="true"
+      [totalPage]="totalPage"
+      [pageSize]="pageSize1"
+      [listLoading]="listLoading1"
+       (pageIndexEmit)='getPageIndex1($event)' (pageSizeEmit)='getPageSize1($event)'
+      (updateDataResult)="selectData($event)"></app-table-form>
+

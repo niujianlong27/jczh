@@ -1,0 +1,85 @@
+<div [ngStyle]="{'width':listWidth}" class="grid-box">
+        <!--标签-->
+        <nz-tabset class="table-list" *ngIf="tabArr[0]" [(nzSelectedIndex)]="tabIndex">
+          <nz-tab nzTitle="{{tab.name}}" *ngFor="let tab of tabArr" (nzSelect)="tabClick(tab)">
+          </nz-tab>
+        </nz-tabset>
+       <!--列表-->
+        <nz-table #nzTable reNzTable [extraTableHeight]="extraTableHeight" (scrollBottom)="scrollBottom()" (heightEmit)="tableHeightFun($event)" [selfTableHeight]="selfTableHeight" [nzScroll]="{x:tableWidth,y:selfTableHeight || tableHeight }" nzSize="small" [nzShowPagination]="false"
+        [nzNoResult]="noResult" class="table-grid" [nzLoading] = "listLoading" (nzCurrentPageDataChange)="currentPageDataChange($event)" [nzData]="_dataSet" [nzFrontPagination]="false">
+          <thead>
+            <tr [colDrag]="dataHeader" [headers]="dataHeaderRefresh" (canColDrag)="coldrag($event)">
+              <th nzShowCheckbox *ngIf="isCheckBox && _dataSet[0]" [(nzChecked)]="allChecked" [nzDisabled]="!isMutli" [nzWidth]="checkBoxWidth || '35px'"  nzLeft="0px" [nzIndeterminate]="indeterminate" (nzCheckedChange)="checkAll($event)"></th>
+              <ng-container *ngFor="let h of dataHeader;let h_dex = index;">
+                <th *ngIf="filterFlag" class="table-th" title="{{h.colCname}}" [nzWidth]="h.width" nzShowSort (nzSortChange)="sort($event,h)"
+                  [nzShowFilter]="headerFilter[h.colEname] && headerFilter[h.colEname][1]" [nzFilters]="headerFilter[h.colEname]||[]"
+                  (nzFilterChange)="filterData($event,h.colEname)">
+                  <span [class.header-span]="h.required">{{h.colCname}}</span>
+                  <span class="resize-handle"></span>
+                </th>
+                <th *ngIf="!filterFlag" class="table-th" title="{{h.colCname}}" [nzWidth]="h.width" [nzFilters]="headerFilter[h.colEname]||[]"
+                  (nzFilterChange)="filterData($event,h.colEname)">
+                  <span [class.header-span]="h.required">{{h.colCname}}</span>
+                  <span class="resize-handle"></span>
+                </th>
+              </ng-container>
+              <th [nzWidth]="_gridOperate.width"  nzRight="0px" *ngIf="_gridOperate.show">{{_gridOperate.title}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of nzTable.data;let dex = index" (mouseover)="listOverFun(data,dex)" (mouseleave)="listLeaveFun(data,dex)" [class.bg-grid-tr] =" ( dex % 2 !== 0 ) && closeBgTr" [ngStyle]="data.replaceCheckBox?{'background-color':'#fafafa'}:{}" [class.tr-selected]="_trSelected[dex] && trSelectedShow">
+            <td [class.bg-grid-tr] =" ( dex % 2 !== 0 ) && closeBgTr" nzShowCheckbox *ngIf="isCheckBox && !data.replaceCheckBox" [(nzChecked)]="data.checked" nzLeft="0px" [nzDisabled]="data.disabled" (nzCheckedChange)="refreshStatus(data)"></td>
+            <td *ngIf="data.replaceCheckBox">{{data.replaceCheckBox}}</td>
+            <ng-container *ngFor="let n of dataHeader">
+              <td [ngClass]="n.type"  [ngSwitch]="(n.edit==='BJBJ20' && !data.EDIT) ||(n.edit==='BJBJ10' && data.editstate == 0) || !n.edit" (click)="tdClick(data,dex,(n.edit==='BJBJ20' && !data.EDIT) ||(n.edit==='BJBJ10' && data.editstate == 0) || !n.edit)">
+                <ng-template [ngSwitchCase]="true">
+                    <span title="{{data[n.colEname]}}">{{ data[n.colEname] | gridData:{"type":n.type,"format":n.format} }}</span>
+                </ng-template>
+                <ng-template [ngSwitchCase]="false">
+                  <!--文本框-->
+                    <input *ngIf="n.type==='string'" [disabled]="data.inputDisabled && data.inputDisabled[n.colEname]" nz-input nzSize="small" [(ngModel)]="data[n.colEname]" #input (ngModelChange)="onChange($event,data,input,n)" (blur)="inputBlur(data,dex)"  [ngModelOptions]="{standalone: true}">
+                  <!--数字框-->
+                    <app-input-number *ngIf="n.type==='number'" [disabled]="data.inputDisabled && data.inputDisabled[n.colEname]" [format]="n.format" size="small" [(ngModel)]="data[n.colEname]" #input (ngModelChange)="onChange($event,data,input.input.nativeElement,n)" (blur)="inputBlur(data,dex)"  [ngModelOptions]="{standalone: true}" [intType]="intType"></app-input-number>
+                  <!--时间框-->
+                    <nz-date-picker *ngIf="n.type==='date'" [nzDisabled]="data.inputDisabled && data.inputDisabled[n.colEname]" [(ngModel)]="data[n.colEname]"  [ngModelOptions]="{standalone: true}" nzSize="small"
+                       nzShowTime  [nzStyle]="{width:'auto'}"
+                       nzFormat="yyyy-MM-dd HH:mm"
+                     ></nz-date-picker>
+                  <!--pop弹出框-->
+                    <input-modal *ngIf="n.type == 'pop'" [DISABLED]="data.inputDisabled && data.inputDisabled[n.colEname]" [eName]='n.colEname' [popData]='popData' [popIndex]="dex"
+                                 [popTableData]="popTableData"  [inputSize]="'small'" [findset]='n.apiParameter' [searchParamFiled]="searchParamFiled" [searchParamFiledNot]="searchParamFiledNot && searchParamFiledNot[n.colEname]" [searchValue]="data[searchListFiled]" [(inputModalModel)]="data[n.colEname]"
+                                 (inpEmit)='inpEmitFun($event,dex,data.rowid,n)'></input-modal>
+                  <!--下拉选择-->
+                  <nz-select *ngIf="n.type==='select'" style="min-width:60px;" nzSize='small' [style.width]="n.width?n.width-10+'px':'100px'" [nzDisabled]="data.inputDisabled && data.inputDisabled[n.colEname]" [(ngModel)]="data[n.colEname]" (ngModelChange)="onChange($event,data,input,n)" nzAllowClear nzPlaceHolder="选择">
+                    <nz-option *ngFor="let option of n.apiParameter.optionList" [nzValue]="option[n.apiParameter.optionParam?n.apiParameter.optionParam.value:'value']" [nzLabel]="option[n.apiParameter.optionParam?n.apiParameter.optionParam.name:'name']"></nz-option>
+                  </nz-select>
+
+                </ng-template>
+              </td>
+            </ng-container>
+            <td class="grid-operate" *ngIf="_gridOperate.show" nzRight="0px">
+                <ng-template [ngTemplateOutlet]="_gridOperate.template" [ngTemplateOutletContext]="{$implicit: data, index: dex }"></ng-template>
+            </td>
+            </tr>
+            <tr style="height: 1px"></tr>
+          </tbody>
+        </nz-table>
+        <ng-template #noResult>
+          <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAxKSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgIDxlbGxpcHNlIGZpbGw9IiNGNUY1RjUiIGN4PSIzMiIgY3k9IjMzIiByeD0iMzIiIHJ5PSI3Ii8+CiAgICA8ZyBmaWxsLXJ1bGU9Im5vbnplcm8iIHN0cm9rZT0iI0Q5RDlEOSI+CiAgICAgIDxwYXRoIGQ9Ik01NSAxMi43Nkw0NC44NTQgMS4yNThDNDQuMzY3LjQ3NCA0My42NTYgMCA0Mi45MDcgMEgyMS4wOTNjLS43NDkgMC0xLjQ2LjQ3NC0xLjk0NyAxLjI1N0w5IDEyLjc2MVYyMmg0NnYtOS4yNHoiLz4KICAgICAgPHBhdGggZD0iTTQxLjYxMyAxNS45MzFjMC0xLjYwNS45OTQtMi45MyAyLjIyNy0yLjkzMUg1NXYxOC4xMzdDNTUgMzMuMjYgNTMuNjggMzUgNTIuMDUgMzVoLTQwLjFDMTAuMzIgMzUgOSAzMy4yNTkgOSAzMS4xMzdWMTNoMTEuMTZjMS4yMzMgMCAyLjIyNyAxLjMyMyAyLjIyNyAyLjkyOHYuMDIyYzAgMS42MDUgMS4wMDUgMi45MDEgMi4yMzcgMi45MDFoMTQuNzUyYzEuMjMyIDAgMi4yMzctMS4zMDggMi4yMzctMi45MTN2LS4wMDd6IiBmaWxsPSIjRkFGQUZBIi8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K"/>
+          <p class="text-center">暂无数据</p>
+        </ng-template>
+        <div>
+          <div *ngIf="nzShowPagination" class="fl" style="margin: 5px;">
+            <a style="color:#40a9ff;" title="导出表格数据" (click)="export()">导出</a>&nbsp;&nbsp;&nbsp;
+            <i nz-icon type="filter" theme="outline" *ngIf="!filterFlag" (click)="setFilterFlag()" title="显示grid筛选和排序" style="color:#40a9ff;"></i>
+            <i nz-icon type="filter" theme="fill" *ngIf="filterFlag" (click)="setFilterFlag()" title="隐藏grid筛选和排序" style="color:#40a9ff;"></i>
+          </div>
+          <div style="margin-left: 30px;">
+            <app-pagination [caculateEnameArr]="caculateEnameArr" [nzShowPagination]="nzShowPagination" [showCount]="showCount"
+              [(nzPageSize)]="pageSize" [colSet]="colSet" [nzPageSizeOptions]="_pageSizeOptions" [changedHeaders]="dataHeader"
+              [paginationRef]="paginationRef" [selectCount]="_selectedLength || updateData.length" [(nzPageIndex)]="pageIndex"
+              (nzPageSizeChange)="pageSizeFun($event)" (nzPageIndexChange)="pageChange($event)" [nzTotal]="_totalPage" [formId]="formId"
+              [gridId]="gridId"></app-pagination>
+          </div>
+        </div>
+</div>

@@ -1,0 +1,9 @@
+nz-date-picker ::ng-deep .ant-calendar-picker {
+  width: 100% !important;
+}
+nz-date-picker .ant-calendar-picker ::ng-deep nz-picker {
+  width: 100% !important;
+}
+.ant-form-explain {
+  position: absolute;
+}

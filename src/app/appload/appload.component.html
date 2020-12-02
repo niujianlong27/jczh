@@ -1,0 +1,15 @@
+<div class="appload-box">
+   <div class="appload-img">
+       <img [src]="imgUrl">
+   </div>
+   <div>
+      <p class="appload-title">{{appName}}</p>
+      <p class="appload-version">Version {{resultData.versionNum}}</p>
+      <div class="appload-remark">
+          更新内容: {{resultData.remark}}
+      </div>
+      <div>
+        <a nz-button nzType="primary" [href]="loadUrl">点击下载</a>
+      </div>
+   </div>
+</div>

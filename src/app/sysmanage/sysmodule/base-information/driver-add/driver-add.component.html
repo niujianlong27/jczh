@@ -1,0 +1,124 @@
+<form nz-form [formGroup]="validateForm" style="padding-top: 2%">
+  <div nz-row [nzGutter]="8" [nzType]="'flex'">
+    <ng-container *ngFor="let control of controlArray">
+      <ng-container *ngIf="control.type !== ''">
+        <div *ngIf="control.eName === 'cardPhoto'" style="width: 100%;height: 1px;"></div>
+        <div nz-col [ngClass]="{'margin': control.type == 'upload'}"
+        [nzSpan]=" control.type == 'upload' && status === 'updata' ? 12 : 6"
+        *ngIf="control.eName!='loginAuthz'&&control.eName!='status'&&control.eName!='authStatus'||status=='add'" >
+          <nz-form-item>
+            <nz-form-label [nzRequired]="control.require"
+                          [nzSpan]=" control.type == 'upload' && status === 'updata' ? 5 : 10"
+                          [nzFor]="control.eName">{{ control.cName}}</nz-form-label>
+            <nz-form-control [nzSpan]="control.type == 'upload' && status === 'updata' ? 19 : 14" >
+
+              <input-modal *ngIf="control.type == 'modal'" [isMutli]="false" [findset]="formIdFindset"
+                          [inputModalModel]="inputModalModel" (inpEmit)="inpEmit($event)" [borderRed]="borderRed"
+                          [DISABLED]="true"></input-modal>
+
+              <input *ngIf="control.type == 'text'" nz-input [type]="control.type" [formControlName]="control.eName"
+                    [attr.id]="control.eName">
+
+              <ng-container  *ngIf="status=='add'">
+              <nz-select *ngIf="control.type == 'select1'"  nzPlaceHolder="请选择"  nzShowSearch [formControlName]="control.eName"
+                        [attr.id]="control.eName">
+                  <nz-option *ngFor="let i of loginAuthzArr" [nzLabel]="i.name" [nzValue]="i.value">
+                  </nz-option>
+              </nz-select>
+              <nz-select *ngIf="control.type == 'select2'"  nzPlaceHolder="请选择"  nzShowSearch [formControlName]="control.eName"
+                        [attr.id]="control.eName">
+                <nz-option *ngFor="let i of statusArr" [nzLabel]="i.name" [nzValue]="i.value">
+                </nz-option>
+              </nz-select>
+              <nz-select *ngIf="control.type == 'select3'"  nzPlaceHolder="请选择"  nzShowSearch [formControlName]="control.eName"
+                        [attr.id]="control.eName">
+                <nz-option *ngFor="let i of authStatusArr" [nzLabel]="i.name" [nzValue]="i.value">
+                </nz-option>
+              </nz-select>
+              </ng-container>
+
+              <nz-date-picker *ngIf="control.type == 'date'" [formControlName]="control.eName" style="width:100%" [nzStyle]="{width: '100%'}"></nz-date-picker>
+
+              <span *ngIf="control.type == 'upload'">
+                <nz-upload
+                  [hidden]="(control.eName === 'driverPhoto' || control.eName === 'cardPhoto') && status === 'updata'"
+                  [nzAction]="upload.action" [nzRemove]="remove()" [nzCustomRequest]='upload.handleRequest' [(nzFileList)]="control.dataArr"
+                  nzListType="picture-card" [nzPreview]="handlePreview" [nzData]="upload.handleData" (nzChange)="handleChange($event,control.eName)"
+                  [nzShowButton]="control.dataArr.length < 1">
+                  <i nz-icon type="plus"></i>
+                  <div class="ant-upload-text">Upload</div>
+                </nz-upload>
+
+                <input type="hidden" formControlName={{control.eName}} readonly="readonly">
+                <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+                          (nzOnCancel)="previewVisible=false">
+                  <ng-template #modalContent>
+                    <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }"/>
+                  </ng-template>
+                </nz-modal>
+                 <!--图片放大图--->
+                <ng-container *ngIf="control.eName === 'cardPhoto' && status === 'updata' && validateForm.get('cardPhoto')?.value">
+                  <div style="width: 100%; height: 350px; overflow: auto;">
+                    <img [src]="validateForm.get('cardPhoto')?.value" #imgLeft
+                    style="display: block;height: 350px;" [imgViewer]="{url: validateForm.get('cardPhoto')?.value, shadow: true}"
+                    [ngStyle]="{transform: img1Rotate}"/>
+                  </div>
+                  <div class="rotate-icon">
+                    <i nz-icon nzType="redo" nzTheme="outline" title="旋转90度" (click)="rotate(1)"></i>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="control.eName === 'driverPhoto' && status === 'updata' && validateForm.get('driverPhoto')?.value">
+                  <div style="width: 100%; height: 350px; overflow: auto;">
+                    <img [src]="validateForm.get('driverPhoto')?.value" #imgRight
+                     style="display: block; height: 350px;" [imgViewer]="{url: validateForm.get('driverPhoto')?.value, shadow: true}"
+                     [ngStyle]="{transform: img2Rotate}"/>
+                  </div>
+                  <div class="rotate-icon">
+                    <i nz-icon nzType="redo" nzTheme="outline" title="旋转90度" (click)="rotate(2)"></i>
+                  </div>
+                </ng-container>
+                 <!--end-->
+              </span>
+              <nz-radio-group [attr.id]="control.eName" *ngIf="control.type == 'radio'" [formControlName]="control.eName">
+                <label nz-radio [nzValue]="r.value" *ngFor="let r of control.radioArr"
+                      [nzDisabled]="r.value === 'YHLX10'">{{r.name}}</label>
+              </nz-radio-group>
+              <nz-select *ngIf="control.type == 'select'"  nzPlaceHolder="请选择"  nzShowSearch [formControlName]="control.eName"
+                        [attr.id]="control.eName">
+                <nz-option *ngFor="let i of userCompanyTypeArr"  [nzLabel]="i.name" [nzValue]="i.value">
+                </nz-option>
+              </nz-select>
+
+              <nz-form-explain *ngIf="validateForm.get(control.eName)?.dirty && validateForm.get(control.eName)?.errors">
+                <ng-container *ngIf="validateForm.get(control.eName)?.hasError('required')">
+                  {{control.validateCon}}
+                </ng-container>
+                <ng-container *ngIf="validateForm.get(control.eName)?.hasError('pattern')">
+                  {{control.validators.patternErr}}
+                </ng-container>
+
+              </nz-form-explain>
+
+            </nz-form-control>
+          </nz-form-item>
+
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+  <div nz-row>
+    <div nz-col [nzSpan]="24" style="text-align: right;" *ngIf="disAbled==false">
+      <button style="margin-right: 20px" nz-button [nzType]="'primary'" (click)="submitForm()">确定</button>
+      <button style="margin-right: 10px" nz-button (click)="cancel()">取消</button>
+    </div>
+    <div nz-col [nzSpan]="24" style="text-align: right;" *ngIf="disAbled==true">
+      <button style="margin-right: 20px" nz-button [nzType]="'primary'" (click)="submitForm1()">审核通过</button>
+      <button style="margin-right: 10px" nz-button (click)="cancel1()">驳回</button>
+    </div>
+  </div>
+</form>
+
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="请输入驳回理由" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <textarea  nz-input [(ngModel)]="inputValue" ></textarea>
+</nz-modal>

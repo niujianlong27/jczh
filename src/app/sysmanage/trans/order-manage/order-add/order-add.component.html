@@ -1,0 +1,191 @@
+<div nz-row>
+<tpl-buttons appCilckOnce [duration]="3000" formId="order_registration" (btnClick)="btnClick($event)"  [btnHiden]="{'deleteBales':true,'addBales':true,'deleteAll':true,'Return':operateType=='add','save':operateType=='view','clearData':operateType=='view','Use':operateType=='view'}"></tpl-buttons>
+</div>
+
+<div nz-row>
+  <div nz-col class="transition" [nzSpan]="leftGridHidden ? 0 : 4">
+    <app-table-form [formId]="formId" gridId="order" [dataSet]="orderData" (updateDataResult)="selectedOrder($event)"
+      (listClick)="rowCilcked($event)" [nzShowPagination]="false" [showCount]="false" [isCheckBox]="false" [trSelected]="[true]" [trSelectedShow]="true"></app-table-form>
+  </div>
+  <div nz-col class="transition" [nzSpan]="leftGridHidden ? 24 : 20" style="padding-left:14px;">
+      <a class="tableIcon" (click)="leftGridHidden = !leftGridHidden">
+        <span class="tableIcon-btn">
+          <i nz-icon type="caret-right" theme="outline" [hidden]="!leftGridHidden"></i>
+          <i nz-icon type="caret-left" theme="outline" [hidden]="leftGridHidden"></i>
+        </span>
+      </a>
+
+    <div nz-row>
+      <div nz-col nzSpan="24">
+        <form nz-form nzLayout="inline">
+          <div nz-row [nzGutter]="{ xs: 8, md: 16, lg: 24, xl: 32 }" nzType="flex" nzAlign="bottom">
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label nzSpan="8">合同编号</nz-form-label>
+                <nz-form-control nzSpan="16">
+                  <input type="text" nz-input [(ngModel)]="order.orderNo" name="orderNo" placeholder="系统生成" disabled="true">
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label nzSpan="8" nzRequired>合同立项日期</nz-form-label>
+                <nz-form-control nzSpan="16">
+                  <nz-date-picker [nzStyle]="{width:'100%'}" nzShowTime [(ngModel)]="order.contractDate" name="contractDate" nzFormat="yyyy-MM-dd HH:mm:ss"></nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label nzSpan="8" nzRequired>客户名称</nz-form-label>
+                <nz-form-control nzSpan="16">
+                  <input-modal [(inputModalModel)]="order.consignorCompanyName" [findset]="{formId:'form_bank_tan',name:'客户名称',parameter:'companyName',url:'getCompanyBankThree'}"
+                    (inpEmit)="setCompanyId($event, 'consignorCompanyId', 'consignorCompanyName')"></input-modal>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label nzSpan="8">银行名称</nz-form-label>
+                <nz-form-control nzSpan="16">
+                  <input type="text" nz-input disabled="true" [(ngModel)]="bankObj.companyBank" name="companyBank">
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nzSpan="8">账号</nz-form-label>
+                  <nz-form-control nzSpan="16">
+                    <input type="text" nz-input disabled="true" [(ngModel)]="bankObj.companyBankNo" name="companyBankNo">
+                  </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nzSpan="8">联系人</nz-form-label>
+                  <nz-form-control nzSpan="16">
+                    <input type="text" nz-input [(ngModel)]="order.consignorName" name="consignorName">
+                  </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nzSpan="8">联系方式</nz-form-label>
+                  <nz-form-control nzSpan="16">
+                    <input type="text" nz-input [(ngModel)]="order.consignorPhone" name="consignorPhone">
+                  </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nzSpan="8">特殊要求</nz-form-label>
+                  <nz-form-control nzSpan="16">
+                    <input type="text" nz-input [(ngModel)]="order.orderRequest" name="orderRequest">
+                  </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nzSpan="8" nzRequired>承运结算账户</nz-form-label>
+                  <nz-form-control nzSpan="16">
+                    <input-modal [(inputModalModel)]="order.transSettleCompanyName " [findset]="{formId:'settle_company_pop',name:'承运结算账户',parameter:'settleCompanyName',parameterSend:'settleCompanyId',url:'transSettleCompany'}"
+                                 (inpEmit)="setCompanyId($event, 'transSettleCompany')"></input-modal>
+                  </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+              <nz-form-item>
+                <nz-form-label nzSpan="8">银行名称</nz-form-label>
+                <nz-form-control nzSpan="16">
+                  <input type="text" nz-input disabled="true" [(ngModel)]="bankObj.settleBank" name="settleBank">
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nzSpan="8">账号</nz-form-label>
+                  <nz-form-control nzSpan="16">
+                    <input type="text" nz-input disabled="true" [(ngModel)]="bankObj.settleBankNo" name="settleBankNo">
+                  </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nzSpan="8" nzRequired>收货地址</nz-form-label>
+                  <nz-form-control nzSpan="16">
+                    <input-modal [(inputModalModel)]="order.detailAddressName" [findset]="{formId:'point_pop',name:'详细收货地址',parameter:'address',parameterSend:'locationId',url:'point', 'insertType':'address'}"
+                                 (inpEmit)="setCompanyId($event, 'detailAddress')"></input-modal>
+                  </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nzSpan="8" nzRequired>运输方式</nz-form-label>
+                  <nz-form-control nzSpan="16">
+                    <app-select  [apiParam]="flowApi" [(ngModel)]="order.flowId" name="flowId"></app-select>
+                  </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nzSpan="8">结算方式</nz-form-label>
+                  <nz-form-control nzSpan="16">
+                    <nz-select  nzShowSearch [(ngModel)]="order.businessNature" name="businessNature">
+                      <nz-option *ngFor="let i of businessNature" [nzLabel]="i.name" [nzValue]="i.value"></nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nzSpan="8">总金额</nz-form-label>
+                  <nz-form-control nzSpan="16">
+                    <input type="text" nz-input [(ngModel)]="order.totalPrice" name="totalPrice" disabled="true">
+                  </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8">
+                <nz-form-item>
+                  <nz-form-label nzSpan="8">备注</nz-form-label>
+                  <nz-form-control nzSpan="16">
+                    <input type="text" nz-input [(ngModel)]="order.remark" name="remark">
+                  </nz-form-control>
+                </nz-form-item>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+    <div nz-row class="order-registration">
+      <nz-tabset>
+        <nz-tab nzTitle="合同明细">
+          <p class="m-re">
+            <tpl-buttons formId="order_registration" (btnClick)="btnClick($event)"  [btnHiden]="{'save':true,'delete':true,'Return':true,'Use':true,'clearData':true}"></tpl-buttons>
+          </p>
+          <!-- <app-table-form [extraTableHeight]="342" [formId]="formId" gridId="item" [dataSet]="itemData" isMutli="true" [nzShowPagination]="false" (modelChange)="modelChange($event)"
+            (inpEmit)="inpEmit($event)" [popTableData]="popTableData" [selectedLength]="selectedLength" (updateDataResult)="updateDataResult($event)"></app-table-form> -->
+            <app-table-form [extraTableHeight]="342" [formId]="formId" gridId="item" [dataSet]="itemData" isMutli="true" [nzShowPagination]="false" (modelChange)="modelChange($event)"
+            (inpEmit)="inpEmit($event)" [popTableData]="popTableData" (updateDataResult)="updateDataResult($event)"></app-table-form>
+        </nz-tab>
+      </nz-tabset>
+    </div>
+  </div>
+</div>
+
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="使用订单"  [nzMaskClosable]="false" [nzFooter]="modalFooter"  [nzContent]="modalOrder" (nzOnCancel)="nzOnCancel()"
+          nzWidth="70%" >
+   <ng-template #modalOrder>
+    <app-searchform [formId]="'order_registration_modal'" (search)="modalListSearch($event)"></app-searchform>
+    <tpl-buttons appClickDisabled [formId]="'order_registration_modal'" (btnClick)="modalBtnClick($event)" [btnDisable]="modalBtnDis" ></tpl-buttons>
+    <app-table-form [formId]="'order_registration_modal'" [dataSet]="modalDataSet" [listLoading]="modalListLoading" [isMutli]="true"
+                    [pageSize]="modalPageSize" [totalPage]="modalTotalPages" selfTableHeight="245px" (updateDataResult)="modalUpdateDatafun($event)"></app-table-form>
+   </ng-template>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="nzOnCancel()">取消</button>
+  </ng-template>
+</nz-modal>
